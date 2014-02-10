@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="Bubble">
-        <attr name="xPos" format="float"/>
-        <attr name="yPos" format="float"/>
-        <attr name="rad" format="float"/>
-        
+        <attr name="xPos" format="float" />
+        <attr name="yPos" format="float" />
+        <attr name="rad" format="float" />
     </declare-styleable>
+
 </resources>
