@@ -4,7 +4,6 @@ import java.util.Random;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
