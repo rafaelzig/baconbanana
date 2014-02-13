@@ -25,6 +25,7 @@ public class LoginPage {
 			e.printStackTrace();
 		}
 		//bla
+		//kllk
 
 		loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initLayout();
