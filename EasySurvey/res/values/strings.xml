@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="questHinty">Please Type Your Answer Here</string>
     <string name="next">Next</string>
+    <string name="title_activity_question">Question</string>
+    <string name="title_activity_text_box_question">TextBoxQuestion</string>
 
 </resources>
