@@ -26,5 +26,9 @@ public class QuestionPreview extends JPanel{
 		add(list);
 		
 	}
+	public static void main(String args[])
+	{
+		new QuestionPreview();
+	}
 	
 }
