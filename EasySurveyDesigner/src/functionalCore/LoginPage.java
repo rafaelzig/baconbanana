@@ -24,7 +24,7 @@ public class LoginPage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		//bla
 
 		loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initLayout();
