@@ -98,6 +98,6 @@ public class EasySurveyFrame
 	
 	public static void main(String[] args) 
 	{
-		new AddNewQuestion();
+		new EasySurveyFrame();
 	}
 }

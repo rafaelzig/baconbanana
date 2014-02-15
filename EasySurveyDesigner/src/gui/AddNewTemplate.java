@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -38,6 +40,18 @@ public class AddNewTemplate
 		jpButtons.add(AddExistingQuestion);
 		jpButtons.add(Delete);
 		jpButtons.add(Save);
+		
+		CreateQuestion.addActionListener(new ActionListener()
+		{
+			
+			public void actionPerformed(ActionEvent e1)
+			{
+				new AddNewQuestion();
+				
+			}
+		
+				
+				});
 		
 		window.pack();
 		window.setSize(800,800);
