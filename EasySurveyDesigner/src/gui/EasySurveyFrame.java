@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -72,13 +74,30 @@ public class EasySurveyFrame
 		jpQuestionsButton.add(Filler);
 		jpQuestionsButton.add(Send);
 		
+		Add.addActionListener(new ActionListener()
+		{
+			
+			public void actionPerformed(ActionEvent e1)
+			{
+				new AddNewTemplate();
+				
+			}
+		
+				
+				});
+		
+		
+		
+		
+		
 		window.pack();
 		window.setSize(800,800);
 		window.setVisible(true);
 	}
 	
+	
 	public static void main(String[] args) 
 	{
-		new EasySurveyFrame();
+		new AddNewQuestion();
 	}
 }
