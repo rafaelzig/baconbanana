@@ -1,4 +1,4 @@
-package functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;

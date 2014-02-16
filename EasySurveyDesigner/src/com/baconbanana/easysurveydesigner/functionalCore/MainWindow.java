@@ -1,4 +1,4 @@
-package functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
