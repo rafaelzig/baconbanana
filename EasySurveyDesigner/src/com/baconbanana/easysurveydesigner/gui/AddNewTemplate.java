@@ -1,4 +1,4 @@
-package gui;
+package com.baconbanana.easysurveydesigner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
