@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<survey>
+    <name>Introduction</name>
+    <stage>Initial Consultation</stage>
+    <questionList>
+        <openEndedQuestion>
+            <content>What is your name?</content>
+        </openEndedQuestion>
+        <openEndedQuestion>
+            <answer>25</answer>
+            <content>What is your age?</content>
+        </openEndedQuestion>
+        <multipleChoiceQuestion>
+            <content>Are you a smoker?</content>
+            <choices>
+                <choiceList>Yes</choiceList>
+                <choiceList>No</choiceList>
+            </choices>
+        </multipleChoiceQuestion>
+        <multipleChoiceQuestion>
+            <answer>Male</answer>
+            <content>What is your gender?</content>
+            <choices>
+                <choiceList>Male</choiceList>
+                <choiceList>Female</choiceList>
+            </choices>
+        </multipleChoiceQuestion>
+    </questionList>
+</survey>
