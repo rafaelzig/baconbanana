@@ -20,13 +20,17 @@ import javax.swing.JTextField;
 public class AddNewQuestion 
 {
 	private String[] typesOfAnswers = { "Text Field", "Radio Button", "Check Box"};
+	
 
 	JFrame window = new JFrame("Add new question");
 
 	JTextArea question = new JTextArea("");
-	JTextField choices = new JTextField("dsgxdzsrgdxfg");
+	
+	JTextField title = new JTextField("");
+	
 	JButton add = new JButton("Add");
 	JButton remove = new JButton("Remove");
+	JButton save = new JButton("Save");
 	
 	JCheckBox answerCheckBox;
 	
@@ -49,6 +53,7 @@ public class AddNewQuestion
 
 		JPanel jpQuestion = new JPanel(new BorderLayout());
 		window.add(jpQuestion, BorderLayout.CENTER);
+		window.add(title, BorderLayout.NORTH);
 		jpQuestion.add(question, BorderLayout.CENTER);
 		JPanel jpChoices= new JPanel(new BorderLayout());
 		jpQuestion.add(jpChoices, BorderLayout.SOUTH);
@@ -64,6 +69,7 @@ public class AddNewQuestion
 		jpButtons.add(answer);
 		jpButtons.add(add);
 		jpButtons.add(remove);
+		jpButtons.add(save);
 
 		for (int i = 0; i <3; i++)
 			answer.addItem(typesOfAnswers[count++]);
@@ -111,9 +117,9 @@ public class AddNewQuestion
 
 		
 		});
-		remove.addActionListener(new ActionListener()
+	remove.addActionListener(new ActionListener()
 		
-				{
+		{
 				public void actionPerformed(ActionEvent e2)
 				{
 					jpRadioButtons.remove(0);
@@ -126,15 +132,21 @@ public class AddNewQuestion
 				
 				}
 				});
+	
+	save.addActionListener(new ActionListener()
+	
+	{
+			public void actionPerformed(ActionEvent e3)
+			{
+				AddNewTemplate.myModel2.addElement(title.getText());
+				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
+				window.dispose();
+			}
+			});
 		
 		window.pack();
 		window.setSize(800,800);
 		window.setVisible(true);
-	}
-
-	protected void AddNewAnswer() {
-
-
-	}
-
+		}
+	
 }

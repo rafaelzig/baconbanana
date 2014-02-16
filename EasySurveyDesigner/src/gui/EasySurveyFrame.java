@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,9 +23,11 @@ public class EasySurveyFrame
 	JLabel Information3 = new JLabel("Information 3");
 	JLabel Filler = new JLabel(" ");
 	
-	JList<Object> List1 = new JList<Object>();
-	JList<Object> List2 = new JList<Object>();
-	JList<Object> List3 = new JList<Object>();
+	static JList<String> List1 = new JList<String>();
+	JList<String> List2 = new JList<String>();
+	JList<String> List3 = new JList<String>();
+	
+	
 	
 	JButton Add = new JButton("Add");
 	JButton Save = new JButton("Save");
@@ -32,6 +35,8 @@ public class EasySurveyFrame
 	JButton Send = new JButton("Send");
 	
 	BasicArrowButton Move = new BasicArrowButton(BasicArrowButton.SOUTH);
+	
+	final static DefaultListModel<String> myModel1 = new DefaultListModel<String>();
 	
 
 	public EasySurveyFrame()
@@ -51,7 +56,7 @@ public class EasySurveyFrame
 		jpTemplates.add(Information1, BorderLayout.NORTH);
 		jpTemplates.add(List1, BorderLayout.CENTER);
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
-		jpTemplates.add(jpTemplatesButtons);
+		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
 		jpTemplatesButtons.add(Add);
 		jpTemplatesButtons.add(Save);
 		jpTemplatesButtons.add(Delete);
@@ -69,16 +74,18 @@ public class EasySurveyFrame
 		jpQuestionsPreview.add(Information3, BorderLayout.NORTH);
 		jpQuestionsPreview.add(List3, BorderLayout.CENTER);
 		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
-		jpQuestionsPreview.add(jpQuestionsButton);
+		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);
 		jpQuestionsButton.add(Filler);
 		jpQuestionsButton.add(Filler);
 		jpQuestionsButton.add(Send);
+		
 		
 		Add.addActionListener(new ActionListener()
 		{
 			
 			public void actionPerformed(ActionEvent e1)
 			{
+				AddNewTemplate.myModel2.clear();
 				new AddNewTemplate();
 				
 			}
