@@ -57,14 +57,20 @@ containing a value of this type.
         public static final int questTextBox=0x7f080001;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int activity_question=0x7f030001;
-        public static final int activity_text_box_question=0x7f030002;
+        public static final int activity_check_box_question=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_question=0x7f030002;
+        public static final int activity_radio_btn_question=0x7f030003;
+        public static final int activity_ratin_question=0x7f030004;
+        public static final int activity_text_box_question=0x7f030005;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
-        public static final int question=0x7f070001;
-        public static final int text_box_question=0x7f070002;
+        public static final int check_box_question=0x7f070000;
+        public static final int main=0x7f070001;
+        public static final int question=0x7f070002;
+        public static final int radio_btn_question=0x7f070003;
+        public static final int ratin_question=0x7f070004;
+        public static final int text_box_question=0x7f070005;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
@@ -72,7 +78,10 @@ containing a value of this type.
         public static final int hello_world=0x7f050002;
         public static final int next=0x7f050004;
         public static final int questHinty=0x7f050003;
+        public static final int title_activity_check_box_question=0x7f050008;
         public static final int title_activity_question=0x7f050005;
+        public static final int title_activity_radio_btn_question=0x7f050007;
+        public static final int title_activity_ratin_question=0x7f050009;
         public static final int title_activity_text_box_question=0x7f050006;
     }
     public static final class style {

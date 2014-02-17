@@ -19,22 +19,18 @@ import android.widget.TextView;
 
 public class TextBoxQuestion extends Question implements OnClickListener
 {
-	
-	TextView quest;
-	EditText answer;
+
+	EditText answerTextBox;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//standard ops
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_text_box_question);
-		layout = (RelativeLayout) findViewById(R.id.layout);
+		
 		
 		//specific ops
-		quest = (TextView) findViewById(R.id.questTextBox);
-		quest.setText("How are you feeling today, Mrs Borris?");
-		nextBtn = (Button) findViewById(R.id.nextTextBox);
-		nextBtn.setOnClickListener(this);
-		answer = (EditText) findViewById(R.id.answTextBox);
+		this.setQuestionText("How are you feeling Mrs Boris");
+		answerTextBox = (EditText) findViewById(R.id.answTextBox);
 	}
 
 	@Override
@@ -47,7 +43,7 @@ public class TextBoxQuestion extends Question implements OnClickListener
 	@Override
 	public void onClickAnimation() {
 		ObjectAnimator questAni = ObjectAnimator.ofFloat(quest, View.ALPHA, 1f, 0f);
-		ObjectAnimator answerAni = ObjectAnimator.ofFloat(answer, View.ALPHA, 1f, 0f);
+		ObjectAnimator answerAni = ObjectAnimator.ofFloat(answerTextBox, View.ALPHA, 1f, 0f);
 		//ObjectAnimator nextAni = ObjectAnimator.ofFloat(nextBtn, View.ALPHA, 1f, 0f);
 		AnimatorSet fadeToBlack = new AnimatorSet();
 		fadeToBlack.play(questAni).with(answerAni);
@@ -55,7 +51,7 @@ public class TextBoxQuestion extends Question implements OnClickListener
 		fadeToBlack.setDuration(1000);
 		fadeToBlack.start();
 		initBubbles(nextBtn);
-		initBubbles(answer);
+		initBubbles(answerTextBox);
 		initBubbles(quest);
 		
 	}

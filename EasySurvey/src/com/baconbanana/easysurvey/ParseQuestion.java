@@ -24,5 +24,8 @@ public class ParseQuestion extends Activity{
 			nextQuest(++questNo);
 		}
 	}
+	public void xmlToQuestion(){
+		//turn xml into array of questions
+	}
 	
 }

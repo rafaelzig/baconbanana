@@ -14,17 +14,21 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public abstract class Question extends Activity implements Serializable, OnClickListener{
 	Bubble[] myBubbles = new Bubble[20];
 	RelativeLayout layout;
 	Button nextBtn;
+	TextView quest;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		nextBtn = (Button) findViewById(R.id.nextTextBox);
 		nextBtn.setOnClickListener(this);
+		layout = (RelativeLayout) findViewById(R.id.layout);
+		quest = (TextView) findViewById(R.id.questTextBox);
 	}
 
 	@Override
@@ -53,6 +57,10 @@ public abstract class Question extends Activity implements Serializable, OnClick
 		//animation listener to wait for it to finish
 		//setResult == answers
 		
+	}
+	
+	public void setQuestionText(String question){
+		quest.setText(question);
 	}
 	
 	public abstract void onClickAnimation();
