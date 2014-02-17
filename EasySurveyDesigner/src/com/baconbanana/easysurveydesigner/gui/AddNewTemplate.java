@@ -43,6 +43,7 @@ public class AddNewTemplate
 	public AddNewTemplate()
 	{
 		initWidgets();
+		window.setLocationRelativeTo(null);
 	}
 
 	/**

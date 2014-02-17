@@ -26,7 +26,6 @@ public class EasySurveyFrame
 {
 
 	JFrame window = new JFrame("Easy Survey");
-
 	JLabel Information1 = new JLabel("List of templates");
 	JLabel Information2 = new JLabel("Template preview");
 	JLabel Information3 = new JLabel("Questionare preview");
@@ -54,6 +53,7 @@ public class EasySurveyFrame
 	public EasySurveyFrame()
 	{
 		initWidgets();
+		window.setLocationRelativeTo(null);
 	}
 
 	/**

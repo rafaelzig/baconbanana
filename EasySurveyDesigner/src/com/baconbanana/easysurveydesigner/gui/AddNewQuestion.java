@@ -56,6 +56,7 @@ public class AddNewQuestion
 	public AddNewQuestion()
 	{
 		initWidgets();
+		window.setLocationRelativeTo(null);
 	}
 
 	/**
