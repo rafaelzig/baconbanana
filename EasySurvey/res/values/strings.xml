@@ -8,5 +8,8 @@
     <string name="next">Next</string>
     <string name="title_activity_question">Question</string>
     <string name="title_activity_text_box_question">TextBoxQuestion</string>
+    <string name="title_activity_radio_btn_question">RadioBtnQuestion</string>
+    <string name="title_activity_check_box_question">CheckBoxQuestion</string>
+    <string name="title_activity_ratin_question">RatinQuestion</string>
 
 </resources>

@@ -32,6 +32,18 @@
             android:name="com.baconbanana.easysurvey.questtemp.TextBoxQuestion"
             android:label="@string/title_activity_text_box_question" >
         </activity>
+        <activity
+            android:name="com.baconbanana.easysurvey.questtemp.RadioBtnQuestion"
+            android:label="@string/title_activity_radio_btn_question" >
+        </activity>
+        <activity
+            android:name="com.baconbanana.easysurvey.questtemp.CheckBoxQuestion"
+            android:label="@string/title_activity_check_box_question" >
+        </activity>
+        <activity
+            android:name="com.baconbanana.easysurvey.questtemp.RatingQuestion"
+            android:label="@string/title_activity_ratin_question" >
+        </activity>
     </application>
 
 </manifest>
