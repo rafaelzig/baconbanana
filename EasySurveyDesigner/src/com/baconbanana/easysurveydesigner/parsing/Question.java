@@ -15,24 +15,23 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso({ OpenEndedQuestion.class, MultipleChoiceQuestion.class })
 abstract class Question
 {
+	/**
+	 * Static fields representing the types of the question.
+	 */
+	public static final int OPEN_ENDED_QUESTION_TYPE = 0, MULTIPLE_CHOICE_QUESTION_TYPE = 1;
+	
+	private int type;
 	private String content, answer;
 
 	/**
 	 * @param content
 	 *            The content of the question
 	 */
-	public Question(String content)
+	public Question(String content, int type)
 	{
 		super();
 		this.content = content;
-	}
-
-	/**
-	 * Default Constructor method
-	 */
-	public Question()
-	{
-		this("Question");
+		this.type = type;
 	}
 
 	/**
@@ -41,6 +40,22 @@ abstract class Question
 	public String getContent()
 	{
 		return content;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public int getType()
+	{
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(int type)
+	{
+		this.type = type;
 	}
 
 	/**
