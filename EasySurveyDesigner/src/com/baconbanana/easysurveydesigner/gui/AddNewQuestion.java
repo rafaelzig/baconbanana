@@ -1,178 +1,157 @@
 package com.baconbanana.easysurveydesigner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
-/**
- * 
- * @author Mateusz Kusaj, Beka M & team. 
- * 
- * This class represents GUI used to create the question. User will have an option to add different types 
- * of answers as well as remove and edit them.  
- *
- */
+public class AddNewQuestion {
 
-public class AddNewQuestion 
-{
-	private String[] typesOfAnswers = { "Text Field", "Radio Button", "Check Box"};
-
-
-	JFrame window = new JFrame("Add new question");
-
-	JTextArea question = new JTextArea("");
-
-	JTextField title = new JTextField("");
-
-	JButton add = new JButton("Add");
-	JButton remove = new JButton("Remove");
-	JButton save = new JButton("Save");
-
-	JCheckBox answerCheckBox;
-
-
-	JComboBox<String> answer = new JComboBox<String>();
-	int comboBox = 1;
-
-	private int count = 0;
+	String questionType;
+	JFrame window;
+	JTextArea question;
+	JTextField title;
+	JButton add;
+	JButton remove;
+	JButton save;
 	int answerLimit = 0;
+	DefaultTableModel model;
+	JTable table;
 
-	/**
-	 * Constructor method.
-	 */
+	public AddNewQuestion(String type) {
+		this.questionType = type;
+		window = new JFrame("New " + questionType + " question");
+		setThings();
+		setListeners();
+	}
 
-	public AddNewQuestion()
-	{
-		initWidgets();
+	public void setThings() {
+
+		// ---------------------------------------------------
+
+		window.setLayout(new BorderLayout());
+
+		// --------------center of window---------------------
+		question = new JTextArea("Type your question here");
+		question.setPreferredSize(new Dimension(800, 280));
+		window.add(question, BorderLayout.CENTER);
+		// ---------------------------------------------------
+
+		// --------------North of window----------------------
+		title = new JTextField("Type your title here");
+		title.setPreferredSize(new Dimension(800, 20));
+		window.add(title, BorderLayout.NORTH);
+		// ---------------------------------------------------
+
+		// --------------South of window----------------------
+		Object[] columnNames = { "Answer", "Select" };
+		Object[][] data = {};
+		model = new DefaultTableModel(data, columnNames);
+		table = new JTable(model) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Class getColumnClass(int column) {
+				switch (column) {
+				case 0:
+					return String.class;
+				default:
+					return Boolean.class;
+				}
+			}
+		};
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(200, 400));
+
+		JPanel panelSouth = new JPanel(new BorderLayout());
+		panelSouth.add(scrollPane, BorderLayout.NORTH);
+
+		JPanel jpButtons = new JPanel(new FlowLayout());
+		jpButtons.setPreferredSize(new Dimension(800, 50));
+
+		add = new JButton("add");
+		jpButtons.add(add);
+		remove = new JButton("remove");
+		jpButtons.add(remove);
+		save = new JButton("save");
+		jpButtons.add(save);
+
+		panelSouth.add(jpButtons, BorderLayout.SOUTH);
+
+		window.add(panelSouth, BorderLayout.SOUTH);
+
+		window.pack();
+		window.setSize(800, 800);
+		window.setVisible(true);
+		// ---------------------------------------------------
+
 		window.setLocationRelativeTo(null);
 	}
 
-	/**
-	 * Class that creates all widgets as well as layouts and panels that are used to build this GUI.
-	 */
+	public void setListeners() {
+		add.addActionListener(new ActionListener() {
 
-	public void initWidgets()
-	{
-		window.setLayout(new BorderLayout());
+			public void actionPerformed(ActionEvent e1) {
+				if (answerLimit < 20) {
+					if (questionType.equalsIgnoreCase("text area")) {
+						model.addRow(new Object[] { "type answer here", false });
 
-		JPanel jpQuestion = new JPanel(new BorderLayout());
-		window.add(jpQuestion, BorderLayout.CENTER);
-		window.add(title, BorderLayout.NORTH);
-		jpQuestion.add(question, BorderLayout.CENTER);
-		JPanel jpChoices= new JPanel(new BorderLayout());
-		jpQuestion.add(jpChoices, BorderLayout.SOUTH);
-		final JPanel jpRadioButtons = new JPanel(new GridLayout(20,1));
-		final JPanel jpTextField = new JPanel(new GridLayout(20,1));
-		final JPanel jpRemove = new JPanel(new GridLayout(20,1)); 
-		jpChoices.add(jpRadioButtons, BorderLayout.WEST);
-		jpChoices.add(jpTextField, BorderLayout.CENTER);
-		jpChoices.add(jpRemove, BorderLayout.EAST);
-
-		JPanel jpButtons = new JPanel(new FlowLayout());
-		window.add(jpButtons, BorderLayout.SOUTH);
-		jpButtons.add(answer);
-		jpButtons.add(add);
-		jpButtons.add(remove);
-		jpButtons.add(save);
-
-		for (int i = 0; i <3; i++)
-			answer.addItem(typesOfAnswers[count++]);
-
-		/**
-		 * Action Listener that adds new answer text box. In addition to text box user 
-		 * can add radio button or check box. 
-		 */
-
-		add.addActionListener(new ActionListener()
-		{
-
-			public void actionPerformed(ActionEvent e1)
-			{
-				if (answerLimit < 20)
-				{
-					if (answer.getSelectedIndex() == 0) 
-					{
-
-						jpRadioButtons.add(new JLabel(""));
-						jpTextField.add(new JTextField(""));
-
-						jpRemove.add(new JCheckBox());
-						window.pack();
-						window.setSize(800,800);
 					}
-					if (answer.getSelectedIndex() == 1) 
-					{
-						jpRadioButtons.add(new JRadioButton());
-						jpTextField.add(new JTextField(""));
-						jpRemove.add(new JCheckBox());
-						window.pack();
-						window.setSize(800,800);
+					if (questionType.equalsIgnoreCase("radio button")) {
+						model.addRow(new Object[] { "type answer here", false });
+
 					}
-					if (answer.getSelectedIndex() == 2)
-					{
-						jpRadioButtons.add(new JCheckBox());
-						jpTextField.add(new JTextField(""));
-						jpRemove.add(new JCheckBox());
-						window.pack();
-						window.setSize(800,800);
+					if (questionType.equalsIgnoreCase("check box")) {
+						model.addRow(new Object[] { "type answer here", false });
+
 					}
 					answerLimit++;
 				}
 			}
 
-
 		});
-
-		/**
-		 * Action Listener that allows user to delete answers.
-		 */
-
 		remove.addActionListener(new ActionListener()
 
 		{
-			public void actionPerformed(ActionEvent e2)
-			{
-				jpRadioButtons.remove(0);
-				jpTextField.remove(0);
-				jpRemove.remove(0);
+			public void actionPerformed(ActionEvent e2) {
+				for (int x = 0; x < model.getRowCount(); x++) {
+
+					if ((boolean) model.getValueAt(x, 1) == true) {
+						model.removeRow(x);
+					}
+
+				}
+
 				window.pack();
-				window.setSize(800,800);
+				window.setSize(800, 800);
 
 				answerLimit--;
 
 			}
 		});
-		/**
-		 * Action Listener that saves the question under the name that user entered at the top of the window.
-		 * It also closes the form.
-		 */
 
 		save.addActionListener(new ActionListener()
 
 		{
-			public void actionPerformed(ActionEvent e3)
-			{
-				AddNewTemplate.myModel2.addElement(title.getText());
+			public void actionPerformed(ActionEvent e3) {
+				AddNewTemplate.myModel2.addElement(title.getText() + "("
+						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
 				window.dispose();
 			}
 		});
 
-		window.pack();
-		window.setSize(800,800);
-		window.setVisible(true);
 	}
 
 }

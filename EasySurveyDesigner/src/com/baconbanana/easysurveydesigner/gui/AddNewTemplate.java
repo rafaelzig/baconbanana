@@ -7,106 +7,90 @@ import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * 
- * @author Mateusz Kusaj, Beka M and team
- * 
- * This class creates GUI to build each separate template. It allows users to create, edit or remove 
- * questions and add them to the template.
- *
- */
+public class AddNewTemplate {
+	private String stage;
+	private JFrame window;
+	private JButton createQuestion;
+	private JButton addExistingQuestion;
+	private JButton delete;
+	private JButton save;
+	private JTextField nameOfTemplate;
+	private JComboBox<String> type;
 
-public class AddNewTemplate 
-{
-
-	JFrame window = new JFrame("Create new template");
-	JButton createQuestion = new JButton ("Create question");
-	JButton addExistingQuestion = new JButton ("Add existing question");
-	JButton delete = new JButton ("Delete");
-	JButton save = new JButton ("Save");
-
-	JTextField nameOfTemplate = new JTextField("");
-
-	static JList<String> Template = new JList<String>();
-
+	public static JList<String> Template = new JList<String>();
 	final static DefaultListModel<String> myModel2 = new DefaultListModel<String>();
 
-	/**
-	 * Constructor method.
-	 */
-
-	public AddNewTemplate()
-	{
-		initWidgets();
+	public AddNewTemplate(String stage) {
+		this.stage = stage;
+		setThings();
+		setListeners();
 		window.setLocationRelativeTo(null);
+
 	}
 
-	/**
-	 * Class that creates all widgets as well as layouts and panels that are used to build this GUI.
-	 */
-
-	public void initWidgets()
-	{
-
+	public void setThings() {
+		window = new JFrame("Create new template. Stage:" + this.stage);
 		window.setLayout(new BorderLayout());
 
-		window.add(nameOfTemplate, BorderLayout.NORTH);
+		createQuestion = new JButton("Create question");
+		addExistingQuestion = new JButton("Add existing question");
+		delete = new JButton("Delete");
+		save = new JButton("Save");
+		nameOfTemplate = new JTextField("Type name for this template here");
 
+		// ---------------------set combo box-----------------------------------
+		type = new JComboBox<String>();
+		String[] typesOfAnswers = { "Text Area", "Radio Button", "Check Box" };
+		int count = 0;
+		for (int i = 0; i < 3; i++)
+			type.addItem(typesOfAnswers[count++]);
+		// --------------------------------------------------------------------
+
+		window.add(nameOfTemplate, BorderLayout.NORTH);
 		window.add(Template, BorderLayout.CENTER);
 
 		JPanel jpButtons = new JPanel(new FlowLayout());
-		window.add(jpButtons, BorderLayout.SOUTH);
-
+		jpButtons.add(type);
 		jpButtons.add(createQuestion);
 		jpButtons.add(addExistingQuestion);
 		jpButtons.add(delete);
 		jpButtons.add(save);
 
+		window.add(jpButtons, BorderLayout.SOUTH);
 
 		Template.setModel(myModel2);
 
-		/**
-		 * Action Listener that opens new frame where user can create each separate question.
-		 */
+		window.pack();
+		window.setSize(800, 800);
+		window.setVisible(true);
 
-		createQuestion.addActionListener(new ActionListener()
-		{
+	}
 
-			public void actionPerformed(ActionEvent e1)
-			{
-				new AddNewQuestion();
+	public void setListeners() {
+		createQuestion.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e1) {
+				String h = type.getSelectedItem().toString();
+				System.out.println(h);
+				new AddNewQuestion(h);
 
 			}
-
-
 		});
-
-		/**
-		 * Action Listener that updates the list in EasySurveyFrame after adding there new template that has been just created under the name
-		 * that is entered by the user into the text field at the top of the window. 
-		 */
 
 		save.addActionListener(new ActionListener()
 
 		{
-			public void actionPerformed(ActionEvent e3)
-			{
+			public void actionPerformed(ActionEvent e3) {
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
 				window.dispose();
 			}
 		});
-
-		window.pack();
-		window.setSize(800,800);
-		window.setVisible(true);
-
-
 	}
 }
-
