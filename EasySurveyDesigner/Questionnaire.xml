@@ -5,13 +5,16 @@
     <questionList>
         <openEndedQuestion>
             <content>What is your name?</content>
+            <type>0</type>
         </openEndedQuestion>
         <openEndedQuestion>
             <answer>25</answer>
             <content>What is your age?</content>
+            <type>0</type>
         </openEndedQuestion>
         <multipleChoiceQuestion>
             <content>Are you a smoker?</content>
+            <type>1</type>
             <choices>
                 <choiceList>Yes</choiceList>
                 <choiceList>No</choiceList>
@@ -20,6 +23,7 @@
         <multipleChoiceQuestion>
             <answer>Male</answer>
             <content>What is your gender?</content>
+            <type>1</type>
             <choices>
                 <choiceList>Male</choiceList>
                 <choiceList>Female</choiceList>

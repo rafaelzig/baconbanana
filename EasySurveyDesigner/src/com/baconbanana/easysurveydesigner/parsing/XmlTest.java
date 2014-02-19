@@ -68,7 +68,14 @@ class XmlTest
 			for (Question q : qTwo.getQuestionList())
 			{
 				System.out.println(q.getContent());
-				if (q instanceof MultipleChoiceQuestion) System.out.println(((MultipleChoiceQuestion) q).getChoiceList());
+				switch (q.getType())
+				{
+					case Question.OPEN_ENDED_QUESTION_TYPE: // Do something
+						break;
+					case Question.MULTIPLE_CHOICE_QUESTION_TYPE: 
+						System.out.println(((MultipleChoiceQuestion) q).getChoiceList());
+						break;
+				}
 				System.out.println(q.getClass().getSimpleName() + "\n");
 			}
 		}

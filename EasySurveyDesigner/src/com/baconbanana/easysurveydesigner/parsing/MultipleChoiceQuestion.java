@@ -31,7 +31,7 @@ public class MultipleChoiceQuestion extends Question
 	 */
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
 	{
-		super(content);
+		super(content, MULTIPLE_CHOICE_QUESTION_TYPE);
 		this.choiceList = choiceList;
 	}
 
@@ -50,6 +50,7 @@ public class MultipleChoiceQuestion extends Question
 	 */
 	public MultipleChoiceQuestion()
 	{
+		this("Multiple Choice Question");
 	}
 
 	/**

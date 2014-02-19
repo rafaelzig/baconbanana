@@ -20,7 +20,7 @@ public class OpenEndedQuestion extends Question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content);
+		super(content, OPEN_ENDED_QUESTION_TYPE);
 	}
 
 	/**
