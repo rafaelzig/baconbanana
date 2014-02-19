@@ -48,7 +48,7 @@ public class Bubble extends ImageView{
 	}
 
 	private int calSize(){
-		return randy.nextInt(100) + 50;
+		return randy.nextInt(125) + 25;
 	}
 	public void doAnimation(){
 			ObjectAnimator anima = ObjectAnimator.ofFloat(this, View.ALPHA, 0f, 1f);

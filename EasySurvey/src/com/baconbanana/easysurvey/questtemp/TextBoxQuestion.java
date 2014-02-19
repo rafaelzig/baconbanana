@@ -26,6 +26,7 @@ public class TextBoxQuestion extends Question implements OnClickListener
 		//standard ops
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_text_box_question);
+		this.initViews();
 		
 		
 		//specific ops
@@ -53,6 +54,8 @@ public class TextBoxQuestion extends Question implements OnClickListener
 		initBubbles(nextBtn);
 		initBubbles(answerTextBox);
 		initBubbles(quest);
+		this.setResult(Activity.RESULT_OK);
+		this.finish();
 		
 	}
 

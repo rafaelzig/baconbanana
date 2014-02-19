@@ -25,6 +25,9 @@ public abstract class Question extends Activity implements Serializable, OnClick
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+	}
+	protected void initViews(){
 		nextBtn = (Button) findViewById(R.id.nextTextBox);
 		nextBtn.setOnClickListener(this);
 		layout = (RelativeLayout) findViewById(R.id.layout);
@@ -38,11 +41,11 @@ public abstract class Question extends Activity implements Serializable, OnClick
 		return true;
 	}
 	protected void initBubbles(View mv){
-		for(int i = 0; i < mv.getWidth()/ 100; i++){
+		for(int i = 0; i < mv.getWidth()/ 50; i++){
 			//Button Bubbles
 			int[] pos = new int[2];
 			mv.getLocationInWindow(pos);
-			pos[0] = pos[0] + (i*100);
+			pos[0] = pos[0] + (i*50);
 			myBubbles[i] = new Bubble(this);
 			myBubbles[i].setPosition(pos);
 			layout.addView(myBubbles[i]);

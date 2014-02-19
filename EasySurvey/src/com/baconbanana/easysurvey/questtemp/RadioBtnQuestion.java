@@ -8,15 +8,17 @@ import android.widget.RadioGroup;
 import com.baconbanana.easysurvey.R;
 
 public class RadioBtnQuestion extends Question {
-	RadioGroup radGro = new RadioGroup(this);
+	RadioGroup radGro;
 	RadioButton[] radios;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//standard ops
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_radio_btn_question);
+		this.initViews();
 		
 		//specific ops
+		radGro = new RadioGroup(this);
 		this.setQuestionText("How much do you like RADIOBUTTONS?");
 		int arb = 5;
 		radios = new RadioButton[arb];
@@ -40,6 +42,8 @@ public class RadioBtnQuestion extends Question {
 	@Override
 	public void onClickAnimation() {
 		// TODO Auto-generated method stub
+		this.setResult(this.RESULT_OK);
+		this.finish();
 		
 	}
 

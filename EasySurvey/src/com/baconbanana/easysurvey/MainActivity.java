@@ -1,8 +1,7 @@
 package com.baconbanana.easysurvey;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -19,9 +18,12 @@ public class MainActivity extends Activity implements OnClickListener{
 	EditText answer;
 	RelativeLayout layout;
 	Bubble[] myBubbles = new Bubble[20];
+	ParseQuestion qp;
+	private int count = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		/*
+		 *super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		quest = (TextView) findViewById(R.id.questTextBox);
 		quest.setText("How are you feeling today, Mrs Borris?");
@@ -29,6 +31,11 @@ public class MainActivity extends Activity implements OnClickListener{
 		nextBtn.setOnClickListener(this);
 		answer = (EditText) findViewById(R.id.answTextBox);
 		layout = (RelativeLayout) findViewById(R.id.layout);
+		*/
+		//second
+		super.onCreate(savedInstanceState);
+		qp = new ParseQuestion();
+		this.startActivity(new Intent(this, ParseQuestion.class));
 		
 	}
 
@@ -42,7 +49,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View arg0) {
 		if(arg0.getId() == R.id.nextTextBox){
-			ObjectAnimator questAni = ObjectAnimator.ofFloat(quest, View.ALPHA, 1f, 0f);
+			/*ObjectAnimator questAni = ObjectAnimator.ofFloat(quest, View.ALPHA, 1f, 0f);
 			ObjectAnimator answerAni = ObjectAnimator.ofFloat(answer, View.ALPHA, 1f, 0f);
 			//ObjectAnimator nextAni = ObjectAnimator.ofFloat(nextBtn, View.ALPHA, 1f, 0f);
 			AnimatorSet fadeToBlack = new AnimatorSet();
@@ -53,6 +60,9 @@ public class MainActivity extends Activity implements OnClickListener{
 			initBubbles(nextBtn);
 			initBubbles(answer);
 			initBubbles(quest);
+			*/
+			qp.nextQuest(count);
+			count++;
 		}
 		
 	}
