@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class AddNewQuestion {
+public class NewOpenEnded {
 
 	String questionType;
 	JFrame window;
@@ -28,9 +28,9 @@ public class AddNewQuestion {
 	DefaultTableModel model;
 	JTable table;
 
-	public AddNewQuestion(String type) {
+	public NewOpenEnded(String type) {
 		this.questionType = type;
-		window = new JFrame("New " + questionType + " question");
+		window = new JFrame("New " + questionType);
 		setThings();
 		setListeners();
 	}
@@ -70,6 +70,7 @@ public class AddNewQuestion {
 				}
 			}
 		};
+		model.addRow(new Object[] { "type answer here", false });
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 400));
@@ -104,21 +105,11 @@ public class AddNewQuestion {
 
 			public void actionPerformed(ActionEvent e1) {
 				if (answerLimit < 20) {
-					if (questionType.equalsIgnoreCase("text area")) {
-						model.addRow(new Object[] { "type answer here", false });
-
-					}
-					if (questionType.equalsIgnoreCase("radio button")) {
-						model.addRow(new Object[] { "type answer here", false });
-
-					}
-					if (questionType.equalsIgnoreCase("check box")) {
-						model.addRow(new Object[] { "type answer here", false });
-
-					}
-					answerLimit++;
+					model.addRow(new Object[] { "type answer here", false });
 				}
+				answerLimit++;
 			}
+
 
 		});
 		remove.addActionListener(new ActionListener()
