@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.util.List;
 
