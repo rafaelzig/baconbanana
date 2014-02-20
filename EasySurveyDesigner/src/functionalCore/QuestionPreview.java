@@ -1,4 +1,4 @@
-package functionalCore;
+package src.functionalCore;
 
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
