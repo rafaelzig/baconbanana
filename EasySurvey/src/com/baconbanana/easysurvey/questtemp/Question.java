@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public abstract class Question extends Activity implements Serializable, OnClickListener{
-	Bubble[] myBubbles = new Bubble[20];
+	Bubble[] myBubbles = new Bubble[30];
 	RelativeLayout layout;
 	Button nextBtn;
 	TextView quest;
@@ -56,7 +56,7 @@ public abstract class Question extends Activity implements Serializable, OnClick
 	@Override
 	public void onClick(View v) {
 		//Do some Shit
-		onClickAnimation();
+		onClickAnswer();
 		//animation listener to wait for it to finish
 		//setResult == answers
 		
@@ -66,7 +66,7 @@ public abstract class Question extends Activity implements Serializable, OnClick
 		quest.setText(question);
 	}
 	
-	public abstract void onClickAnimation();
+	public abstract void onClickAnswer();
 	
 
 }

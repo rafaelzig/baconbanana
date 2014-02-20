@@ -24,8 +24,9 @@ public class CheckBoxQuestion extends Question {
 		return true;
 	}
 
+
 	@Override
-	public void onClickAnimation() {
+	public void onClickAnswer() {
 		// TODO Auto-generated method stub
 		
 	}

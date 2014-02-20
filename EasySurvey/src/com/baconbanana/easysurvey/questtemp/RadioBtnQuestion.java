@@ -1,11 +1,13 @@
 package com.baconbanana.easysurvey.questtemp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
-import com.baconbanana.easysurvey.R;
+import com.baconbanana.easysurvey.*;
 
 public class RadioBtnQuestion extends Question {
 	RadioGroup radGro;
@@ -19,6 +21,7 @@ public class RadioBtnQuestion extends Question {
 		
 		//specific ops
 		radGro = new RadioGroup(this);
+		radGro.setBackgroundColor(0xCCFF99);
 		this.setQuestionText("How much do you like RADIOBUTTONS?");
 		int arb = 5;
 		radios = new RadioButton[arb];
@@ -27,8 +30,12 @@ public class RadioBtnQuestion extends Question {
 			radios[i].setText("Option " + i);
 			radGro.addView(radios[i]);
 		}
+		//setting up paramaters
+		RelativeLayout.LayoutParams rl = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		rl.addRule(RelativeLayout.CENTER_VERTICAL);
+		rl.addRule(RelativeLayout.CENTER_HORIZONTAL);
 		//check out layouts
-		layout.addView(radGro);
+		layout.addView(radGro,rl);
 		
 	}
 
@@ -40,9 +47,12 @@ public class RadioBtnQuestion extends Question {
 	}
 
 	@Override
-	public void onClickAnimation() {
+	public void onClickAnswer() {
 		// TODO Auto-generated method stub
-		this.setResult(this.RESULT_OK);
+		Intent answerIntent = new Intent();
+		RadioButton selectedRB = (RadioButton) findViewById(radGro.getCheckedRadioButtonId());
+		answerIntent.putExtra("answer", selectedRB.getText().toString());
+		this.setResult(this.RESULT_OK, answerIntent);
 		this.finish();
 		
 	}

@@ -57,7 +57,7 @@ public class Bubble extends ImageView{
 			ObjectAnimator animx = ObjectAnimator.ofFloat(this, View.TRANSLATION_X, randy.nextInt(100) + 50);
 			animx.setRepeatCount(5);
 			animx.setRepeatMode(Animation.REVERSE);
-			ObjectAnimator animr = ObjectAnimator.ofFloat(this, "rotate", 360);
+			ObjectAnimator animr = ObjectAnimator.ofFloat(this, View.ROTATION, 360);
 			anima.setDuration(randy.nextInt(100));
 			animx.setRepeatCount(5);
 			animx.setRepeatMode(Animation.RESTART);

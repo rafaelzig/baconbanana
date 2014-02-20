@@ -15,30 +15,30 @@ public class ParseQuestion extends Activity{
 	private ArrayList<Question> questions =  new ArrayList<Question>();
 	private int questNo = 0;
 	private int count;
-	//private ArratList<Answers>
+	private ArrayList<String> answers = new ArrayList<String>();
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		//standard ops
 		super.onCreate(savedInstanceState);
+		
+		//placeholder survey
 		Question q1 = new TextBoxQuestion();
 		Question q2 = new RadioBtnQuestion();
-		this.addQuestion(q1);
 		this.addQuestion(q2);
+		this.addQuestion(q1);
 		this.nextQuest(questNo++);
 	}
 	
 	public void nextQuest(int i){
-		//Class<? extends Question> cc = questions.get(i);
 		Intent questSpecs = new Intent(ParseQuestion.this, questions.get(i).getClass());
 		questSpecs.putExtra("question", questions.get(i));
 		this.startActivityForResult(questSpecs, i);
-		//this.startActivity(questSpecs);
 		}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		if(requestCode == questNo && resultCode == RESULT_OK){
-			//save answers
-			nextQuest(++questNo);
+		if(resultCode == RESULT_OK){
+			answers.add(data.getStringExtra("answer"));
+			nextQuest(questNo++);
 		}
 	}
 	public void xmlToQuestion(){

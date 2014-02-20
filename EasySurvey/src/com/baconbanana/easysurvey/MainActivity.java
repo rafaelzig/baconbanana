@@ -22,20 +22,13 @@ public class MainActivity extends Activity implements OnClickListener{
 	private int count = 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		/*
-		 *super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		quest = (TextView) findViewById(R.id.questTextBox);
-		quest.setText("How are you feeling today, Mrs Borris?");
-		nextBtn = (Button) findViewById(R.id.nextTextBox);
-		nextBtn.setOnClickListener(this);
-		answer = (EditText) findViewById(R.id.answTextBox);
-		layout = (RelativeLayout) findViewById(R.id.layout);
-		*/
-		//second
+		
 		super.onCreate(savedInstanceState);
-		qp = new ParseQuestion();
-		this.startActivity(new Intent(this, ParseQuestion.class));
+		
+		VideoActivity va = new VideoActivity();
+		this.startActivity(new Intent(this, VideoActivity.class));
+		/*qp = new ParseQuestion();
+		this.startActivity(new Intent(this, ParseQuestion.class));*/
 		
 	}
 
