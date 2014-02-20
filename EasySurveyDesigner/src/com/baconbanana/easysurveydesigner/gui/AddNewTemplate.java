@@ -46,9 +46,9 @@ public class AddNewTemplate {
 
 		// ---------------------set combo box-----------------------------------
 		type = new JComboBox<String>();
-		String[] typesOfAnswers = { "Text Area", "Radio Button", "Check Box" };
+		String[] typesOfAnswers = { "Open ended question", "Multiple choice question"};
 		int count = 0;
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 2; i++)
 			type.addItem(typesOfAnswers[count++]);
 		// --------------------------------------------------------------------
 
@@ -77,9 +77,13 @@ public class AddNewTemplate {
 
 			public void actionPerformed(ActionEvent e1) {
 				String h = type.getSelectedItem().toString();
-				System.out.println(h);
-				new AddNewQuestion(h);
-
+				
+				if (h == "Multiple choice question"){
+					new NewMultipleChoice(h);
+				}
+				if (h == "Open ended question"){
+					new NewOpenEnded(h);
+				}
 			}
 		});
 

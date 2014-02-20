@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.gui;
 
 
 import javax.swing.plaf.*;

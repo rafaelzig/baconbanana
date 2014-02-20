@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner.functionalCore;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -20,14 +20,11 @@ public class OpenEndedQuestion extends Question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content, OPEN_ENDED_QUESTION_TYPE);
+		super(content);
 	}
 
-	/**
-	 * Default Constructor method
-	 */
-	public OpenEndedQuestion()
+	public void setAnswer(String answer)
 	{
-		this("Open Ended Question");
+		this.answer = answer;
 	}
 }
