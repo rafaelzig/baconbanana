@@ -33,12 +33,21 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 * TODO
 	 * @param answerList
 	 */
-	public void setAnswer(List<Integer> answerList)
+/*	public void setAnswer(List<Integer> answerList)
 	{
 		if (!acceptMultiple && answerList.size() > 1)
 			;// Throw some exception
 		else
 			for (int index : answerList)
 				answer += getChoiceList().get(index) + ",";
+	}*/
+
+	@Override
+	public void setAnswer(String answer)
+	{
+		if (!acceptMultiple && !answer.isEmpty())
+			;// Throw some exception
+		else if (getChoiceList().contains(answer))
+			this.answer = answer;
 	}
 }

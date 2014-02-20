@@ -34,7 +34,7 @@ public abstract class Question
 		this.answer = new String();
 	}
 
-	/**
+	/** 
 	 * @return the content
 	 */
 	public String getContent()
@@ -58,4 +58,9 @@ public abstract class Question
 	{
 		return answer;
 	}
+	
+	/**
+	 * TODO
+	 */
+	public abstract void setAnswer(String answer);
 }
