@@ -5,6 +5,11 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -28,6 +33,8 @@ import javax.swing.plaf.basic.BasicArrowButton;
 
 public class EasySurveyFrame {
 
+	 static ArrayList<String>templateList;
+	
 	JFrame window = new JFrame("Easy Survey");
 	JLabel Information1 = new JLabel("List of templates");
 	JLabel Information2 = new JLabel("Template preview");
@@ -73,6 +80,48 @@ public class EasySurveyFrame {
 		jpTemplates.add(Information1, BorderLayout.NORTH);
 		jpTemplates.add(List1, BorderLayout.CENTER);
 		List1.setBorder(border);
+		
+		//---------------------------------------------------------------------------
+		ArrayList<String>list = new ArrayList<String>();
+        try {
+            // The newInstance() call is a work around for some
+            // broken Java implementations
+
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            // handle the error
+        }
+    
+        Connection conn = null;
+        try {
+            conn =
+               DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
+                                           "user=root&password=1111");
+
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery("SELECT * FROM  template");
+            while (res.next()) {
+            String name= res.getString("name");
+            String age = res.getString("questions");
+            System.out.println(name + "\t" + age);
+            list.add(name);
+            }
+            templateList=list;
+            System.out.println(list.toString());
+            /*
+            int val = st.executeUpdate("INSERT INTO template  VALUES ('Matt', '55')");
+             if (val==1)   System.out.print("Successfully inserted value");
+            conn.close();*/
+            } catch (Exception e) {
+            e.printStackTrace();
+            }
+        for (String s : list) {
+			myModel1.addElement(s);
+		}
+		
+		List1.setModel(EasySurveyFrame.myModel1);
+		
+		//----------------------------------------------------------
 		
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
 		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
