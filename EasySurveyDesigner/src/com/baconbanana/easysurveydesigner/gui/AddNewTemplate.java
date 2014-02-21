@@ -1,10 +1,12 @@
 package com.baconbanana.easysurveydesigner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -12,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 public class AddNewTemplate {
 	private String stage;
@@ -37,6 +40,7 @@ public class AddNewTemplate {
 	public void setThings() {
 		window = new JFrame("Create new template. Stage:" + this.stage);
 		window.setLayout(new BorderLayout());
+		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 
 		createQuestion = new JButton("Create question");
 		addExistingQuestion = new JButton("Add existing question");
@@ -54,7 +58,8 @@ public class AddNewTemplate {
 
 		window.add(nameOfTemplate, BorderLayout.NORTH);
 		window.add(Template, BorderLayout.CENTER);
-
+		Template.setBorder(border);
+		
 		JPanel jpButtons = new JPanel(new FlowLayout());
 		jpButtons.add(type);
 		jpButtons.add(createQuestion);

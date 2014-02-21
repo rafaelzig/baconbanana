@@ -1,11 +1,13 @@
 package com.baconbanana.easysurveydesigner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
 public class NewMultipleChoice {
@@ -40,16 +43,19 @@ public class NewMultipleChoice {
 		// ---------------------------------------------------
 
 		window.setLayout(new BorderLayout());
+		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 
 		// --------------center of window---------------------
 		question = new JTextArea("Type your question here");
 		question.setPreferredSize(new Dimension(800, 280));
+		question.setBorder(border);
 		window.add(question, BorderLayout.CENTER);
 		// ---------------------------------------------------
 
 		// --------------North of window----------------------
 		title = new JTextField("Type your title here");
 		title.setPreferredSize(new Dimension(800, 20));
+		title.setBorder(border);
 		window.add(title, BorderLayout.NORTH);
 		// ---------------------------------------------------
 
@@ -105,7 +111,7 @@ public class NewMultipleChoice {
 		add.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e1) {
-				if (answerLimit < 20) {
+				if (answerLimit < 10) {
 					
 					model.addRow(new Object[] { "type answer here", false });
 					answerLimit++;

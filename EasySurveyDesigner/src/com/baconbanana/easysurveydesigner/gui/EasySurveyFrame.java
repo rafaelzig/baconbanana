@@ -1,16 +1,19 @@
 package com.baconbanana.easysurveydesigner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicArrowButton;
 
 /**
@@ -62,12 +65,15 @@ public class EasySurveyFrame {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		window.setLayout(new BorderLayout());
+		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 
 		JPanel jpTemplates = new JPanel(new BorderLayout());
 		window.add(jpTemplates, BorderLayout.WEST);
 
 		jpTemplates.add(Information1, BorderLayout.NORTH);
 		jpTemplates.add(List1, BorderLayout.CENTER);
+		List1.setBorder(border);
+		
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
 		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
 		jpTemplatesButtons.add(Add);
@@ -80,12 +86,15 @@ public class EasySurveyFrame {
 
 		jpTemplatesPreview.add(Information2, BorderLayout.NORTH);
 		jpTemplatesPreview.add(List2, BorderLayout.CENTER);
+		List2.setBorder(border);
 
 		JPanel jpQuestionsPreview = new JPanel(new BorderLayout());
 		window.add(jpQuestionsPreview, BorderLayout.SOUTH);
 
 		jpQuestionsPreview.add(Information3, BorderLayout.NORTH);
 		jpQuestionsPreview.add(List3, BorderLayout.CENTER);
+		List3.setBorder(border);
+		
 		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
 		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);
 		jpQuestionsButton.add(Filler);
@@ -119,8 +128,9 @@ public class EasySurveyFrame {
 	 *            Main method that initialise this class.
 	 * 
 	 */
-
+/*
 	public static void main(String[] args) {
 		new EasySurveyFrame();
 	}
+	*/
 }

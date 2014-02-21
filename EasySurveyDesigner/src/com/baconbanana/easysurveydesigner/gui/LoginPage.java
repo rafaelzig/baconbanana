@@ -14,9 +14,10 @@ import javax.swing.UIManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class LoginPage {
-	JFrame loginPageFrame = new JFrame("Login Page");
+	static JFrame loginPageFrame = new JFrame("Login Page");
 	public LoginPage()
 	{
+		/*
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 		     MetalLookAndFeel.setCurrentTheme(new TestStyle());
@@ -24,13 +25,14 @@ public class LoginPage {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 		//bla
 		//kllk
 
 		loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initLayout();
 		loginPageFrame.setVisible(true);
-		JFrame.setDefaultLookAndFeelDecorated(true);
+		//JFrame.setDefaultLookAndFeelDecorated(true);
 		
 	}
 	public void initLayout()
@@ -51,9 +53,9 @@ public class LoginPage {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new MainWindow(userNameField.getText());
-				loginPageFrame.setVisible(false);
-				
+				//new MainWindow(userNameField.getText());
+				new EasySurveyFrame();
+				loginPageFrame.dispose();
 			}
 		});
 	
@@ -62,5 +64,6 @@ public class LoginPage {
 	public static void main(String args[])
 	{
 		new LoginPage();
+		
 	}
 }
