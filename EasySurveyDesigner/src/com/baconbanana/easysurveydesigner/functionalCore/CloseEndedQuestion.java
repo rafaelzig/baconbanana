@@ -35,14 +35,19 @@ abstract class CloseEndedQuestion extends Question
 	public CloseEndedQuestion(String content, List<String> choiceList)
 	{
 		super(content);
-		this.choiceList = choiceList;
+		
+		if (choiceList.size() > 1)
+			this.choiceList = choiceList;
+		else
+			; // Only one choice -> Throw some exception
+		
 		this.subsequentList = new LinkedList<>();
 	}
 
 	/**
 	 * @return the choices
 	 */
-	@XmlElementWrapper(name = "choices")
+	@XmlElementWrapper(name="choices")
 	public List<String> getChoiceList()
 	{
 		return choiceList;

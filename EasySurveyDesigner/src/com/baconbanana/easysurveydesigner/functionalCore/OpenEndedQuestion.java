@@ -22,6 +22,14 @@ public class OpenEndedQuestion extends Question
 	{
 		super(content);
 	}
+	
+	/**
+	 * Default Constructor method
+	 */
+	public OpenEndedQuestion()
+	{
+		this("Open Ended Question");
+	}
 
 	public void setAnswer(String answer)
 	{

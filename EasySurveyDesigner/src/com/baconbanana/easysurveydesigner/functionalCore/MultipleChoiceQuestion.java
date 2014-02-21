@@ -3,6 +3,7 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,42 +13,35 @@ import javax.xml.bind.annotation.XmlRootElement;
  * 
  *         This class represents a Multiple Choice Question, a form of
  *         assessment in which respondents are asked to select the best possible
- *         answer (or answers) out of the choices from a list.
+ *         answer out of the choices from a list.
  */
 @XmlRootElement
 public class MultipleChoiceQuestion extends CloseEndedQuestion
 {
-
-	private boolean acceptMultiple;
-
 	/**
 	 * TODO
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choiceList, boolean acceptMultiple)
+	public MultipleChoiceQuestion(String content, List<String> choiceList)
 	{
 		super(content, choiceList);
-		this.acceptMultiple = acceptMultiple;
+	}
+	
+	/**
+	 * Default Constructor method.
+	 */
+	public MultipleChoiceQuestion()
+	{
+		this("Multiple Choice Question", new ArrayList<String>());
 	}
 	
 	/**
 	 * TODO
-	 * @param answerList
 	 */
-/*	public void setAnswer(List<Integer> answerList)
-	{
-		if (!acceptMultiple && answerList.size() > 1)
-			;// Throw some exception
-		else
-			for (int index : answerList)
-				answer += getChoiceList().get(index) + ",";
-	}*/
-
-	@Override
 	public void setAnswer(String answer)
 	{
-		if (!acceptMultiple && !answer.isEmpty())
-			;// Throw some exception
-		else if (getChoiceList().contains(answer))
+		if (getChoiceList().contains(answer))
 			this.answer = answer;
+		else
+			; // Answer not in choiceList -> Throw some exception
 	}
 }

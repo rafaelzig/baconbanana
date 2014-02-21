@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  *         asks for a reply. Survey questions can be of different types and
  *         serve to gather different sets of data.
  */
-@XmlSeeAlso({ OpenEndedQuestion.class, ScalarQuestion.class, MultipleChoiceQuestion.class})
+@XmlSeeAlso({ OpenEndedQuestion.class, ScalarQuestion.class, MultipleChoiceQuestion.class, MultipleAnswerQuestion.class})
 public abstract class Question
 {
 //	/**

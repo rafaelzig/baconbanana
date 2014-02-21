@@ -4,30 +4,74 @@
     <stage>Initial Consultation</stage>
     <questionList>
         <openEndedQuestion>
+            <answer></answer>
             <content>What is your name?</content>
-            <type>0</type>
         </openEndedQuestion>
         <openEndedQuestion>
-            <answer>25</answer>
+            <answer></answer>
             <content>What is your age?</content>
-            <type>0</type>
         </openEndedQuestion>
         <multipleChoiceQuestion>
+            <answer></answer>
             <content>Are you a smoker?</content>
-            <type>1</type>
             <choices>
                 <choiceList>Yes</choiceList>
                 <choiceList>No</choiceList>
             </choices>
         </multipleChoiceQuestion>
         <multipleChoiceQuestion>
-            <answer>Male</answer>
+            <answer></answer>
             <content>What is your gender?</content>
-            <type>1</type>
             <choices>
                 <choiceList>Male</choiceList>
                 <choiceList>Female</choiceList>
             </choices>
         </multipleChoiceQuestion>
+        <multipleAnswerQuestion>
+            <answer></answer>
+            <content>Select your favourite fruits:</content>
+            <choices>
+                <choiceList>Apple</choiceList>
+                <choiceList>Orange</choiceList>
+                <choiceList>Banana</choiceList>
+                <choiceList>Tangerine</choiceList>
+                <choiceList>Watermelon</choiceList>
+                <choiceList>Kiwi</choiceList>
+                <choiceList>Papaya</choiceList>
+            </choices>
+        </multipleAnswerQuestion>
+        <scalarQuestion>
+            <answer></answer>
+            <content>How would you rate Rafael's importance to this project?</content>
+            <choices>
+                <choiceList>Not important</choiceList>
+                <choiceList>Slightly important</choiceList>
+                <choiceList>Moderately important</choiceList>
+                <choiceList>Highly important</choiceList>
+                <choiceList>Extremely important</choiceList>
+            </choices>
+        </scalarQuestion>
+        <scalarQuestion>
+            <answer></answer>
+            <content>How would you rate Rafael's performance on this project?</content>
+            <choices>
+                <choiceList>Not influential</choiceList>
+                <choiceList>Slightly influential</choiceList>
+                <choiceList>Moderately influential</choiceList>
+                <choiceList>Highly influential</choiceList>
+                <choiceList>Extremely influential</choiceList>
+            </choices>
+        </scalarQuestion>
+        <scalarQuestion>
+            <answer></answer>
+            <content>Rafael is awesome.</content>
+            <choices>
+                <choiceList>Not in agreement</choiceList>
+                <choiceList>Slightly in agreement</choiceList>
+                <choiceList>Moderately in agreement</choiceList>
+                <choiceList>Highly in agreement</choiceList>
+                <choiceList>Extremely in agreement</choiceList>
+            </choices>
+        </scalarQuestion>
     </questionList>
 </survey>

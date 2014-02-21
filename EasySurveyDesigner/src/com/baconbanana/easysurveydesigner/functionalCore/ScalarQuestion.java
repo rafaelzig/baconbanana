@@ -20,53 +20,46 @@ public class ScalarQuestion extends CloseEndedQuestion
 	/**
 	 * Static fields representing the type of Scalar Question to be constructed.
 	 */
-	public static final int IMPORTANCE_SCALE = 1, QUALITY_SCALE = 2,
-			PROPENSITY_SCALE = 3, LIKERT_SCALE = 4;
+	public static final String ACCEPTABILITY_SCALE = "acceptable",
+			AGREEMENT_SCALE = "in agreement", APPROPRIATENESS_SCALE = "appropriate",
+			AWARENESS_SCALE = "aware", CONCERN_SCALE = "concerned",
+			FAMILIARITY_SCALE = "familiar", FREQUENCY_SCALE = "frequent",
+			IMPORTANCE_SCALE = "important", INFLUENCE_SCALE = "influential",
+			LIKELIHOOD_SCALE = "likely", PRIORITY_SCALE = "?",
+			QUALITY_SCALE = "?", SATISFACTION_SCALE = "satisfied";
 
 	/**
 	 * @param content
 	 * @param type
 	 */
-	public ScalarQuestion(String content, int type)
+	public ScalarQuestion(String content, String keyword)
 	{
-		super(content, prepareChoiceList(type));
+		super(content, prepareChoiceList(keyword));
 	}
 
-	private static List<String> prepareChoiceList(int type)
+	/**
+	 * Default Constructor method.
+	 */
+	public ScalarQuestion()
+	{
+		this("Scalar Question", "Keyword");
+	}
+	
+	/**
+	 * TODO
+	 * 
+	 * @param type
+	 * @return
+	 */
+	private static List<String> prepareChoiceList(String keyword)
 	{
 		List<String> choiceList = new ArrayList<>(5);
 
-		switch (type)
-		{
-			case IMPORTANCE_SCALE:
-				choiceList.add("Unimportant");
-				choiceList.add("Of Little Importance");
-				choiceList.add("Moderately Important");
-				choiceList.add("Important");
-				choiceList.add("Very important");
-				break;
-			case QUALITY_SCALE:
-				choiceList.add("Extremely Poor");
-				choiceList.add("Below Average");
-				choiceList.add("Average");
-				choiceList.add("Above Average");
-				choiceList.add("Excellent");
-				break;
-			case PROPENSITY_SCALE:
-				choiceList.add("Definitely Not");
-				choiceList.add("Probably Not");
-				choiceList.add("Not Sure");
-				choiceList.add("Probably");
-				choiceList.add("Definitely");
-				break;
-			case LIKERT_SCALE:
-				choiceList.add("Strongly Disagree");
-				choiceList.add("Disagree");
-				choiceList.add("Undecided");
-				choiceList.add("Agree");
-				choiceList.add("Strongly Agree");
-				break;
-		}
+		choiceList.add("Not " + keyword);
+		choiceList.add("Slightly " + keyword);
+		choiceList.add("Moderately " + keyword);
+		choiceList.add("Highly " + keyword);
+		choiceList.add("Extremely " + keyword);
 
 		return choiceList;
 	}
@@ -74,8 +67,11 @@ public class ScalarQuestion extends CloseEndedQuestion
 	/**
 	 * TODO
 	 */
-	public void setAnswer(int index)
+	public void setAnswer(String answer)
 	{
-		answer = getChoiceList().get(index);
+		if (getChoiceList().contains(answer))
+			this.answer = answer;
+		else
+			; // Answer not in choiceList -> Throw some exception
 	}
 }
