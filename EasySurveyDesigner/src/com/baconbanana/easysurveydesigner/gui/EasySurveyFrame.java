@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -122,6 +123,21 @@ public class EasySurveyFrame {
 
 			}
 
+		});
+		
+		Delete.addActionListener(new ActionListener() {
+			
+			
+			public void actionPerformed(ActionEvent e2) {
+				try {
+					DataTest.DeleteTemplate();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				DataTest.FillListOfTemplates();
+				
+			}
 		});
 
 		window.pack();

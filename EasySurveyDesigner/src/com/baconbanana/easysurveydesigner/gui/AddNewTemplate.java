@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -23,7 +24,7 @@ public class AddNewTemplate {
 	private JButton addExistingQuestion;
 	private JButton delete;
 	private JButton save;
-	private JTextField nameOfTemplate;
+	static JTextField nameOfTemplate;
 	private JComboBox<String> type;
 
 	public static JList<String> Template = new JList<String>();
@@ -96,8 +97,18 @@ public class AddNewTemplate {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
+				
+				try {
+					DataTest.SaveTemplate();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				DataTest.FillListOfTemplates();
+				/*
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
+				*/
 				window.dispose();
 			}
 		});

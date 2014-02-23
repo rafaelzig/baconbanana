@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-public class MainWindow {
+public class MainWindowUnused {
 	JFrame mainFrame = new JFrame();
 	ImageIcon ii;
 
@@ -25,7 +25,7 @@ public class MainWindow {
 	double Sw = screenSize.getWidth();
 	double Sh = screenSize.getHeight();
 
-	public MainWindow(String string)
+	public MainWindowUnused(String string)
 
 	{
 		accountName = string;
