@@ -5,7 +5,9 @@ import java.sql.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 // Notice, do not import com.mysql.jdbc.*
@@ -13,7 +15,14 @@ import java.util.ArrayList;
 
 public class DataTest {
 	   static ArrayList<String>templateList;
-    public static void main(String[] args) {
+        
+    public ArrayList<String>getList()
+    {
+    	return templateList;
+    }
+    
+    public static void FillListOfTemplates()
+    {
     	ArrayList<String>list = new ArrayList<String>();
         try {
             // The newInstance() call is a work around for some
@@ -24,33 +33,32 @@ public class DataTest {
             // handle the error
         }
     
-    Connection conn = null;
-    try {
-        conn =
-           DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                       "user=root&password=1111");
+        Connection conn = null;
+        try {
+            conn =
+               DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
+                                           "user=root&password=1111");
 
-        Statement st = conn.createStatement();
-        ResultSet res = st.executeQuery("SELECT * FROM  template");
-        while (res.next()) {
-        String name= res.getString("name");
-        String age = res.getString("questions");
-        System.out.println(name + "\t" + age);
-        list.add(name);
-        }
-        templateList=list;
-        System.out.println(list.toString());
-        /*
-        int val = st.executeUpdate("INSERT INTO template  VALUES ('Matt', '55')");
-         if (val==1)   System.out.print("Successfully inserted value");
-        conn.close();*/
-        } catch (Exception e) {
-        e.printStackTrace();
-        }
-    }
-    public ArrayList<String>getList()
-    {
-    	return templateList;
+            Statement st = conn.createStatement();
+            ResultSet res = st.executeQuery("SELECT * FROM  template");
+            while (res.next()) {
+            String name= res.getString("name");
+            String age = res.getString("questions");
+            list.add(name);
+            }
+            templateList=list;
+            /*
+            int val = st.executeUpdate("INSERT INTO template  VALUES ('Matt', '55')");
+             if (val==1)   System.out.print("Successfully inserted value");
+            conn.close();*/
+            } catch (Exception e) {
+            e.printStackTrace();
+            }
+        for (String s : list) {
+			EasySurveyFrame.myModel1.addElement(s);
+		}
+		
+		EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
     }
 
 }
