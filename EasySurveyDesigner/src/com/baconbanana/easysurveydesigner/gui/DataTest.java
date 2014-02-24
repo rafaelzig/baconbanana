@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class DataTest {
 	   static ArrayList<String>templateList;
+	   static String loggin = new String("user=root");
+	   static String password = new String("password=admin");
         
     public ArrayList<String>getList()
     {
@@ -37,7 +39,7 @@ public class DataTest {
         try {
             conn =
                DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                           "user=root&password=1111");
+                                           loggin+"&"+password);
 
             Statement st = conn.createStatement();
             ResultSet res = st.executeQuery("SELECT * FROM  template");
@@ -70,7 +72,7 @@ public class DataTest {
     	
             conn =
                DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                           "user=root&password=1111");
+            		   loggin+"&"+password);
 
             Statement st = conn.createStatement();
     	
@@ -88,7 +90,7 @@ public class DataTest {
     	
         conn =
            DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                       "user=root&password=1111");
+        		   loggin+"&"+password);
 
         Statement st = conn.createStatement();
 	
