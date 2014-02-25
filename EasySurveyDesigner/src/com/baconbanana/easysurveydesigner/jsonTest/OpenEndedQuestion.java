@@ -5,8 +5,7 @@ package com.baconbanana.easysurveydesigner.jsonTest;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -18,7 +17,7 @@ import org.json.JSONObject;
 @XmlRootElement
 public class OpenEndedQuestion extends Question
 {
-	public OpenEndedQuestion(JSONObject rawData) throws JSONException
+	public OpenEndedQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
@@ -28,7 +27,7 @@ public class OpenEndedQuestion extends Question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content);
+		super(content, Question.OPEN_ENDED_QUESTION_TYPE);
 	}
 	
 	public void setAnswer(String answer)

@@ -5,31 +5,56 @@ package com.baconbanana.easysurveydesigner.jsonTest;
 
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
  * 
  *         This class represents a questionnaire, an investigation of the
  *         opinions or experience of a group of people, based on a series of
- *         questions.
+ *         questionList.
  */
 public class Survey
 {
 	private String name, stage;
-	private List<Question> questions;
+	private List<Question> questionList;
 	
-	public Survey(List<Question> questions)
+	public Survey(String name, String stage, List<Question> questionList)
 	{
-		this.questions = questions;
+		this.name = name;
+		this.stage = stage;
+		this.questionList = questionList;
 	}
 	
-	public Survey(JSONObject rawData) throws JSONException
+	public Survey(JSONObject rawData)
 	{
 		super();
 		
+		JSONObject questionRaw;
+		
+		JSONArray questionListRaw = (JSONArray) rawData.get("questionList");
+		
+		for (int index = 0; index < questionListRaw.size(); index++)
+		{
+			questionRaw = (JSONObject) questionListRaw.get(index);
+			
+			switch ((Integer) questionRaw.get("type"))
+			{
+				case Question.MULTIPLE_ANSWER_QUESTION:
+					questionList.add(new MultipleAnswerQuestion(questionRaw));
+					break;
+				case Question.MULTIPLE_CHOICE_QUESTION_TYPE:
+					questionList.add(new MultipleChoiceQuestion(questionRaw));
+					break;
+				case Question.OPEN_ENDED_QUESTION_TYPE:
+					questionList.add(new OpenEndedQuestion(questionRaw));
+					break;
+				case Question.SCALAR_QUESTION_TYPE:
+					questionList.add(new ScalarQuestion(questionRaw));
+					break;
+			}
+		}
 	}
 
 	/**
@@ -67,42 +92,37 @@ public class Survey
 	}
 
 	/**
-	 * @return the questions
+	 * @return the questionList
 	 */
-	public List<Question> getquestions()
+	public List<Question> getQuestionList()
 	{
-		return questions;
+		return questionList;
 	}
 
 	/**
-	 * @param questions
-	 *            the questions to set
+	 * @param questionList
+	 *            the questionList to set
 	 */
-	public void setquestions(List<Question> questions)
+	public void setQuestionList(List<Question> questionList)
 	{
-		this.questions = questions;
+		this.questionList = questionList;
 	}
 	
-	public static Survey getSurvey() throws JSONException {
-		// Fetching the data from the World Bank feed
-		List<JSONtest> countries = CachingEngine.getCachedCountries();
-		//ArrayList<JSONtest> countries = new ArrayList<JSONtest>();
-
-		if (countries.size() == 0) {
-			// Parsing the data onto JSONArray objects
-			JSONArray rootArray = new JSONArray(QuerySystem.getAllCountriesData());
-			JSONArray allCountriesRaw = rootArray.getJSONArray(1);
-
-			// Iterates through allCountriesRaw
-			for (int n = 0; n < allCountriesRaw.length(); n++) {
-				// Creates and adds a JSONtest object to the ArrayList of countries
-				JSONtest aJSONtest = new JSONtest(allCountriesRaw.getJSONObject(n));
-				if (aJSONtest.longitude != null && aJSONtest.latitude != null) {
-					countries.add(aJSONtest);
-				}
-			}
-			CachingEngine.writeCountriesCache(countries); // Cache response for 1 day.
-		}
-		return countries;
+	@SuppressWarnings("unchecked")
+	public JSONObject getJSON()
+	{
+		JSONObject surveyRaw = new JSONObject();
+		
+		surveyRaw.put("name", name);
+		surveyRaw.put("stage", stage);
+		
+		JSONArray questionListRaw = new JSONArray();
+		
+		for (Question question : questionList)
+			questionListRaw.add(question.getJSON());
+		
+		surveyRaw.put("questionList", questionListRaw);
+		
+		return surveyRaw;
 	}
 }

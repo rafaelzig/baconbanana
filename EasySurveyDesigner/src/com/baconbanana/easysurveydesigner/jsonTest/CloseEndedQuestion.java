@@ -5,78 +5,78 @@ package com.baconbanana.easysurveydesigner.jsonTest;
 
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
  * 
  *         This abstract class represents a close-ended question, which is a
- *         question format that limits respondents with a list of answer choices
+ *         question format that limits respondents with a list of answer choiceList
  *         from which they must choose to answer the question. Commonly these
- *         type of questions are in the form of multiple choices, either with
+ *         type of choiceList are in the form of multiple choiceList, either with
  *         one answer or with check-all-that-apply, but also can be in scale
  *         format, where respondent should decide to rate the situation in along
  *         the scale continuum,
  */
 abstract class CloseEndedQuestion extends Question
 {
-	private List<String> choices;
+	private List<String> choiceList;
 
 	/**
 	 * Constructor method.
 	 * 
 	 * @param content
 	 *            The content of the question.
-	 * @param choices
-	 *            An List of String objects containing the choices.
+	 * @param choiceList
+	 *            An List of String objects containing the choiceList.
 	 */
-	public CloseEndedQuestion(String content, List<String> choices)
+	public CloseEndedQuestion(String content, int type, List<String> choiceList)
 	{
-		super(content);
+		super(content, type);
 
-		if (choices.size() > 1) this.choices = choices;
+		if (choiceList.size() > 1) this.choiceList = choiceList;
 		else
 		; // Only one choice -> Throw some exception
 	}
 
-	public CloseEndedQuestion(JSONObject rawData) throws JSONException
+	public CloseEndedQuestion(JSONObject rawData)
 	{
 		super(rawData);
 		
-		JSONArray choicesRaw = rawData.getJSONArray("choices");
+		JSONArray choiceListRaw = (JSONArray) rawData.get("choiceList");
 		
-		if (choicesRaw.length() > 1)
-			for (int index = 0; index < choicesRaw.length(); index++)
-				choices.add(choicesRaw.getString(index));
+		if (choiceListRaw.size() > 1)
+			for (int index = 0; index < choiceListRaw.size(); index++)
+				choiceList.add((String) choiceListRaw.get(index));
 		else
 			; // Only one choice -> Throw some exception
 	}
 
 	/**
-	 * @return the choices
+	 * @return the choiceList
 	 */
-	public List<String> getChoices()
+	public List<String> getChoiceList()
 	{
-		return choices;
+		return choiceList;
 	}
 
 	/**
-	 * @param choices
-	 *            The list containing the choices.
+	 * @param choiceList
+	 *            The list containing the choiceList.
 	 */
-	public void setChoices(List<String> choices)
+	public void setchoiceList(List<String> choiceList)
 	{
-		this.choices = choices;
+		this.choiceList = choiceList;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject getJSON() throws JSONException
+	public JSONObject getJSON()
 	{
 		JSONObject rawData = super.getJSON();
 		
-		rawData.put("choices", choices);
+		rawData.put("choiceList", choiceList);
 		
 		return rawData;
 	}

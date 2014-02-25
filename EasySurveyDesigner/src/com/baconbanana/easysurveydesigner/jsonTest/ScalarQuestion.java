@@ -6,10 +6,7 @@ package com.baconbanana.easysurveydesigner.jsonTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -17,7 +14,6 @@ import org.json.JSONObject;
  *         This class represents a Scalar Question, where the respondent should
  *         decide to rate the situation in along the scale continuum.
  */
-@XmlRootElement
 public class ScalarQuestion extends CloseEndedQuestion
 {
 	/**
@@ -37,14 +33,14 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 */
 	public ScalarQuestion(String content, String keyword)
 	{
-		super(content, prepareChoices(keyword));
+		super(content, Question.SCALAR_QUESTION_TYPE, prepareChoiceList(keyword));
 	}
 
 	/**
 	 * Default Constructor method.
 	 * @throws JSONException 
 	 */
-	public ScalarQuestion(JSONObject rawData) throws JSONException
+	public ScalarQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
@@ -55,17 +51,17 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * @param type
 	 * @return
 	 */
-	private static List<String> prepareChoices(String keyword)
+	private static List<String> prepareChoiceList(String keyword)
 	{
-		List<String> choices = new ArrayList<>(5);
+		List<String> choiceList = new ArrayList<>(5);
 
-		choices.add("Not " + keyword);
-		choices.add("Slightly " + keyword);
-		choices.add("Moderately " + keyword);
-		choices.add("Highly " + keyword);
-		choices.add("Extremely " + keyword);
+		choiceList.add("Not " + keyword);
+		choiceList.add("Slightly " + keyword);
+		choiceList.add("Moderately " + keyword);
+		choiceList.add("Highly " + keyword);
+		choiceList.add("Extremely " + keyword);
 
-		return choices;
+		return choiceList;
 	}
 
 	/**
@@ -73,7 +69,7 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 */
 	public void setAnswer(String answer)
 	{
-		if (getChoices().contains(answer))
+		if (getChoiceList().contains(answer))
 			this.answer = answer;
 		else
 			; // Answer not in choiceList -> Throw some exception

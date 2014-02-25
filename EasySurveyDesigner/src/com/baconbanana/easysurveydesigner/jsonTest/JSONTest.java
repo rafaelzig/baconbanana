@@ -1,101 +1,57 @@
 package com.baconbanana.easysurveydesigner.jsonTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class JSONTest
 {
-
-	public JSONTest(JSONObject rawData)
+	public static void main (String[] args)
 	{
-		super();
-
-		try
-		// Attempts to parse rawData
-		{
-			this.name = rawData.getString(NAME_KEY);
-			this.id = rawData.getString(ID_KEY);
-			this.iso2Code = rawData.getString(ISO_2_CODE_KEY);
-			this.capitalCity = rawData.getString(CAPITAL_CITY_KEY);
-
-			try
-			{
-				this.longitude = Double.parseDouble(rawData
-						.getString(LONGITUDE_KEY));
-			}
-			catch (NumberFormatException e)
-			{
-				this.longitude = null;
-			}
-
-			try
-			{
-				this.latitude = Double.parseDouble(rawData
-						.getString(LATITUDE_KEY));
-			}
-			catch (NumberFormatException e)
-			{
-				this.latitude = null;
-			}
-
-		}
-		catch (JSONException e)
-		{ // Encountered a problem whilst parsing rawData
-			e.printStackTrace();
-		}
+		// Creating a list of Question objects
+				List<Question> questionList = new ArrayList<>();
+				
+				// Adding an OpenEndedQuestion object
+				questionList.add(new OpenEndedQuestion("What is your name?"));
+				questionList.add(new OpenEndedQuestion("What is your age?"));
+				
+				// Creating a list of choices for the next Question object 
+				List<String> choiceList = new ArrayList<>();
+				choiceList.add("Yes");
+				choiceList.add("No");
+				
+				// Adding a MultipleChoiceQuestion object
+				questionList.add(new MultipleChoiceQuestion("Are you a smoker?", choiceList));
+				
+				// Changing the choices for the next Question object
+				choiceList = new ArrayList<>();
+				choiceList.add("Male");
+				choiceList.add("Female");
+				
+				// Adding another MultipleChoiceQuestion object
+				questionList.add(new MultipleChoiceQuestion("What is your gender?", choiceList));
+				
+				// Changing the choices for the next Question object
+				choiceList = new ArrayList<>();
+				choiceList.add("Apple");
+				choiceList.add("Orange");
+				choiceList.add("Banana");
+				choiceList.add("Tangerine");
+				choiceList.add("Watermelon");
+				choiceList.add("Kiwi");
+				choiceList.add("Papaya");
+				
+				// Adding a MultipleAnswerQuestion object
+				questionList.add(new MultipleAnswerQuestion("Select your favourite fruits:", choiceList));		
+				
+				// Adding ScalarQuestion objects
+				questionList.add(new ScalarQuestion("How would you rate Rafael's importance to this project?", ScalarQuestion.IMPORTANCE_SCALE));
+				questionList.add(new ScalarQuestion("How would you rate Rafael's performance on this project?", ScalarQuestion.INFLUENCE_SCALE));
+				questionList.add(new ScalarQuestion("Rafael is awesome.", ScalarQuestion.AGREEMENT_SCALE));
+				
+				// Creating a Survey object and setting its list of Question objects
+				Survey qOne = new Survey("Introduction", "Initial Consultation", questionList);
+				
+				System.out.println(qOne.getJSON().toJSONString());
 	}
-
-	/**
-	 * Constructs a new JSONtest object with the specified line from the cache
-	 * file.
-	 * 
-	 * @param cacheLine
-	 */
-	public JSONTest(String cacheLine)
-	{
-		super();
-
-		// Places the JSONtest data into a String array
-		String[] JSONtestParts = cacheLine.split(", ");
-
-		// Attempts to parse the JSONtest data
-		try
-		{
-			this.name = JSONtestParts[1];
-			this.id = JSONtestParts[0];
-			this.iso2Code = JSONtestParts[2];
-			this.capitalCity = JSONtestParts[3];
-
-			try
-			{
-				this.longitude = Double.parseDouble(JSONtestParts[5]);
-			}
-			catch (NumberFormatException e)
-			{
-				this.longitude = null;
-			}
-
-			try
-			{
-				this.latitude = Double.parseDouble(JSONtestParts[4]);
-			}
-			catch (NumberFormatException e)
-			{
-				this.latitude = null;
-			}
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-	}
-
-	/**
-	 * Retrieves an ArrayList of JSONtest Objects containing all countries from
-	 * the World Bank feed.
-	 * 
-	 * @return An ArrayList of JSONtest objects containing all countries from the
-	 *         World Bank feed.
-	 * @throws JSONException
-	 *             If there was a problem whilst parsing queryData.
-	 */
-
-	 
 }

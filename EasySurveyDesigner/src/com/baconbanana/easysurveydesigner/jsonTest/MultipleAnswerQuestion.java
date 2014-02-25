@@ -7,8 +7,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -29,10 +28,10 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 */
 	public MultipleAnswerQuestion(String content, List<String> choices)
 	{
-		super(content, choices);
+		super(content, Question.MULTIPLE_ANSWER_QUESTION, choices);
 	}
 	
-	public MultipleAnswerQuestion(JSONObject rawData) throws JSONException
+	public MultipleAnswerQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
@@ -45,7 +44,7 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 		String[] answers = answer.split(",");
 		
 		for (String a : answers)
-			if (!getChoices().contains(a));
+			if (!getChoiceList().contains(a));
 				; // Answer not in choiceList -> Throw some exception
 				
 		this.answer = answer;

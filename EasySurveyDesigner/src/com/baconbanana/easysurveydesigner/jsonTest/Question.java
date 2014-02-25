@@ -3,8 +3,7 @@
  */
 package com.baconbanana.easysurveydesigner.jsonTest;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 
 
 /**
@@ -16,12 +15,13 @@ import org.json.JSONObject;
  */
 public abstract class Question
 {
-//	/**
-//	 * Static fields representing the types of the question.
-//	 */
-//	public static final int OPEN_ENDED_QUESTION_TYPE = 0, MULTIPLE_CHOICE_QUESTION_TYPE = 1;
+	/**
+	 * Static fields representing the types of the question.
+	 */
+	public static final int OPEN_ENDED_QUESTION_TYPE = 1, MULTIPLE_CHOICE_QUESTION_TYPE = 2,MULTIPLE_ANSWER_QUESTION = 3, SCALAR_QUESTION_TYPE = 4;
 	
 	private String content;
+	private int type;
 	String answer;
 
 	/**
@@ -29,22 +29,34 @@ public abstract class Question
 	 *            The content of the question
 	 * @throws JSONException 
 	 */
-	public Question(JSONObject rawData) throws JSONException
+	public Question(JSONObject rawData)
 	{
 		super();
 		
-		this.content = rawData.getString("content");
-		this.answer = rawData.getString("answer");
+		this.type = (int) rawData.get("type");
+		this.content = (String) rawData.get("content");
+		this.answer = (String) rawData.get("answer");
 	}
 	
-	public Question(String content)
+	public Question(String content, int type)
 	{
 		super();
 		
+		this.type = type;
 		this.content = content;
 		this.answer = new String();
 	}
 
+	public void setType(int type)
+	{
+		this.type = type;
+	}
+	
+	public int getType()
+	{
+		return type;
+	}
+	
 	/** 
 	 * @return the content
 	 */
@@ -75,7 +87,8 @@ public abstract class Question
 	 */
 	public abstract void setAnswer(String answer);
 	
-	public JSONObject getJSON() throws JSONException
+	@SuppressWarnings("unchecked")
+	public JSONObject getJSON()
 	{
 		JSONObject rawData = new JSONObject();
 		
