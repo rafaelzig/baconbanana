@@ -5,6 +5,8 @@ package com.baconbanana.easysurveydesigner.functionalCore;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.json.simple.JSONObject;
+
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -15,22 +17,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class OpenEndedQuestion extends Question
 {
+	public OpenEndedQuestion(JSONObject rawData)
+	{
+		super(rawData);
+	}
+	
 	/**
 	 * @param content The content of the question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content);
+		super(content, Question.OPEN_ENDED_QUESTION_TYPE);
 	}
 	
-	/**
-	 * Default Constructor method
-	 */
-	public OpenEndedQuestion()
-	{
-		this("Open Ended Question");
-	}
-
 	public void setAnswer(String answer)
 	{
 		this.answer = answer;

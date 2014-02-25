@@ -1,8 +1,10 @@
-package com.baconbanana.easysurveydesigner.jsonTest;
+package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.simple.parser.ParseException;
 
 import com.baconbanana.easysurveydesigner.parsing.Operations;
 
@@ -55,15 +57,32 @@ public class JSONTest
 				// Creating a Survey object and setting its list of Question objects
 				Survey qOne = new Survey("Introduction", "Initial Consultation", questionList);
 				
+				String json = null;
+				
 				try
 				{
-					Operations.writeFile(qOne.getJSON().toJSONString().getBytes(), "Survey.json");
-					byte[] test = Operations.readFile("Survey.json");
+					Operations.writeFile(qOne.getJSON().toJSONString(), "Survey.json");
+					json = Operations.readFile("Survey.json");
+					System.out.println(json);
 				}
 				catch (IOException e)
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+				Survey qTwo = null;
+				
+				try
+				{
+					qTwo = new Survey(Operations.parseJSON(json));
+				}
+				catch (ParseException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				System.out.println(qTwo.getJSON().toJSONString());
 	}
 }

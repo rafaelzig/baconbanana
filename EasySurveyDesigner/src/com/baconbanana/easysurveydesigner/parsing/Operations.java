@@ -3,64 +3,89 @@
  */
 package com.baconbanana.easysurveydesigner.parsing;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
- * @author Zigoto
- * 
+ * TODO
+ * @author Rafael da Silva Costa & Team
+ *
  */
 public class Operations
 {
-	/** Read the given binary file, and return its contents as a byte array. */
-	public static byte[] readFile(String fileName) throws IOException
+	/**
+	 * TODO
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 */
+	public static String readFile(String fileName) throws IOException
 	{
-		System.out.println("Reading in binary file named : " + fileName);
-		File file = new File(fileName);
-		System.out.println("File size: " + file.length());
-
-		byte[] result = new byte[(int) file.length()];
-		int totalBytesRead = 0;
-		InputStream input = new BufferedInputStream(new FileInputStream(file));
+		Path path = new File(fileName).toPath();
+		BufferedReader reader = null;
+		StringBuilder output = null;
 		
-		while (totalBytesRead < result.length)
+		try
 		{
-			int bytesRemaining = result.length - totalBytesRead;
-			int bytesRead = input.read(result, totalBytesRead, bytesRemaining);
-
-			if (bytesRead > 0)
-				totalBytesRead = totalBytesRead + bytesRead;
+			reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII);
+			output = new StringBuilder();
+			String line = null;
+			
+			while ((line = reader.readLine()) != null)
+				output.append(line);
 		}
-
-		/*
-		 * the above style is a bit tricky: it places bytes into the 'result'
-		 * array; 'result' is an output parameter; the while loop usually has a
-		 * single iteration only.
-		 */
-		System.out.println("Num bytes read: " + totalBytesRead);
-		input.close();
-		return result;
+		finally
+		{
+			reader.close();
+		}
+		
+		return output.toString();
 	}
 
 	/**
-	 * Write a byte array to the given file. Writing binary data is
-	 * significantly simpler than reading it.
-	 * 
+	 * TODO
+	 * @param input
+	 * @param fileName
 	 * @throws IOException
 	 */
-	public static void writeFile(byte[] aInput, String aOutputFileName)
+	public static void writeFile(String input, String fileName)
 			throws IOException
 	{
-		System.out.println("Writing binary file...");
-		OutputStream output = new BufferedOutputStream(new FileOutputStream(
-				aOutputFileName));
-		output.write(aInput);
-		output.close();
+		Path path = new File(fileName).toPath();
+
+		BufferedWriter writer = null;
+
+		try
+		{
+			writer = Files.newBufferedWriter(path, StandardCharsets.US_ASCII);
+			writer.write(input);
+			writer.close();
+		}
+		finally
+		{
+			writer.close();
+		}
+	}
+
+	/**
+	 * TODO
+	 * @param str
+	 * @return
+	 * @throws ParseException
+	 */
+	public static JSONObject parseJSON(String str) throws ParseException
+	{
+		JSONParser parser = new JSONParser();
+
+		return (JSONObject) parser.parse(str);
 	}
 }

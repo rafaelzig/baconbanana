@@ -1,11 +1,9 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.jsonTest;
+package com.baconbanana.easysurveydesigner.oldFunctionalCore;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -17,19 +15,22 @@ import org.json.simple.JSONObject;
 @XmlRootElement
 public class OpenEndedQuestion extends Question
 {
-	public OpenEndedQuestion(JSONObject rawData)
-	{
-		super(rawData);
-	}
-	
 	/**
 	 * @param content The content of the question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content, Question.OPEN_ENDED_QUESTION_TYPE);
+		super(content);
 	}
 	
+	/**
+	 * Default Constructor method
+	 */
+	public OpenEndedQuestion()
+	{
+		this("Open Ended Question");
+	}
+
 	public void setAnswer(String answer)
 	{
 		this.answer = answer;

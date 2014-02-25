@@ -3,10 +3,11 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -23,15 +24,12 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 */
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
 	{
-		super(content, choiceList);
+		super(content, Question.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList);
 	}
 	
-	/**
-	 * Default Constructor method.
-	 */
-	public MultipleChoiceQuestion()
+	public MultipleChoiceQuestion(JSONObject rawData)
 	{
-		this("Multiple Choice Question", new ArrayList<String>());
+		super(rawData);
 	}
 	
 	/**

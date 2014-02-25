@@ -3,7 +3,8 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
-import javax.xml.bind.annotation.XmlSeeAlso;
+import org.json.simple.JSONObject;
+
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -12,28 +13,50 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  *         asks for a reply. Survey questions can be of different types and
  *         serve to gather different sets of data.
  */
-@XmlSeeAlso({ OpenEndedQuestion.class, ScalarQuestion.class, MultipleChoiceQuestion.class, MultipleAnswerQuestion.class})
 public abstract class Question
 {
-//	/**
-//	 * Static fields representing the types of the question.
-//	 */
-//	public static final int OPEN_ENDED_QUESTION_TYPE = 0, MULTIPLE_CHOICE_QUESTION_TYPE = 1;
+	/**
+	 * Static fields representing the types of the question.
+	 */
+	public static final int OPEN_ENDED_QUESTION_TYPE = 1, MULTIPLE_CHOICE_QUESTION_TYPE = 2,MULTIPLE_ANSWER_QUESTION = 3, SCALAR_QUESTION_TYPE = 4;
 	
 	private String content;
+	private long type;
 	String answer;
 
 	/**
 	 * @param content
 	 *            The content of the question
+	 * @throws JSONException 
 	 */
-	public Question(String content)
+	public Question(JSONObject rawData)
 	{
 		super();
+		
+		this.type = (long) rawData.get("type");
+		this.content = (String) rawData.get("content");
+		this.answer = (String) rawData.get("answer");
+	}
+	
+	public Question(String content, int type)
+	{
+		super();
+		
+		this.type = type;
 		this.content = content;
 		this.answer = new String();
 	}
 
+	public void setType(int type)
+	{
+		this.type = type;
+	}
+	
+	public long getType()
+	{
+		return type;
+	}
+	
 	/** 
 	 * @return the content
 	 */
@@ -63,4 +86,16 @@ public abstract class Question
 	 * TODO
 	 */
 	public abstract void setAnswer(String answer);
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject getJSON()
+	{
+		JSONObject rawData = new JSONObject();
+		
+		rawData.put("type", type);
+		rawData.put("content",content);
+		rawData.put("answer",answer);
+		
+		return rawData;
+	}
 }

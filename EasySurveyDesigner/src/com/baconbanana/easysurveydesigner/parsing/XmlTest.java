@@ -7,12 +7,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.OpenEndedQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.ScalarQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Survey;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.OpenEndedQuestion;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.Question;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.oldFunctionalCore.Survey;
 
 /**
  * @author Rafael da Silva Costa & Team

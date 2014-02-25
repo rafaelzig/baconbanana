@@ -3,26 +3,66 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  * @author Rafael da Silva Costa & Team
  * 
  *         This class represents a questionnaire, an investigation of the
  *         opinions or experience of a group of people, based on a series of
- *         questions.
+ *         questionList.
  */
-@XmlRootElement
-@XmlType(propOrder = { "name", "stage", "questionList" })
 public class Survey
 {
 	private String name, stage;
 	private List<Question> questionList;
+	
+	public Survey(String name, String stage, List<Question> questionList)
+	{
+		this.name = name;
+		this.stage = stage;
+		this.questionList = questionList;
+	}
+	
+	public Survey(JSONObject rawData)
+	{
+		super();
+		
+		this.name = (String) rawData.get("name");
+		this.stage = (String) rawData.get("stage");
+		
+		JSONArray questionListRaw = (JSONArray) rawData.get("questionList");
+		questionList = new ArrayList<>();
+		JSONObject questionRaw;
+		
+		
+		for (int index = 0; index < questionListRaw.size(); index++)
+		{
+			questionRaw = (JSONObject) questionListRaw.get(index);
+			
+			Long type = (long) questionRaw.get("type");
+			
+			switch (type.intValue())
+			{
+				case Question.MULTIPLE_ANSWER_QUESTION:
+					questionList.add(new MultipleAnswerQuestion(questionRaw));
+					break;
+				case Question.MULTIPLE_CHOICE_QUESTION_TYPE:
+					questionList.add(new MultipleChoiceQuestion(questionRaw));
+					break;
+				case Question.OPEN_ENDED_QUESTION_TYPE:
+					questionList.add(new OpenEndedQuestion(questionRaw));
+					break;
+				case Question.SCALAR_QUESTION_TYPE:
+					questionList.add(new ScalarQuestion(questionRaw));
+					break;
+			}
+		}
+	}
 
 	/**
 	 * @return the name
@@ -61,8 +101,6 @@ public class Survey
 	/**
 	 * @return the questionList
 	 */
-	@XmlElementWrapper(name = "questionList")
-	@XmlElementRef
 	public List<Question> getQuestionList()
 	{
 		return questionList;
@@ -70,10 +108,28 @@ public class Survey
 
 	/**
 	 * @param questionList
-	 *            the questions to set
+	 *            the questionList to set
 	 */
 	public void setQuestionList(List<Question> questionList)
 	{
 		this.questionList = questionList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject getJSON()
+	{
+		JSONObject surveyRaw = new JSONObject();
+		
+		surveyRaw.put("name", name);
+		surveyRaw.put("stage", stage);
+		
+		JSONArray questionListRaw = new JSONArray();
+		
+		for (Question question : questionList)
+			questionListRaw.add(question.getJSON());
+		
+		surveyRaw.put("questionList", questionListRaw);
+		
+		return surveyRaw;
 	}
 }

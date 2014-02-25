@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.jsonTest;
+package com.baconbanana.easysurveydesigner.oldFunctionalCore;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONObject;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -14,6 +14,7 @@ import org.json.simple.JSONObject;
  *         This class represents a Scalar Question, where the respondent should
  *         decide to rate the situation in along the scale continuum.
  */
+@XmlRootElement
 public class ScalarQuestion extends CloseEndedQuestion
 {
 	/**
@@ -33,16 +34,15 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 */
 	public ScalarQuestion(String content, String keyword)
 	{
-		super(content, Question.SCALAR_QUESTION_TYPE, prepareChoiceList(keyword));
+		super(content, prepareChoiceList(keyword));
 	}
 
 	/**
 	 * Default Constructor method.
-	 * @throws JSONException 
 	 */
-	public ScalarQuestion(JSONObject rawData)
+	public ScalarQuestion()
 	{
-		super(rawData);
+		this("Scalar Question", "Keyword");
 	}
 	
 	/**
