@@ -1,11 +1,7 @@
 package com.baconbanana.easysurvey.questtemp;
 
 import java.io.Serializable;
-
-import com.baconbanana.easysurvey.Bubble;
-import com.baconbanana.easysurvey.R;
-import com.baconbanana.easysurvey.R.layout;
-import com.baconbanana.easysurvey.R.menu;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,11 +12,17 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.baconbanana.easysurvey.Bubble;
+import com.baconbanana.easysurvey.R;
+
 public abstract class Question extends Activity implements Serializable, OnClickListener{
 	Bubble[] myBubbles = new Bubble[30];
 	RelativeLayout layout;
 	Button nextBtn;
 	TextView quest;
+	ArrayList<String> itemOptions;
+	String questionTitle = "";
+	public static final int OPEN_ENDED_QUESTION_TYPE = 1, MULTIPLE_CHOICE_QUESTION_TYPE = 2,MULTIPLE_ANSWER_QUESTION = 3, SCALAR_QUESTION_TYPE = 4;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public abstract class Question extends Activity implements Serializable, OnClick
 		nextBtn.setOnClickListener(this);
 		layout = (RelativeLayout) findViewById(R.id.layout);
 		quest = (TextView) findViewById(R.id.questTextBox);
+		this.setQuestionText(questionTitle);
 	}
 
 	@Override
@@ -63,10 +66,16 @@ public abstract class Question extends Activity implements Serializable, OnClick
 	}
 	
 	public void setQuestionText(String question){
-		quest.setText(question);
+		questionTitle = question;
+		if(quest != null){
+			quest.setText(questionTitle);
+		}
+	}
+	public void setItemOptions(ArrayList<String> io){
+		this.itemOptions = io;
 	}
 	
 	public abstract void onClickAnswer();
 	
-
+	
 }

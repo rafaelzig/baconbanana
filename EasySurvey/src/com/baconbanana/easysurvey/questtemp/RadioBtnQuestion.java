@@ -22,12 +22,11 @@ public class RadioBtnQuestion extends Question {
 		//specific ops
 		radGro = new RadioGroup(this);
 		radGro.setBackgroundColor(0xCCFF99);
-		this.setQuestionText("How much do you like RADIOBUTTONS?");
-		int arb = 5;
+		int arb = this.itemOptions.size();
 		radios = new RadioButton[arb];
 		for(int i = 0; i < arb; i++){
 			radios[i] = new RadioButton(this);
-			radios[i].setText("Option " + i);
+			radios[i].setText(itemOptions.get(i));
 			radGro.addView(radios[i]);
 		}
 		//setting up paramaters

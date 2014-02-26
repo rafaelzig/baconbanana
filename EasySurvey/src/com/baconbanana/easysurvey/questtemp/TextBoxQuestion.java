@@ -21,7 +21,6 @@ public class TextBoxQuestion extends Question
 		
 		
 		//specific ops
-		this.setQuestionText("How are you feeling Mrs Boris");
 		answerTextBox = (EditText) findViewById(R.id.answTextBox);
 	}
 

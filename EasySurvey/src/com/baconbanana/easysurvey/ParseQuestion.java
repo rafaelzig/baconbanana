@@ -1,31 +1,38 @@
 package com.baconbanana.easysurvey;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import com.baconbanana.easysurvey.questtemp.Question;
-import com.baconbanana.easysurvey.questtemp.RadioBtnQuestion;
-import com.baconbanana.easysurvey.questtemp.TextBoxQuestion;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.EditText;
+
+import com.baconbanana.easysurvey.parse.JSONParser;
+import com.baconbanana.easysurvey.parse.XMLParser;
+import com.baconbanana.easysurvey.questtemp.Question;
 
 public class ParseQuestion extends Activity{
 	private ArrayList<Question> questions =  new ArrayList<Question>();
 	private int questNo = 0;
-	private int count;
 	private ArrayList<String> answers = new ArrayList<String>();
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		//standard ops
 		super.onCreate(savedInstanceState);
 		
-		//placeholder survey
+		/*//placeholder survey
 		Question q1 = new TextBoxQuestion();
 		Question q2 = new RadioBtnQuestion();
+		//Question q3 = new CheckBoxQuestion();
+		//this.addQuestion(q3);
 		this.addQuestion(q2);
-		this.addQuestion(q1);
+		this.addQuestion(q1);*/
+		jsonToQuestion();
 		this.nextQuest(questNo++);
 	}
 	
@@ -41,8 +48,22 @@ public class ParseQuestion extends Activity{
 			nextQuest(questNo++);
 		}
 	}
-	public void xmlToQuestion(){
-		//turn xml into array of questions
+	public void jsonToQuestion(){
+		try{
+			JSONParser jsonPser = new JSONParser();
+			InputStreamReader input = new InputStreamReader(this.getAssets().open("Questionnaire.xml"));
+			BufferedReader plop = new BufferedReader(input);
+			questions = jsonPser.read(plop);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+		}
+		
 	}
 	public void addQuestion(Question object){
 		
