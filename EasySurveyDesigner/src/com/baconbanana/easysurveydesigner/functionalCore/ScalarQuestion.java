@@ -20,36 +20,60 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * Static fields representing the type of Scalar Question to be constructed.
 	 */
 	public static final String ACCEPTABILITY_SCALE = "acceptable",
-			AGREEMENT_SCALE = "in agreement", APPROPRIATENESS_SCALE = "appropriate",
-			AWARENESS_SCALE = "aware", CONCERN_SCALE = "concerned",
-			FAMILIARITY_SCALE = "familiar", FREQUENCY_SCALE = "frequent",
-			IMPORTANCE_SCALE = "important", INFLUENCE_SCALE = "influential",
-			LIKELIHOOD_SCALE = "likely", PRIORITY_SCALE = "?",
-			QUALITY_SCALE = "?", SATISFACTION_SCALE = "satisfied";
+			AGREEMENT_SCALE = "in agreement",
+			APPROPRIATENESS_SCALE = "appropriate", AWARENESS_SCALE = "aware",
+			CONCERN_SCALE = "concerned", FAMILIARITY_SCALE = "familiar",
+			FREQUENCY_SCALE = "frequent", IMPORTANCE_SCALE = "important",
+			INFLUENCE_SCALE = "influential", LIKELIHOOD_SCALE = "likely",
+			PRIORITY_SCALE = "?", QUALITY_SCALE = "?",
+			SATISFACTION_SCALE = "satisfied";
 
 	/**
+	 * Builds a ScalarQuestion object with the specified content and keyword.
+	 * 
 	 * @param content
-	 * @param type
+	 *            A String object containing the content of the question.
+	 * @param keyword
+	 *            One of the constants representing the keyword to be used in
+	 *            this question.
+	 * @see ScalarQuestion#ACCEPTABILITY_SCALE
+	 * @see ScalarQuestion#AGREEMENT_SCALE
+	 * @see ScalarQuestion#APPROPRIATENESS_SCALE
+	 * @see ScalarQuestion#AWARENESS_SCALE
+	 * @see ScalarQuestion#CONCERN_SCALE
+	 * @see ScalarQuestion#FAMILIARITY_SCALE
+	 * @see ScalarQuestion#FREQUENCY_SCALE
+	 * @see ScalarQuestion#IMPORTANCE_SCALE
+	 * @see ScalarQuestion#INFLUENCE_SCALE
+	 * @see ScalarQuestion#LIKELIHOOD_SCALE
+	 * @see ScalarQuestion#PRIORITY_SCALE
+	 * @see ScalarQuestion#QUALITY_SCALE
+	 * @see ScalarQuestion#SATISFACTION_SCALE
 	 */
 	public ScalarQuestion(String content, String keyword)
 	{
-		super(content, Question.SCALAR_QUESTION_TYPE, prepareChoiceList(keyword));
+		super(content, QuestionType.SCALAR_QUESTION_TYPE,
+				prepareChoiceList(keyword));
 	}
 
 	/**
-	 * Default Constructor method.
-	 * @throws JSONException 
+	 * Builds a ScalarQuestion object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the question.
 	 */
 	public ScalarQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
-	
+
 	/**
-	 * TODO
+	 * Prepares the list of choices of this question.
 	 * 
-	 * @param type
-	 * @return
+	 * @param keyword
+	 *            One of the constants representing the keyword to be used in
+	 *            this question.
+	 * @return A List containing the choices for this question.
 	 */
 	private static List<String> prepareChoiceList(String keyword)
 	{
@@ -64,9 +88,6 @@ public class ScalarQuestion extends CloseEndedQuestion
 		return choiceList;
 	}
 
-	/**
-	 * TODO
-	 */
 	public void setAnswer(String answer)
 	{
 		if (getChoiceList().contains(answer))

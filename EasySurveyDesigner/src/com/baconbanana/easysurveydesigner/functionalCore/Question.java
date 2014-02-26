@@ -5,7 +5,6 @@ package com.baconbanana.easysurveydesigner.functionalCore;
 
 import org.json.simple.JSONObject;
 
-
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -15,50 +14,61 @@ import org.json.simple.JSONObject;
  */
 public abstract class Question
 {
-	/**
-	 * Static fields representing the types of the question.
-	 */
-	public static final int OPEN_ENDED_QUESTION_TYPE = 1, MULTIPLE_CHOICE_QUESTION_TYPE = 2,MULTIPLE_ANSWER_QUESTION = 3, SCALAR_QUESTION_TYPE = 4;
-	
+	private QuestionType type;
 	private String content;
-	private long type;
 	String answer;
 
 	/**
-	 * @param content
-	 *            The content of the question
-	 * @throws JSONException 
+	 * Builds a Question object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the question.
 	 */
 	public Question(JSONObject rawData)
 	{
 		super();
-		
-		this.type = (long) rawData.get("type");
+
+		this.type = QuestionType.valueOf((String) rawData.get("type"));
 		this.content = (String) rawData.get("content");
 		this.answer = (String) rawData.get("answer");
 	}
-	
-	public Question(String content, int type)
+
+	/**
+	 * Builds a Question object with the specified content and type.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param type
+	 *            An enumeration representing the type of the question.
+	 * @see QuestionType#MULTIPLE_ANSWER_QUESTION_TYPE
+	 * @see QuestionType#MULTIPLE_CHOICE_QUESTION_TYPE
+	 * @see QuestionType#OPEN_ENDED_QUESTION_TYPE
+	 * @see QuestionType#SCALAR_QUESTION_TYPE
+	 */
+	public Question(String content, QuestionType type)
 	{
 		super();
-		
+
 		this.type = type;
 		this.content = content;
 		this.answer = new String();
 	}
 
-	public void setType(int type)
-	{
-		this.type = type;
-	}
-	
-	public long getType()
+	/**
+	 * Gets the type of the question.
+	 * 
+	 * @return An Enumeration representing the question type.
+	 * @see QuestionType
+	 */
+	public QuestionType getType()
 	{
 		return type;
 	}
-	
-	/** 
-	 * @return the content
+
+	/**
+	 * Gets the content of the question.
+	 * 
+	 * @return A String object containing the content of the question.
 	 */
 	public String getContent()
 	{
@@ -66,36 +76,48 @@ public abstract class Question
 	}
 
 	/**
+	 * Sets the content of the question.
+	 * 
 	 * @param content
-	 *            the content to set
+	 *            A String object containing the content of the question.
 	 */
 	public void setContent(String content)
 	{
 		this.content = content;
 	}
-	
+
 	/**
-	 * TODO
+	 * Gets the answer of the question.
+	 * 
+	 * @return A String object containing the answer of the question.
 	 */
 	public String getAnswer()
 	{
 		return answer;
 	}
-	
+
 	/**
-	 * TODO
+	 * Sets the answer of the question.
+	 * 
+	 * @param answer
+	 *            A String object containing the answer of the question.
 	 */
 	public abstract void setAnswer(String answer);
-	
+
+	/**
+	 * Gets a JSONObject containing the question.
+	 * 
+	 * @return A JSONObject containing the survey.
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONObject getJSON()
 	{
 		JSONObject rawData = new JSONObject();
-		
-		rawData.put("type", type);
-		rawData.put("content",content);
-		rawData.put("answer",answer);
-		
+
+		rawData.put("type", type.toString());
+		rawData.put("content", content);
+		rawData.put("answer", answer);
+
 		return rawData;
 	}
 }

@@ -3,8 +3,6 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.simple.JSONObject;
 
 /**
@@ -14,22 +12,30 @@ import org.json.simple.JSONObject;
  *         encourage a full, meaningful answer using the subject's own knowledge
  *         and/or feelings.
  */
-@XmlRootElement
 public class OpenEndedQuestion extends Question
 {
+	/**
+	 * Builds a OpenEndedQuestion object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the question.
+	 */
 	public OpenEndedQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
-	
+
 	/**
-	 * @param content The content of the question
+	 * Builds a OpenEndedQuestion object with the specified content.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content, Question.OPEN_ENDED_QUESTION_TYPE);
+		super(content, QuestionType.OPEN_ENDED_QUESTION_TYPE);
 	}
-	
+
 	public void setAnswer(String answer)
 	{
 		this.answer = answer;

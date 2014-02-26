@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner.oldParsing;
 
 import java.io.File;
 import java.util.ArrayList;
