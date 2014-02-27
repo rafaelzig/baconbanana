@@ -5,8 +5,6 @@ package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.simple.JSONObject;
 
 /**
@@ -17,36 +15,43 @@ import org.json.simple.JSONObject;
  *         when more then one answer is correct.
  * 
  */
-@XmlRootElement
 public class MultipleAnswerQuestion extends CloseEndedQuestion
 {
 	/**
-	 * TODO
+	 * Builds a MultipleAnswerQuestion object with the specified content and
+	 * list of choices.
 	 * 
 	 * @param content
-	 * @param choices
+	 *            A String object containing the content of the question.
+	 * @param choiceList
+	 *            A List of String objects containing the choices of the
+	 *            question.
 	 */
 	public MultipleAnswerQuestion(String content, List<String> choices)
 	{
-		super(content, Question.MULTIPLE_ANSWER_QUESTION, choices);
+		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choices);
 	}
-	
+
+	/**
+	 * Builds a MultipleChoiceQuestion object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the question.
+	 */
 	public MultipleAnswerQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
 
-	/**
-	 * TODO
-	 */
 	public void setAnswer(String answer)
 	{
 		String[] answers = answer.split(",");
-		
+
 		for (String a : answers)
-			if (!getChoiceList().contains(a));
-				; // Answer not in choiceList -> Throw some exception
-				
+			if (!getChoiceList().contains(a))
+				;
+		; // Answer not in choiceList -> Throw some exception
+
 		this.answer = answer;
 	}
 }

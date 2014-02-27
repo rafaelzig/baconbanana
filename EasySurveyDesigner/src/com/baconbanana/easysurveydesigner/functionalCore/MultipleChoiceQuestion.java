@@ -5,8 +5,6 @@ package com.baconbanana.easysurveydesigner.functionalCore;
 
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.json.simple.JSONObject;
 
 /**
@@ -16,25 +14,34 @@ import org.json.simple.JSONObject;
  *         assessment in which respondents are asked to select the best possible
  *         answer out of the choices from a list.
  */
-@XmlRootElement
 public class MultipleChoiceQuestion extends CloseEndedQuestion
 {
 	/**
-	 * TODO
+	 * Builds a MultipleChoiceQuestion object with the specified content and
+	 * list of choices.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param choiceList
+	 *            A List of String objects containing the choices of the
+	 *            question.
 	 */
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
 	{
-		super(content, Question.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList);
+		super(content, QuestionType.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList);
 	}
-	
+
+	/**
+	 * Builds a MultipleChoiceQuestion object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the question.
+	 */
 	public MultipleChoiceQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
-	
-	/**
-	 * TODO
-	 */
+
 	public void setAnswer(String answer)
 	{
 		if (getChoiceList().contains(answer))

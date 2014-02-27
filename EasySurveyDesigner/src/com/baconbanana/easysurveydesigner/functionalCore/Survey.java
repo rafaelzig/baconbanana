@@ -20,52 +20,45 @@ public class Survey
 {
 	private String name, stage;
 	private List<Question> questionList;
-	
+
+	/**
+	 * Builds a Survey object with the specified name, stage and list of
+	 * questions.
+	 * 
+	 * @param name
+	 *            A String object containing the name of the survey.
+	 * @param stage
+	 *            A String object containing the stage of the survey.
+	 * @param questionList
+	 *            A List of Question objects containing the questions of the
+	 *            survey.
+	 */
 	public Survey(String name, String stage, List<Question> questionList)
 	{
 		this.name = name;
 		this.stage = stage;
 		this.questionList = questionList;
 	}
-	
+
+	/**
+	 * Builds a Survey object with the specified JSONObject.
+	 * 
+	 * @param rawData
+	 *            A JSONObject containing the survey.
+	 */
 	public Survey(JSONObject rawData)
 	{
 		super();
-		
+
 		this.name = (String) rawData.get("name");
 		this.stage = (String) rawData.get("stage");
-		
-		JSONArray questionListRaw = (JSONArray) rawData.get("questionList");
-		questionList = new ArrayList<>();
-		JSONObject questionRaw;
-		
-		
-		for (int index = 0; index < questionListRaw.size(); index++)
-		{
-			questionRaw = (JSONObject) questionListRaw.get(index);
-			
-			Long type = (long) questionRaw.get("type");
-			
-			switch (type.intValue())
-			{
-				case Question.MULTIPLE_ANSWER_QUESTION:
-					questionList.add(new MultipleAnswerQuestion(questionRaw));
-					break;
-				case Question.MULTIPLE_CHOICE_QUESTION_TYPE:
-					questionList.add(new MultipleChoiceQuestion(questionRaw));
-					break;
-				case Question.OPEN_ENDED_QUESTION_TYPE:
-					questionList.add(new OpenEndedQuestion(questionRaw));
-					break;
-				case Question.SCALAR_QUESTION_TYPE:
-					questionList.add(new ScalarQuestion(questionRaw));
-					break;
-			}
-		}
+		setQuestionList((JSONArray) rawData.get("questionList"));
 	}
 
 	/**
-	 * @return the name
+	 * Gets the name of the survey.
+	 * 
+	 * @return A String object containing the name of the survey.
 	 */
 	public String getName()
 	{
@@ -73,8 +66,10 @@ public class Survey
 	}
 
 	/**
+	 * Sets the name of the survey.
+	 * 
 	 * @param name
-	 *            the name to set
+	 *            A String object containing the name of the survey.
 	 */
 	public void setName(String name)
 	{
@@ -82,7 +77,9 @@ public class Survey
 	}
 
 	/**
-	 * @return the stage
+	 * Gets the stage of the survey.
+	 * 
+	 * @return A String object containing the stage of the survey.
 	 */
 	public String getStage()
 	{
@@ -90,8 +87,10 @@ public class Survey
 	}
 
 	/**
+	 * Sets the stage of the survey.
+	 * 
 	 * @param stage
-	 *            the stage to set
+	 *            A String object containing the stage of the survey.
 	 */
 	public void setStage(String stage)
 	{
@@ -99,7 +98,10 @@ public class Survey
 	}
 
 	/**
-	 * @return the questionList
+	 * Gets the list of questions of the survey.
+	 * 
+	 * @return A List of Question objects containing the questions of the
+	 *         survey.
 	 */
 	public List<Question> getQuestionList()
 	{
@@ -107,29 +109,61 @@ public class Survey
 	}
 
 	/**
-	 * @param questionList
-	 *            the questionList to set
+	 * Sets the list of questions of the survey.
+	 * 
+	 * @param questionListRaw
+	 *            A JSON Array containing the raw question list.
 	 */
-	public void setQuestionList(List<Question> questionList)
+	private void setQuestionList(JSONArray questionListRaw)
 	{
-		this.questionList = questionList;
+		questionList = new ArrayList<>();
+
+		QuestionType type;
+		JSONObject questionRaw;
+
+		for (int index = 0; index < questionListRaw.size(); index++)
+		{
+			questionRaw = (JSONObject) questionListRaw.get(index);
+			type = QuestionType.valueOf((String) questionRaw.get("type"));
+
+			switch (type)
+			{
+				case MULTIPLE_ANSWER_QUESTION_TYPE:
+					questionList.add(new MultipleAnswerQuestion(questionRaw));
+					break;
+				case MULTIPLE_CHOICE_QUESTION_TYPE:
+					questionList.add(new MultipleChoiceQuestion(questionRaw));
+					break;
+				case OPEN_ENDED_QUESTION_TYPE:
+					questionList.add(new OpenEndedQuestion(questionRaw));
+					break;
+				case SCALAR_QUESTION_TYPE:
+					questionList.add(new ScalarQuestion(questionRaw));
+					break;
+			}
+		}
 	}
-	
+
+	/**
+	 * Gets a JSONObject containing the survey.
+	 * 
+	 * @return A JSONObject containing the survey.
+	 */
 	@SuppressWarnings("unchecked")
 	public JSONObject getJSON()
 	{
 		JSONObject surveyRaw = new JSONObject();
-		
+
 		surveyRaw.put("name", name);
 		surveyRaw.put("stage", stage);
-		
+
 		JSONArray questionListRaw = new JSONArray();
-		
+
 		for (Question question : questionList)
 			questionListRaw.add(question.getJSON());
-		
+
 		surveyRaw.put("questionList", questionListRaw);
-		
+
 		return surveyRaw;
 	}
 }

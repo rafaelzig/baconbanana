@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import com.baconbanana.easysurvey.questtemp.CheckBoxQuestion;
 import com.baconbanana.easysurvey.questtemp.Question;
 import com.baconbanana.easysurvey.questtemp.RadioBtnQuestion;
-import com.baconbanana.easysurvey.questtemp.RatingQuestion;
 import com.baconbanana.easysurvey.questtemp.TextBoxQuestion;
 
 public class JSONParser {
@@ -36,6 +35,8 @@ public class JSONParser {
 		
 		return parse(jsonSurvey);
 	}
+	
+	
 	
 	private ArrayList<Question> parse(JSONObject jsonSurvey){
 		ArrayList<Question> survey = new ArrayList<Question>();

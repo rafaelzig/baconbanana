@@ -5,87 +5,97 @@ package com.baconbanana.easysurveydesigner.parsing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * TODO
  * @author Rafael da Silva Costa & Team
- *
+ * 
+ *         This class contains static methods for reading and writing to a file,
+ *         and for parsing a JSON string into a JSONObject.
+ * 
  */
 public class Operations
 {
 	/**
-	 * TODO
+	 * Attempts to read from a file with the specified fileName, returning the
+	 * content as a String object.
+	 * 
 	 * @param fileName
-	 * @return
+	 *            A String object containing the file name.
+	 * @return A String object containing the contents of the file.
 	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
 	 */
 	public static String readFile(String fileName) throws IOException
 	{
-		Path path = new File(fileName).toPath();
-		BufferedReader reader = null;
 		StringBuilder output = null;
-		
+		BufferedReader reader = null;
+
 		try
 		{
-			reader = Files.newBufferedReader(path, StandardCharsets.US_ASCII);
+			reader = new BufferedReader(new FileReader(fileName));
 			output = new StringBuilder();
-			String line = null;
-			
+			String line;
+
 			while ((line = reader.readLine()) != null)
 				output.append(line);
 		}
 		finally
 		{
-			reader.close();
+			if (reader != null)
+				reader.close();
 		}
-		
+
 		return output.toString();
 	}
 
 	/**
-	 * TODO
+	 * Attempts to write the specified String object to a file with the
+	 * specified fileName.
+	 * 
 	 * @param input
+	 *            A String object containing the content to be written.
 	 * @param fileName
+	 *            A String object containing the file name.
 	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
 	 */
 	public static void writeFile(String input, String fileName)
 			throws IOException
 	{
-		Path path = new File(fileName).toPath();
-
 		BufferedWriter writer = null;
 
 		try
 		{
-			writer = Files.newBufferedWriter(path, StandardCharsets.US_ASCII);
+			writer = new BufferedWriter(new FileWriter(fileName));
 			writer.write(input);
-			writer.close();
 		}
 		finally
 		{
-			writer.close();
+			if (writer != null)
+				writer.close();
 		}
 	}
 
 	/**
-	 * TODO
-	 * @param str
-	 * @return
+	 * Parses the specified json string and returns a JSONObject.
+	 * 
+	 * @param jsonString
+	 *            A String object containing the a json structure.
+	 * @return A JSONObject representing the json structure.
 	 * @throws ParseException
+	 *             Signals that a parsing exception of some sort has occurred.
 	 */
-	public static JSONObject parseJSON(String str) throws ParseException
+	public static JSONObject parseJSON(String jsonString) throws ParseException
 	{
 		JSONParser parser = new JSONParser();
 
-		return (JSONObject) parser.parse(str);
+		return (JSONObject) parser.parse(jsonString);
 	}
 }
