@@ -51,18 +51,16 @@ public class JSONParser {
 						break;
 					case Question.MULTIPLE_CHOICE_QUESTION_TYPE:
 						survey.add(quest = new RadioBtnQuestion());
-						quest.setItemOptions(getChoices(jsonQuestion.getJSONArray("choiceList")));
 						break;
 					case Question.MULTIPLE_ANSWER_QUESTION:
 						survey.add(quest = new CheckBoxQuestion());
-						quest.setItemOptions(getChoices(jsonQuestion.getJSONArray("choiceList")));
 						break;
 					case Question.SCALAR_QUESTION_TYPE:
-						//survey.add(quest = new RatingQuestion());
+						survey.add(quest = new RatingQuestion());
 						break;
 				}
 				quest.setQuestionText(jsonQuestion.getString("content"));
-				survey.add(quest);
+				if(type > 1) quest.setItemOptions(getChoices(jsonQuestion.getJSONArray("choiceList")));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

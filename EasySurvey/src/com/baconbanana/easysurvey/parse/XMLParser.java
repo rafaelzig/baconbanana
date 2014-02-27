@@ -79,11 +79,11 @@ public class XMLParser {
 	        String name = parser.getName();
 	        //parser for text box questions
 	        if (name.equals("openEndedQuestion")) {
-	        	quest = new TextBoxQuestion();
+	        	//quest = new TextBoxQuestion();
 	        	quest.setQuestionText(readTextBoxQuestionTitle(parser).toString());
 	        //parser for  radio button questions
 	        } else if (name.equals("multipleChoiceQuestion")) {
-	        	quest = new RadioBtnQuestion();
+	        	//quest = new RadioBtnQuestion();
 	        	quest.setQuestionText(readMultiChoiceQuestionOptions(parser, quest).toString());
 	        } else {
 	            skip(parser);

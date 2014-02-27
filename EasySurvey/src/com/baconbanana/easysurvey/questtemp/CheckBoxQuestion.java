@@ -1,5 +1,7 @@
 package com.baconbanana.easysurvey.questtemp;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +14,9 @@ import com.baconbanana.easysurvey.R;
 
 public class CheckBoxQuestion extends Question {
 	
+	
+
+
 	CheckBox[] checkBoxSet;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +26,13 @@ public class CheckBoxQuestion extends Question {
 		this.initViews();
 		
 		//specific ops
-		this.setQuestionText("How does who do what?");
 		LinearLayout cbl = new LinearLayout(this);
-		int arb = 5;
+		int arb = this.itemOptions.size();
 		checkBoxSet = new CheckBox[arb];
 		for(int i = 0; i < arb; i++){
 			checkBoxSet[i] = new CheckBox(this);
-			checkBoxSet[i].setText("Option " + i);
-			checkBoxSet[i].setId(i);
+			checkBoxSet[i].setText(itemOptions.get(i));
+			//checkBoxSet[i].setId(i);
 			cbl.addView(checkBoxSet[i]);
 		}
 		//Add checkBoxes to layout

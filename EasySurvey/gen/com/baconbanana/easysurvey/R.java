@@ -80,7 +80,7 @@ containing a value of this type.
         public static final int activity_main=0x7f030002;
         public static final int activity_question=0x7f030003;
         public static final int activity_radio_btn_question=0x7f030004;
-        public static final int activity_ratin_question=0x7f030005;
+        public static final int activity_rating_question=0x7f030005;
         public static final int activity_text_box_question=0x7f030006;
         public static final int activity_video=0x7f030007;
     }

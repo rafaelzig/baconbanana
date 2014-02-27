@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.baconbanana.easysurvey.parse.JSONParser;
-import com.baconbanana.easysurvey.parse.XMLParser;
 import com.baconbanana.easysurvey.questtemp.Question;
 
 public class ParseQuestion extends Activity{
@@ -33,12 +31,13 @@ public class ParseQuestion extends Activity{
 		this.addQuestion(q2);
 		this.addQuestion(q1);*/
 		jsonToQuestion();
-		this.nextQuest(questNo++);
+		this.nextQuest(questNo);
 	}
 	
 	public void nextQuest(int i){
 		Intent questSpecs = new Intent(ParseQuestion.this, questions.get(i).getClass());
-		questSpecs.putExtra("question", questions.get(i));
+		questSpecs.putExtra("question", questions.get(i).getQuestionText());
+		questSpecs.putExtra("itemOptions", questions.get(i).getItemOptions());
 		this.startActivityForResult(questSpecs, i);
 		}
 	@Override
@@ -51,7 +50,7 @@ public class ParseQuestion extends Activity{
 	public void jsonToQuestion(){
 		try{
 			JSONParser jsonPser = new JSONParser();
-			InputStreamReader input = new InputStreamReader(this.getAssets().open("Questionnaire.xml"));
+			InputStreamReader input = new InputStreamReader(this.getAssets().open("Survey.json"));
 			BufferedReader plop = new BufferedReader(input);
 			questions = jsonPser.read(plop);
 		} catch (FileNotFoundException e) {

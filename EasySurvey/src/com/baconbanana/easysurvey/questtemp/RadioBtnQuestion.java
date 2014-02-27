@@ -1,15 +1,19 @@
 package com.baconbanana.easysurvey.questtemp;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import com.baconbanana.easysurvey.*;
+import com.baconbanana.easysurvey.R;
 
 public class RadioBtnQuestion extends Question {
+	
+
 	RadioGroup radGro;
 	RadioButton[] radios;
 	@Override
@@ -22,7 +26,7 @@ public class RadioBtnQuestion extends Question {
 		//specific ops
 		radGro = new RadioGroup(this);
 		radGro.setBackgroundColor(0xCCFF99);
-		int arb = this.itemOptions.size();
+		int arb = getItemOptions().size();
 		radios = new RadioButton[arb];
 		for(int i = 0; i < arb; i++){
 			radios[i] = new RadioButton(this);
@@ -48,11 +52,15 @@ public class RadioBtnQuestion extends Question {
 	@Override
 	public void onClickAnswer() {
 		// TODO Auto-generated method stub
-		Intent answerIntent = new Intent();
-		RadioButton selectedRB = (RadioButton) findViewById(radGro.getCheckedRadioButtonId());
-		answerIntent.putExtra("answer", selectedRB.getText().toString());
-		this.setResult(this.RESULT_OK, answerIntent);
-		this.finish();
+		if(radGro.getCheckedRadioButtonId() >= 0){
+			Intent answerIntent = new Intent();
+			RadioButton selectedRB = (RadioButton) findViewById(radGro.getCheckedRadioButtonId());
+			answerIntent.putExtra("answer", selectedRB.getText().toString());
+			this.setResult(Activity.RESULT_OK, answerIntent);
+			this.finish();
+		}else{
+			Toast.makeText(getApplicationContext(), "Please Select One of the Answers", Toast.LENGTH_SHORT).show();
+		}
 		
 	}
 

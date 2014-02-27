@@ -8,8 +8,7 @@ import android.widget.EditText;
 
 import com.baconbanana.easysurvey.R;
 
-public class TextBoxQuestion extends Question
-{
+public class TextBoxQuestion extends Question {
 
 	EditText answerTextBox;
 	@Override
