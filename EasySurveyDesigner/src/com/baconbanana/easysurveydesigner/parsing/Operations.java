@@ -5,9 +5,11 @@ package com.baconbanana.easysurveydesigner.parsing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,12 +36,26 @@ public class Operations
 	 */
 	public static String readFile(String fileName) throws IOException
 	{
-		StringBuilder output = null;
-		BufferedReader reader = null;
+		return readFile(new FileInputStream(fileName));
+	}
 
+	/**
+	 * Attempts to read from the specified InputStream object, returning the
+	 * content as a String object.
+	 * 
+	 * @param input
+	 *            An InputStream object containing the content of the file.
+	 * @return A String object containing the contents of the file.
+	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
+	 */
+	public static String readFile(InputStream input) throws IOException
+	{
+		BufferedReader reader = null;
+		StringBuilder output;
 		try
 		{
-			reader = new BufferedReader(new FileReader(fileName));
+			reader = new BufferedReader(new InputStreamReader(input));
 			output = new StringBuilder();
 			String line;
 
@@ -54,7 +70,7 @@ public class Operations
 
 		return output.toString();
 	}
-
+	
 	/**
 	 * Attempts to write the specified String object to a file with the
 	 * specified fileName.
@@ -98,4 +114,5 @@ public class Operations
 
 		return (JSONObject) parser.parse(jsonString);
 	}
+
 }
