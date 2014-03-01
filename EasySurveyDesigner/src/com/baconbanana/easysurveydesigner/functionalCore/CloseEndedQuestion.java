@@ -20,7 +20,7 @@ import org.json.simple.JSONObject;
  *         also can be in scale format, where respondent should decide to rate
  *         the situation in along the scale continuum,
  */
-abstract class CloseEndedQuestion extends Question
+public abstract class CloseEndedQuestion extends Question
 {
 	private List<String> choiceList;
 
