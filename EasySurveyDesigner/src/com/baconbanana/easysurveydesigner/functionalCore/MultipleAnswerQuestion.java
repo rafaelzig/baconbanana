@@ -18,6 +18,27 @@ import org.json.simple.JSONObject;
 public class MultipleAnswerQuestion extends CloseEndedQuestion
 {
 	/**
+	 * Builds a MultipleAnswerQuestion object with the specified content, list
+	 * of choices and subsequent questions.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param choiceList
+	 *            A List of String objects containing the choices of the
+	 *            question.
+	 * @param subsequentList
+	 *            A List of subsequent Question objects.
+	 * @param contingencyAnswer
+	 *            A String object representing the contingency answer.
+	 */
+	public MultipleAnswerQuestion(String content, List<String> choices,
+			List<Question> subsequentList, String contingencyAnswer)
+	{
+		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choices,
+				subsequentList, contingencyAnswer);
+	}
+
+	/**
 	 * Builds a MultipleAnswerQuestion object with the specified content and
 	 * list of choices.
 	 * 
@@ -29,7 +50,7 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 */
 	public MultipleAnswerQuestion(String content, List<String> choices)
 	{
-		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choices);
+		this(content, choices, null, null);
 	}
 
 	/**

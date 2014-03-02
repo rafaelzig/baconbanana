@@ -20,13 +20,45 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * Static fields representing the type of Scalar Question to be constructed.
 	 */
 	public static final String ACCEPTABILITY_SCALE = "acceptable",
-			AGREEMENT_SCALE = "in agreement",
-			APPROPRIATENESS_SCALE = "appropriate", AWARENESS_SCALE = "aware",
-			CONCERN_SCALE = "concerned", FAMILIARITY_SCALE = "familiar",
-			FREQUENCY_SCALE = "frequent", IMPORTANCE_SCALE = "important",
-			INFLUENCE_SCALE = "influential", LIKELIHOOD_SCALE = "likely",
-			PRIORITY_SCALE = "?", QUALITY_SCALE = "?",
-			SATISFACTION_SCALE = "satisfied";
+			LIKERT_SCALE = "agree", APPROPRIATENESS_SCALE = "appropriate",
+			AWARENESS_SCALE = "aware", CONCERN_SCALE = "concerned",
+			FAMILIARITY_SCALE = "familiar", FREQUENCY_SCALE = "frequent",
+			IMPORTANCE_SCALE = "important", INFLUENCE_SCALE = "influential",
+			LIKELIHOOD_SCALE = "likely", SATISFACTION_SCALE = "satisfied";
+
+	/**
+	 * Builds a ScalarQuestion object with the specified content, keyword and
+	 * list of subsequent questions.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param keyword
+	 *            One of the constants representing the keyword to be used in
+	 *            this question.
+	 * @param subsequentList
+	 *            A List of subsequent Question objects.
+	 * @param contingencyAnswer
+	 *            A String object representing the contingency answer.
+	 * @see ScalarQuestion#ACCEPTABILITY_SCALE
+	 * @see ScalarQuestion#AGREEMENT_SCALE
+	 * @see ScalarQuestion#APPROPRIATENESS_SCALE
+	 * @see ScalarQuestion#AWARENESS_SCALE
+	 * @see ScalarQuestion#CONCERN_SCALE
+	 * @see ScalarQuestion#FAMILIARITY_SCALE
+	 * @see ScalarQuestion#FREQUENCY_SCALE
+	 * @see ScalarQuestion#IMPORTANCE_SCALE
+	 * @see ScalarQuestion#INFLUENCE_SCALE
+	 * @see ScalarQuestion#LIKELIHOOD_SCALE
+	 * @see ScalarQuestion#PRIORITY_SCALE
+	 * @see ScalarQuestion#QUALITY_SCALE
+	 * @see ScalarQuestion#SATISFACTION_SCALE
+	 */
+	public ScalarQuestion(String content, String keyword,
+			List<Question> subsequentList, String contingencyAnswer)
+	{
+		super(content, QuestionType.SCALAR_QUESTION_TYPE,
+				prepareChoiceList(keyword), subsequentList, contingencyAnswer);
+	}
 
 	/**
 	 * Builds a ScalarQuestion object with the specified content and keyword.
@@ -52,8 +84,7 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 */
 	public ScalarQuestion(String content, String keyword)
 	{
-		super(content, QuestionType.SCALAR_QUESTION_TYPE,
-				prepareChoiceList(keyword));
+		this(content, keyword, null, null);
 	}
 
 	/**
@@ -65,6 +96,14 @@ public class ScalarQuestion extends CloseEndedQuestion
 	public ScalarQuestion(JSONObject rawData)
 	{
 		super(rawData);
+	}
+
+	public void setAnswer(String answer)
+	{
+		if (getChoiceList().contains(answer))
+			this.answer = answer;
+		else
+			; // Answer not in choiceList -> Throw some exception
 	}
 
 	/**
@@ -79,20 +118,23 @@ public class ScalarQuestion extends CloseEndedQuestion
 	{
 		List<String> choiceList = new ArrayList<>(5);
 
-		choiceList.add("Not " + keyword);
-		choiceList.add("Slightly " + keyword);
-		choiceList.add("Moderately " + keyword);
-		choiceList.add("Highly " + keyword);
-		choiceList.add("Extremely " + keyword);
+		if (keyword.equals(LIKERT_SCALE))
+		{
+			choiceList.add("Strongly dis" + keyword);
+			choiceList.add("Dis" + keyword);
+			choiceList.add("Neither " + keyword + " nor dis" + keyword);
+			choiceList.add("A" + keyword.substring(1));
+			choiceList.add("Strongly " + keyword);
+		}
+		else
+		{
+			choiceList.add("Not " + keyword);
+			choiceList.add("Slightly " + keyword);
+			choiceList.add("Moderately " + keyword);
+			choiceList.add("Highly " + keyword);
+			choiceList.add("Extremely " + keyword);
+		}
 
 		return choiceList;
-	}
-
-	public void setAnswer(String answer)
-	{
-		if (getChoiceList().contains(answer))
-			this.answer = answer;
-		else
-			; // Answer not in choiceList -> Throw some exception
 	}
 }

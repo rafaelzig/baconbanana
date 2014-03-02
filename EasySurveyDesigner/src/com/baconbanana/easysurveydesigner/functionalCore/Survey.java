@@ -3,11 +3,12 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import com.baconbanana.easysurveydesigner.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -52,7 +53,8 @@ public class Survey
 
 		this.name = (String) rawData.get("name");
 		this.stage = (String) rawData.get("stage");
-		setQuestionList((JSONArray) rawData.get("questionList"));
+		this.questionList = Operations.parseQuestionList((JSONArray) rawData
+				.get("questionList"));
 	}
 
 	/**
@@ -111,37 +113,13 @@ public class Survey
 	/**
 	 * Sets the list of questions of the survey.
 	 * 
-	 * @param questionListRaw
-	 *            A JSON Array containing the raw question list.
+	 * @param A
+	 *            List of Question objects containing the questions of the
+	 *            survey.
 	 */
-	private void setQuestionList(JSONArray questionListRaw)
+	public void setQuestionList(List<Question> questionList)
 	{
-		questionList = new ArrayList<>();
-
-		QuestionType type;
-		JSONObject questionRaw;
-
-		for (int index = 0; index < questionListRaw.size(); index++)
-		{
-			questionRaw = (JSONObject) questionListRaw.get(index);
-			type = QuestionType.valueOf((String) questionRaw.get("type"));
-
-			switch (type)
-			{
-				case MULTIPLE_ANSWER_QUESTION_TYPE:
-					questionList.add(new MultipleAnswerQuestion(questionRaw));
-					break;
-				case MULTIPLE_CHOICE_QUESTION_TYPE:
-					questionList.add(new MultipleChoiceQuestion(questionRaw));
-					break;
-				case OPEN_ENDED_QUESTION_TYPE:
-					questionList.add(new OpenEndedQuestion(questionRaw));
-					break;
-				case SCALAR_QUESTION_TYPE:
-					questionList.add(new ScalarQuestion(questionRaw));
-					break;
-			}
-		}
+		this.questionList = questionList;
 	}
 
 	/**

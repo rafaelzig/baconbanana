@@ -28,10 +28,15 @@ public class JSONTest
 		List<String> choiceList = new ArrayList<>();
 		choiceList.add("Yes");
 		choiceList.add("No");
-
-		// Adding a MultipleChoiceQuestion object
+		
+		// Creating subsequent questions for the next Question object
+		List<Question> subsequentList = new ArrayList<>();
+		subsequentList.add(new OpenEndedQuestion("When have you started smoking?"));
+		subsequentList.add(new OpenEndedQuestion("How many packs do you smoke a day?"));
+		
+		// Adding a MultipleChoiceQuestion object with subsequent questions
 		questionList.add(new MultipleChoiceQuestion("Are you a smoker?",
-				choiceList));
+				choiceList, subsequentList, "Yes"));
 
 		// Changing the choices for the next Question object
 		choiceList = new ArrayList<>();
@@ -64,7 +69,7 @@ public class JSONTest
 				"How would you rate Rafael's performance on this project?",
 				ScalarQuestion.INFLUENCE_SCALE));
 		questionList.add(new ScalarQuestion("Rafael is awesome.",
-				ScalarQuestion.AGREEMENT_SCALE));
+				ScalarQuestion.LIKERT_SCALE));
 
 		// Creating a Survey object and setting its list of Question objects
 		Survey qOne = new Survey("Introduction", "Initial Consultation",
