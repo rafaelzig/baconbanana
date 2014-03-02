@@ -60,7 +60,12 @@ public class EasySurveyFrame {
 	 */
 
 	public EasySurveyFrame() {
-		DataTest.FillListOfTemplates();
+		try {
+			DataTest.FillListOfTemplates();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		initWidgets();
 		window.setLocationRelativeTo(null);
 	}
@@ -130,12 +135,12 @@ public class EasySurveyFrame {
 			
 			public void actionPerformed(ActionEvent e2) {
 				try {
-					DataTest.DeleteTemplate();
+					DataTest.DeleteTemplate(List1.getSelectedValue());
+					DataTest.FillListOfTemplates();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				DataTest.FillListOfTemplates();
 				
 			}
 		});
