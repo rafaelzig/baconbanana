@@ -15,6 +15,8 @@ import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class LoginPage {
 	static JFrame loginPageFrame = new JFrame("Login Page");
+	static String username;
+	static String password;
 	public LoginPage()
 	{
 		/*
@@ -45,7 +47,8 @@ public class LoginPage {
 		final JTextField userNameField = new JTextField("");
 		panel.add(userNameField);
 		panel.add(new JLabel("Password"));
-		panel.add(new JPasswordField());
+		final JPasswordField jPasswordField = new JPasswordField();
+		panel.add(jPasswordField);
 		JButton loginButton = new JButton("Sing in");
 		panel.add(loginButton);
 		loginPageFrame.setBounds(200,200,200,200);
@@ -54,17 +57,27 @@ public class LoginPage {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//new MainWindow(userNameField.getText());
+				username = userNameField.getText();
+				password = jPasswordField.getText();
 				new EasySurveyFrame();
+				new DataTest();
+				System.out.print(userNameField.getText()+jPasswordField.getText());
 				loginPageFrame.dispose();
 			}
 		});
 	
 }
-	
+	public static String getUserName()
+	{
+		return "user="+username;
+	}
+	public static String getPassword()
+	{
+		return "password"+password;
+	}
 	public static void main(String args[])
 	{
 		
 		new LoginPage();
-		new DataTest();
 	}
 }

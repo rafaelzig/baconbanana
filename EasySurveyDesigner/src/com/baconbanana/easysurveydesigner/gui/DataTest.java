@@ -12,47 +12,56 @@ import java.util.ArrayList;
 
 public class DataTest {
 	   static ArrayList<String>templateList;
-	   static String loggin = new String("user=root");
+	   static String loggin= new String("user=root");
 	   static String password = new String("password=admin");
         
+	  
+	   public DataTest()
+	   {
+		   password = LoginPage.getPassword();
+		  /* loggin=new String("user="+userName);
+		   this.password=new String("password="+password);
+		   try {
+	            // The newInstance() call is a work around for some
+	            // broken Java implementations
+
+	            Class.forName("com.mysql.jdbc.Driver").newInstance();
+	        } catch (Exception ex) {
+	            // handle the error
+	        }*/
+	   }
+	   public static Statement createConnection() throws SQLException
+	   {
+		   Statement myState = null;
+		   Connection conn = null;
+			conn =
+			           DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
+			                                       LoginPage.getUserName()+"&"+password);
+			Statement st = conn.createStatement();
+			myState = st;
+		return myState;
+
+	   }
     public ArrayList<String>getList()
     {
     	return templateList;
     }
     
-    public static void FillListOfTemplates()
+    public static void FillListOfTemplates()throws SQLException
     {
     	ArrayList<String>list = new ArrayList<String>();
-        try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-        } catch (Exception ex) {
-            // handle the error
-        }
+        
     
-        Connection conn = null;
-        try {
-            conn =
-               DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                           loggin+"&"+password);
-
-            Statement st = conn.createStatement();
-            ResultSet res = st.executeQuery("SELECT * FROM  template");
+  
+     
+            
+            ResultSet res = createConnection().executeQuery("SELECT * FROM  template");
             while (res.next()) {
             String name= res.getString("name");
             list.add(name);
             }
             templateList=list;
-            /*
-            int val = st.executeUpdate("INSERT INTO template  VALUES ('Matt3', '553')");
-             if (val==1)   System.out.print("Successfully inserted value");
-            conn.close();
-             */
-            } catch (Exception e) {
-            e.printStackTrace();
-            }
+            
         EasySurveyFrame.myModel1.clear();
         for (String s : list) {
 			EasySurveyFrame.myModel1.addElement(s);
@@ -61,40 +70,25 @@ public class DataTest {
 		EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
     }
     
-    public static void SaveTemplate() throws SQLException
+    public static void SaveTemplate(String nameOfTmeplate) throws SQLException
     {
     	String templateName = new String(); 
-    	templateName = "INSERT INTO template  VALUES (" + "'" + AddNewTemplate.nameOfTemplate.getText() + "', '553')";
-    	Connection conn = null;
+    	templateName = "INSERT INTO template  VALUES (" + "'" + nameOfTmeplate + "', '553')";
     	
-            conn =
-               DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-            		   loggin+"&"+password);
-
-            Statement st = conn.createStatement();
     	
-    	int val = st.executeUpdate(templateName);
+    	int val = createConnection().executeUpdate(templateName);
         if (val==1)   System.out.print("Successfully inserted value");
-       conn.close();
     }
     
-    public static void DeleteTemplate()  throws SQLException
+    public static void DeleteTemplate(String giveTemplateName)  throws SQLException
     {
     	String templateName = new String();
-    	templateName = EasySurveyFrame.List1.getSelectedValue();
-    	templateName = "DELETE FROM `easysurvay`.`template` WHERE `name`='" + templateName +"'";
-    	Connection conn = null;
+    	templateName = "DELETE FROM `easysurvay`.`template` WHERE `name`='" + giveTemplateName +"'";
     	
-        conn =
-           DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-        		   loggin+"&"+password);
-
-        Statement st = conn.createStatement();
+        
 	
-	int val = st.executeUpdate(templateName);
+	int val = createConnection().executeUpdate(templateName);
     if (val==1)   System.out.print("Successfully deleted value");
-   conn.close();
     }
    
-
 }

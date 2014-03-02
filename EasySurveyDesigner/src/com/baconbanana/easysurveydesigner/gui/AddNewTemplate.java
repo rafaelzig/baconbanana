@@ -99,12 +99,12 @@ public class AddNewTemplate {
 			public void actionPerformed(ActionEvent e3) {
 				
 				try {
-					DataTest.SaveTemplate();
+					DataTest.SaveTemplate(nameOfTemplate.getText());
+					DataTest.FillListOfTemplates();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				DataTest.FillListOfTemplates();
 				/*
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
