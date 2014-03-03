@@ -73,7 +73,7 @@ public class LoginPage {
 	}
 	public static String getPassword()
 	{
-		return "password"+password;
+		return "password="+password;
 	}
 	public static void main(String args[])
 	{

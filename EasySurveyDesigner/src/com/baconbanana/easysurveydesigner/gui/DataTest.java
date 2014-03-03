@@ -36,7 +36,7 @@ public class DataTest {
 		   Connection conn = null;
 			conn =
 			           DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-			                                       LoginPage.getUserName()+"&"+password);
+			                                       LoginPage.getUserName()+"&"+LoginPage.getPassword());
 			Statement st = conn.createStatement();
 			myState = st;
 		return myState;
