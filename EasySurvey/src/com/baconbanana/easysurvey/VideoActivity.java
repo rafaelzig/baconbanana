@@ -25,7 +25,7 @@ public class VideoActivity extends Activity {
        mediaController.setAnchorView(video);
        video.setMediaController(mediaController);
 
-       video.start();
+       video.start();// test checking
 }
 
 		
