@@ -32,14 +32,14 @@ import javax.swing.plaf.basic.BasicArrowButton;
  * 
  */
 
-public class EasySurveyFrame {
+public class CreateSurvey {
 
 	 static ArrayList<String>templateList;
 	
-	JFrame window = new JFrame("Easy Survey");
+	JFrame window = new JFrame("Create your survey");
 	JLabel Information1 = new JLabel("List of templates");
 	JLabel Information2 = new JLabel("Template preview");
-	JLabel Information3 = new JLabel("Questionare preview");
+	JLabel Information3 = new JLabel("Survey preview");
 	JLabel Filler = new JLabel(" ");
 
 	static JList<String> List1 = new JList<String>();
@@ -47,7 +47,7 @@ public class EasySurveyFrame {
 	JList<String> List3 = new JList<String>();
 
 	JButton Add = new JButton("Add");
-	JButton Save = new JButton("Save");
+	JButton Edit = new JButton("Edit");
 	JButton Delete = new JButton("Delete");
 	JButton Send = new JButton("Send");
 
@@ -59,7 +59,7 @@ public class EasySurveyFrame {
 	 * Constructor method.
 	 */
 
-	public EasySurveyFrame() {
+	public CreateSurvey() {
 		try {
 			DataTest.FillListOfTemplates();
 		} catch (SQLException e) {
@@ -76,7 +76,6 @@ public class EasySurveyFrame {
 	 */
 
 	public void initWidgets() {
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		window.setLayout(new BorderLayout());
 		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
@@ -91,7 +90,7 @@ public class EasySurveyFrame {
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
 		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
 		jpTemplatesButtons.add(Add);
-		jpTemplatesButtons.add(Save);
+		jpTemplatesButtons.add(Edit);
 		jpTemplatesButtons.add(Delete);
 		jpTemplatesButtons.add(Move);
 

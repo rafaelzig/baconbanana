@@ -59,7 +59,7 @@ public class LoginPage {
 				//new MainWindow(userNameField.getText());
 				username = userNameField.getText();
 				password = jPasswordField.getText();
-				new EasySurveyFrame();
+				new MenuFrame();
 				new DataTest();
 				System.out.print(getUserName()+getPassword());
 				loginPageFrame.dispose();

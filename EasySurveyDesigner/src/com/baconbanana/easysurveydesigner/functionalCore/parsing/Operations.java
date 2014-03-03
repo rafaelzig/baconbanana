@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner.functionalCore.parsing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,10 +10,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -70,7 +80,7 @@ public class Operations
 
 		return output.toString();
 	}
-	
+
 	/**
 	 * Attempts to write the specified String object to a file with the
 	 * specified fileName.
@@ -113,6 +123,45 @@ public class Operations
 		JSONParser parser = new JSONParser();
 
 		return (JSONObject) parser.parse(jsonString);
+	}
+
+	/**
+	 * Parses the specified JSONArray and returns a List of Question objects.
+	 * 
+	 * @param questionListRaw
+	 *            A JSON Array containing the raw question list.
+	 * @return A List of Question objects.
+	 */
+	public static List<Question> parseQuestionList(JSONArray questionListRaw)
+	{
+		List<Question> questionList = new ArrayList<>();
+
+		QuestionType type;
+		JSONObject questionRaw;
+
+		for (int index = 0; index < questionListRaw.size(); index++)
+		{
+			questionRaw = (JSONObject) questionListRaw.get(index);
+			type = QuestionType.valueOf((String) questionRaw.get("type"));
+
+			switch (type)
+			{
+				case MULTIPLE_ANSWER_QUESTION_TYPE:
+					questionList.add(new MultipleAnswerQuestion(questionRaw));
+					break;
+				case MULTIPLE_CHOICE_QUESTION_TYPE:
+					questionList.add(new MultipleChoiceQuestion(questionRaw));
+					break;
+				case OPEN_ENDED_QUESTION_TYPE:
+					questionList.add(new OpenEndedQuestion(questionRaw));
+					break;
+				case SCALAR_QUESTION_TYPE:
+					questionList.add(new ScalarQuestion(questionRaw));
+					break;
+			}
+		}
+
+		return questionList;
 	}
 
 }

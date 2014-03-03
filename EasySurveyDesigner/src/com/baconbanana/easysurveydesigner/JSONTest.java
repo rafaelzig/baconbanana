@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.OpenEndedQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.ScalarQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Survey;
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 public class JSONTest
 {
@@ -28,10 +29,15 @@ public class JSONTest
 		List<String> choiceList = new ArrayList<>();
 		choiceList.add("Yes");
 		choiceList.add("No");
-
-		// Adding a MultipleChoiceQuestion object
+		
+		// Creating subsequent questions for the next Question object
+		List<Question> subsequentList = new ArrayList<>();
+		subsequentList.add(new OpenEndedQuestion("When have you started smoking?"));
+		subsequentList.add(new OpenEndedQuestion("How many packs do you smoke a day?"));
+		
+		// Adding a MultipleChoiceQuestion object with subsequent questions
 		questionList.add(new MultipleChoiceQuestion("Are you a smoker?",
-				choiceList));
+				choiceList, subsequentList, "Yes"));
 
 		// Changing the choices for the next Question object
 		choiceList = new ArrayList<>();
@@ -64,7 +70,7 @@ public class JSONTest
 				"How would you rate Rafael's performance on this project?",
 				ScalarQuestion.INFLUENCE_SCALE));
 		questionList.add(new ScalarQuestion("Rafael is awesome.",
-				ScalarQuestion.AGREEMENT_SCALE));
+				ScalarQuestion.LIKERT_SCALE));
 
 		// Creating a Survey object and setting its list of Question objects
 		Survey qOne = new Survey("Introduction", "Initial Consultation",

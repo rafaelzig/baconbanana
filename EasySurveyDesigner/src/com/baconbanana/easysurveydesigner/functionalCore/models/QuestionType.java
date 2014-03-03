@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 /**
  * @author Rafael da Silva Costa & Team. An Enumeration representing the

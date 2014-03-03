@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import org.json.simple.JSONObject;
 

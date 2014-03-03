@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.util.List;
 
@@ -17,6 +17,27 @@ import org.json.simple.JSONObject;
 public class MultipleChoiceQuestion extends CloseEndedQuestion
 {
 	/**
+	 * Builds a MultipleChoiceQuestion object with the specified content, list
+	 * of choices and subsequent questions.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param choiceList
+	 *            A List of String objects containing the choices of the
+	 *            question.
+	 * @param subsequentList
+	 *            A List of subsequent Question objects.
+	 * @param contingencyAnswer
+	 *            A String object representing the contingency answer.
+	 */
+	public MultipleChoiceQuestion(String content, List<String> choiceList,
+			List<Question> subsequentList, String contingencyAnswer)
+	{
+		super(content, QuestionType.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList,
+				subsequentList, contingencyAnswer);
+	}
+
+	/**
 	 * Builds a MultipleChoiceQuestion object with the specified content and
 	 * list of choices.
 	 * 
@@ -26,9 +47,9 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 *            A List of String objects containing the choices of the
 	 *            question.
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choiceList)
+	public MultipleChoiceQuestion(String content, List<String> choices)
 	{
-		super(content, QuestionType.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList);
+		this(content, choices, null, null);
 	}
 
 	/**
