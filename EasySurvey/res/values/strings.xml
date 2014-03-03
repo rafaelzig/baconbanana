@@ -11,5 +11,5 @@
     <string name="title_activity_radio_btn_question">RadioBtnQuestion</string>
     <string name="title_activity_check_box_question">CheckBoxQuestion</string>
     <string name="title_activity_ratin_question">RatinQuestion</string>
-
+    <string name="title_activity_test">Test</string>
 </resources>
