@@ -19,7 +19,7 @@ public class DataTest {
             // The newInstance() call is a work around for some
             // broken Java implementations
 
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
+          //  Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
             // handle the error
         }
@@ -31,10 +31,10 @@ public class DataTest {
                                        "user=root&password=1111");
 
         Statement st = conn.createStatement();
-        ResultSet res = st.executeQuery("SELECT * FROM  template");
+        ResultSet res = st.executeQuery("SELECT * FROM  templates");
         while (res.next()) {
-        String name= res.getString("name");
-        String age = res.getString("questions");
+        String name= res.getString("id");
+        String age = res.getString("title");
         System.out.println(name + "\t" + age);
         list.add(name);
         }

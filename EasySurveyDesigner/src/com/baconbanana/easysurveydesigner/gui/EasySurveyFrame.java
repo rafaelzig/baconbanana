@@ -5,9 +5,17 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
@@ -56,9 +64,10 @@ public class EasySurveyFrame {
 
 	/**
 	 * Constructor method.
+	 * @throws SQLException 
 	 */
 
-	public EasySurveyFrame() {
+	public EasySurveyFrame() throws SQLException {
 		initWidgets();
 		window.setLocationRelativeTo(null);
 	}
@@ -68,7 +77,7 @@ public class EasySurveyFrame {
 	 * panels used to create this GUI.
 	 */
 
-	public void initWidgets() {
+	public void initWidgets()  throws SQLException{
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		window.setLayout(new BorderLayout());
@@ -82,6 +91,7 @@ public class EasySurveyFrame {
 		List1.setBorder(border);
 		
 		//---------------------------------------------------------------------------
+		Statement st=null;
 		ArrayList<String>list = new ArrayList<String>();
         try {
             // The newInstance() call is a work around for some
@@ -95,14 +105,14 @@ public class EasySurveyFrame {
         Connection conn = null;
         try {
             conn =
-               DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-                                           "user=root&password=1111");
+               DriverManager.getConnection("jdbc:mysql://localhost/letmetrydb?" +
+                                           "user=beka&password=12345");
 
-            Statement st = conn.createStatement();
-            ResultSet res = st.executeQuery("SELECT * FROM  template");
+            st = conn.createStatement();
+            ResultSet res = st.executeQuery("SELECT * FROM  templates");
             while (res.next()) {
-            String name= res.getString("name");
-            String age = res.getString("questions");
+            String name= res.getString("id");
+            String age = res.getString("title");
             System.out.println(name + "\t" + age);
             list.add(name);
             }
@@ -112,14 +122,18 @@ public class EasySurveyFrame {
             int val = st.executeUpdate("INSERT INTO template  VALUES ('Matt', '55')");
              if (val==1)   System.out.print("Successfully inserted value");
             conn.close();*/
-            } catch (Exception e) {
+            } catch (SQLException e ) {
             e.printStackTrace();
-            }
+            list.add("bla");
+            } //finally {
+	   // if (st != null) { st.close(); }
+	   //}
         for (String s : list) {
 			myModel1.addElement(s);
 		}
 		
 		List1.setModel(EasySurveyFrame.myModel1);
+		List1.setSelectedIndex(0);//initially selected
 		
 		//----------------------------------------------------------
 		
@@ -164,7 +178,39 @@ public class EasySurveyFrame {
 			}
 
 		});
+		
 
+		Send.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e1) {
+				String data= List1.getSelectedValue();
+				
+				/*
+				   int portNumber = 5555;
+				
+				      try {
+				         ServerSocket srvr = new ServerSocket(portNumber);
+				         Socket skt = srvr.accept();
+				         System.out.print("Server has connected!\n");
+				         PrintWriter out = new PrintWriter(skt.getOutputStream(), true);
+				         System.out.print("Sending string: '" + data + "'\n");
+				         out.print(data);
+				         out.close();
+				         skt.close();
+				         srvr.close();
+				      }
+				      catch(Exception e) {
+				         System.out.print("Whoops! It didn't work!\n");
+				      }
+				
+			        
+		*/
+
+			}
+
+		});
+		
+		
 		window.pack();
 		window.setSize(800, 800);
 		window.setVisible(true);

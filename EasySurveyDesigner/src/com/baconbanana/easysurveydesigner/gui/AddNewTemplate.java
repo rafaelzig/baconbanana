@@ -5,6 +5,12 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -98,6 +104,32 @@ public class AddNewTemplate {
 			public void actionPerformed(ActionEvent e3) {
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
+				
+				//---------------------------------------------------------------------------
+				Statement st=null;
+		        try {
+		        	Class.forName("com.mysql.jdbc.Driver").newInstance();
+		        } catch (Exception ex) {
+
+		        }
+		    
+		        Connection conn = null;
+		        try {
+		            conn =
+		               DriverManager.getConnection("jdbc:mysql://localhost/letmetrydb?" +
+		                                           "user=beka&password=12345");
+		            st = conn.createStatement();
+		            String s="INSERT INTO templates  VALUES (" + " '3' , '"+ nameOfTemplate.getText() + 
+		            		"')";
+		            st.executeUpdate(s);
+		             
+		            conn.close();
+		            } catch (SQLException e ) {
+		            e.printStackTrace();
+		           
+		            } 
+		        //----------------------------------------------------------
+				
 				window.dispose();
 			}
 		});

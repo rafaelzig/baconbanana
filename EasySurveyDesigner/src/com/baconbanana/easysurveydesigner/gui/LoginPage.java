@@ -3,6 +3,15 @@ package com.baconbanana.easysurveydesigner.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,29 +19,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.plaf.metal.MetalLookAndFeel;
 
 public class LoginPage {
 	static JFrame loginPageFrame = new JFrame("Login Page");
+	 
+
+	 
 	public LoginPage()
 	{
-		/*
-		try {
-			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-		     MetalLookAndFeel.setCurrentTheme(new TestStyle());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		//bla
-		//kllk
+
 
 		loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initLayout();
 		loginPageFrame.setVisible(true);
-		//JFrame.setDefaultLookAndFeelDecorated(true);
 		
 	}
 	public void initLayout()
@@ -54,7 +53,12 @@ public class LoginPage {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				//new MainWindow(userNameField.getText());
-				new EasySurveyFrame();
+				try {
+					new EasySurveyFrame();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				loginPageFrame.dispose();
 			}
 		});
@@ -63,8 +67,84 @@ public class LoginPage {
 	
 	public static void main(String args[])
 	{
+   System.out.println("beka");
+
+		//new LoginPage();
+		//new DataTest();
 		
-		new LoginPage();
-		new DataTest();
+		//--------------------info to find the ip--------------------------------------
+		try {
+			InetAddress myself = InetAddress.getLocalHost ();
+			System.out.println("Local hostname : " + myself.getHostName () + "\n");
+			System.out.println("Local IP Address : " + (myself.getAddress ()) + "\n");
+			}
+			catch (UnknownHostException ex){
+				System.out.println("Failed to find myself:");
+			ex.printStackTrace ();
+			}
+		//------------------------------------------------------------------------------
+		
+		
+	        	
+	   		 //-----------------------------
+	   		
+	   			ServerSocket serverSocket= null;
+	   		    BufferedReader in;
+	   			PrintStream os;
+	   			Socket clientSocket = null;
+	   		//------------------------------
+	   			
+	   		
+	                	
+	            		while(true){
+	                    		  try {
+	                    			  //-------------------find free port--------------------------------
+	                    			  try {
+	                    				  serverSocket = create(new int[] { 3843, 4584, 4843, 9999, 8979, 8888 });
+	                    				    System.out.println("listening on port: " + serverSocket.getLocalPort());
+	                    				} catch (IOException ex) {
+	                    				    System.err.println("no available ports");
+	                    				}
+	                    			  //-----------------------------------------------------------------
+	                    			
+	          	                	System.out.println("Waiting for clients to connect...");
+	          	                	
+	          	                	
+	          	                	
+									clientSocket = serverSocket.accept();
+									in = new BufferedReader(new InputStreamReader(
+	          	          					clientSocket.getInputStream()));
+	          	          			String s= in.readLine();
+	          	          			System.out.println(s+"\n");
+	          	          						
+	          	          			clientSocket.close();
+	          	          			in.close();
+	          	          	
+		                              clientSocket.close();
+		                              serverSocket.close();
+		                              
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								
+
+	            }}}
+	        
+
+	    
+	public static ServerSocket create(int[] ports) throws IOException {
+	    for (int port : ports) {
+	        try {
+	            return new ServerSocket(port);
+	        } catch (IOException ex) {
+	            continue; // try next port
+	        }
+	    }
+
+	    // if the program gets here, no port in the range was found
+	    throw new IOException("no free port found");
 	}
+	
+	
+
 }
