@@ -58,7 +58,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			// -------------------------------------------------------------
 			Socket skt = null;
 			try {
-				skt = new Socket("10.230.160.96", 3843);
+				
+				skt = new Socket("10.230.130.157", 3843);
 				PrintStream output = null;
 				output = new PrintStream(skt.getOutputStream());
 				String s = answer.getText().toString();
