@@ -61,7 +61,7 @@ public class LoginPage {
 				password = jPasswordField.getText();
 				new EasySurveyFrame();
 				new DataTest();
-				System.out.print(userNameField.getText()+jPasswordField.getText());
+				System.out.print(getUserName()+getPassword());
 				loginPageFrame.dispose();
 			}
 		});
@@ -73,7 +73,7 @@ public class LoginPage {
 	}
 	public static String getPassword()
 	{
-		return "password"+password;
+		return "password="+password;
 	}
 	public static void main(String args[])
 	{

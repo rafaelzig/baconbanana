@@ -34,9 +34,8 @@ public class DataTest {
 	   {
 		   Statement myState = null;
 		   Connection conn = null;
-			conn =
-			           DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
-			                                       LoginPage.getUserName()+"&"+password);
+			conn =DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
+			                                       LoginPage.getUserName()+"&"+LoginPage.getPassword());
 			Statement st = conn.createStatement();
 			myState = st;
 		return myState;
@@ -85,8 +84,6 @@ public class DataTest {
     	String templateName = new String();
     	templateName = "DELETE FROM `easysurvay`.`template` WHERE `name`='" + giveTemplateName +"'";
     	
-        
-	
 	int val = createConnection().executeUpdate(templateName);
     if (val==1)   System.out.print("Successfully deleted value");
     }
