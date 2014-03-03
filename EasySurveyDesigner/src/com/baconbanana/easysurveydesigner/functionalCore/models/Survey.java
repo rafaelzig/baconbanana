@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.parsing.Operations;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team

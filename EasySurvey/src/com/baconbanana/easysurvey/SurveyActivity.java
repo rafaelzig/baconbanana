@@ -18,10 +18,10 @@ import android.widget.TextView;
 
 import com.baconbanana.easysurvey.functionalCore.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.TouchListener;
-import com.baconbanana.easysurveydesigner.functionalCore.CloseEndedQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.Survey;
-import com.baconbanana.easysurveydesigner.parsing.Operations;
+import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 public class SurveyActivity extends Activity
 {

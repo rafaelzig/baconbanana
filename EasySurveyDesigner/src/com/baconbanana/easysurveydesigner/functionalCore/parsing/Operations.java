@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.parsing;
+package com.baconbanana.easysurveydesigner.functionalCore.parsing;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,12 +18,12 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.OpenEndedQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
 
 /**
  * @author Rafael da Silva Costa & Team

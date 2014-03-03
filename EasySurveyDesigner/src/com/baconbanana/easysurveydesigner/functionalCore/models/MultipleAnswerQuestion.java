@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore;
+package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.util.List;
 
@@ -10,14 +10,15 @@ import org.json.simple.JSONObject;
 /**
  * @author Rafael da Silva Costa & Team
  * 
- *         This class represents a Multiple Choice Question, a form of
- *         assessment in which respondents are asked to select the best possible
- *         answer out of the choices from a list.
+ *         This class represents a Multiple Answer Question, which allows users
+ *         to choose more than one answer. This type of question may be used
+ *         when more then one answer is correct.
+ * 
  */
-public class MultipleChoiceQuestion extends CloseEndedQuestion
+public class MultipleAnswerQuestion extends CloseEndedQuestion
 {
 	/**
-	 * Builds a MultipleChoiceQuestion object with the specified content, list
+	 * Builds a MultipleAnswerQuestion object with the specified content, list
 	 * of choices and subsequent questions.
 	 * 
 	 * @param content
@@ -30,15 +31,15 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 * @param contingencyAnswer
 	 *            A String object representing the contingency answer.
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choiceList,
+	public MultipleAnswerQuestion(String content, List<String> choices,
 			List<Question> subsequentList, String contingencyAnswer)
 	{
-		super(content, QuestionType.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList,
+		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choices,
 				subsequentList, contingencyAnswer);
 	}
 
 	/**
-	 * Builds a MultipleChoiceQuestion object with the specified content and
+	 * Builds a MultipleAnswerQuestion object with the specified content and
 	 * list of choices.
 	 * 
 	 * @param content
@@ -47,7 +48,7 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 *            A List of String objects containing the choices of the
 	 *            question.
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choices)
+	public MultipleAnswerQuestion(String content, List<String> choices)
 	{
 		this(content, choices, null, null);
 	}
@@ -58,16 +59,20 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public MultipleChoiceQuestion(JSONObject rawData)
+	public MultipleAnswerQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
 
 	public void setAnswer(String answer)
 	{
-		if (getChoiceList().contains(answer))
-			this.answer = answer;
-		else
-			; // Answer not in choiceList -> Throw some exception
+		String[] answers = answer.split(",");
+
+		for (String a : answers)
+			if (!getChoiceList().contains(a))
+				;
+		; // Answer not in choiceList -> Throw some exception
+
+		this.answer = answer;
 	}
 }
