@@ -62,12 +62,12 @@ public class DataTest {
             }
             templateList=list;
             
-        EasySurveyFrame.myModel1.clear();
+        CreateSurvey.myModel1.clear();
         for (String s : list) {
-			EasySurveyFrame.myModel1.addElement(s);
+        	CreateSurvey.myModel1.addElement(s);
 		}
 		
-		EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
+        CreateSurvey.List1.setModel(CreateSurvey.myModel1);
     }
     
     public static void SaveTemplate(String nameOfTmeplate) throws SQLException

@@ -51,9 +51,9 @@ public class AddNewTemplate {
 
 		// ---------------------set combo box-----------------------------------
 		type = new JComboBox<String>();
-		String[] typesOfAnswers = { "Open ended question", "Multiple choice question"};
+		String[] typesOfAnswers = { "Open ended question", "Multiple choice question", "Multiple answer question"};
 		int count = 0;
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 3; i++)
 			type.addItem(typesOfAnswers[count++]);
 		// --------------------------------------------------------------------
 
@@ -86,6 +86,10 @@ public class AddNewTemplate {
 				
 				if (h == "Multiple choice question"){
 					new NewMultipleChoice(h);
+				}
+				
+				if (h== "Multiple answer question"){
+					new NewMultipleAnswer(h);
 				}
 				if (h == "Open ended question"){
 					new NewOpenEnded(h);
