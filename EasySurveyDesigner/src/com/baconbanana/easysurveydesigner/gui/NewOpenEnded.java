@@ -26,6 +26,7 @@ public class NewOpenEnded {
 	JTextField title;
 	JButton save;
 	JTextArea answer;
+	JButton cancel;
 
 	public NewOpenEnded(String type) {
 		this.questionType = type;
@@ -71,6 +72,8 @@ public class NewOpenEnded {
 
 		save = new JButton("save");
 		jpButtons.add(save);
+		cancel = new JButton("Cancel");
+		jpButtons.add(cancel);
 
 		panelSouth.add(jpButtons, BorderLayout.SOUTH);
 
@@ -94,7 +97,18 @@ public class NewOpenEnded {
 				AddNewTemplate.myModel2.addElement(title.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
+				new AddNewTemplate("test");
 				window.dispose();
+			}
+		});
+		
+		cancel.addActionListener(new ActionListener() 
+		
+		{
+			public void actionPerformed(ActionEvent e) {
+				new AddNewTemplate("test");
+				window.dispose();
+				
 			}
 		});
 

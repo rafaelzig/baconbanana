@@ -27,6 +27,7 @@ public class NewMultipleAnswer {
 	JButton add;
 	JButton remove;
 	JButton save;
+	JButton cancel;
 	int answerLimit = 0;
 	DefaultTableModel model;
 	JTable table;
@@ -42,6 +43,7 @@ public class NewMultipleAnswer {
 
 		// ---------------------------------------------------
 
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 
@@ -94,6 +96,8 @@ public class NewMultipleAnswer {
 		jpButtons.add(remove);
 		save = new JButton("save");
 		jpButtons.add(save);
+		cancel = new JButton("Cancel");
+		jpButtons.add(cancel);
 
 		panelSouth.add(jpButtons, BorderLayout.SOUTH);
 
@@ -146,7 +150,18 @@ public class NewMultipleAnswer {
 				AddNewTemplate.myModel2.addElement(title.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
+				new AddNewTemplate("test");
 				window.dispose();
+			}
+		});
+		
+		cancel.addActionListener(new ActionListener() 
+		
+		{
+			public void actionPerformed(ActionEvent e) {
+				new AddNewTemplate("test");
+				window.dispose();
+				
 			}
 		});
 

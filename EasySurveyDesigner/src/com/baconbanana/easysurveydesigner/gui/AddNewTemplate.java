@@ -24,6 +24,7 @@ public class AddNewTemplate {
 	private JButton addExistingQuestion;
 	private JButton delete;
 	private JButton save;
+	private JButton cancel;
 	static JTextField nameOfTemplate;
 	private JComboBox<String> type;
 
@@ -39,6 +40,7 @@ public class AddNewTemplate {
 	}
 
 	public void setThings() {
+		
 		window = new JFrame("Create new template. Stage:" + this.stage);
 		window.setLayout(new BorderLayout());
 		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
@@ -47,6 +49,7 @@ public class AddNewTemplate {
 		addExistingQuestion = new JButton("Add existing question");
 		delete = new JButton("Delete");
 		save = new JButton("Save");
+		cancel = new JButton("Cancel");
 		nameOfTemplate = new JTextField("Type name for this template here");
 
 		// ---------------------set combo box-----------------------------------
@@ -67,6 +70,7 @@ public class AddNewTemplate {
 		jpButtons.add(addExistingQuestion);
 		jpButtons.add(delete);
 		jpButtons.add(save);
+		jpButtons.add(cancel);
 
 		window.add(jpButtons, BorderLayout.SOUTH);
 
@@ -94,6 +98,7 @@ public class AddNewTemplate {
 				if (h == "Open ended question"){
 					new NewOpenEnded(h);
 				}
+				window.dispose();
 			}
 		});
 
@@ -113,6 +118,16 @@ public class AddNewTemplate {
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
 				*/
+				new CreateSurvey();
+				window.dispose();
+			}
+		});
+		
+		cancel.addActionListener(new ActionListener() {
+			
+			
+			public void actionPerformed(ActionEvent arg0) {
+				new CreateSurvey();
 				window.dispose();
 			}
 		});

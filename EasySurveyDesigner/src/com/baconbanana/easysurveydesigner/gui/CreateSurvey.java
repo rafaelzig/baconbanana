@@ -40,7 +40,7 @@ public class CreateSurvey {
 	JLabel Information1 = new JLabel("List of templates");
 	JLabel Information2 = new JLabel("Template preview");
 	JLabel Information3 = new JLabel("Survey preview");
-	JLabel Filler = new JLabel(" ");
+	JLabel Filler = new JLabel("                  ");
 
 	static JList<String> List1 = new JList<String>();
 	JList<String> List2 = new JList<String>();
@@ -49,8 +49,10 @@ public class CreateSurvey {
 	JButton Add = new JButton("Add");
 	JButton Edit = new JButton("Edit");
 	JButton Delete = new JButton("Delete");
+	JButton Save = new JButton("Save");
+	JButton Cancel = new JButton("Cancel");
 	JButton Send = new JButton("Send");
-
+	
 	BasicArrowButton Move = new BasicArrowButton(BasicArrowButton.SOUTH);
 
 	final static DefaultListModel<String> myModel1 = new DefaultListModel<String>();
@@ -77,6 +79,7 @@ public class CreateSurvey {
 
 	public void initWidgets() {
 
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
 
@@ -111,6 +114,8 @@ public class CreateSurvey {
 		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
 		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);
 		jpQuestionsButton.add(Filler);
+		jpQuestionsButton.add(Save);
+		jpQuestionsButton.add(Cancel);
 		jpQuestionsButton.add(Filler);
 		jpQuestionsButton.add(Send);
 
@@ -124,6 +129,7 @@ public class CreateSurvey {
 			public void actionPerformed(ActionEvent e1) {
 				AddNewTemplate.myModel2.clear();
 				new AddNewTemplate("test");
+				window.dispose();
 
 			}
 
@@ -140,6 +146,16 @@ public class CreateSurvey {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
+			}
+		});
+		
+		Cancel.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new MenuFrame();
+				window.dispose();
 				
 			}
 		});

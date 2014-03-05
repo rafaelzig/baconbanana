@@ -25,6 +25,8 @@ public class ListOfPatients {
 	}
 
 	private void initWidgets() {
+		
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		window.add(ListOfPatients, BorderLayout.CENTER);
 		JPanel jpButtons = new JPanel(new FlowLayout());
@@ -37,8 +39,7 @@ public class ListOfPatients {
 			
 			
 			public void actionPerformed(ActionEvent e1) {
-				new ListOfPatients();
-				
+
 			}
 		});
 		
