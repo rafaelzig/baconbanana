@@ -12,7 +12,7 @@ public class MenuFrame {
 	JFrame window = new JFrame ("Easy Survey");
 	JButton createSurvey = new JButton ("Create new Survey");
 	JButton openSurvey = new JButton ("Open Survey"); 
-	JButton previewAnswers = new JButton ("<html>Previews answers made <br> by the patients</html>");
+	JButton previewAnswers = new JButton ("<html>Preview answers made <br> by the patients</html>");
 	
 	
 	public MenuFrame ()
