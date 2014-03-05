@@ -23,7 +23,6 @@ public class NewOpenEnded {
 	String questionType;
 	JFrame window;
 	JTextArea question;
-	JTextField title;
 	JButton save;
 	JTextArea answer;
 	JButton cancel;
@@ -49,13 +48,8 @@ public class NewOpenEnded {
 		question.setBorder(border);
 		window.add(question, BorderLayout.CENTER);
 		// ---------------------------------------------------
-
-		// --------------North of window----------------------
-		title = new JTextField("Type your title here");
-		title.setPreferredSize(new Dimension(800, 20));
-		window.add(title, BorderLayout.NORTH);
-		// ---------------------------------------------------
-
+		
+		
 		// --------------South of window----------------------
 		
 
@@ -94,7 +88,7 @@ public class NewOpenEnded {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				AddNewTemplate.myModel2.addElement(title.getText() + "("
+				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
 				new AddNewTemplate("test");

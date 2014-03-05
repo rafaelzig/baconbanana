@@ -23,7 +23,6 @@ public class NewMultipleAnswer {
 	String questionType;
 	JFrame window;
 	JTextArea question;
-	JTextField title;
 	JButton add;
 	JButton remove;
 	JButton save;
@@ -54,13 +53,7 @@ public class NewMultipleAnswer {
 		window.add(question, BorderLayout.CENTER);
 		// ---------------------------------------------------
 
-		// --------------North of window----------------------
-		title = new JTextField("Type your title here");
-		title.setPreferredSize(new Dimension(800, 20));
-		title.setBorder(border);
-		window.add(title, BorderLayout.NORTH);
-		// ---------------------------------------------------
-
+		
 		// --------------South of window----------------------
 		Object[] columnNames = { "Answer", "Select" };
 		Object[][] data = {};
@@ -147,7 +140,7 @@ public class NewMultipleAnswer {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				AddNewTemplate.myModel2.addElement(title.getText() + "("
+				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
 				new AddNewTemplate("test");
