@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.old.questtemp;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.baconbanana.easysurvey.R;
+import com.baconbanana.easysurvey.VideoActivity;
 
 public class MainActivity extends Activity implements OnClickListener{
 	

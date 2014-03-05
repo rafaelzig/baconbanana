@@ -10,6 +10,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
  */
 public class Operations
 {
+	/**
+	 * String object representing the date format used.
+	 */
+	private final static String DATE_FORMAT = "yyyy-MM-dd";
+	
 	/**
 	 * Attempts to read from a file with the specified fileName, returning the
 	 * content as a String object.
@@ -162,6 +169,22 @@ public class Operations
 		}
 
 		return questionList;
+	}
+	
+	/**
+	 * Parses the specified string into a java.sql.Date object.
+	 * 
+	 * @param date
+	 *            String Object in the format yyyy-MM-dd representing a date.
+	 * @return java.sql.Date object representing the date.
+	 * @throws java.text.ParseException 
+	 */
+	public static Date parseDate(String date) throws java.text.ParseException
+	{
+		SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
+		format.setLenient(false);
+		
+		return new Date(format.parse(date).getTime());
 	}
 
 }

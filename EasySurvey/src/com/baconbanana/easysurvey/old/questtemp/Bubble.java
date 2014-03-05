@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.old.questtemp;
 
 import java.util.Random;
 
@@ -10,6 +10,8 @@ import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import com.baconbanana.easysurvey.R;
 
 
 public class Bubble extends ImageView{

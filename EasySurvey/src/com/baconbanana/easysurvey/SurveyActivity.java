@@ -16,13 +16,19 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.baconbanana.easysurvey.functionalCore.GestureListener;
-import com.baconbanana.easysurvey.functionalCore.TouchListener;
+import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
+import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
+/**
+ * This class builds the activity which displays the survey to the user.
+ * 
+ * @author Rafael da Silva Costa & Team
+ * 
+ */
 public class SurveyActivity extends Activity
 {
 	private int cursor;
@@ -48,6 +54,9 @@ public class SurveyActivity extends Activity
 		buildLayout();
 	}
 
+	/**
+	 * Builds the listener object used in this activity.
+	 */
 	private void buildListener()
 	{
 		touchListener = new TouchListener(this, new GestureListener()
@@ -68,11 +77,14 @@ public class SurveyActivity extends Activity
 		});
 	}
 
+	/**
+	 * Parses the json string from the assets folder into a Survey object.
+	 */
 	private void loadSurvey()
 	{
 		JSONObject rawData = null;
 		String jsonString;
-	
+
 		try
 		{
 			jsonString = Operations.readFile(getAssets().open("Survey.json"));
@@ -88,16 +100,27 @@ public class SurveyActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-		survey = new Survey(rawData);
+
+		try
+		{
+			survey = new Survey(rawData);
+		}
+		catch (java.text.ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		currentQuestion = survey.getQuestionList().get(0);
 	}
 
+	/**
+	 * Constructs the layout of the activity.
+	 */
 	private void buildLayout()
 	{
 		placeholderLayout = (LinearLayout) findViewById(R.id.placeholderLayout);
 		placeholderLayout.setOnTouchListener(touchListener);
-		
+
 		txtContent = (TextView) findViewById(R.id.txtContent);
 		txtContent.setText(currentQuestion.getContent());
 
@@ -175,6 +198,12 @@ public class SurveyActivity extends Activity
 		buildLayout();
 	}
 
+	/**
+	 * Selects the radio button which the user has pressed, deselecting the
+	 * radio button which was already selected.
+	 * 
+	 * @param v The Radio Button object which receives the event.
+	 */
 	public void checkRadioButtons(View v)
 	{
 		RadioButton selected = (RadioButton) v;

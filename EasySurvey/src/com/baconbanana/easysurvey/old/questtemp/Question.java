@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey.questtemp;
+package com.baconbanana.easysurvey.old.questtemp;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.baconbanana.easysurvey.Bubble;
 import com.baconbanana.easysurvey.R;
 
 public abstract class Question extends Activity implements Serializable, OnClickListener{

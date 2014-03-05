@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.old.questtemp;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.baconbanana.easysurvey.R;
 
 public class DisplayMessageActivity extends Activity {
 	private ParseQuestion qp;

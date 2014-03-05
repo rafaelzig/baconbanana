@@ -1,7 +1,6 @@
-package com.baconbanana.easysurvey.parse;
+package com.baconbanana.easysurvey.old.parsing;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
@@ -10,9 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 
-import com.baconbanana.easysurvey.questtemp.Question;
-import com.baconbanana.easysurvey.questtemp.RadioBtnQuestion;
-import com.baconbanana.easysurvey.questtemp.TextBoxQuestion;
+import com.baconbanana.easysurvey.old.questtemp.Question;
 
 public class XMLParser {
 	

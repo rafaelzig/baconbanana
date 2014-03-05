@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey.functionalCore;
+package com.baconbanana.easysurvey.functionalCore.listeners;
 
 import android.content.Context;
 import android.view.GestureDetector;

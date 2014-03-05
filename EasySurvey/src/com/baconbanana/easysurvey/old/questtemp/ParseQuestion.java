@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.old.questtemp;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -6,13 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.baconbanana.easysurvey.old.parsing.JSONParser;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.baconbanana.easysurvey.parse.JSONParser;
-import com.baconbanana.easysurvey.questtemp.Question;
 
 public class ParseQuestion extends Activity{
 	private ArrayList<Question> questions =  new ArrayList<Question>();

@@ -1,10 +1,10 @@
 /**
  * 
  */
-package com.baconbanana.easysurvey.functionalCore;
+package com.baconbanana.easysurvey.functionalCore.listeners;
 
-import android.view.MotionEvent;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
 
 /**
  * Abstract class that provides implementations of left to right and right to left swipe gestures

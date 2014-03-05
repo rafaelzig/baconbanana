@@ -14,13 +14,13 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.baconbanana.easysurvey.MainActivity"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.MainActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.ParseQuestion"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.ParseQuestion"
             android:label="@string/title_activity_question" >
         </activity>
         <activity
@@ -30,37 +30,37 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.DisplayMessageActivity"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.DisplayMessageActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.questtemp.Question"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.Question"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.questtemp.TextBoxQuestion"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.TextBoxQuestion"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.questtemp.RadioBtnQuestion"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.RadioBtnQuestion"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.questtemp.CheckBoxQuestion"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.CheckBoxQuestion"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.questtemp.RatingQuestion"
+            android:name="com.baconbanana.easysurvey.Old.questtemp.RatingQuestion"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >

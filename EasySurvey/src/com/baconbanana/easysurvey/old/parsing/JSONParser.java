@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey.parse;
+package com.baconbanana.easysurvey.old.parsing;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,11 +8,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.baconbanana.easysurvey.questtemp.CheckBoxQuestion;
-import com.baconbanana.easysurvey.questtemp.Question;
-import com.baconbanana.easysurvey.questtemp.RadioBtnQuestion;
-import com.baconbanana.easysurvey.questtemp.RatingQuestion;
-import com.baconbanana.easysurvey.questtemp.TextBoxQuestion;
+import com.baconbanana.easysurvey.old.questtemp.CheckBoxQuestion;
+import com.baconbanana.easysurvey.old.questtemp.Question;
+import com.baconbanana.easysurvey.old.questtemp.RadioBtnQuestion;
+import com.baconbanana.easysurvey.old.questtemp.RatingQuestion;
+import com.baconbanana.easysurvey.old.questtemp.TextBoxQuestion;
 
 public class JSONParser {
 	
