@@ -120,4 +120,13 @@ public abstract class Question
 
 		return rawData;
 	}
+
+	/**
+	 * Returns true if the question has been answered, false otherwise.
+	 * @return True if the question has been answered, False otherwise.
+	 */
+	public boolean isAnswered()
+	{
+		return (!answer.isEmpty());
+	}
 }

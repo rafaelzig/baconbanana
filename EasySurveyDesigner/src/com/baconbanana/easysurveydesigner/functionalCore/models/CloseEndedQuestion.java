@@ -161,4 +161,14 @@ public abstract class CloseEndedQuestion extends Question
 
 		return rawData;
 	}
+	
+	public void setAnswer(String answer)
+	{
+		int index = choiceList.indexOf(answer);
+		
+		if (index >= 0)
+			this.answer = choiceList.get(index);
+		else
+			;// throw some exception, answer not found in choiceList
+	}
 }

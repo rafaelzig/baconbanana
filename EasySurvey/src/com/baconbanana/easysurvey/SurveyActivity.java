@@ -1,7 +1,6 @@
 package com.baconbanana.easysurvey;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -12,7 +11,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
@@ -31,15 +33,16 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
-	private int cursor;
+	private int size, cursor;
 	private Survey survey;
 	private Question currentQuestion;
 	private List<String> choiceList;
-	private List<RadioButton> radioGroup;
+	private View[] viewGroup;
 	private LinearLayout placeholderLayout;
 	private OnTouchListener touchListener;
-	private View lineView, choiceView;
-	private TextView txtContent;
+	private TextView txtContent, txtPage;
+	private ProgressBar pgrBar;
+	private View lineView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -49,7 +52,6 @@ public class SurveyActivity extends Activity
 		setContentView(R.layout.question_placeholder);
 
 		buildListener();
-
 		loadSurvey();
 		buildLayout();
 	}
@@ -111,6 +113,8 @@ public class SurveyActivity extends Activity
 			e.printStackTrace();
 		}
 		currentQuestion = survey.getQuestionList().get(0);
+		size = survey.getQuestionList().size();
+		cursor = 0;
 	}
 
 	/**
@@ -124,52 +128,59 @@ public class SurveyActivity extends Activity
 		txtContent = (TextView) findViewById(R.id.txtContent);
 		txtContent.setText(currentQuestion.getContent());
 
+		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
+		pgrBar.setMax(size - 1);
+		pgrBar.setProgress(survey.getAnswerCount());
+
+		int res;
 		boolean flag = false;
-		int res, id;
 
 		switch (currentQuestion.getType())
 		{
 			case OPEN_ENDED_QUESTION_TYPE:
-				lineView = getLayoutInflater().inflate(R.layout.textview_line,
+				lineView = getLayoutInflater().inflate(R.layout.textbox,
 						placeholderLayout, false);
+				((TextView) lineView).setText(currentQuestion.getAnswer());
+				viewGroup = new View[] { lineView };
 				placeholderLayout.addView(lineView);
+
 				break;
 
 			case MULTIPLE_CHOICE_QUESTION_TYPE:
 			case SCALAR_QUESTION_TYPE:
-				radioGroup = new ArrayList<RadioButton>();
 				flag = true;
 				// Falls through
 
 			case MULTIPLE_ANSWER_QUESTION_TYPE:
 				choiceList = ((CloseEndedQuestion) currentQuestion)
 						.getChoiceList();
+				viewGroup = new View[choiceList.size()];
 
-				if (flag)
-				{
-					res = R.layout.radio_line;
-					id = R.id.rbChoice;
-				}
-				else
-				{
-					res = R.layout.checkbox_line;
-					id = R.id.cbChoice;
-				}
+				res = (flag) ? R.layout.radiobutton : R.layout.checkbox;
 
-				for (String choice : choiceList)
+				for (int i = 0; i < choiceList.size(); i++)
 				{
 					lineView = getLayoutInflater().inflate(res,
 							placeholderLayout, false);
-					choiceView = lineView.findViewById(id);
-					((TextView) choiceView).setText(choice);
-					placeholderLayout.addView(lineView);
 
-					if (flag)
-						radioGroup.add((RadioButton) choiceView);
+					((TextView) lineView).setText(choiceList.get(i));
+					
+					if (currentQuestion.getAnswer().equals(choiceList.get(i)))
+						((CompoundButton) lineView).setChecked(true);
+
+					placeholderLayout.addView(lineView);
+					viewGroup[i] = ((CompoundButton) lineView);
 				}
 
 				break;
 		}
+
+		lineView = getLayoutInflater().inflate(R.layout.button_line,
+				placeholderLayout, false);
+		placeholderLayout.addView(lineView);
+
+		txtPage = (TextView) findViewById(R.id.txtPage);
+		txtPage.setText((cursor + 1) + "/" + (size));
 	}
 
 	/**
@@ -182,7 +193,7 @@ public class SurveyActivity extends Activity
 	 */
 	private void skipQuestion(boolean next)
 	{
-		int size = survey.getQuestionList().size();
+		saveAnswer();
 
 		placeholderLayout.invalidate();
 		setContentView(R.layout.question_placeholder);
@@ -198,18 +209,48 @@ public class SurveyActivity extends Activity
 		buildLayout();
 	}
 
+	private void saveAnswer()
+	{
+		String answer = null;
+
+		if (currentQuestion.getType() == QuestionType.OPEN_ENDED_QUESTION_TYPE)
+		{
+			answer = ((TextView) viewGroup[0]).getText().toString();
+			if (!answer.isEmpty())
+				currentQuestion.setAnswer(answer);
+		}
+		else
+		{
+			for (View compButton : viewGroup)
+			{
+				if (((CompoundButton) compButton).isChecked())
+				{
+					answer = ((TextView) compButton).getText().toString();
+					currentQuestion.setAnswer(answer);
+				}
+			}
+		}
+
+	}
+
+	public void onClick(View v)
+	{
+		skipQuestion((v.getId() == R.id.btnNext));
+	}
+
 	/**
 	 * Selects the radio button which the user has pressed, deselecting the
 	 * radio button which was already selected.
 	 * 
-	 * @param v The Radio Button object which receives the event.
+	 * @param v
+	 *            The Radio Button object which receives the event.
 	 */
 	public void checkRadioButtons(View v)
 	{
 		RadioButton selected = (RadioButton) v;
-		for (RadioButton radioButton : radioGroup)
+		for (View radioButton : viewGroup)
 			if (radioButton != selected)
-				radioButton.setChecked(false);
+				((RadioButton) radioButton).setChecked(false);
 	}
 
 	@Override

@@ -153,6 +153,21 @@ public class Survey
 	}
 
 	/**
+	 * Returns the number of questions answered of the survey.
+	 * 
+	 * @return An integer representing the number of questions answered.
+	 */
+	public int getAnswerCount()
+	{
+		int count = 0;
+		
+		for (Question question : questionList)
+			if (question.isAnswered()) count++;
+				
+		return count;
+	}
+
+	/**
 	 * Gets a JSONObject containing the survey.
 	 * 
 	 * @return A JSONObject containing the survey.

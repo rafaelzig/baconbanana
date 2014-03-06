@@ -98,14 +98,6 @@ public class ScalarQuestion extends CloseEndedQuestion
 		super(rawData);
 	}
 
-	public void setAnswer(String answer)
-	{
-		if (getChoiceList().contains(answer))
-			this.answer = answer;
-		else
-			; // Answer not in choiceList -> Throw some exception
-	}
-
 	/**
 	 * Prepares the list of choices of this question.
 	 * 

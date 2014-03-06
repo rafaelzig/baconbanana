@@ -31,10 +31,10 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 * @param contingencyAnswer
 	 *            A String object representing the contingency answer.
 	 */
-	public MultipleAnswerQuestion(String content, List<String> choices,
+	public MultipleAnswerQuestion(String content, List<String> choiceList,
 			List<Question> subsequentList, String contingencyAnswer)
 	{
-		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choices,
+		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choiceList,
 				subsequentList, contingencyAnswer);
 	}
 
@@ -48,9 +48,9 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 *            A List of String objects containing the choices of the
 	 *            question.
 	 */
-	public MultipleAnswerQuestion(String content, List<String> choices)
+	public MultipleAnswerQuestion(String content, List<String> choiceList)
 	{
-		this(content, choices, null, null);
+		this(content, choiceList, null, null);
 	}
 
 	/**
@@ -66,13 +66,29 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 
 	public void setAnswer(String answer)
 	{
-		String[] answers = answer.split(",");
+		int index = getChoiceList().indexOf(answer);
 
-		for (String a : answers)
-			if (!getChoiceList().contains(a))
-				;
-		; // Answer not in choiceList -> Throw some exception
+		if (index >= 0)
+		{
+			if (isAnswered())
+			{
+				this.answer += answer + ";";
+				String[] oldAnswers = this.answer.split(";");
+				String[] newAnswers = new String[getChoiceList().size()];
 
-		this.answer = answer;
+				for (String oldAnswer : oldAnswers)
+					newAnswers[getChoiceList().indexOf(oldAnswer)] = oldAnswer;
+
+				this.answer = new String();
+
+				for (String newAnswer : newAnswers)
+				{
+					if (newAnswer != null)
+						this.answer += newAnswer + ";";
+				}
+			}
+			else
+				this.answer = answer + ";";
+		}
 	}
 }

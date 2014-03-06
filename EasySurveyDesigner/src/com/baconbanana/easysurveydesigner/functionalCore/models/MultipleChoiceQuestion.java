@@ -47,9 +47,9 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 *            A List of String objects containing the choices of the
 	 *            question.
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choices)
+	public MultipleChoiceQuestion(String content, List<String> choiceList)
 	{
-		this(content, choices, null, null);
+		this(content, choiceList, null, null);
 	}
 
 	/**
@@ -61,13 +61,5 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	public MultipleChoiceQuestion(JSONObject rawData)
 	{
 		super(rawData);
-	}
-
-	public void setAnswer(String answer)
-	{
-		if (getChoiceList().contains(answer))
-			this.answer = answer;
-		else
-			; // Answer not in choiceList -> Throw some exception
 	}
 }
