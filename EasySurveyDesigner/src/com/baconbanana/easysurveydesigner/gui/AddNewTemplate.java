@@ -109,7 +109,7 @@ public class AddNewTemplate {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				
+				/*
 				try {
 					DataTest.SaveTemplate(nameOfTemplate.getText());
 					DataTest.FillListOfTemplates();
@@ -117,7 +117,7 @@ public class AddNewTemplate {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				/*
+				
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
 				*/

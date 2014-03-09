@@ -14,11 +14,12 @@ public class DataTest {
 	   static ArrayList<String>templateList;
 	   static String loggin= new String("user=root");
 	   static String password = new String("password=admin");
-        
+       static int QuestionID = 0;
 	  
 	   public DataTest()
 	   {
 		   password = LoginPage.getPassword();
+		   
 		  /* loggin=new String("user="+userName);
 		   this.password=new String("password="+password);
 		   try {
@@ -34,7 +35,7 @@ public class DataTest {
 	   {
 		   Statement myState = null;
 		   Connection conn = null;
-			conn =DriverManager.getConnection("jdbc:mysql://localhost/easysurvay?" +
+			conn =DriverManager.getConnection("jdbc:mysql://localhost/neweasysurvey?" +
 			                                       LoginPage.getUserName()+"&"+LoginPage.getPassword());
 			Statement st = conn.createStatement();
 			myState = st;
@@ -87,5 +88,15 @@ public class DataTest {
 	int val = createConnection().executeUpdate(templateName);
     if (val==1)   System.out.print("Successfully deleted value");
     }
+    
+    public static void SaveQuestion(int ID, String Content, String Type) throws SQLException
+    {
+    	String question = new String();
+    	question = "INSERT INTO question VALUES (" + "'" + ID + "', '" + Content + "', '" + Type + "')";    
+    	ID++;
+    int val = createConnection().executeUpdate(question);
+    if (val==1)   System.out.print("Successfully inserted value");		
+    }
+    
    
 }

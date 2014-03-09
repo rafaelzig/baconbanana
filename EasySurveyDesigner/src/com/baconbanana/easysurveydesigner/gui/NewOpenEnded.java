@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -91,6 +92,15 @@ public class NewOpenEnded {
 				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
+				
+				String Type = questionType;
+				
+				try {
+					DataTest.SaveQuestion(DataTest.QuestionID, question.getText(), Type);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				
 				new AddNewTemplate("test");
 				window.dispose();
 			}

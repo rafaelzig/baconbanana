@@ -153,14 +153,14 @@ public class CreateSurvey {
 			
 			
 			public void actionPerformed(ActionEvent e2) {
-				try {
+				/*try {
 					DataTest.DeleteTemplate(List1.getSelectedValue());
 					DataTest.FillListOfTemplates();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+			*/	
 			}
 		});
 		
