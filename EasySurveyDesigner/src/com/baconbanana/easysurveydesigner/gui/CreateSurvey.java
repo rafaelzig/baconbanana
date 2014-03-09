@@ -57,14 +57,6 @@ public class CreateSurvey {
 	JButton Save = new JButton("Save");
 	JButton Cancel = new JButton("Cancel");
 	JButton Send = new JButton("Send");
-	JButton Receive = new JButton("Receive"); // <-----new line
-	String localIP; // <-----new line
-	ServerSocket serverSocket; // <-----new line
-	Socket clientSocket; // <-----new line
-	int[] listOfSockets; // <-----new line
-	String receivedData; // <-----new line
-	 Boolean notReceived; // <-----new line
-	String json; // <-----new line
 	
 	BasicArrowButton Move = new BasicArrowButton(BasicArrowButton.SOUTH);
 
@@ -131,7 +123,6 @@ public class CreateSurvey {
 		jpQuestionsButton.add(Cancel);
 		jpQuestionsButton.add(Filler);
 		jpQuestionsButton.add(Send);
-		jpQuestionsButton.add(Receive); // <-----new line
 
 		/**
 		 * Action Listener that send user to another window where he/she can
@@ -174,38 +165,6 @@ public class CreateSurvey {
 			}
 		});
 		
-//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-		Send.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Thread t= new Connection();
-				Thread t1= new getData();
-				t.start();
-				try {
-					t.join();
-				} catch (InterruptedException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				 JFrame frame = new JFrame();
-				 frame.add(new JLabel(localIP));
-				 
-				 frame.pack();
-				 frame.setSize(800, 800);
-				 frame.setVisible(true);
-				 
-				t1.start();
-				
-				
-				
-			}
-		});
-		
-		
-		
-//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	
 		window.pack();
 		window.setSize(800, 800);
 		window.setVisible(true);
@@ -223,143 +182,5 @@ public class CreateSurvey {
 		new EasySurveyFrame();
 	}
 	*/
-//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*	
-	public class Connection extends Thread {
-		
-		
-		public Connection(){
-			//this.json=json;
-			notReceived=false;
-		}
-		
-	    public void run() {
-	        
-	    	while (notReceived) {
-	    		listOfSockets = new int[200];
-	    		for (int x = 0; x < 200; x++) {
-	    			listOfSockets[x] = 2502 + x;
-	    		}
-				try {
-					InetAddress myself = InetAddress.getLocalHost();
-					localIP = ("Local IP Address : "
-							+ (myself.getHostAddress()) + "\n");
-				} catch (UnknownHostException ex) {
-					System.out.println("Failed to find ");
-					ex.printStackTrace();
-				}
 
-				try {
-					serverSocket = createServerSocket(listOfSockets);
-
-					System.out.println("listening on port: "
-							+ serverSocket.getLocalPort() + "\n");
-				} catch (IOException ex) {
-					System.err.println("no available ports");
-				}
-
-				
-			
-	    	
-	    }
-	    }
-	   
-
-	    public void makeAFrameWithEverything (){
-	    	
-	    }
-	
-	
-	/*threadGet = new Thread() {
-		public void run() {
-			
-		}
-	};*/
-
-/*	threadSend = new Thread() {
-		public void run() {
-			// --------------write----------------------------
-			PrintWriter writer;
-			while (notSent) {
-
-				try {
-					serverSocket = createServerSocket(listOfSockets);
-					System.out.println("listening on port: "
-							+ serverSocket.getLocalPort() + "\n");
-				} catch (IOException ex) {
-					System.err.println("no available ports");
-				}
-				
-				//connection
-			//	.add(new JLabel("Connecting... your IP is:" + localIP));
-				
-				try {
-					clientSocket = serverSocket.accept();
-
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.err.println("client accept problem");
-				}
-
-				try {
-					clientSocket = serverSocket.accept();
-					writer = new PrintWriter(
-							clientSocket.getOutputStream(), true);
-					notSent=false;
-					
-					writer.write(dataToBeSent);
-					System.out.println("Message Send");
-					writer.flush();
-					writer.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			// ------------------------------------------------
-		}
-	};*/
-
-
-// ---------------------------------------------------
-	public ServerSocket createServerSocket(int[] ports) throws IOException {
-	for (int port : ports) {
-		try {
-			return new ServerSocket(port);
-		} catch (IOException ex) {
-			continue; // try next port
-		}
-	}
-
-	throw new IOException("no free port found");
-}
-}
-//-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	public class getData extends Thread{
-		public void run(){
-			
-			try {
-				clientSocket = serverSocket.accept();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.err.println("client accept problem");
-			}
-
-			try {
-				BufferedReader in = new BufferedReader(new InputStreamReader(
-						clientSocket.getInputStream()));
-				notReceived = false;
-				receivedData = in.readLine();
-				System.out.println("Android says:" + receivedData
-						+ "\n");
-
-				in.close();
-				clientSocket.close();
-				serverSocket.close();
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-	}
-	
 }
