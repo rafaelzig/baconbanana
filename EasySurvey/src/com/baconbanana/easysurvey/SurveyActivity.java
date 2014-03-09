@@ -19,18 +19,15 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
-import com.baconbanana.easysurvey.old.questtemp.ConnectionWIFI;
 import com.baconbanana.easysurvey.old.questtemp.ParseQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
