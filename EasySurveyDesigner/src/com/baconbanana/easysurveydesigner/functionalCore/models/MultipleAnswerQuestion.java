@@ -7,6 +7,10 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -18,27 +22,6 @@ import org.json.simple.JSONObject;
 public class MultipleAnswerQuestion extends CloseEndedQuestion
 {
 	/**
-	 * Builds a MultipleAnswerQuestion object with the specified content, list
-	 * of choices and subsequent questions.
-	 * 
-	 * @param content
-	 *            A String object containing the content of the question.
-	 * @param choiceList
-	 *            A List of String objects containing the choices of the
-	 *            question.
-	 * @param subsequentList
-	 *            A List of subsequent Question objects.
-	 * @param contingencyAnswer
-	 *            A String object representing the contingency answer.
-	 */
-	public MultipleAnswerQuestion(String content, List<String> choiceList,
-			List<Question> subsequentList, String contingencyAnswer)
-	{
-		super(content, QuestionType.MULTIPLE_ANSWER_QUESTION_TYPE, choiceList,
-				subsequentList, contingencyAnswer);
-	}
-
-	/**
 	 * Builds a MultipleAnswerQuestion object with the specified content and
 	 * list of choices.
 	 * 
@@ -47,10 +30,14 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 * @param choiceList
 	 *            A List of String objects containing the choices of the
 	 *            question.
+	 * @throws InvalidChoiceListException
+	 *             Signals an error when a choice list for a question given by
+	 *             the user has less than two choices.
 	 */
 	public MultipleAnswerQuestion(String content, List<String> choiceList)
+			throws InvalidChoiceListException
 	{
-		this(content, choiceList, null, null);
+		super(content, QuestionType.MULTIPLE_ANSWER, choiceList);
 	}
 
 	/**
@@ -64,31 +51,14 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 		super(rawData);
 	}
 
-	public void setAnswer(String answer)
+	public void setAnswer(String answer) throws InvalidAnswerException
 	{
-		int index = getChoiceList().indexOf(answer);
+		String[] answers = Operations.parseAnswers(answer);
 
-		if (index >= 0)
-		{
-			if (isAnswered())
-			{
-				this.answer += answer + ";";
-				String[] oldAnswers = this.answer.split(";");
-				String[] newAnswers = new String[getChoiceList().size()];
-
-				for (String oldAnswer : oldAnswers)
-					newAnswers[getChoiceList().indexOf(oldAnswer)] = oldAnswer;
-
-				this.answer = new String();
-
-				for (String newAnswer : newAnswers)
-				{
-					if (newAnswer != null)
-						this.answer += newAnswer + ";";
-				}
-			}
-			else
-				this.answer = answer + ";";
-		}
+		for (String a : answers)
+			if (getChoiceList().indexOf(a) < 0)
+				throw new InvalidAnswerException(a, getChoiceList());
+		
+		this.answer = answer;
 	}
 }

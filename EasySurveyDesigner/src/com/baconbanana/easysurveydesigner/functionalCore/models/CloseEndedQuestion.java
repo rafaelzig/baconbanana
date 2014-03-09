@@ -5,10 +5,10 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.util.List;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -24,8 +24,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 public abstract class CloseEndedQuestion extends Question
 {
 	private List<String> choiceList;
-	private List<Question> subsequentList;
-	private String contingencyAnswer;
 
 	/**
 	 * Builds a CloseEndedQuestion object with the specified content, type, list
@@ -38,28 +36,24 @@ public abstract class CloseEndedQuestion extends Question
 	 * @param choiceList
 	 *            A List of String objects containing the choices of the
 	 *            question.
-	 * @param subsequentList
-	 *            A List of subsequent Question objects.
-	 * @param contingencyAnswer
-	 *            A String object representing the contingency answer.
-	 * @see QuestionType#MULTIPLE_ANSWER_QUESTION_TYPE
-	 * @see QuestionType#MULTIPLE_CHOICE_QUESTION_TYPE
-	 * @see QuestionType#OPEN_ENDED_QUESTION_TYPE
-	 * @see QuestionType#SCALAR_QUESTION_TYPE
+	 * @throws InvalidChoiceListException
+	 *             Signals an error when a choice list for a question given by
+	 *             the user has less than two choices.
+	 * @see QuestionType#MULTIPLE_ANSWER
+	 * @see QuestionType#MULTIPLE_CHOICE
+	 * @see QuestionType#OPEN_ENDED
+	 * @see QuestionType#CONTINGENCY
+	 * @see QuestionType#SCALAR
 	 */
 	public CloseEndedQuestion(String content, QuestionType type,
-			List<String> choiceList, List<Question> subsequentList,
-			String contingencyAnswer)
+			List<String> choiceList) throws InvalidChoiceListException
 	{
 		super(content, type);
 
 		if (choiceList.size() > 1)
 			this.choiceList = choiceList;
 		else
-			; // Only one choice -> Throw some exception
-
-		this.subsequentList = subsequentList;
-		this.contingencyAnswer = contingencyAnswer;
+			throw new InvalidChoiceListException(choiceList.size());
 	}
 
 	/**
@@ -72,16 +66,7 @@ public abstract class CloseEndedQuestion extends Question
 	public CloseEndedQuestion(JSONObject rawData)
 	{
 		super(rawData);
-
 		choiceList = (List<String>) rawData.get("choiceList");
-		JSONArray subsequentListRaw = (JSONArray) rawData
-				.get("subsequentList");
-
-		if (subsequentListRaw != null)
-		{
-			subsequentList = Operations.parseQuestionList(subsequentListRaw);
-			contingencyAnswer = (String) rawData.get("contingencyAnswer");
-		}
 	}
 
 	/**
@@ -107,35 +92,6 @@ public abstract class CloseEndedQuestion extends Question
 	}
 
 	/**
-	 * Gets the list of subsequent questions if the answer to this question is
-	 * the contingency answer, null otherwise.
-	 * 
-	 * @return A List of subsequent Question objects if this Question's answer
-	 *         is the same as contingencyAnswer, null otherwise.
-	 */
-
-	public List<Question> getSubsequentList()
-	{
-		return (answer.equals(contingencyAnswer)) ? subsequentList : null;
-	}
-
-	/**
-	 * Sets the list of subsequent questions along with the contingency answer.
-	 * 
-	 * @param subsequentList
-	 *            A List of subsequent Question objects.
-	 * @param contingencyAnswer
-	 *            A String object representing the contingency answer.
-	 */
-
-	public void setSubsequentList(List<Question> subsequentList,
-			String contingencyAnswer)
-	{
-		this.subsequentList = subsequentList;
-		this.contingencyAnswer = contingencyAnswer;
-	}
-
-	/**
 	 * Gets a JSONObject containing the question.
 	 * 
 	 * @return A JSONObject containing the survey.
@@ -145,30 +101,18 @@ public abstract class CloseEndedQuestion extends Question
 	public JSONObject getJSON()
 	{
 		JSONObject rawData = super.getJSON();
-
 		rawData.put("choiceList", choiceList);
-
-		if (subsequentList != null)
-		{
-			JSONArray subsequentListRaw = new JSONArray();
-
-			for (Question question : subsequentList)
-				subsequentListRaw.add(question.getJSON());
-
-			rawData.put("subsequentList", subsequentListRaw);
-			rawData.put("contingencyAnswer", contingencyAnswer);
-		}
 
 		return rawData;
 	}
-	
-	public void setAnswer(String answer)
+
+	public void setAnswer(String answer) throws InvalidAnswerException
 	{
 		int index = choiceList.indexOf(answer);
-		
-		if (index >= 0)
-			this.answer = choiceList.get(index);
-		else
-			;// throw some exception, answer not found in choiceList
+
+		if (index < 0)
+			throw new InvalidAnswerException(answer, choiceList);
+
+		this.answer = choiceList.get(index);
 	}
 }

@@ -5,6 +5,8 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import org.json.simple.JSONObject;
 
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -40,10 +42,10 @@ public abstract class Question
 	 *            A String object containing the content of the question.
 	 * @param type
 	 *            An enumeration representing the type of the question.
-	 * @see QuestionType#MULTIPLE_ANSWER_QUESTION_TYPE
-	 * @see QuestionType#MULTIPLE_CHOICE_QUESTION_TYPE
-	 * @see QuestionType#OPEN_ENDED_QUESTION_TYPE
-	 * @see QuestionType#SCALAR_QUESTION_TYPE
+	 * @see QuestionType#MULTIPLE_ANSWER
+	 * @see QuestionType#MULTIPLE_CHOICE
+	 * @see QuestionType#OPEN_ENDED
+	 * @see QuestionType#SCALAR
 	 */
 	public Question(String content, QuestionType type)
 	{
@@ -101,8 +103,12 @@ public abstract class Question
 	 * 
 	 * @param answer
 	 *            A String object containing the answer of the question.
+	 * @throws InvalidAnswerException
+	 *             Signals an error when an answer given by the user does not
+	 *             exist in the possible choices for the question.
 	 */
-	public abstract void setAnswer(String answer);
+	public abstract void setAnswer(String answer)
+			throws InvalidAnswerException;
 
 	/**
 	 * Gets a JSONObject containing the question.
@@ -123,6 +129,7 @@ public abstract class Question
 
 	/**
 	 * Returns true if the question has been answered, false otherwise.
+	 * 
 	 * @return True if the question has been answered, False otherwise.
 	 */
 	public boolean isAnswered()

@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -35,39 +37,9 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * @param keyword
 	 *            One of the constants representing the keyword to be used in
 	 *            this question.
-	 * @param subsequentList
-	 *            A List of subsequent Question objects.
-	 * @param contingencyAnswer
-	 *            A String object representing the contingency answer.
-	 * @see ScalarQuestion#ACCEPTABILITY_SCALE
-	 * @see ScalarQuestion#AGREEMENT_SCALE
-	 * @see ScalarQuestion#APPROPRIATENESS_SCALE
-	 * @see ScalarQuestion#AWARENESS_SCALE
-	 * @see ScalarQuestion#CONCERN_SCALE
-	 * @see ScalarQuestion#FAMILIARITY_SCALE
-	 * @see ScalarQuestion#FREQUENCY_SCALE
-	 * @see ScalarQuestion#IMPORTANCE_SCALE
-	 * @see ScalarQuestion#INFLUENCE_SCALE
-	 * @see ScalarQuestion#LIKELIHOOD_SCALE
-	 * @see ScalarQuestion#PRIORITY_SCALE
-	 * @see ScalarQuestion#QUALITY_SCALE
-	 * @see ScalarQuestion#SATISFACTION_SCALE
-	 */
-	public ScalarQuestion(String content, String keyword,
-			List<Question> subsequentList, String contingencyAnswer)
-	{
-		super(content, QuestionType.SCALAR_QUESTION_TYPE,
-				prepareChoiceList(keyword), subsequentList, contingencyAnswer);
-	}
-
-	/**
-	 * Builds a ScalarQuestion object with the specified content and keyword.
-	 * 
-	 * @param content
-	 *            A String object containing the content of the question.
-	 * @param keyword
-	 *            One of the constants representing the keyword to be used in
-	 *            this question.
+	 * @throws InvalidChoiceListException
+	 *             Signals an error when a choice list for a question given by
+	 *             the user has less than two choices.
 	 * @see ScalarQuestion#ACCEPTABILITY_SCALE
 	 * @see ScalarQuestion#AGREEMENT_SCALE
 	 * @see ScalarQuestion#APPROPRIATENESS_SCALE
@@ -83,8 +55,9 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * @see ScalarQuestion#SATISFACTION_SCALE
 	 */
 	public ScalarQuestion(String content, String keyword)
+			throws InvalidChoiceListException
 	{
-		this(content, keyword, null, null);
+		super(content, QuestionType.SCALAR, prepareChoiceList(keyword));
 	}
 
 	/**

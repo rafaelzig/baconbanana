@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidSubsequentListException;
+import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
@@ -38,18 +41,25 @@ public class JSONTest
 		subsequentList.add(new OpenEndedQuestion(
 				"How many packs do you smoke a day?"));
 
-		// Adding a MultipleChoiceQuestion object with subsequent questions
-		questionList.add(new MultipleChoiceQuestion("Are you a smoker?",
-				choiceList, subsequentList, "Yes"));
+		// Adding a ContingencyQuestion object with subsequent questions
+		try
+		{
+			questionList.add(new ContingencyQuestion("Are you a smoker?",
+					choiceList, subsequentList, "Yes"));
 
-		// Changing the choices for the next Question object
-		choiceList = new ArrayList<>();
-		choiceList.add("Male");
-		choiceList.add("Female");
+			// Changing the choices for the next Question object
+			choiceList = new ArrayList<>();
+			choiceList.add("Male");
+			choiceList.add("Female");
 
-		// Adding another MultipleChoiceQuestion object
-		questionList.add(new MultipleChoiceQuestion("What is your gender?",
-				choiceList));
+			// Adding another MultipleChoiceQuestion object
+			questionList.add(new MultipleChoiceQuestion("What is your gender?",
+					choiceList));
+		}
+		catch (InvalidChoiceListException | InvalidSubsequentListException e)
+		{
+			e.printStackTrace();
+		}
 
 		// Changing the choices for the next Question object
 		choiceList = new ArrayList<>();
@@ -61,19 +71,25 @@ public class JSONTest
 		choiceList.add("Kiwi");
 		choiceList.add("Papaya");
 
-		// Adding a MultipleAnswerQuestion object
-		questionList.add(new MultipleAnswerQuestion(
-				"Select your favourite fruits:", choiceList));
-
-		// Adding ScalarQuestion objects
-		questionList.add(new ScalarQuestion(
-				"How would you rate Rafael's importance to this project?",
-				ScalarQuestion.IMPORTANCE_SCALE));
-		questionList.add(new ScalarQuestion(
-				"How would you rate Rafael's performance on this project?",
-				ScalarQuestion.INFLUENCE_SCALE));
-		questionList.add(new ScalarQuestion("Rafael is awesome.",
-				ScalarQuestion.LIKERT_SCALE));
+		try
+		{
+			// Adding a MultipleAnswerQuestion object
+			questionList.add(new MultipleAnswerQuestion(
+					"Select your favourite fruits:", choiceList));
+			// Adding ScalarQuestion objects
+			questionList.add(new ScalarQuestion(
+					"How would you rate Rafael's importance to this project?",
+					ScalarQuestion.IMPORTANCE_SCALE));
+			questionList.add(new ScalarQuestion(
+					"How would you rate Rafael's performance on this project?",
+					ScalarQuestion.INFLUENCE_SCALE));
+			questionList.add(new ScalarQuestion("Rafael is awesome.",
+					ScalarQuestion.LIKERT_SCALE));
+		}
+		catch (InvalidChoiceListException e)
+		{
+			e.printStackTrace();
+		}
 
 		// Creating the Patient object
 		Patient patient = null;
@@ -83,7 +99,6 @@ public class JSONTest
 		}
 		catch (java.text.ParseException e1)
 		{
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -95,13 +110,13 @@ public class JSONTest
 
 		try
 		{
-			Operations.writeFile(qOne.getJSON().toJSONString(), "Survey.json");
-			json = Operations.readFile("Survey.json");
+			Operations.writeFile(qOne.getJSON().toJSONString(),
+					Operations.FILENAME);
+			json = Operations.readFile(Operations.FILENAME);
 			System.out.println(json);
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -113,7 +128,6 @@ public class JSONTest
 		}
 		catch (java.text.ParseException | ParseException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

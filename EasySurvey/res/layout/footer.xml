@@ -30,7 +30,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="#/#"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/btnFinish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnNext"
+        android:layout_alignParentRight="true"
+        android:onClick="onClick"
+        android:text="Finish Survey"
+        android:visibility="gone" />
 
 </RelativeLayout>

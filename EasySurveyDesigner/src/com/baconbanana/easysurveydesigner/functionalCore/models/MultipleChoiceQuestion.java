@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.json.simple.JSONObject;
 
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+
 /**
  * @author Rafael da Silva Costa & Team
  * 
@@ -25,31 +27,14 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 * @param choiceList
 	 *            A List of String objects containing the choices of the
 	 *            question.
-	 * @param subsequentList
-	 *            A List of subsequent Question objects.
-	 * @param contingencyAnswer
-	 *            A String object representing the contingency answer.
-	 */
-	public MultipleChoiceQuestion(String content, List<String> choiceList,
-			List<Question> subsequentList, String contingencyAnswer)
-	{
-		super(content, QuestionType.MULTIPLE_CHOICE_QUESTION_TYPE, choiceList,
-				subsequentList, contingencyAnswer);
-	}
-
-	/**
-	 * Builds a MultipleChoiceQuestion object with the specified content and
-	 * list of choices.
-	 * 
-	 * @param content
-	 *            A String object containing the content of the question.
-	 * @param choiceList
-	 *            A List of String objects containing the choices of the
-	 *            question.
+	 * @throws InvalidChoiceListException
+	 *             Signals an error when a choice list for a question given by
+	 *             the user has less than two choices.
 	 */
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
+			throws InvalidChoiceListException
 	{
-		this(content, choiceList, null, null);
+		super(content, QuestionType.MULTIPLE_CHOICE, choiceList);
 	}
 
 	/**

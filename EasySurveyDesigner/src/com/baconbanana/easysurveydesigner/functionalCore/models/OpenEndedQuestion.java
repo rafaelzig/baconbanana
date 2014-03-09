@@ -33,7 +33,7 @@ public class OpenEndedQuestion extends Question
 	 */
 	public OpenEndedQuestion(String content)
 	{
-		super(content, QuestionType.OPEN_ENDED_QUESTION_TYPE);
+		super(content, QuestionType.OPEN_ENDED);
 	}
 
 	public void setAnswer(String answer)

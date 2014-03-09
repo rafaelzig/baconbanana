@@ -1,25 +1,32 @@
 package com.baconbanana.easysurvey;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
@@ -36,30 +43,64 @@ public class SurveyActivity extends Activity
 	private int size, cursor;
 	private Survey survey;
 	private Question currentQuestion;
+	private List<Question> questionList;
 	private List<String> choiceList;
-	private View[] viewGroup;
-	private LinearLayout placeholderLayout;
+	private LinearLayout placeholder, questions;
 	private OnTouchListener touchListener;
+	private OnKeyListener keyListener;
 	private TextView txtContent, txtPage;
 	private ProgressBar pgrBar;
 	private View lineView;
+	private LayoutInflater inf;
+	private InputMethodManager keyboard;
+	private int subsequentCursor;
+	private boolean isSubsequent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.question_placeholder);
+		inf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		buildListener();
-		loadSurvey();
+		setContentView(R.layout.placeholder);
+		getSurvey(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
+		buildListeners();
 		buildLayout();
 	}
 
 	/**
-	 * Builds the listener object used in this activity.
+	 * 
 	 */
-	private void buildListener()
+	private void getSurvey(String jsonString)
+	{
+		try
+		{
+			survey = new Survey(Operations.parseJSON(jsonString));
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (org.json.simple.parser.ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		size = survey.size();
+		cursor = 0;
+		subsequentCursor = -1;
+		questionList = survey.getQuestionList();
+		currentQuestion = questionList.get(cursor);
+	}
+
+	/**
+	 * Builds the listener objects used in this activity.
+	 */
+	private void buildListeners()
 	{
 		touchListener = new TouchListener(this, new GestureListener()
 		{
@@ -76,45 +117,44 @@ public class SurveyActivity extends Activity
 				skipQuestion(false);
 				return true;
 			}
+
+			@Override
+			public boolean onBottomToTopSwipe()
+			{
+				if (currentQuestion.getType() == QuestionType.OPEN_ENDED)
+				{
+					keyboard.showSoftInput(lineView, 0);
+					return true;
+				}
+
+				return false;
+			}
+
+			@Override
+			public boolean onTopToBottomSwipe()
+			{
+				keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(),
+						0);
+				return true;
+			}
 		});
-	}
 
-	/**
-	 * Parses the json string from the assets folder into a Survey object.
-	 */
-	private void loadSurvey()
-	{
-		JSONObject rawData = null;
-		String jsonString;
+		keyListener = new OnKeyListener()
+		{
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event)
+			{
+				if ((event.getAction() == KeyEvent.ACTION_DOWN)
+						&& (keyCode == KeyEvent.KEYCODE_ENTER))
+				{
+					skipQuestion(true);
+					return true;
+				}
 
-		try
-		{
-			jsonString = Operations.readFile(getAssets().open("Survey.json"));
-			rawData = Operations.parseJSON(jsonString);
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (ParseException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+				return false;
+			}
+		};
 
-		try
-		{
-			survey = new Survey(rawData);
-		}
-		catch (java.text.ParseException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		currentQuestion = survey.getQuestionList().get(0);
-		size = survey.getQuestionList().size();
-		cursor = 0;
 	}
 
 	/**
@@ -122,65 +162,138 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildLayout()
 	{
-		placeholderLayout = (LinearLayout) findViewById(R.id.placeholderLayout);
-		placeholderLayout.setOnTouchListener(touchListener);
+		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
+		placeholder.setOnTouchListener(touchListener);
+
+		buildStaticViews();
+		buildQuestionViews();
+	}
+
+	/**
+	 * Builds the header views and places them on the placeholder layout.
+	 */
+	private void buildStaticViews()
+	{
+		lineView = inf.inflate(R.layout.header, placeholder, false);
+		placeholder.addView(lineView);
+
+		questions = (LinearLayout) inf.inflate(R.layout.placeholder,
+				placeholder, false);
+		placeholder.addView(questions);
+
+		lineView = inf.inflate(R.layout.footer, placeholder, false);
+		placeholder.addView(lineView);
 
 		txtContent = (TextView) findViewById(R.id.txtContent);
-		txtContent.setText(currentQuestion.getContent());
 
 		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
-		pgrBar.setMax(size - 1);
-		pgrBar.setProgress(survey.getAnswerCount());
+		pgrBar.setMax(size);
 
-		int res;
+		txtPage = (TextView) findViewById(R.id.txtPage);
+	}
+
+	/**
+	 * Builds the question views and places them on the placeholder layout.
+	 */
+	private void buildQuestionViews()
+	{
+		String[] sortedAnswers = null, unsortedAnswers;
 		boolean flag = false;
+		int res;
+
+		pgrBar.setProgress(survey.getAnswerCount());
+		txtPage.setText((cursor + subsequentCursor + 1) + "/" + (size));
+		txtContent.setText(currentQuestion.getContent());
 
 		switch (currentQuestion.getType())
 		{
-			case OPEN_ENDED_QUESTION_TYPE:
-				lineView = getLayoutInflater().inflate(R.layout.textbox,
-						placeholderLayout, false);
-				((TextView) lineView).setText(currentQuestion.getAnswer());
-				viewGroup = new View[] { lineView };
-				placeholderLayout.addView(lineView);
+			case OPEN_ENDED:
+				lineView = inf.inflate(R.layout.textbox, questions, false);
+
+				if (currentQuestion.isAnswered())
+					((EditText) lineView).setText(currentQuestion.getAnswer());
+
+				lineView.setOnKeyListener(keyListener);
+				questions.addView(lineView);
+				lineView.requestFocus();
+				keyboard.showSoftInput(lineView, 1);
 
 				break;
 
-			case MULTIPLE_CHOICE_QUESTION_TYPE:
-			case SCALAR_QUESTION_TYPE:
+			case MULTIPLE_CHOICE:
+			case CONTINGENCY:
+			case SCALAR:
 				flag = true;
 				// Falls through
-
-			case MULTIPLE_ANSWER_QUESTION_TYPE:
+			case MULTIPLE_ANSWER:
 				choiceList = ((CloseEndedQuestion) currentQuestion)
 						.getChoiceList();
-				viewGroup = new View[choiceList.size()];
+
+					unsortedAnswers = Operations.parseAnswers(currentQuestion
+							.getAnswer());
+					sortedAnswers = new String[choiceList.size()];
+
+					for (String answer : unsortedAnswers)
+						sortedAnswers[choiceList.indexOf(answer)] = answer;
 
 				res = (flag) ? R.layout.radiobutton : R.layout.checkbox;
 
 				for (int i = 0; i < choiceList.size(); i++)
 				{
-					lineView = getLayoutInflater().inflate(res,
-							placeholderLayout, false);
+					lineView = inf.inflate(res, questions, false);
 
 					((TextView) lineView).setText(choiceList.get(i));
-					
-					if (currentQuestion.getAnswer().equals(choiceList.get(i)))
+
+					if (sortedAnswers != null && sortedAnswers[i] != null)
 						((CompoundButton) lineView).setChecked(true);
 
-					placeholderLayout.addView(lineView);
-					viewGroup[i] = ((CompoundButton) lineView);
+					questions.addView(lineView);
 				}
 
 				break;
 		}
 
-		lineView = getLayoutInflater().inflate(R.layout.button_line,
-				placeholderLayout, false);
-		placeholderLayout.addView(lineView);
+	}
 
-		txtPage = (TextView) findViewById(R.id.txtPage);
-		txtPage.setText((cursor + 1) + "/" + (size));
+	private void saveAnswer()
+	{
+		String answer = new String();
+
+		try
+		{
+			if (currentQuestion.getType() == QuestionType.OPEN_ENDED)
+			{
+				answer = ((TextView) questions.getChildAt(0)).getText()
+						.toString();
+				if (!answer.isEmpty())
+					currentQuestion.setAnswer(answer);
+			}
+			else
+			{
+				boolean flag = (currentQuestion.getType() == QuestionType.MULTIPLE_ANSWER);
+
+				for (int i = 0; i < questions.getChildCount(); i++)
+				{
+					if (((CompoundButton) questions.getChildAt(i)).isChecked())
+					{
+						answer += ((TextView) questions.getChildAt(i))
+								.getText().toString();
+
+						if (flag)
+							answer += Operations.SEPARATOR;
+						else
+							break;
+					}
+				}
+				if (!answer.isEmpty())
+					currentQuestion.setAnswer(answer);
+			}
+		}
+		catch (InvalidAnswerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -194,48 +307,127 @@ public class SurveyActivity extends Activity
 	private void skipQuestion(boolean next)
 	{
 		saveAnswer();
+		questions.removeAllViews();
 
-		placeholderLayout.invalidate();
-		setContentView(R.layout.question_placeholder);
+		checkAnswer();
+		loadNextQuestion(next);
 
-		cursor = (next) ? cursor + 1 : cursor - 1;
+		buildQuestionViews();
 
-		if (cursor >= size)
-			cursor = 0;
-		else if (cursor < 0)
-			cursor = size - 1;
+		if (currentQuestion.getType() != QuestionType.OPEN_ENDED)
+			keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
 
-		currentQuestion = survey.getQuestionList().get(cursor);
-		buildLayout();
+		if (pgrBar.getProgress() == pgrBar.getMax())
+		{
+			lineView = findViewById(R.id.btnFinish);
+			lineView.setVisibility(Button.VISIBLE);
+		}
 	}
 
-	private void saveAnswer()
+	/**
+	 * Checks if the question has been answered and if it is a contingency
+	 * question, if true, moves the cursor to the subsequent questions.
+	 */
+	private void checkAnswer()
 	{
-		String answer = null;
+		if (!isSubsequent && currentQuestion.getType() == QuestionType.CONTINGENCY)
+		{
+			List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
+					.getSubsequentList();
 
-		if (currentQuestion.getType() == QuestionType.OPEN_ENDED_QUESTION_TYPE)
-		{
-			answer = ((TextView) viewGroup[0]).getText().toString();
-			if (!answer.isEmpty())
-				currentQuestion.setAnswer(answer);
-		}
-		else
-		{
-			for (View compButton : viewGroup)
+			if (currentQuestion.getAnswer().equals(
+					((ContingencyQuestion) currentQuestion)
+							.getContingencyAnswer()))
 			{
-				if (((CompoundButton) compButton).isChecked())
+				questionList = subsequent;
+				isSubsequent = true;
+			}
+			else
+			{
+				try
 				{
-					answer = ((TextView) compButton).getText().toString();
-					currentQuestion.setAnswer(answer);
+					for (Question question : subsequent)
+						question.setAnswer("");
+				}
+				catch (InvalidAnswerException e)
+				{
+					e.printStackTrace();
 				}
 			}
 		}
-
 	}
 
+	public void loadNextQuestion(boolean next)
+	{
+		if (!isSubsequent)
+		{
+			cursor = (next) ? cursor + 1 : cursor - 1;
+
+			if (cursor >= questionList.size())
+				cursor = 0;
+			else if (cursor < 0)
+				cursor = questionList.size() - 1;
+
+			currentQuestion = questionList.get(cursor);
+		}
+		else
+		{
+			subsequentCursor = (next) ? subsequentCursor + 1
+					: subsequentCursor - 1;
+
+			if (subsequentCursor >= 0 && subsequentCursor < questionList.size())
+				currentQuestion = questionList.get(subsequentCursor);
+			else
+			{
+				isSubsequent = false;
+				questionList = survey.getQuestionList();
+				cursor = (subsequentCursor < 0) ? cursor : cursor + 1;
+				subsequentCursor = -1;
+				currentQuestion = questionList.get(cursor);
+			}
+		}
+	}
+
+	/**
+	 * Method fired when the user presses buttons in the application.
+	 * 
+	 * @param v
+	 *            View object which the event originates.
+	 */
 	public void onClick(View v)
 	{
-		skipQuestion((v.getId() == R.id.btnNext));
+		switch (v.getId())
+		{
+			case R.id.btnFinish:
+				finishSurvey();
+				break;
+
+			case R.id.btnPrevious:
+			case R.id.btnNext:
+				skipQuestion((v.getId() == R.id.btnNext));
+				break;
+		}
+	}
+
+	/**
+	 * Finishes the survey, writing the user's answers back to the json file.
+	 */
+	private void finishSurvey()
+	{
+		if (Storage.isExternalStorageWritable())
+		{
+			Storage.createRootDirectory();
+
+			try
+			{
+				Operations.writeFile(survey.getJSON().toJSONString(),
+						Storage.ROOT_DIRECTORY + Operations.FILENAME);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -247,10 +439,9 @@ public class SurveyActivity extends Activity
 	 */
 	public void checkRadioButtons(View v)
 	{
-		RadioButton selected = (RadioButton) v;
-		for (View radioButton : viewGroup)
-			if (radioButton != selected)
-				((RadioButton) radioButton).setChecked(false);
+		for (int i = 0; i < questions.getChildCount(); i++)
+			if (questions.getChildAt(i) != v)
+				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
 	@Override
@@ -260,5 +451,4 @@ public class SurveyActivity extends Activity
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 }

@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
  	android:background="#99FF33"
     android:orientation="vertical"
-    tools:context=".MainActivity" 
+    tools:context=".OldMainActivity" 
     android:weightSum="1"
     android:baselineAligned="false"
     android:layout_gravity="fill_vertical">

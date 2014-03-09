@@ -12,9 +12,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baconbanana.easysurvey.R;
-import com.baconbanana.easysurvey.VideoActivity;
+import com.baconbanana.easysurvey.MainActivity;
 
-public class MainActivity extends Activity implements OnClickListener{
+public class OldMainActivity extends Activity implements OnClickListener{
 	
 	TextView quest;
 	Button nextBtn;
@@ -28,8 +28,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		super.onCreate(savedInstanceState);
 		
-		VideoActivity va = new VideoActivity();
-		this.startActivity(new Intent(this, VideoActivity.class));
+		MainActivity va = new MainActivity();
+		this.startActivity(new Intent(this, MainActivity.class));
 		/*qp = new ParseQuestion();
 		this.startActivity(new Intent(this, ParseQuestion.class));*/
 		

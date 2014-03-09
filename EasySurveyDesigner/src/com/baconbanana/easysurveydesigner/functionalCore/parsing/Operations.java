@@ -3,23 +3,26 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore.parsing;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
@@ -37,83 +40,119 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
 public class Operations
 {
 	/**
-	 * String object representing the date format used.
+	 * String object representing the separator used in the answers.
 	 */
-	private final static String DATE_FORMAT = "yyyy-MM-dd";
-	
+	public static final String SEPARATOR = ";";
+
 	/**
-	 * Attempts to read from a file with the specified fileName, returning the
-	 * content as a String object.
+	 * String object representing the filename used to save the json files.
+	 */
+	public static final String FILENAME = "Survey.json";
+
+	private final static String DATE_FORMAT = "yyyy-MM-dd";
+	private final static SimpleDateFormat format = new SimpleDateFormat(
+			DATE_FORMAT);
+	private final static Pattern p = Pattern.compile(SEPARATOR);
+	private final static JSONParser parser = new JSONParser();
+	private static OutputStream outputStream;
+	private static InputStream inputStream;
+
+	/**
+	 * Attempts to read from the specified file, returning the content as a
+	 * String object.
 	 * 
-	 * @param fileName
-	 *            A String object containing the file name.
 	 * @return A String object containing the contents of the file.
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static String readFile(String fileName) throws IOException
+	public static String readFile(String filename) throws IOException
 	{
-		return readFile(new FileInputStream(fileName));
+		return readFile(new FileInputStream(new File(filename)));
 	}
 
 	/**
-	 * Attempts to read from the specified InputStream object, returning the
-	 * content as a String object.
+	 * Attempts to read from the json file, returning the content as a String
+	 * object.
 	 * 
-	 * @param input
-	 *            An InputStream object containing the content of the file.
+	 * @param is
+	 *            FileInputStream object containing the input stream to be used.
 	 * @return A String object containing the contents of the file.
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static String readFile(InputStream input) throws IOException
+	public static String readFile(InputStream is) throws IOException
 	{
-		BufferedReader reader = null;
-		StringBuilder output;
+		byte[] output = new byte[is.available()];
+
+		int totalBytesRead = 0;
+
 		try
 		{
-			reader = new BufferedReader(new InputStreamReader(input));
-			output = new StringBuilder();
-			String line;
+			inputStream = new BufferedInputStream(is);
 
-			while ((line = reader.readLine()) != null)
-				output.append(line);
+			while (totalBytesRead < output.length)
+			{
+				int bytesRemaining = output.length - totalBytesRead;
+				int bytesRead = inputStream.read(output, totalBytesRead,
+						bytesRemaining);
+				if (bytesRead > 0)
+					totalBytesRead = totalBytesRead + bytesRead;
+			}
 		}
 		finally
 		{
-			if (reader != null)
-				reader.close();
+			if (inputStream != null)
+				inputStream.close();
 		}
 
-		return output.toString();
+		return new String(output);
 	}
 
 	/**
 	 * Attempts to write the specified String object to a file with the
-	 * specified fileName.
+	 * specified filename.
 	 * 
 	 * @param input
-	 *            A String object containing the content to be written.
-	 * @param fileName
-	 *            A String object containing the file name.
+	 *            String object containing the content to be written.
+	 * @param filename
+	 *            String object representing the filename.
+	 * 
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static void writeFile(String input, String fileName)
+	public static void writeFile(String input, String filename)
 			throws IOException
 	{
-		BufferedWriter writer = null;
+		writeFile(input, new FileOutputStream(new File(filename)));
+	}
+
+	/**
+	 * Attempts to write the specified String object to the specified
+	 * FileOutputStream object.
+	 * 
+	 * @param input
+	 *            A String object containing the content to be written.
+	 * @param fos
+	 *            FileOutputStream object containing the stream to be used.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
+	 */
+	public static void writeFile(String input, FileOutputStream fos)
+			throws IOException
+	{
+		outputStream = new BufferedOutputStream(fos);
 
 		try
 		{
-			writer = new BufferedWriter(new FileWriter(fileName));
-			writer.write(input);
+			outputStream.write(input.getBytes());
 		}
 		finally
 		{
-			if (writer != null)
-				writer.close();
+			if (outputStream != null)
+				outputStream.close();
 		}
+
 	}
 
 	/**
@@ -127,8 +166,6 @@ public class Operations
 	 */
 	public static JSONObject parseJSON(String jsonString) throws ParseException
 	{
-		JSONParser parser = new JSONParser();
-
 		return (JSONObject) parser.parse(jsonString);
 	}
 
@@ -153,16 +190,19 @@ public class Operations
 
 			switch (type)
 			{
-				case MULTIPLE_ANSWER_QUESTION_TYPE:
+				case MULTIPLE_ANSWER:
 					questionList.add(new MultipleAnswerQuestion(questionRaw));
 					break;
-				case MULTIPLE_CHOICE_QUESTION_TYPE:
+				case MULTIPLE_CHOICE:
 					questionList.add(new MultipleChoiceQuestion(questionRaw));
 					break;
-				case OPEN_ENDED_QUESTION_TYPE:
+				case CONTINGENCY:
+					questionList.add(new ContingencyQuestion(questionRaw));
+					break;
+				case OPEN_ENDED:
 					questionList.add(new OpenEndedQuestion(questionRaw));
 					break;
-				case SCALAR_QUESTION_TYPE:
+				case SCALAR:
 					questionList.add(new ScalarQuestion(questionRaw));
 					break;
 			}
@@ -170,21 +210,24 @@ public class Operations
 
 		return questionList;
 	}
-	
+
 	/**
 	 * Parses the specified string into a java.sql.Date object.
 	 * 
 	 * @param date
 	 *            String Object in the format yyyy-MM-dd representing a date.
 	 * @return java.sql.Date object representing the date.
-	 * @throws java.text.ParseException 
+	 * @throws java.text.ParseException
 	 */
 	public static Date parseDate(String date) throws java.text.ParseException
 	{
-		SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
 		format.setLenient(false);
-		
+
 		return new Date(format.parse(date).getTime());
 	}
 
+	public static String[] parseAnswers(String answer)
+	{
+		return (answer.isEmpty()) ? new String[0] : p.split(answer);
+	}
 }
