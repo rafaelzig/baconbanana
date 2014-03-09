@@ -23,6 +23,7 @@
         android:layout_toLeftOf="@+id/txtPage"
         android:onClick="onClick"
         android:text="Previous" />
+    
 
     <TextView
         android:id="@+id/txtPage"
@@ -32,5 +33,15 @@
         android:layout_centerHorizontal="true"
         android:text="#/#"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/btnSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnPrevious"
+        android:layout_alignParentLeft="true"
+        android:onClick="onClick"
+        android:text="Submit" />
+
 
 </RelativeLayout>
