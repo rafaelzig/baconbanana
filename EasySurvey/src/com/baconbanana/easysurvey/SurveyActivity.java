@@ -44,10 +44,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 /**
  * This class builds the activity which displays the survey to the user.
  * 
- * @author Rafael da Silva Costa & Team 
+ * @author Rafael da Silva Costa & Team
  * 
  */
-public class SurveyActivity extends Activity {
+public class SurveyActivity extends Activity
+{
 	final SurveyActivity contex = this;
 
 	private int size, cursor;
@@ -80,7 +81,8 @@ public class SurveyActivity extends Activity {
 	Socket skt = null;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 
 		inf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -127,13 +129,15 @@ public class SurveyActivity extends Activity {
 		touchListener = new TouchListener(this, new GestureListener()
 		{
 			@Override
-			public boolean onRightToLeftSwipe() {
+			public boolean onRightToLeftSwipe()
+			{
 				skipQuestion(true);
 				return true;
 			}
 
 			@Override
-			public boolean onLeftToRightSwipe() {
+			public boolean onLeftToRightSwipe()
+			{
 				skipQuestion(false);
 				return true;
 			}
@@ -246,12 +250,12 @@ public class SurveyActivity extends Activity {
 				choiceList = ((CloseEndedQuestion) currentQuestion)
 						.getChoiceList();
 
-					unsortedAnswers = Operations.parseAnswers(currentQuestion
-							.getAnswer());
-					sortedAnswers = new String[choiceList.size()];
+				unsortedAnswers = Operations.parseAnswers(currentQuestion
+						.getAnswer());
+				sortedAnswers = new String[choiceList.size()];
 
-					for (String answer : unsortedAnswers)
-						sortedAnswers[choiceList.indexOf(answer)] = answer;
+				for (String answer : unsortedAnswers)
+					sortedAnswers[choiceList.indexOf(answer)] = answer;
 
 				res = (flag) ? R.layout.radiobutton : R.layout.checkbox;
 
@@ -320,7 +324,8 @@ public class SurveyActivity extends Activity {
 	 *            Represents the action of the method, true if next question,
 	 *            false if previous question.
 	 */
-	private void skipQuestion(boolean next) {
+	private void skipQuestion(boolean next)
+	{
 		saveAnswer();
 		questions.removeAllViews();
 
@@ -345,7 +350,8 @@ public class SurveyActivity extends Activity {
 	 */
 	private void checkAnswer()
 	{
-		if (!isSubsequent && currentQuestion.getType() == QuestionType.CONTINGENCY)
+		if (!isSubsequent
+				&& currentQuestion.getType() == QuestionType.CONTINGENCY)
 		{
 			List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
 					.getSubsequentList();
@@ -444,35 +450,40 @@ public class SurveyActivity extends Activity {
 		}
 	}
 
-	
-	
 	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-//------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 	/**
-	 * called when the SIBMIT button is pressed. It first checks if all of 
-	 * the questions are answered. If no, dialog box showing not answered 
-	 * questions appears. If yes, confirmation dialog box appears. once pressed ok, 
-	 * it tries too connect to server.   
-	 * @param b Boolean    
+	 * called when the SIBMIT button is pressed. It first checks if all of the
+	 * questions are answered. If no, dialog box showing not answered questions
+	 * appears. If yes, confirmation dialog box appears. once pressed ok, it
+	 * tries too connect to server.
+	 * 
+	 * @param b
+	 *            Boolean
 	 */
-	private void submit(boolean b) {
+	private void submit(boolean b)
+	{
 		answerdAnswers = survey.getAnswerCount();
 		numberOfQuestions = survey.getQuestionList().size();
-		if (answerdAnswers == numberOfQuestions) {
+		if (answerdAnswers == numberOfQuestions)
+		{
 
 			// move to entirely new activity and do the shit
-			DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
+			{
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						// Yes button clicked
-						(new ConnectToServer()).execute();
-						break;
+				public void onClick(DialogInterface dialog, int which)
+				{
+					switch (which)
+					{
+						case DialogInterface.BUTTON_POSITIVE:
+							// Yes button clicked
+							(new ConnectToServer()).execute();
+							break;
 
-					case DialogInterface.BUTTON_NEGATIVE:
-						// No button clicked
-						break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							// No button clicked
+							break;
 					}
 				}
 			};
@@ -482,10 +493,14 @@ public class SurveyActivity extends Activity {
 					.setPositiveButton("Yes", dialogClickListenerSure)
 					.setNegativeButton("No", dialogClickListenerSure).show();
 
-		} else {
+		}
+		else
+		{
 			String g = "";
-			for (int x = 0; x < numberOfQuestions; x++) {
-				if (survey.getQuestionList().get(x).isAnswered() == false) {
+			for (int x = 0; x < numberOfQuestions; x++)
+			{
+				if (survey.getQuestionList().get(x).isAnswered() == false)
+				{
 					g += x + ",";
 
 				}
@@ -500,26 +515,35 @@ public class SurveyActivity extends Activity {
 		}
 
 	}
-//-----------------------------------------------------------------------------
+
+	// -----------------------------------------------------------------------------
 	/**
-	 * Tries to connect to server by calling the method createSocket. 
-	 * On post execute it checks if the socket was created. If created,
-	 * try to send data. If not, tells it was unsuccessful.
-	 * @param b Boolean    
-	 */	
-	public class ConnectToServer extends AsyncTask<String, Void, String> {
+	 * Tries to connect to server by calling the method createSocket. On post
+	 * execute it checks if the socket was created. If created, try to send
+	 * data. If not, tells it was unsuccessful.
+	 * 
+	 * @param b
+	 *            Boolean
+	 */
+	public class ConnectToServer extends AsyncTask<String, Void, String>
+	{
 
 		@Override
-		protected String doInBackground(String... arg0) {
-			
+		protected String doInBackground(String... arg0)
+		{
+
 			listOfSockets = new int[200];
-			for (int x = 0; x < 200; x++) {
+			for (int x = 0; x < 200; x++)
+			{
 				listOfSockets[x] = 2400 + x;
 			}
 
-			try {
+			try
+			{
 				skt = createSocket(listOfSockets, IP);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				System.out.println(e);
 			}
 
@@ -527,33 +551,40 @@ public class SurveyActivity extends Activity {
 
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 
-			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener()
+			{
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						
-						(new SendToServer()).execute();// <---
-						
-						break;
+				public void onClick(DialogInterface dialog, int which)
+				{
+					switch (which)
+					{
+						case DialogInterface.BUTTON_POSITIVE:
 
-					case DialogInterface.BUTTON_NEGATIVE:
-						// No button clicked
-						break;
+							(new SendToServer()).execute();// <---
+
+							break;
+
+						case DialogInterface.BUTTON_NEGATIVE:
+							// No button clicked
+							break;
 					}
 				}
 			};
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(contex);
 			String message = "";
-			if (skt == null) {
+			if (skt == null)
+			{
 				message = "Could not connect to Server";
 				builder.setMessage(message)
 						.setNegativeButton("close", dialogClickListenerSend)
 						.show();
-			} else {
+			}
+			else
+			{
 				message = "Successfully Connected to Server";
 				builder.setMessage(message)
 						.setPositiveButton("Send My Answers",
@@ -566,31 +597,37 @@ public class SurveyActivity extends Activity {
 
 	}
 
-// ---------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------
 	/**
-	 * tries to get output stream and write lines to the server
-	 * then on post execute dialog box pops up with the result of attempt         
+	 * tries to get output stream and write lines to the server then on post
+	 * execute dialog box pops up with the result of attempt
 	 */
-	public class SendToServer extends AsyncTask<String, Void, String> {
-		String message="";
-		
+	public class SendToServer extends AsyncTask<String, Void, String>
+	{
+		String message = "";
+
 		@Override
-		protected String doInBackground(String... arg0) {
-			
-			try {
+		protected String doInBackground(String... arg0)
+		{
+
+			try
+			{
 				PrintStream output = null;
 				output = new PrintStream(skt.getOutputStream());
 				output.print("try");
-				message="successfully sent";
+				message = "successfully sent";
 				// TODO
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				System.out.println(e);
-				message="could not send it";
+				message = "could not send it";
 			}
 			return null;
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 
 			AlertDialog.Builder dlgAlert = new AlertDialog.Builder(contex);
 
@@ -601,23 +638,32 @@ public class SurveyActivity extends Activity {
 		}
 
 	}
-// ---------------------------------------------------------------------------------
+
+	// ---------------------------------------------------------------------------------
 	/**
-	 * loops through the array of ports passed as a parameter and then tries 
-	 * to create a socket with the given ip
-	 *@param ports array of int 
-	 *@param IP string            
+	 * loops through the array of ports passed as a parameter and then tries to
+	 * create a socket with the given ip
+	 * 
+	 * @param ports
+	 *            array of int
+	 * @param IP
+	 *            string
 	 */
 	public static Socket createSocket(int[] ports, String IP)
-			throws IOException {
+			throws IOException
+	{
 
-		for (int port : ports) {
-			try {
+		for (int port : ports)
+		{
+			try
+			{
 				Socket s = new Socket(IP, port);
 				String st = "" + s.getPort();
 				Log.d("port", st);
 				return s;
-			} catch (IOException ex) {
+			}
+			catch (IOException ex)
+			{
 				continue; // try next port
 			}
 		}
@@ -625,9 +671,10 @@ public class SurveyActivity extends Activity {
 		// no portfound
 		throw new IOException("no free port found");
 	}
-// ---------------------------------------------------------------------------------
 
-// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+	// ---------------------------------------------------------------------------------
+
+	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 	/**
 	 * Selects the radio button which the user has pressed, deselecting the
@@ -644,7 +691,8 @@ public class SurveyActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
