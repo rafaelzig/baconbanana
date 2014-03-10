@@ -14,6 +14,7 @@ public class MenuFrame {
 	JButton openSurvey = new JButton ("Open Survey"); 
 	JButton previewAnswers = new JButton ("<html>Preview answers made <br> by the patients</html>");
 	
+	JButton connect = new JButton ("Connect to Device");// <----------new line
 	
 	public MenuFrame ()
 	{
@@ -38,14 +39,14 @@ public class MenuFrame {
 		window.add(previewAnswers);
 		window.add(new JLabel (" "));
 		window.add(new JLabel (" "));
-		window.add(new JLabel (" "));
+		window.add(connect);//         <-----------------new line
 		window.add(new JLabel (" "));
 		
 		createSurvey.addActionListener(new ActionListener() {
 			
 			
 			public void actionPerformed(ActionEvent e1) {
-				new CreateSurvey();
+				// new CreateSurvey();
 				window.dispose();
 				
 			}
@@ -60,6 +61,23 @@ public class MenuFrame {
 				
 			}
 		});
+		
+		//--------------------------------------------------
+				connect.addActionListener(new ActionListener() {
+					
+					
+					public void actionPerformed(ActionEvent e2) {
+						try {
+							new ConnectionPage();
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						window.dispose();
+						
+					}
+				});
+				//--------------------------------------------------
 		
 		window.pack();
 		window.setSize(600, 600);

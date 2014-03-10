@@ -22,6 +22,7 @@ public class AddNewTemplate {
 	private JFrame window;
 	private JButton createQuestion;
 	private JButton addExistingQuestion;
+	private JButton edit;
 	private JButton delete;
 	private JButton save;
 	private JButton cancel;
@@ -47,6 +48,7 @@ public class AddNewTemplate {
 
 		createQuestion = new JButton("Create question");
 		addExistingQuestion = new JButton("Add existing question");
+		edit = new JButton("Edit");
 		delete = new JButton("Delete");
 		save = new JButton("Save");
 		cancel = new JButton("Cancel");
@@ -68,6 +70,7 @@ public class AddNewTemplate {
 		jpButtons.add(type);
 		jpButtons.add(createQuestion);
 		jpButtons.add(addExistingQuestion);
+		jpButtons.add(edit);
 		jpButtons.add(delete);
 		jpButtons.add(save);
 		jpButtons.add(cancel);
@@ -106,7 +109,7 @@ public class AddNewTemplate {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				
+				/*
 				try {
 					DataTest.SaveTemplate(nameOfTemplate.getText());
 					DataTest.FillListOfTemplates();
@@ -114,11 +117,11 @@ public class AddNewTemplate {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				/*
+				
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
 				*/
-				new CreateSurvey();
+				//new CreateSurvey();
 				window.dispose();
 			}
 		});
@@ -127,7 +130,7 @@ public class AddNewTemplate {
 			
 			
 			public void actionPerformed(ActionEvent arg0) {
-				new CreateSurvey();
+				//new CreateSurvey();
 				window.dispose();
 			}
 		});
