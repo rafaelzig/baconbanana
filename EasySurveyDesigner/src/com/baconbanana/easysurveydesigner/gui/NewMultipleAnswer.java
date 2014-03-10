@@ -14,26 +14,31 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+
 public class NewMultipleAnswer {
 
-	String questionType;
-	JFrame window;
-	JTextArea question;
-	JButton add;
-	JButton remove;
-	JButton save;
-	JButton cancel;
-	int answerLimit = 0;
-	DefaultTableModel model;
-	JTable table;
-
-	public NewMultipleAnswer(String type) {
+	private QuestionType questionType;
+	private JFrame window;
+	private JTextArea question;
+	private JButton add;
+	private JButton remove;
+	private JButton save;
+	private JButton cancel;
+	private int answerLimit = 0;
+	private DefaultTableModel model;
+	private JTable table;
+	private String[] options = new String[9];
+	
+	//instaiate window and set title
+	public NewMultipleAnswer(QuestionType type) {
 		this.questionType = type;
-		window = new JFrame("New " + questionType + " question");
+		window = new JFrame("New " + questionType.toString() + " Question");
+		//should be setLayout
 		setThings();
 		setListeners();
 	}
@@ -45,7 +50,8 @@ public class NewMultipleAnswer {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setLayout(new BorderLayout());
 		Border border = BorderFactory.createLineBorder(Color.GRAY, 1);
-
+		
+		//Question name and data
 		// --------------center of window---------------------
 		question = new JTextArea("Type your question here");
 		question.setPreferredSize(new Dimension(800, 280));
@@ -53,14 +59,13 @@ public class NewMultipleAnswer {
 		window.add(question, BorderLayout.CENTER);
 		// ---------------------------------------------------
 
-		
+		//not sure why we need checkboxes
 		// --------------South of window----------------------
-		Object[] columnNames = { "Answer", "Select" };
-		Object[][] data = {};
-		model = new DefaultTableModel(data, columnNames);
+		String[] columnNames = { "Answer", "Select" };
+		model = new DefaultTableModel(new String[1][9], columnNames);
 		table = new JTable(model) {
 			private static final long serialVersionUID = 1L;
-
+			//think this is only needed for sorting
 			@Override
 			public Class getColumnClass(int column) {
 				switch (column) {
@@ -71,8 +76,10 @@ public class NewMultipleAnswer {
 				}
 			}
 		};
-		model.addRow(new Object[] { "type answer here", false });
-		model.addRow(new Object[] { "type answer here", false });
+		//instatiate checkboxes
+		options[answerLimit++] = "Type Option Here";
+		options[answerLimit++] = "Type Option Here";
+		this.reDraw(model, options);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setPreferredSize(new Dimension(200, 400));
@@ -82,7 +89,7 @@ public class NewMultipleAnswer {
 
 		JPanel jpButtons = new JPanel(new FlowLayout());
 		jpButtons.setPreferredSize(new Dimension(800, 50));
-
+		//instatiate buttons
 		add = new JButton("add");
 		jpButtons.add(add);
 		remove = new JButton("remove");
@@ -91,7 +98,7 @@ public class NewMultipleAnswer {
 		jpButtons.add(save);
 		cancel = new JButton("Cancel");
 		jpButtons.add(cancel);
-
+		//add buttons
 		panelSouth.add(jpButtons, BorderLayout.SOUTH);
 
 		window.add(panelSouth, BorderLayout.SOUTH);
@@ -109,7 +116,6 @@ public class NewMultipleAnswer {
 
 			public void actionPerformed(ActionEvent e1) {
 				if (answerLimit < 10) {
-					
 					model.addRow(new Object[] { "type answer here", false });
 					answerLimit++;
 				}
@@ -140,6 +146,7 @@ public class NewMultipleAnswer {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
+				saveQuestion();
 				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
@@ -158,6 +165,28 @@ public class NewMultipleAnswer {
 			}
 		});
 
+	}
+	//this methord should ideally be in the model
+	private void saveQuestion(){
+		//Add question to question table
+		String sql = "INSERT INTO Question (Content, Type) VALUES ('" + question.getText() + "', " + questionType + "')";
+		System.out.println(sql);
+		DBOperation.insertRecord(sql);
+		//Add choices to choices table
+		String[] choices = new String[9];
+		for(int i = 0;i < answerLimit; i++){
+			choices[i] = ((String) model.getValueAt(0, i));
+			sql = "INSERT INTO Choices (Choice) Values ('" + choices[i] + "')";
+			int lastId = DBOperation.insertRecordReturnID(sql);
+			System.out.println(lastId);
+		}
+		
+	}
+	
+	private void reDraw(DefaultTableModel m, String[] data){
+		for(int i = 0; i < answerLimit; i++){
+			model.addRow(new Object[] { data[i], false });
+		}
 	}
 
 }

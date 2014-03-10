@@ -32,7 +32,6 @@ import android.widget.TextView;
 import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
-import com.baconbanana.easysurvey.old.questtemp.ParseQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
@@ -71,7 +70,6 @@ public class SurveyActivity extends Activity
 	private int numberOfQuestions;
 
 	RelativeLayout layout;
-	ParseQuestion qp;
 	int[] listOfSockets;
 	ListView listIP;
 	Button button;
@@ -466,35 +464,32 @@ public class SurveyActivity extends Activity
 	{
 		answerdAnswers = survey.getAnswerCount();
 		numberOfQuestions = survey.getQuestionList().size();
-		
 
-			// move to entirely new activity and do the shit
-			DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
+		// move to entirely new activity and do the shit
+		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
 			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
+				switch (which)
 				{
-					switch (which)
-					{
-						case DialogInterface.BUTTON_POSITIVE:
-							// Yes button clicked
-							(new ConnectToServer()).execute();
-							break;
+					case DialogInterface.BUTTON_POSITIVE:
+						// Yes button clicked
+						(new ConnectToServer()).execute();
+						break;
 
-						case DialogInterface.BUTTON_NEGATIVE:
-							// No button clicked
-							break;
-					}
+					case DialogInterface.BUTTON_NEGATIVE:
+						// No button clicked
+						break;
 				}
-			};
+			}
+		};
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Are you sure?")
-					.setPositiveButton("Yes", dialogClickListenerSure)
-					.setNegativeButton("No", dialogClickListenerSure).show();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure?")
+				.setPositiveButton("Yes", dialogClickListenerSure)
+				.setNegativeButton("No", dialogClickListenerSure).show();
 
-		
-		
 	}
 
 	// -----------------------------------------------------------------------------
@@ -645,7 +640,7 @@ public class SurveyActivity extends Activity
 			}
 			catch (IOException ex)
 			{
-				Log.d("noport", ""+port);
+				Log.d("noport", "" + port);
 				continue; // try next port
 			}
 		}
