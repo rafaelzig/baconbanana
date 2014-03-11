@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/EasySurveyDesigner"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="/EasySurveyDesigner/src/com/baconbanana/easysurveydesigner/resources/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/EasySurveyDesigner/src/com/baconbanana/easysurveydesigner/resources/commons-codec-1.9.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
