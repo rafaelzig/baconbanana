@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.gui;
+package com.baconbanana.easysurveydesigner.oldGui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,23 +12,25 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.Border;
-
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import javax.swing.table.DefaultTableModel;
 
 public class NewOpenEnded {
 
-	QuestionType questionType;
+	String questionType;
 	JFrame window;
 	JTextArea question;
 	JButton save;
 	JTextArea answer;
 	JButton cancel;
-	//needs finishing!!
-	public NewOpenEnded(QuestionType type) {
+
+	public NewOpenEnded(String type) {
 		this.questionType = type;
-		window = new JFrame("New " + questionType.toString() + "Question");
+		window = new JFrame("New " + questionType);
 		setThings();
 		
 	}
@@ -91,9 +93,13 @@ public class NewOpenEnded {
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
 				
-				QuestionType Type = questionType;
+				String Type = questionType;
 				
-				
+				try {
+					DataTest.SaveQuestion(DataTest.QuestionID, question.getText(), Type);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				
 				new AddNewTemplate("test");
 				window.dispose();

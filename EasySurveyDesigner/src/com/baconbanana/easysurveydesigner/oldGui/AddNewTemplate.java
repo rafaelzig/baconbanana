@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.gui;
+package com.baconbanana.easysurveydesigner.oldGui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,18 +17,17 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-
 public class AddNewTemplate {
 	private String stage;
 	private JFrame window;
 	private JButton createQuestion;
 	private JButton addExistingQuestion;
+	private JButton edit;
 	private JButton delete;
 	private JButton save;
 	private JButton cancel;
 	static JTextField nameOfTemplate;
-	private JComboBox typeComboBox;
+	private JComboBox<String> type;
 
 	public static JList<String> Template = new JList<String>();
 	final static DefaultListModel<String> myModel2 = new DefaultListModel<String>();
@@ -49,17 +48,18 @@ public class AddNewTemplate {
 
 		createQuestion = new JButton("Create question");
 		addExistingQuestion = new JButton("Add existing question");
+		edit = new JButton("Edit");
 		delete = new JButton("Delete");
 		save = new JButton("Save");
 		cancel = new JButton("Cancel");
 		nameOfTemplate = new JTextField("Type name for this template here");
 
 		// ---------------------set combo box-----------------------------------
-		typeComboBox = new JComboBox(QuestionType.values());
+		type = new JComboBox<String>();
+		String[] typesOfAnswers = { "Open ended question", "Multiple choice question", "Multiple answer question"};
 		int count = 0;
-		/*for (QuestionType q : QuestionType.values()){
-			typeComboBox.addItem(typeComboBox.);
-			}*/
+		for (int i = 0; i < 3; i++)
+			type.addItem(typesOfAnswers[count++]);
 		// --------------------------------------------------------------------
 
 		window.add(nameOfTemplate, BorderLayout.NORTH);
@@ -67,9 +67,10 @@ public class AddNewTemplate {
 		Template.setBorder(border);
 		
 		JPanel jpButtons = new JPanel(new FlowLayout());
-		jpButtons.add(typeComboBox);
+		jpButtons.add(type);
 		jpButtons.add(createQuestion);
 		jpButtons.add(addExistingQuestion);
+		jpButtons.add(edit);
 		jpButtons.add(delete);
 		jpButtons.add(save);
 		jpButtons.add(cancel);
@@ -88,22 +89,18 @@ public class AddNewTemplate {
 		createQuestion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e1) {
-				QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
-				System.out.println(type);
-				switch(type){
-				case MULTIPLE_CHOICE :
-					new NewMultipleChoice(type);
-					break;
-				case MULTIPLE_ANSWER :
-					new NewMultipleAnswer(type);
-					break;
-				case OPEN_ENDED :
-					new NewOpenEnded(type);
-					break;
-				case SCALAR :
-					break;
+				String h = type.getSelectedItem().toString();
+				
+				if (h == "Multiple choice question"){
+					new NewMultipleChoice(h);
 				}
 				
+				if (h== "Multiple answer question"){
+					new NewMultipleAnswer(h);
+				}
+				if (h == "Open ended question"){
+					new NewOpenEnded(h);
+				}
 				window.dispose();
 			}
 		});
@@ -112,7 +109,7 @@ public class AddNewTemplate {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				
+				/*
 				try {
 					DataTest.SaveTemplate(nameOfTemplate.getText());
 					DataTest.FillListOfTemplates();
@@ -120,11 +117,11 @@ public class AddNewTemplate {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				/*
+				
 				EasySurveyFrame.myModel1.addElement(nameOfTemplate.getText());
 				EasySurveyFrame.List1.setModel(EasySurveyFrame.myModel1);
 				*/
-				new CreateSurvey();
+				//new CreateSurvey();
 				window.dispose();
 			}
 		});
@@ -133,7 +130,7 @@ public class AddNewTemplate {
 			
 			
 			public void actionPerformed(ActionEvent arg0) {
-				new CreateSurvey();
+				//new CreateSurvey();
 				window.dispose();
 			}
 		});

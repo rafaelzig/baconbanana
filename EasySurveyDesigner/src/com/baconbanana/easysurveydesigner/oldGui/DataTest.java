@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.gui;
+package com.baconbanana.easysurveydesigner.oldGui;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -62,12 +62,12 @@ public class DataTest {
             }
             templateList=list;
             
-        CreateSurvey.myModel1.clear();
+        //CreateSurvey.myModel1.clear();
         for (String s : list) {
-        	CreateSurvey.myModel1.addElement(s);
+        	//CreateSurvey.myModel1.addElement(s);
 		}
 		
-        CreateSurvey.List1.setModel(CreateSurvey.myModel1);
+        //CreateSurvey.List1.setModel(CreateSurvey.myModel1);
     }
     
     public static void SaveTemplate(String nameOfTmeplate) throws SQLException

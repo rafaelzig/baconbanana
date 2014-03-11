@@ -32,7 +32,6 @@ import android.widget.TextView;
 import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
-import com.baconbanana.easysurvey.old.questtemp.ParseQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
@@ -71,11 +70,10 @@ public class SurveyActivity extends Activity
 	private int numberOfQuestions;
 
 	RelativeLayout layout;
-	ParseQuestion qp;
 	int[] listOfSockets;
 	ListView listIP;
 	Button button;
-	String IP = "192.168.0.6";
+	String IP = "10.230.149.130";
 	String deviceIP;
 	String JSON;
 	Socket skt = null;
@@ -442,6 +440,7 @@ public class SurveyActivity extends Activity
 			{
 				Operations.writeFile(survey.getJSON().toJSONString(),
 						Storage.ROOT_DIRECTORY + Operations.FILENAME);
+				submit(true);
 			}
 			catch (IOException e)
 			{
@@ -465,54 +464,31 @@ public class SurveyActivity extends Activity
 	{
 		answerdAnswers = survey.getAnswerCount();
 		numberOfQuestions = survey.getQuestionList().size();
-		if (answerdAnswers == numberOfQuestions)
+
+		// move to entirely new activity and do the shit
+		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
 		{
-
-			// move to entirely new activity and do the shit
-			DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
+			@Override
+			public void onClick(DialogInterface dialog, int which)
 			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
+				switch (which)
 				{
-					switch (which)
-					{
-						case DialogInterface.BUTTON_POSITIVE:
-							// Yes button clicked
-							(new ConnectToServer()).execute();
-							break;
+					case DialogInterface.BUTTON_POSITIVE:
+						// Yes button clicked
+						(new ConnectToServer()).execute();
+						break;
 
-						case DialogInterface.BUTTON_NEGATIVE:
-							// No button clicked
-							break;
-					}
-				}
-			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Are you sure?")
-					.setPositiveButton("Yes", dialogClickListenerSure)
-					.setNegativeButton("No", dialogClickListenerSure).show();
-
-		}
-		else
-		{
-			String g = "";
-			for (int x = 0; x < numberOfQuestions; x++)
-			{
-				if (survey.getQuestionList().get(x).isAnswered() == false)
-				{
-					g += x + ",";
-
+					case DialogInterface.BUTTON_NEGATIVE:
+						// No button clicked
+						break;
 				}
 			}
-			AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+		};
 
-			dlgAlert.setMessage("These questions are not answered!! - " + g);
-			dlgAlert.setTitle("Not complete");
-			dlgAlert.setPositiveButton("OK", null);
-			dlgAlert.create().show();
-
-		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Are you sure?")
+				.setPositiveButton("Yes", dialogClickListenerSure)
+				.setNegativeButton("No", dialogClickListenerSure).show();
 
 	}
 
@@ -532,10 +508,10 @@ public class SurveyActivity extends Activity
 		protected String doInBackground(String... arg0)
 		{
 
-			listOfSockets = new int[200];
-			for (int x = 0; x < 200; x++)
+			listOfSockets = new int[2000];
+			for (int x = 0; x < 2000; x++)
 			{
-				listOfSockets[x] = 2400 + x;
+				listOfSockets[x] = 2000 + x;
 			}
 
 			try
@@ -664,6 +640,7 @@ public class SurveyActivity extends Activity
 			}
 			catch (IOException ex)
 			{
+				Log.d("noport", "" + port);
 				continue; // try next port
 			}
 		}
