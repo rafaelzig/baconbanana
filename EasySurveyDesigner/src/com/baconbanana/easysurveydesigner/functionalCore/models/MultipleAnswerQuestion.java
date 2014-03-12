@@ -22,6 +22,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 public class MultipleAnswerQuestion extends CloseEndedQuestion
 {
 	/**
+	 * String object containing the question's help message to be displayed.
+	 */
+	private static final String HELP_MESSAGE = "Please select one or more from the below alternatives:";
+
+	/**
 	 * Builds a MultipleAnswerQuestion object with the specified content and
 	 * list of choices.
 	 * 
@@ -37,7 +42,7 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	public MultipleAnswerQuestion(String content, List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, QuestionType.MULTIPLE_ANSWER, choiceList);
+		super(content, HELP_MESSAGE, QuestionType.MULTIPLE_ANSWER, choiceList);
 	}
 
 	/**
@@ -58,7 +63,7 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 		for (String a : answers)
 			if (getChoiceList().indexOf(a) < 0)
 				throw new InvalidAnswerException(a, getChoiceList());
-		
+
 		this.answer = answer;
 	}
 }

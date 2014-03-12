@@ -3,6 +3,8 @@
  */
 package com.baconbanana.easysurveydesigner.functionalCore.models;
 
+import java.text.ParseException;
+
 import org.json.simple.JSONObject;
 
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
@@ -17,8 +19,36 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswe
 public abstract class Question
 {
 	private QuestionType type;
-	private String content;
+	private boolean showName;
+	private String content, helpMessage;
 	String answer;
+
+	/**
+	 * Builds a Question object with the specified content and type.
+	 * 
+	 * @param content
+	 *            A String object containing the content of the question.
+	 * @param helpMessage
+	 *            A String object containing the question's help message to be
+	 *            displayed.
+	 * @param type
+	 *            An enumeration representing the type of the question.
+	 * @see QuestionType#MULTIPLE_ANSWER
+	 * @see QuestionType#MULTIPLE_CHOICE
+	 * @see QuestionType#NUMERIC
+	 * @see QuestionType#SCALAR
+	 */
+	public Question(String content, String helpMessage, QuestionType type)
+	{
+		super();
+
+		this.type = type;
+		this.showName = false;
+		this.content = content;
+		this.helpMessage = helpMessage;
+		this.answer = new String();
+		this.setNameShown(showName);
+	}
 
 	/**
 	 * Builds a Question object with the specified JSONObject.
@@ -31,29 +61,10 @@ public abstract class Question
 		super();
 
 		this.type = QuestionType.valueOf((String) rawData.get("type"));
+		this.showName = (Boolean) rawData.get("showName");
 		this.content = (String) rawData.get("content");
+		this.helpMessage = (String) rawData.get("helpMessage");
 		this.answer = (String) rawData.get("answer");
-	}
-
-	/**
-	 * Builds a Question object with the specified content and type.
-	 * 
-	 * @param content
-	 *            A String object containing the content of the question.
-	 * @param type
-	 *            An enumeration representing the type of the question.
-	 * @see QuestionType#MULTIPLE_ANSWER
-	 * @see QuestionType#MULTIPLE_CHOICE
-	 * @see QuestionType#OPEN_ENDED
-	 * @see QuestionType#SCALAR
-	 */
-	public Question(String content, QuestionType type)
-	{
-		super();
-
-		this.type = type;
-		this.content = content;
-		this.answer = new String();
 	}
 
 	/**
@@ -106,9 +117,12 @@ public abstract class Question
 	 * @throws InvalidAnswerException
 	 *             Signals an error when an answer given by the user does not
 	 *             exist in the possible choices for the question.
+	 * @throws ParseException
+	 *             Signals that an error has been reached unexpectedly while
+	 *             parsing the date into the answer.
 	 */
 	public abstract void setAnswer(String answer)
-			throws InvalidAnswerException;
+			throws InvalidAnswerException, ParseException;
 
 	/**
 	 * Gets a JSONObject containing the question.
@@ -121,7 +135,9 @@ public abstract class Question
 		JSONObject rawData = new JSONObject();
 
 		rawData.put("type", type.toString());
+		rawData.put("showName", showName);
 		rawData.put("content", content);
+		rawData.put("helpMessage", helpMessage);
 		rawData.put("answer", answer);
 
 		return rawData;
@@ -135,5 +151,47 @@ public abstract class Question
 	public boolean isAnswered()
 	{
 		return (!answer.isEmpty());
+	}
+
+	/**
+	 * Returns true if the name of the patient is to be displayed along with the
+	 * question, false otherwise.
+	 * 
+	 * @return true if the name of the patient is to be displayed along with the
+	 *         question, false otherwise.
+	 */
+	public boolean isNameShown()
+	{
+		return showName;
+	}
+
+	/**
+	 * Sets the question to display the name of the patient along with the
+	 * question.
+	 * 
+	 * @param showName
+	 *            True or false
+	 */
+	public void setNameShown(boolean showName)
+	{
+		this.showName = showName;
+	}
+
+	/**
+	 * Gets the question's help message to be displayed.
+	 * 
+	 * @return the helpMessage
+	 */
+	public String getHelpMessage()
+	{
+		return helpMessage;
+	}
+
+	/**
+	 * Clears the answer of the question.
+	 */
+	void clearAnswer()
+	{
+		this.answer = new String();
 	}
 }

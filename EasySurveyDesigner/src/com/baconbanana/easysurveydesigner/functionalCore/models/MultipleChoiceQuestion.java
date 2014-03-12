@@ -19,6 +19,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoic
 public class MultipleChoiceQuestion extends CloseEndedQuestion
 {
 	/**
+	 * String object containing the question's help message to be displayed.
+	 */
+	private static final String HELP_MESSAGE = "Please select one of the below alternatives:";
+
+	/**
 	 * Builds a MultipleChoiceQuestion object with the specified content, list
 	 * of choices and subsequent questions.
 	 * 
@@ -34,7 +39,7 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, QuestionType.MULTIPLE_CHOICE, choiceList);
+		super(content, HELP_MESSAGE, QuestionType.MULTIPLE_CHOICE, choiceList);
 	}
 
 	/**

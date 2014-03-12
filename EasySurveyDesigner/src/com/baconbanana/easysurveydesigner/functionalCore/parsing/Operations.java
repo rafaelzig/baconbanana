@@ -23,12 +23,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.OpenEndedQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.NumericQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -199,8 +201,14 @@ public class Operations
 				case CONTINGENCY:
 					questionList.add(new ContingencyQuestion(questionRaw));
 					break;
-				case OPEN_ENDED:
-					questionList.add(new OpenEndedQuestion(questionRaw));
+				case NUMERIC:
+					questionList.add(new NumericQuestion(questionRaw));
+					break;
+				case DATE:
+					questionList.add(new DateQuestion(questionRaw));
+					break;
+				case TEXTUAL:
+					questionList.add(new TextualQuestion(questionRaw));
 					break;
 				case SCALAR:
 					questionList.add(new ScalarQuestion(questionRaw));
@@ -218,6 +226,8 @@ public class Operations
 	 *            String Object in the format yyyy-MM-dd representing a date.
 	 * @return java.sql.Date object representing the date.
 	 * @throws java.text.ParseException
+	 *             Signals that an error has been reached unexpectedly while
+	 *             parsing the date.
 	 */
 	public static Date parseDate(String date) throws java.text.ParseException
 	{

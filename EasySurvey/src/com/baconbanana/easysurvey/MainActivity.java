@@ -22,7 +22,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 public class MainActivity extends Activity
 {
-	
+
 	/**
 	 * Name of the extra data.
 	 */
@@ -34,10 +34,9 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		prepareVideo();
-		
-	
+
 	}
 
 	/**
@@ -69,62 +68,54 @@ public class MainActivity extends Activity
 	{
 		JSONObject rawData = null;
 		String jsonString;
-
-/*		try
-		{
-			jsonString = Operations.readFile(getAssets().open(
-					Operations.FILENAME));
-
-			rawData = Operations.parseJSON(jsonString);
-			survey = new Survey(rawData);
-			Operations.writeFile(survey.getJSON().toJSONString(),
-			Storage.ROOT_DIRECTORY + Operations.FILENAME);
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (java.text.ParseException e)
-		{
-			e.printStackTrace();
-		}
-		catch (ParseException e)
-		{
-			e.printStackTrace();
-		}*/
+		
+		
+		// try
+		// {
+		// jsonString = Operations.readFile(getAssets().open(
+		// Operations.FILENAME));
+		//
+		// rawData = Operations.parseJSON(jsonString);
+		// survey = new Survey(rawData);
+		// Operations.writeFile(survey.getJSON().toJSONString(),
+		// Storage.ROOT_DIRECTORY + Operations.FILENAME);
+		// }
+		// catch (IOException e)
+		// {
+		// e.printStackTrace();
+		// }
+		// catch (java.text.ParseException e)
+		// {
+		// e.printStackTrace();
+		// }
+		// catch (ParseException e)
+		// {
+		// e.printStackTrace();
+		// }
+		//
+		// return true;
 
 		if (Storage.isExternalStorageReadable())
 		{
 			try
 			{
-				jsonString = Operations.readFile(getAssets().open(
-						Operations.FILENAME));
+				jsonString = Operations.readFile(Storage.ROOT_DIRECTORY
+						+ Operations.FILENAME);
 				rawData = Operations.parseJSON(jsonString);
 				survey = new Survey(rawData);
 			}
 			catch (IOException e)
 			{
-				
-				
 				e.printStackTrace();
 			}
-			catch (ParseException ex)
+			catch (ParseException e)
 			{
-			
-			
-				
-			
-			} catch (java.text.ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
-				
-				
-				
-			
+			catch (java.text.ParseException e)
+			{
+				e.printStackTrace();
+			}
 
 			if (survey.getAnswerCount() == survey.getQuestionList().size())
 				return false;
@@ -134,6 +125,7 @@ public class MainActivity extends Activity
 
 		Log.e(getPackageName(), "Unable to read from external storage device.");
 		return false;
+
 	}
 
 	public void beginSurvey(View view)
@@ -147,9 +139,7 @@ public class MainActivity extends Activity
 		else
 			Toast.makeText(this, "Survey completed", Toast.LENGTH_LONG).show();
 	}
-	
 
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{

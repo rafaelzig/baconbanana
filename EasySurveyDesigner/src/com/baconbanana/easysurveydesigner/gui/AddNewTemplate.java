@@ -97,7 +97,7 @@ public class AddNewTemplate {
 				case MULTIPLE_ANSWER :
 					new NewMultipleAnswer(type);
 					break;
-				case OPEN_ENDED :
+				case NUMERIC :
 					new NewOpenEnded(type);
 					break;
 				case SCALAR :

@@ -38,19 +38,19 @@ public abstract class CloseEndedQuestion extends Question
 	 *            question.
 	 * @throws InvalidChoiceListException
 	 *             Signals an error when a choice list for a question given by
-	 *             the user has less than two choices.
+	 *             the user has less than two or more than ten alternatives.
 	 * @see QuestionType#MULTIPLE_ANSWER
 	 * @see QuestionType#MULTIPLE_CHOICE
-	 * @see QuestionType#OPEN_ENDED
+	 * @see QuestionType#NUMERIC
 	 * @see QuestionType#CONTINGENCY
 	 * @see QuestionType#SCALAR
 	 */
-	public CloseEndedQuestion(String content, QuestionType type,
+	public CloseEndedQuestion(String content, String helpMessage, QuestionType type,
 			List<String> choiceList) throws InvalidChoiceListException
 	{
-		super(content, type);
+		super(content, helpMessage, type);
 
-		if (choiceList.size() > 1)
+		if (choiceList.size() > 1 && choiceList.size() <= 10)
 			this.choiceList = choiceList;
 		else
 			throw new InvalidChoiceListException(choiceList.size());

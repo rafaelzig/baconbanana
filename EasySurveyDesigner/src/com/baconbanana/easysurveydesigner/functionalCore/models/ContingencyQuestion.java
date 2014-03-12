@@ -23,6 +23,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class ContingencyQuestion extends CloseEndedQuestion
 {
+	/**
+	 * String object containing the question's help message to be displayed.
+	 */
+	private static final String HELP_MESSAGE = "Please select one of the below alternatives:";
+	
 	private List<Question> subsequentList;
 	private String contingencyAnswer;
 
@@ -50,7 +55,7 @@ public class ContingencyQuestion extends CloseEndedQuestion
 			List<Question> subsequentList, String contingencyAnswer)
 			throws InvalidChoiceListException, InvalidSubsequentListException
 	{
-		super(content, QuestionType.CONTINGENCY, choiceList);
+		super(content, HELP_MESSAGE, QuestionType.CONTINGENCY, choiceList);
 
 		setSubsequentList(subsequentList, contingencyAnswer);
 	}
@@ -146,5 +151,11 @@ public class ContingencyQuestion extends CloseEndedQuestion
 		}
 
 		return super.isAnswered();
+	}
+
+	public void clearSubsequentAnswers()
+	{
+		for (Question question : subsequentList)
+			question.clearAnswer();
 	}
 }

@@ -9,5 +9,5 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
  */
 public enum QuestionType
 {
-	OPEN_ENDED, MULTIPLE_CHOICE, MULTIPLE_ANSWER, SCALAR, CONTINGENCY;
+	NUMERIC, DATE, TEXTUAL, MULTIPLE_CHOICE, MULTIPLE_ANSWER, SCALAR, CONTINGENCY;
 }

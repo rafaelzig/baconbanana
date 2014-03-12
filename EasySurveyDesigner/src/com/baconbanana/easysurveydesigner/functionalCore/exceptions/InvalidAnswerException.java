@@ -28,6 +28,11 @@ public class InvalidAnswerException extends Exception
 		super(prepareMessage(answer, choiceList));
 	}
 
+	public InvalidAnswerException(String message)
+	{
+		super("Invalid answer given:\n" + message);
+	}
+
 	/**
 	 * Prepares the error message.
 	 * 

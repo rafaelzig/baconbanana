@@ -162,15 +162,35 @@ public class Survey
 		int count = 0;
 
 		for (Question question : questionList)
+		{
 			if (question.isAnswered())
+			{
 				count++;
+
+				if (question.getType() == QuestionType.CONTINGENCY)
+					count += ((ContingencyQuestion) question)
+							.getSubsequentList().size();
+			}
+		}
 
 		return count;
 	}
 
+	/**
+	 * Returns the amount of questions in the survey.
+	 * 
+	 * @return
+	 */
 	public int size()
 	{
-		return questionList.size();
+		int size = questionList.size();
+
+		for (Question question : questionList)
+			if (question.getType() == QuestionType.CONTINGENCY)
+				size += ((ContingencyQuestion) question).getSubsequentList()
+						.size();
+
+		return size;
 	}
 
 	/**
@@ -182,18 +202,18 @@ public class Survey
 	public JSONObject getJSON()
 	{
 		JSONObject surveyRaw = new JSONObject();
-	
+
 		surveyRaw.put("name", name);
 		surveyRaw.put("patient", patient.getJSON());
 		surveyRaw.put("stage", stage);
-	
+
 		JSONArray questionListRaw = new JSONArray();
-	
+
 		for (Question question : questionList)
 			questionListRaw.add(question.getJSON());
-	
+
 		surveyRaw.put("questionList", questionListRaw);
-	
+
 		return surveyRaw;
 	}
 }

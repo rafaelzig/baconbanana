@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
@@ -66,10 +65,6 @@ public class SurveyActivity extends Activity
 	private int subsequentCursor;
 	private boolean isSubsequent;
 
-	private int answerdAnswers;
-	private int numberOfQuestions;
-
-	RelativeLayout layout;
 	int[] listOfSockets;
 	ListView listIP;
 	Button button;
@@ -93,7 +88,8 @@ public class SurveyActivity extends Activity
 	}
 
 	/**
-	 * 
+	 * Reads Survey object from the specified json string, saving its contents
+	 * to the survey object.
 	 */
 	private void getSurvey(String jsonString)
 	{
@@ -143,7 +139,8 @@ public class SurveyActivity extends Activity
 			@Override
 			public boolean onBottomToTopSwipe()
 			{
-				if (currentQuestion.getType() == QuestionType.OPEN_ENDED)
+				if (currentQuestion.getType() == QuestionType.TEXTUAL
+						|| currentQuestion.getType() == QuestionType.NUMERIC)
 				{
 					keyboard.showSoftInput(lineView, 0);
 					return true;
@@ -222,12 +219,15 @@ public class SurveyActivity extends Activity
 		int res;
 
 		pgrBar.setProgress(survey.getAnswerCount());
-		txtPage.setText((cursor + subsequentCursor + 1) + "/" + (size));
+		txtPage.setText(getPageNumber());
 		txtContent.setText(currentQuestion.getContent());
 
 		switch (currentQuestion.getType())
 		{
-			case OPEN_ENDED:
+		// TODO
+			case TEXTUAL:
+			case NUMERIC:
+			case DATE:
 				lineView = inf.inflate(R.layout.textbox, questions, false);
 
 				if (currentQuestion.isAnswered())
@@ -236,7 +236,7 @@ public class SurveyActivity extends Activity
 				lineView.setOnKeyListener(keyListener);
 				questions.addView(lineView);
 				lineView.requestFocus();
-				keyboard.showSoftInput(lineView, 1);
+				keyboard.showSoftInput(lineView, 0);
 				break;
 
 			case MULTIPLE_CHOICE:
@@ -268,18 +268,38 @@ public class SurveyActivity extends Activity
 
 					questions.addView(lineView);
 				}
-
-				break;
 		}
 	}
 
+	/**
+	 * Gets the current page number.
+	 * 
+	 * @return String object representing the text to be displayed.
+	 */
+	private CharSequence getPageNumber()
+	{
+		String pageNumber = String.valueOf(cursor + 1);
+
+		if (isSubsequent)
+			pageNumber += "." + (subsequentCursor + 1);
+
+		pageNumber += "/" + questionList.size();
+
+		return pageNumber;
+	}
+
+	/**
+	 * Saves the answer of the current question.
+	 */
 	private void saveAnswer()
 	{
 		String answer = new String();
 
 		try
 		{
-			if (currentQuestion.getType() == QuestionType.OPEN_ENDED)
+			if (currentQuestion.getType() == QuestionType.TEXTUAL
+					|| currentQuestion.getType() == QuestionType.NUMERIC
+					|| currentQuestion.getType() == QuestionType.DATE)
 			{
 				answer = ((TextView) questions.getChildAt(0)).getText()
 						.toString();
@@ -296,7 +316,6 @@ public class SurveyActivity extends Activity
 					{
 						answer += ((TextView) questions.getChildAt(i))
 								.getText().toString();
-
 						if (flag)
 							answer += Operations.SEPARATOR;
 						else
@@ -308,6 +327,11 @@ public class SurveyActivity extends Activity
 			}
 		}
 		catch (InvalidAnswerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -327,12 +351,13 @@ public class SurveyActivity extends Activity
 		saveAnswer();
 		questions.removeAllViews();
 
-		checkAnswer();
+		checkAnswer(next);
 		loadNextQuestion(next);
 
 		buildQuestionViews();
 
-		if (currentQuestion.getType() != QuestionType.OPEN_ENDED)
+		if (currentQuestion.getType() != QuestionType.TEXTUAL
+				|| currentQuestion.getType() != QuestionType.NUMERIC)
 			keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
 
 		if (pgrBar.getProgress() == pgrBar.getMax())
@@ -345,36 +370,43 @@ public class SurveyActivity extends Activity
 	/**
 	 * Checks if the question has been answered and if it is a contingency
 	 * question, if true, moves the cursor to the subsequent questions.
+	 * 
+	 * @param next
+	 *            True if the cursor should be incremented, false if it should
+	 *            be decremented.
 	 */
-	private void checkAnswer()
+	private void checkAnswer(boolean next)
 	{
 		if (!isSubsequent
 				&& currentQuestion.getType() == QuestionType.CONTINGENCY)
 		{
-			List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
-					.getSubsequentList();
 			if (currentQuestion.getAnswer().equals(
 					((ContingencyQuestion) currentQuestion)
 							.getContingencyAnswer()))
 			{
-				questionList = subsequent;
-				isSubsequent = true;
+				if (next)
+				{
+					List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
+							.getSubsequentList();
+					questionList = subsequent;
+					isSubsequent = true;
+				}
 			}
 			else
 			{
-				try
-				{
-					for (Question question : subsequent)
-						question.setAnswer("");
-				}
-				catch (InvalidAnswerException e)
-				{
-					e.printStackTrace();
-				}
+				((ContingencyQuestion) currentQuestion)
+						.clearSubsequentAnswers();
 			}
 		}
 	}
 
+	/**
+	 * Loads the next question, changing the current cursor.
+	 * 
+	 * @param next
+	 *            True if the cursor should be incremented, false if it should
+	 *            be decremented.
+	 */
 	public void loadNextQuestion(boolean next)
 	{
 		if (!isSubsequent)
@@ -444,9 +476,28 @@ public class SurveyActivity extends Activity
 			}
 			catch (IOException e)
 			{
+				// TODO
 				e.printStackTrace();
 			}
 		}
+	}
+
+	// ---------------------------------------------------------------------------------
+
+	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+	/**
+	 * Selects the radio button which the user has pressed, deselecting the
+	 * radio button which was already selected.
+	 * 
+	 * @param v
+	 *            The Radio Button object which receives the event.
+	 */
+	public void checkRadioButtons(View v)
+	{
+		for (int i = 0; i < questions.getChildCount(); i++)
+			if (questions.getChildAt(i) != v)
+				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
 	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -458,13 +509,10 @@ public class SurveyActivity extends Activity
 	 * tries too connect to server.
 	 * 
 	 * @param b
-	 *            Boolean
+	 *            Boolean TODO
 	 */
 	private void submit(boolean b)
 	{
-		answerdAnswers = survey.getAnswerCount();
-		numberOfQuestions = survey.getQuestionList().size();
-
 		// move to entirely new activity and do the shit
 		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
 		{
@@ -500,6 +548,8 @@ public class SurveyActivity extends Activity
 	 * 
 	 * @param b
 	 *            Boolean
+	 * 
+	 *            TODO
 	 */
 	public class ConnectToServer extends AsyncTask<String, Void, String>
 	{
@@ -647,24 +697,6 @@ public class SurveyActivity extends Activity
 
 		// no portfound
 		throw new IOException("no free port found");
-	}
-
-	// ---------------------------------------------------------------------------------
-
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-
-	/**
-	 * Selects the radio button which the user has pressed, deselecting the
-	 * radio button which was already selected.
-	 * 
-	 * @param v
-	 *            The Radio Button object which receives the event.
-	 */
-	public void checkRadioButtons(View v)
-	{
-		for (int i = 0; i < questions.getChildCount(); i++)
-			if (questions.getChildAt(i) != v)
-				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
 	@Override

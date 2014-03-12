@@ -19,6 +19,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoic
 public class ScalarQuestion extends CloseEndedQuestion
 {
 	/**
+	 * String object containing the question's help message to be displayed.
+	 */
+	private static final String HELP_MESSAGE = "Please select one of the below choices:";
+
+	/**
 	 * Static fields representing the type of Scalar Question to be constructed.
 	 */
 	public static final String ACCEPTABILITY_SCALE = "acceptable",
@@ -57,7 +62,8 @@ public class ScalarQuestion extends CloseEndedQuestion
 	public ScalarQuestion(String content, String keyword)
 			throws InvalidChoiceListException
 	{
-		super(content, QuestionType.SCALAR, prepareChoiceList(keyword));
+		super(content, HELP_MESSAGE, QuestionType.SCALAR,
+				prepareChoiceList(keyword));
 	}
 
 	/**
