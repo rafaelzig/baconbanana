@@ -18,6 +18,9 @@ public class DBOperation {
 			String systemDir = System.getenv("USERPROFILE");
 			try{
 				Class.forName("org.sqlite.JDBC");
+				
+				//That is the lane that creates the database.
+				
 				con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
 				Statement s = con.createStatement();
 				s.execute("PRAGMA foreign_keys = ON");

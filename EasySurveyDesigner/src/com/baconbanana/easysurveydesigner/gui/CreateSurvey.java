@@ -155,9 +155,10 @@ public class CreateSurvey {
 	 *            Main method that initialise this class.
 	 * 
 	 */
-/*
+
+	/*
 	public static void main(String[] args) {
-		new EasySurveyFrame();
+		new CreateSurvey();
 	}
 	*/
 

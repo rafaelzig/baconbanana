@@ -64,7 +64,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		
 		}
 		private void checkAndCreate(){
-			//need to imploment on update and on delete
+			//need to implement on update and on delete
 			String sql = "";
 			if(!DBOperation.exists("Survey")){
 				sql = "CREATE TABLE Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +

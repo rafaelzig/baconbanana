@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.baconbanana.easysurveydesigner.gui.LoginPage;
+
 public class MySQLInstaller {
 	public static void main(String[] args){
 		String workingDir = System.getProperty("user.dir");
