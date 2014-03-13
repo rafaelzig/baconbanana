@@ -22,9 +22,7 @@ public class DBOperation {
 			String systemDir = System.getenv("USERPROFILE");
 			try{
 				Class.forName("org.sqlite.JDBC");
-				
-				//That is the lane that creates the database.
-				
+				//That is the lane that creates the database.				
 				con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
 				Statement s = con.createStatement();
 				s.execute("PRAGMA foreign_keys = ON");
@@ -45,7 +43,7 @@ public class DBOperation {
 		s.executeUpdate(stmt);
 		s.close();
 	}
-	
+	//considering not that
 	public static boolean createTable(String sql){
 		try{
 			executeStatement("CREATE TABLE " + sql);
@@ -54,7 +52,8 @@ public class DBOperation {
 			return false;
 		}
 	}
-	
+	//or this
+	//NO WONDER ITS BROKE
 	public static boolean insertRecord(String sql){
 		try{
 			executeStatement("INSERT INTO " + sql);

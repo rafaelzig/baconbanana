@@ -177,7 +177,10 @@ public class NewMultipleAnswer {
 		for(int i = 0;i < answerLimit; i++){
 			choices[i] = ((String) model.getValueAt(0, i));
 			sql = "INSERT INTO Choices (Choice) Values ('" + choices[i] + "')";
-			int lastId = DBOperation.insertRecordReturnID(sql);
+			int lastId;
+			if((lastId = DBOperation.insertRecordReturnID(sql)) > 0){
+				System.out.println(lastId);
+			}
 			System.out.println(lastId);
 		}
 		
