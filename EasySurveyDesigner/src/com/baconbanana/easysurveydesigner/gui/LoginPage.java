@@ -3,6 +3,7 @@ package com.baconbanana.easysurveydesigner.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,7 +15,7 @@ import javax.swing.JTextField;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 //Note for future pondering, SQLite does not have usernames or passwords so we will have to implement new security (encrypt files pos)
 	public class LoginPage {
-		static JFrame loginPageFrame;
+		public static JFrame loginPageFrame;
 		static String username;
 		static String password;
 		//Create frame and set close ops
@@ -22,6 +23,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		{
 			loginPageFrame  = new JFrame("Login Page");
 			loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			
 			initLayout();
 			loginPageFrame.setVisible(true);
 			
@@ -50,11 +52,30 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					//new MainWindow(userNameField.getText());
+					String s = null;
 					username = userNameField.getText();
 					//TODO 	Change to getPassword
 					password = passwordField.getText();
+					insertUser();
 					checkAndCreate();
+					/*
+					DBOperation.checkPassword2();
+					if (s == userNameField.getText()){
+						new MenuFrame();
+						loginPageFrame.dispose();
+						System.out.println("Success");
+					}
+					else{
+						loginPageFrame.dispose();
+						new LoginPage();
+						System.out.println("Fail");
+					}
+					*/
+					//checkPassword();
+					String sql = "Login where Username='Barry';";
+					DBOperation.deleteRecord(sql);
+					
+					//DBOperation.selectRecord(sql);
 					new MenuFrame();
 					//new DataTest();
 					//System.out.print(getUserName()+getPassword());
@@ -66,17 +87,17 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		private void checkAndCreate(){
 			String sql = "";
 			if(!DBOperation.exists("Survey")){
-				sql = "CREATE TABLE Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +
+				sql = "Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +
 						"Date_Created DATE," +
 						"Date_Modified DATE)";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Stage")){
-				sql = "CREATE TABLE Stage (Stage INT PRIMARY KEY NOT NULL)";
+				sql = "Stage (Stage INT PRIMARY KEY NOT NULL)";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Survey_Stage")){
-				sql = "CREATE TABLE Survey_Stage (Survey VARCHAR NOT NULL," +
+				sql = "Survey_Stage (Survey VARCHAR NOT NULL," +
 						"Stage INT NOT NULL," +
 						"PRIMARY KEY(Survey, Stage)," +
 						"FOREIGN KEY(Survey) REFERENCES Survey(Survey)," +
@@ -84,18 +105,18 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Type")){
-				sql = "CREATE TABLE Type (Type VARCHAR PRIMARY KEY NOT NULL)";
+				sql = "Type (Type VARCHAR PRIMARY KEY NOT NULL)";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Question")){
-				sql = "CREATE TABLE Question (QuestionID INTEGER PRIMARY KEY AUTOINCREMENT," +
+				sql = "Question (QuestionID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"Content VARCHAR NOT NULL," +
 						"Type VARCHAR NOT NULL," +
 						"FOREIGN KEY(Type) REFERENCES Type(Type))";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Template")){
-				sql = "CREATE TABLE Template (Template VARCHAR NOT NULL," +
+				sql = "Template (Template VARCHAR NOT NULL," +
 						"QuestionID INT NOT NULL," +
 						"PRIMARY KEY(Template, QuestionID)," +
 						"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID))";
@@ -103,7 +124,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 			}
 			//I have added Survey_Template table because it was missing for whatever reason 
 			if(!DBOperation.exists("Survey_Template")){
-				sql = "CREATE TABLE Survey_Template (Survey VARCHAR NOT NULL," +
+				sql = "Survey_Template (Survey VARCHAR NOT NULL," +
 						"Template INT NOT NULL," +
 						"PRIMARY KEY(Survey,Template)," +
 						"FOREIGN KEY(Survey) REFERENCES Survey(Survey))" +
@@ -112,13 +133,13 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 			}
 			
 			if(!DBOperation.exists("Patient")){
-				sql = "CREATE TABLE Patient (PatientID INTEGER PRIMARY KEY AUTOINCREMENT," +
+				sql = "Patient (PatientID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"Name VARCHAR NOT NULL," +
 						"DoB DATE NOT NULL)";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Patient_Survey")){
-				sql = "CREATE TABLE Patient_Survey(PatientSurveyID INTEGER PRIMARY KEY AUTOINCREMENT," +
+				sql = "Patient_Survey(PatientSurveyID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"PatientID INT NOT NULL," +
 						"Survey VARCHAR NOT NULL," +
 						"Stage VARCHAR NOT NULL," +
@@ -128,19 +149,19 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Choices")){
-				sql = "CREATE TABLE Choices (ChoiceID INTEGER PRIMARY KEY AUTOINCREMENT," +
+				sql = "Choices (ChoiceID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"Choice VARCHAR NOT NULL)";
 				DBOperation.createTable(sql);						
 			}
 			if(!DBOperation.exists("Question_Choice")){
-				sql = "CREATE TABLE Patient_Question_Choice (QuestionID INT NOT NULL," +
+				sql = "Patient_Question_Choice (QuestionID INT NOT NULL," +
 						"ChoiceID INT NOT NULL," +
 						"PRIMARY KEY(QuestionID, ChoiceID)," +
 						"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)," +
 						"FOREIGN KEY(ChoiceID) REFERENCES Choice(ChoiceID))";
 			}
 			if(!DBOperation.exists("Patient_Question_Choice")){
-				sql = "CREATE TABLE Patient_Question_Choice (PatientSurveyID INT NOT NULL," +
+				sql = "Patient_Question_Choice (PatientSurveyID INT NOT NULL," +
 						"QuestionID INT NOT NULL," +
 						"ChoiceID INT NOT NULL," +
 						"PRIMARY KEY(PatientSurveyID, QuestionID, ChoiceID)," +
@@ -150,12 +171,12 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Answer")){
-				sql = "CREATE TABLE Answer(AnswerID INTEGER PRIMARY KEY AUTOINCREMENT," +
+				sql = "Answer(AnswerID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"Answer VARCHAR NOT NULL)";
 				DBOperation.createTable(sql);
 			}
 			if(!DBOperation.exists("Patient_Question_Answer")){
-				sql = "CREATE TABLE Patient_Question_Answer (PatientSurveyID INT NOT NULL," +
+				sql = "Patient_Question_Answer (PatientSurveyID INT NOT NULL," +
 						"QuestionID INT NOT NULL," +
 						"AnswerID INT NOT NULL," +
 						"PRIMARY KEY(PatientSurveyID, QuestionID, AnswerID)," +
@@ -164,16 +185,50 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 						"FOREIGN KEY(AnswerID) REFERENCES Answer(AnswerID))";
 				DBOperation.createTable(sql);
 			}
+			//new table used to log in to the software. 
+			if(!DBOperation.exists("Login")){
+				sql = "Login (Username VARCHAR NOT NULL," +
+						"Password VARCHAR NOT NULL," +
+						"PRIMARY KEY(Username, Password))";
+				DBOperation.createTable(sql);
+			}
 			
 		}
+		
+		public void insertUser(){
+			String sql = "login VALUES ('Barry', 'xxx');";
+			DBOperation.insertRecord(sql);
+		}
+		/*
+		public void checkPassword(){
+			String sql = "SELECT * FROM Login;";
+			String colName = "Username";
+			ArrayList<String> results = new ArrayList<String>();
+			DBOperation.selectRecord2(sql, colName);
+			for (String s : results){
+				if (s == username) {
+					new MenuFrame();
+					loginPageFrame.dispose();
+				}
+				else {
+					loginPageFrame.dispose();
+					new LoginPage();
+				}
+				
+			}
+		}
+		
+		*/
+		/*
 		public static String getUserName()
-		{
+		
 			return "user="+username;
 		}
 		public static String getPassword()
 		{
 			return "password="+password;
 		}
+		*/
 		public static void main(String args[])
 		{
 			new LoginPage();

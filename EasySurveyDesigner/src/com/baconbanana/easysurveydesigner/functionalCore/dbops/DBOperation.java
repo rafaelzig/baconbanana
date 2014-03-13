@@ -2,11 +2,15 @@ package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import com.baconbanana.easysurveydesigner.gui.LoginPage;
+import com.baconbanana.easysurveydesigner.gui.MenuFrame;
 
 
 public class DBOperation {
@@ -34,9 +38,17 @@ public class DBOperation {
 		return con;
 	}
 	
+	private static void executeStatement(String stmt)throws SQLException{
+		Connection c = getConnect();
+		Statement s = null;
+		s = c.createStatement();
+		s.executeUpdate(stmt);
+		s.close();
+	}
+	
 	public static boolean createTable(String sql){
 		try{
-			executeStatement(sql);
+			executeStatement("CREATE TABLE " + sql);
 			return true;
 		}catch(SQLException e){
 			return false;
@@ -45,7 +57,7 @@ public class DBOperation {
 	
 	public static boolean insertRecord(String sql){
 		try{
-			executeStatement(sql);
+			executeStatement("INSERT INTO " + sql);
 			return true;
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -56,7 +68,7 @@ public class DBOperation {
 	
 	public static boolean deleteRecord(String sql){
 		try{
-			executeStatement(sql);
+			executeStatement("DELETE from " + sql);
 			return true;
 		}catch(SQLException e){
 			e.printStackTrace();
@@ -129,14 +141,50 @@ public class DBOperation {
 		}
 		return true;
 	}
+	//--------------------------------------------------------------------------------------------------------------------------
 	
-	private static void executeStatement(String stmt)throws SQLException{
+	public static ArrayList<String> selectRecord2(String sql, String colName){
 		Connection c = getConnect();
-		Statement s = null;
-		s = c.createStatement();
-		s.executeUpdate(stmt);
-		s.close();
+		Statement s;
+		ResultSet rs;
+		ArrayList<String> results = new ArrayList<String>();
+		try{
+			c.setAutoCommit(false);
+			s = c.createStatement();
+			rs = s.executeQuery(sql);
+			
+			while(rs.next()){
+				String data = rs.getString(colName);
+				results.add(data);
+				System.out.println(data);
+				
+			}
+		}catch (SQLException e){
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + " : " + e.getMessage());
+			System.exit(0);
+		}
+		return results;
+	}	
+	
+	public static String checkPassword2(){
+		Connection c = getConnect();
+		String s = null;
+		try {
+			PreparedStatement st = con.prepareStatement("SELECT Username FROM Login WHERE Username = 'Barry'");
+			ResultSet rs = st.executeQuery();
+			while (rs.next()){
+				String s1 = rs.getString(1);
+				return s = s1 ;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + " : " + e.getMessage());
+			System.exit(0);
+		}
+		
+		return s;
+		
 	}
-	
-	
 }
