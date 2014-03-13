@@ -52,14 +52,14 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					String s = null;
+					//String s = null;      *
 					username = userNameField.getText();
 					//TODO 	Change to getPassword
 					password = passwordField.getText();
 					insertUser();
 					checkAndCreate();
 					/*
-					DBOperation.checkPassword2();
+					DBOperation.checkPassword2();    *
 					if (s == userNameField.getText()){
 						new MenuFrame();
 						loginPageFrame.dispose();
@@ -71,11 +71,12 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 						System.out.println("Fail");
 					}
 					*/
-					//checkPassword();
+					//checkPassword();             *
+					//This statement deletes the user after login. This is done to avoid error when you next open the software.
+					//It will be useless once I will get special menu to create users in the future. 
 					String sql = "Login where Username='Barry';";
 					DBOperation.deleteRecord(sql);
 					
-					//DBOperation.selectRecord(sql);
 					new MenuFrame();
 					//new DataTest();
 					//System.out.print(getUserName()+getPassword());
@@ -194,13 +195,13 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 			}
 			
 		}
-		
+		//method below adds user. It will have to be moved to different class in future but I wanted to hardcode user just to test it.
 		public void insertUser(){
 			String sql = "login VALUES ('Barry', 'xxx');";
 			DBOperation.insertRecord(sql);
 		}
 		/*
-		public void checkPassword(){
+		public void checkPassword(){                    *
 			String sql = "SELECT * FROM Login;";
 			String colName = "Username";
 			ArrayList<String> results = new ArrayList<String>();

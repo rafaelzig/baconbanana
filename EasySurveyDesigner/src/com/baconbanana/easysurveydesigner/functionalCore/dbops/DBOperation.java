@@ -142,7 +142,8 @@ public class DBOperation {
 		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------------------
-	
+	//I have created those methods to compare username with data from database but they did not work perfectly. 
+	//They are not in use at the moment but I left them here in case they would be useful in future.
 	public static ArrayList<String> selectRecord2(String sql, String colName){
 		Connection c = getConnect();
 		Statement s;
