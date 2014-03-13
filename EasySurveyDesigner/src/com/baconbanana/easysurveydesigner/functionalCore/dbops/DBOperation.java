@@ -53,6 +53,29 @@ public class DBOperation {
 			return false;
 		}
 	}
+	
+	public static boolean deleteRecord(String sql){
+		try{
+			executeStatement(sql);
+			return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + " : " + e.getMessage());
+			return false;
+		}
+	}
+	
+	public static boolean onUpdate(String sql){
+		try{
+			executeStatement(sql);
+			return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			System.err.println(e.getClass().getName() + " : " + e.getMessage());
+			return false;
+		}
+	}
+	
 	public static int insertRecordReturnID(String sql){
 		try{
 			executeStatement(sql);

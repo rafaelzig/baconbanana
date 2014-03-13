@@ -12,7 +12,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
-//Note for future pondering, SQLite does not have usernames or passwords so we will have to imploment new security (encrypt files pos)
+//Note for future pondering, SQLite does not have usernames or passwords so we will have to implement new security (encrypt files pos)
 	public class LoginPage {
 		static JFrame loginPageFrame;
 		static String username;
@@ -64,7 +64,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		
 		}
 		private void checkAndCreate(){
-			//need to implement on update and on delete
 			String sql = "";
 			if(!DBOperation.exists("Survey")){
 				sql = "CREATE TABLE Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +
@@ -100,7 +99,18 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 						"QuestionID INT NOT NULL," +
 						"PRIMARY KEY(Template, QuestionID)," +
 						"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID))";
+				DBOperation.createTable(sql);
 			}
+			//I have added Survey_Template table because it was missing for whatever reason 
+			if(!DBOperation.exists("Survey_Template")){
+				sql = "CREATE TABLE Survey_Template (Survey VARCHAR NOT NULL," +
+						"Template INT NOT NULL," +
+						"PRIMARY KEY(Survey,Template)," +
+						"FOREIGN KEY(Survey) REFERENCES Survey(Survey))" +
+						"FOREIGN KEY(Template) REFERENCES Template(Template))";
+				DBOperation.createTable(sql);
+			}
+			
 			if(!DBOperation.exists("Patient")){
 				sql = "CREATE TABLE Patient (PatientID INTEGER PRIMARY KEY AUTOINCREMENT," +
 						"Name VARCHAR NOT NULL," +
