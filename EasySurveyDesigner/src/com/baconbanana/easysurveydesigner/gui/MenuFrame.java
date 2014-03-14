@@ -88,4 +88,8 @@ public class MenuFrame {
 		window.setSize(600, 600);
 		window.setVisible(true);
 	}
+	public static void main(String args[])
+	{
+		new MenuFrame();
+	}
 }

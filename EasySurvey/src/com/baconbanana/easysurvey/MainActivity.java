@@ -16,6 +16,7 @@ import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
@@ -95,8 +96,7 @@ public class MainActivity extends Activity
 
 		try
 		{
-			jsonString = Operations
-					.readFile(openFileInput(Operations.FILENAME));
+			jsonString = Storage.readFromInternal(this, Operations.FILENAME);
 			rawData = Operations.parseJSON(jsonString);
 			survey = new Survey(rawData);
 		}
