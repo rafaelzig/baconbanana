@@ -17,10 +17,10 @@ public class DataTest {
        static int QuestionID = 0;
 	  
 	   public DataTest()
-	   {
+	   {/*
 		   password = LoginPage.getPassword();
 		   
-		  /* loggin=new String("user="+userName);
+		   loggin=new String("user="+userName);
 		   this.password=new String("password="+password);
 		   try {
 	            // The newInstance() call is a work around for some
@@ -31,6 +31,7 @@ public class DataTest {
 	            // handle the error
 	        }*/
 	   }
+	   /*
 	   public static Statement createConnection() throws SQLException
 	   {
 		   Statement myState = null;
@@ -42,6 +43,7 @@ public class DataTest {
 		return myState;
 
 	   }
+	   
     public ArrayList<String>getList()
     {
     	return templateList;
@@ -97,6 +99,6 @@ public class DataTest {
     int val = createConnection().executeUpdate(question);
     if (val==1)   System.out.print("Successfully inserted value");		
     }
-    
+    */
    
 }
