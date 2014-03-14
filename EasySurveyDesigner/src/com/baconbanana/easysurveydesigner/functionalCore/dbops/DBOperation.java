@@ -25,6 +25,8 @@ public class DBOperation {
 				systemDir = System.getenv("USERPROFILE");
 			}else if(osName.contains("Mac")){
 				systemDir = System.getenv("HOME");
+			}else{
+			
 			}
 			try{
 				Class.forName("org.sqlite.JDBC");
