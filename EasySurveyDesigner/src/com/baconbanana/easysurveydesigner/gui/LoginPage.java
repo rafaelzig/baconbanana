@@ -37,11 +37,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 			loginPageFrame.add(panel);
 			
 			panel.add(new JLabel("User name"));
-			final JTextField userNameField = new JTextField("");
+			final JTextField userNameField = new JTextField("Barry");
 			panel.add(userNameField);
 			
 			panel.add(new JLabel("Password"));
-			final JPasswordField passwordField = new JPasswordField();
+			final JPasswordField passwordField = new JPasswordField("xxx");
 			panel.add(passwordField);
 			
 			JButton loginButton = new JButton("Log in");

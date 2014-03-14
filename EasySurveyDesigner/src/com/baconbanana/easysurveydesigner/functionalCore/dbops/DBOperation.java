@@ -42,6 +42,7 @@ public class DBOperation {
 		s = c.createStatement();
 		s.executeUpdate(stmt);
 		s.close();
+		con.close();
 	}
 	//considering not that
 	public static boolean createTable(String sql){
