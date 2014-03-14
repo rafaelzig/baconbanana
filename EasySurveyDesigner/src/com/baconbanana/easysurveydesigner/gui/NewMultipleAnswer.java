@@ -146,10 +146,19 @@ public class NewMultipleAnswer {
 
 		{
 			public void actionPerformed(ActionEvent e3) {
-				saveQuestion();
 				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
+				
+				String sql = "SELECT * FROM Type WHERE Type = 'Multiple Answer'";
+				if (!DBOperation.existsRecord(sql)) {
+					String sql1 = "Type VALUES ('Multiple Answer')";
+					DBOperation.insertRecord(sql1);
+				}
+				
+				String sql2 = "Question VALUES (NULL, '" + question.getText() + "', 'Multiple Answer')";
+				DBOperation.insertRecord(sql2);
+				
 				new AddNewTemplate("test");
 				window.dispose();
 			}
@@ -167,6 +176,7 @@ public class NewMultipleAnswer {
 
 	}
 	//this methord should ideally be in the model
+	/*
 	private void saveQuestion(){
 		//Add question to question table
 		String sql = "INSERT INTO Question (Content, Type) VALUES ('" + question.getText() + "', " + questionType + "')";
@@ -185,6 +195,7 @@ public class NewMultipleAnswer {
 		}
 		
 	}
+	*/
 	
 	private void reDraw(DefaultTableModel m, String[] data){
 		for(int i = 0; i < answerLimit; i++){
