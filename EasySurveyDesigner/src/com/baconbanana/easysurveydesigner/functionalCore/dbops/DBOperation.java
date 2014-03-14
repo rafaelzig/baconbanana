@@ -115,7 +115,7 @@ public class DBOperation {
 				int colCount = rsmd.getColumnCount();
 				String[] row = new String[colCount];
 				System.out.println(colCount);
-				for(int i = 0; i < colCount; i++){
+				for(int i = 1; i < colCount; i++){
 					row[i] = rs.getString(i);
 				}
 				results.add(row);

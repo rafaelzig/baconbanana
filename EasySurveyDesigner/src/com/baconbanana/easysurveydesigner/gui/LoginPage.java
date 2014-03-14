@@ -58,7 +58,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 					username = userNameField.getText();
 					//TODO 	Change to getPassword
 					password = passwordField.getText();
-					insertUser();
+					//insertUser();
 					/*
 					DBOperation.checkPassword2();    *
 					if (s == userNameField.getText()){
@@ -71,12 +71,12 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 						new LoginPage();
 						System.out.println("Fail");
 					}
-					*/
-					checkPassword();             
+					*/ 
+					checkPassword();            
 					//This statement deletes the user after login. This is done to avoid error when you next open the software.
 					//It will be useless once I will get special menu to create users in the future. 
-					String sql = "Login where Username='Barry';";
-					DBOperation.deleteRecord(sql);
+					//String sql = "Login where Username='Barry';";
+					//DBOperation.deleteRecord(sql);
 					
 					//new MenuFrame();
 					//new DataTest();
@@ -89,11 +89,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		
 		//method below adds user. It will have to be moved to different class in future but I wanted to hardcode user just to test it.
 		public void insertUser(){
-			String sql = "login VALUES ('Barry', 'xxx');";
+			String sql = "login VALUES ('Barry', 'xxx')";
 			DBOperation.insertRecord(sql);
 		}
 				public void checkPassword(){                    
-			String sql = "Login WHERE Username='" + username + "' AND Password='" + password + "'";
+			String sql = "SELECT * FROM Login WHERE Username = '" + username + "' AND Password = '" + password + "'";
 			
 			
 			
