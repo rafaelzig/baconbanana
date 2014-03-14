@@ -25,8 +25,6 @@ public class DBOperation {
 				systemDir = System.getenv("USERPROFILE");
 			}else if(osName.contains("Mac")){
 				systemDir = System.getenv("HOME");
-			}else{
-			
 			}
 			try{
 				Class.forName("org.sqlite.JDBC");
@@ -47,13 +45,13 @@ public class DBOperation {
 		}
 		return con;
 	}
-	
 	private static void executeStatement(String stmt)throws SQLException{
 		Connection c = getConnect();
 		Statement s = null;
 		s = c.createStatement();
 		s.executeUpdate(stmt);
 		s.close();
+		c.close();
 	}
 	//considering not that
 	public static boolean createTable(String sql){
@@ -64,8 +62,6 @@ public class DBOperation {
 			return false;
 		}
 	}
-	//or this
-	//NO WONDER ITS BROKE
 	public static boolean insertRecord(String sql){
 		try{
 			executeStatement("INSERT INTO " + sql);
