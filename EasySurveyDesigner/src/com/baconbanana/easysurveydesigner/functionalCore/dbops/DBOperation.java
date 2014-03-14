@@ -51,7 +51,7 @@ public class DBOperation {
 		s = c.createStatement();
 		s.executeUpdate(stmt);
 		s.close();
-		c.close();
+		//c.close();
 
 	}
 	//considering not that
