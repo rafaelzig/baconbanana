@@ -19,11 +19,23 @@ public class DBOperation {
 	
 	public static Connection getConnect(){
 		if (con == null){
-			String systemDir = System.getenv("USERPROFILE");
+			String osName = System.getProperty("os.name");
+			String systemDir = "";
+			if(osName.contains("Windows")){
+				systemDir = System.getenv("USERPROFILE");
+			}else if(osName.contains("Mac")){
+				systemDir = System.getenv("HOME");
+			}else{
+			
+			}
 			try{
 				Class.forName("org.sqlite.JDBC");
-				//That is the lane that creates the database.				
-				con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
+				//That is the lane that creates the database.
+				if(osName.contains("Windows")){
+					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
+				}else if(osName.contains("Mac")){
+					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"/Documents/SQLite/easysurvey.db");
+				}
 				Statement s = con.createStatement();
 				s.execute("PRAGMA foreign_keys = ON");
 				s.close();
