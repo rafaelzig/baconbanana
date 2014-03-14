@@ -85,11 +85,12 @@ containing a value of this type.
         public static final int activity_main=0x7f030002;
         public static final int activity_old_main=0x7f030003;
         public static final int checkbox=0x7f030004;
-        public static final int footer=0x7f030005;
-        public static final int header=0x7f030006;
-        public static final int placeholder=0x7f030007;
-        public static final int radiobutton=0x7f030008;
-        public static final int textbox=0x7f030009;
+        public static final int datepicker=0x7f030005;
+        public static final int footer=0x7f030006;
+        public static final int header=0x7f030007;
+        public static final int placeholder=0x7f030008;
+        public static final int radiobutton=0x7f030009;
+        public static final int textbox=0x7f03000a;
     }
     public static final class menu {
         public static final int check_box_question=0x7f080000;
