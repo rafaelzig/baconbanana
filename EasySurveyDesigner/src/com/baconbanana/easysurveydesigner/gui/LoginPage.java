@@ -24,7 +24,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		{
 			loginPageFrame  = new JFrame("Login Page");
 			loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			//create database tables if they don't exsist
+			//create database tables if they don't exist
 			DBCreator.checkAndCreate();
 			initLayout();
 			loginPageFrame.setVisible(true);
@@ -72,16 +72,16 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 						System.out.println("Fail");
 					}
 					*/
-					//checkPassword();             *
+					checkPassword();             
 					//This statement deletes the user after login. This is done to avoid error when you next open the software.
 					//It will be useless once I will get special menu to create users in the future. 
 					String sql = "Login where Username='Barry';";
 					DBOperation.deleteRecord(sql);
 					
-					new MenuFrame();
+					//new MenuFrame();
 					//new DataTest();
 					//System.out.print(getUserName()+getPassword());
-					loginPageFrame.dispose();
+					//loginPageFrame.dispose();
 				}
 			});
 		
@@ -92,26 +92,26 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 			String sql = "login VALUES ('Barry', 'xxx');";
 			DBOperation.insertRecord(sql);
 		}
-		/*
-		public void checkPassword(){                    *
-			String sql = "SELECT * FROM Login;";
-			String colName = "Username";
-			ArrayList<String> results = new ArrayList<String>();
-			DBOperation.selectRecord2(sql, colName);
-			for (String s : results){
-				if (s == username) {
+				public void checkPassword(){                    
+			String sql = "Login WHERE Username='" + username + "' AND Password='" + password + "'";
+			
+			
+			
+			if (DBOperation.existsRecord(sql)) {
 					new MenuFrame();
 					loginPageFrame.dispose();
+					System.out.println("Good job");
 				}
 				else {
 					loginPageFrame.dispose();
 					new LoginPage();
+					System.out.println("you have fucked up!!");
 				}
 				
-			}
+			
 		}
 		
-		*/
+		
 		/*
 		public static String getUserName()
 		

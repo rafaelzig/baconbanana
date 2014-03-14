@@ -187,4 +187,16 @@ public class DBOperation {
 		return s;
 		
 	}
+	//TO DO change to throws SQL exception
+	public static boolean existsRecord(String sql){
+		ArrayList<String[]> result = selectRecord(sql);
+		if(result.size() > 0){
+			return true;
+			
+		}
+		else{
+			return false;
+			}
+	}
+	
 }

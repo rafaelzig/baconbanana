@@ -40,7 +40,7 @@ public class JSONTest
 		// Creating subsequent questions for the next Question object
 		List<Question> subsequentList = new ArrayList<>();
 		subsequentList
-				.add(new TextualQuestion("When have you started smoking?"));
+				.add(new DateQuestion("When have you started smoking?"));
 		subsequentList.add(new NumericQuestion(
 				"How many packs do you smoke a day?"));
 
