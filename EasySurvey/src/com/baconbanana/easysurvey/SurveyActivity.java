@@ -1,5 +1,6 @@
 package com.baconbanana.easysurvey;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -12,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
@@ -47,8 +48,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
-	final SurveyActivity contex = this;
-
 	private int size, cursor;
 	private Survey survey;
 	private Question currentQuestion;
@@ -57,7 +56,7 @@ public class SurveyActivity extends Activity
 	private LinearLayout placeholder, questions;
 	private OnTouchListener touchListener;
 	private OnKeyListener keyListener;
-	private TextView txtContent, txtPage;
+	private TextView txtContent, txtHelpMessage, txtPage;
 	private ProgressBar pgrBar;
 	private View lineView;
 	private LayoutInflater inf;
@@ -65,6 +64,7 @@ public class SurveyActivity extends Activity
 	private int subsequentCursor;
 	private boolean isSubsequent;
 
+	final SurveyActivity contex = this;
 	int[] listOfSockets;
 	ListView listIP;
 	Button button;
@@ -202,6 +202,7 @@ public class SurveyActivity extends Activity
 		placeholder.addView(lineView);
 
 		txtContent = (TextView) findViewById(R.id.txtContent);
+		txtHelpMessage = (TextView) findViewById(R.id.txtHelpMessage);
 
 		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
 		pgrBar.setMax(size);
@@ -214,60 +215,83 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildQuestionViews()
 	{
-		String[] sortedAnswers = null, unsortedAnswers;
-		boolean flag = false;
-		int res;
-
 		pgrBar.setProgress(survey.getAnswerCount());
-		txtPage.setText(getPageNumber());
 		txtContent.setText(currentQuestion.getContent());
+		txtHelpMessage.setText(currentQuestion.getHelpMessage());
+		txtPage.setText(getPageNumber());
 
 		switch (currentQuestion.getType())
 		{
 		// TODO
 			case TEXTUAL:
-			case NUMERIC:
-			case DATE:
-				lineView = inf.inflate(R.layout.textbox, questions, false);
-
-				if (currentQuestion.isAnswered())
-					((EditText) lineView).setText(currentQuestion.getAnswer());
-
-				lineView.setOnKeyListener(keyListener);
-				questions.addView(lineView);
-				lineView.requestFocus();
-				keyboard.showSoftInput(lineView, 0);
+				buildOpenEndedQuestion(InputType.TYPE_CLASS_TEXT);
 				break;
-
+			case NUMERIC:
+				buildOpenEndedQuestion(InputType.TYPE_CLASS_NUMBER);
+				break;
+			case DATE:
+				buildOpenEndedQuestion(InputType.TYPE_CLASS_DATETIME);
+				break;
 			case MULTIPLE_CHOICE:
 			case CONTINGENCY:
 			case SCALAR:
-				flag = true;
-				// Falls through
+				buildCloseEndedQuestion(R.layout.radiobutton);
+				break;
 			case MULTIPLE_ANSWER:
-				choiceList = ((CloseEndedQuestion) currentQuestion)
-						.getChoiceList();
+				buildCloseEndedQuestion(R.layout.checkbox);
+				break;
+		}
+	}
 
-				unsortedAnswers = Operations.parseAnswers(currentQuestion
-						.getAnswer());
-				sortedAnswers = new String[choiceList.size()];
+	/**
+	 * Builds the necessary views to display the open ended question
+	 * 
+	 * @param inputType
+	 *            Integer representing the inputType of the view to be set.
+	 */
+	private void buildOpenEndedQuestion(int inputType)
+	{
+		lineView = inf.inflate(R.layout.textbox, questions, false);
+		((TextView) lineView).setInputType(inputType);
 
-				for (String answer : unsortedAnswers)
-					sortedAnswers[choiceList.indexOf(answer)] = answer;
+		if (currentQuestion.isAnswered())
+			((EditText) lineView).setText(currentQuestion.getAnswer());
 
-				res = (flag) ? R.layout.radiobutton : R.layout.checkbox;
+		lineView.setOnKeyListener(keyListener);
+		questions.addView(lineView);
+		lineView.requestFocus();
+		keyboard.showSoftInput(lineView, 0);
+	}
 
-				for (int i = 0; i < choiceList.size(); i++)
-				{
-					lineView = inf.inflate(res, questions, false);
+	/**
+	 * Builds the necessary views to display the close ended question.
+	 * 
+	 * @param viewType
+	 *            Integer representing the type of the view to be constructed.
+	 */
+	private void buildCloseEndedQuestion(int viewType)
+	{
+		String[] sortedAnswers;
+		String[] unsortedAnswers;
 
-					((TextView) lineView).setText(choiceList.get(i));
+		choiceList = ((CloseEndedQuestion) currentQuestion).getChoiceList();
 
-					if (sortedAnswers != null && sortedAnswers[i] != null)
-						((CompoundButton) lineView).setChecked(true);
+		unsortedAnswers = Operations.parseAnswers(currentQuestion.getAnswer());
+		sortedAnswers = new String[choiceList.size()];
 
-					questions.addView(lineView);
-				}
+		for (String answer : unsortedAnswers)
+			sortedAnswers[choiceList.indexOf(answer)] = answer;
+
+		for (int i = 0; i < choiceList.size(); i++)
+		{
+			lineView = inf.inflate(viewType, questions, false);
+
+			((TextView) lineView).setText(choiceList.get(i));
+
+			if (sortedAnswers != null && sortedAnswers[i] != null)
+				((CompoundButton) lineView).setChecked(true);
+
+			questions.addView(lineView);
 		}
 	}
 
@@ -464,27 +488,23 @@ public class SurveyActivity extends Activity
 	 */
 	private void finishSurvey()
 	{
-		if (Storage.isExternalStorageWritable())
+		try
 		{
-			Storage.createRootDirectory();
-
-			try
-			{
-				Operations.writeFile(survey.getJSON().toJSONString(),
-						Storage.ROOT_DIRECTORY + Operations.FILENAME);
-				submit(true);
-			}
-			catch (IOException e)
-			{
-				// TODO
-				e.printStackTrace();
-			}
+			Operations.writeFile(survey.getJSON().toJSONString(),
+					openFileOutput(Operations.FILENAME, Context.MODE_PRIVATE));
 		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		submit(true);
 	}
-
-	// ---------------------------------------------------------------------------------
-
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 	/**
 	 * Selects the radio button which the user has pressed, deselecting the
@@ -500,6 +520,9 @@ public class SurveyActivity extends Activity
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
+	// ---------------------------------------------------------------------------------
+
+	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 	// ------------------------------------------------------------------------
 	/**

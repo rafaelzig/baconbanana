@@ -1,5 +1,6 @@
 package com.baconbanana.easysurvey;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.json.simple.JSONObject;
@@ -9,14 +10,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
@@ -68,64 +67,64 @@ public class MainActivity extends Activity
 	{
 		JSONObject rawData = null;
 		String jsonString;
-		
-		
-		// try
-		// {
-		// jsonString = Operations.readFile(getAssets().open(
-		// Operations.FILENAME));
-		//
-		// rawData = Operations.parseJSON(jsonString);
-		// survey = new Survey(rawData);
-		// Operations.writeFile(survey.getJSON().toJSONString(),
-		// Storage.ROOT_DIRECTORY + Operations.FILENAME);
-		// }
-		// catch (IOException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// catch (java.text.ParseException e)
-		// {
-		// e.printStackTrace();
-		// }
-		// catch (ParseException e)
-		// {
-		// e.printStackTrace();
-		// }
-		//
-		// return true;
 
-		if (Storage.isExternalStorageReadable())
+//		try
+//		{
+//			jsonString = Operations.readFile(getAssets().open(
+//					Operations.FILENAME));
+//
+//			rawData = Operations.parseJSON(jsonString);
+//			survey = new Survey(rawData);
+//			Operations.writeFile(survey.getJSON().toJSONString(),
+//					openFileOutput(Operations.FILENAME, Context.MODE_PRIVATE));
+//		}
+//		catch (IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		catch (java.text.ParseException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		catch (ParseException e)
+//		{
+//			e.printStackTrace();
+//		}
+//
+//		return true;
+
+		try
 		{
-			try
-			{
-				jsonString = Operations.readFile(Storage.ROOT_DIRECTORY
-						+ Operations.FILENAME);
-				rawData = Operations.parseJSON(jsonString);
-				survey = new Survey(rawData);
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
-			catch (java.text.ParseException e)
-			{
-				e.printStackTrace();
-			}
-
-			if (survey.getAnswerCount() == survey.getQuestionList().size())
-				return false;
-
-			return true;
+			jsonString = Operations
+					.readFile(openFileInput(Operations.FILENAME));
+			rawData = Operations.parseJSON(jsonString);
+			survey = new Survey(rawData);
+		}
+		catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (java.text.ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
-		Log.e(getPackageName(), "Unable to read from external storage device.");
-		return false;
+		if (survey.getAnswerCount() == survey.getQuestionList().size())
+			return false;
 
+		return true;
 	}
 
 	public void beginSurvey(View view)
