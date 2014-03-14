@@ -6,11 +6,10 @@ package com.baconbanana.easysurvey.functionalCore;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-
 import android.content.Context;
 import android.os.Environment;
+
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team.
@@ -23,7 +22,6 @@ public class Storage
 	 */
 	public static final File ROOT_DIRECTORY = new File(
 			Environment.getExternalStorageDirectory() + "/EasySurvey/");
-
 	/**
 	 * Creates the directory named by this file, creating missing parent
 	 * directories if necessary.
@@ -42,6 +40,7 @@ public class Storage
 	 * @return true if the external storage is available for read and write,
 	 *         false otherwise.
 	 */
+	
 	public static boolean isExternalStorageWritable()
 	{
 		String state = Environment.getExternalStorageState();

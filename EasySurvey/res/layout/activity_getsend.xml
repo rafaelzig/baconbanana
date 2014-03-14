@@ -12,5 +12,15 @@
          android:layout_marginTop="219dp"
          android:onClick="connect"
          android:text="Connect" />
+
+     <Button
+         android:id="@+id/start"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/connect"
+         android:layout_centerHorizontal="true"
+         android:layout_marginTop="29dp"
+         android:onClick="moveToSurveyActivity"
+         android:text="Start" />
      
 </RelativeLayout>
