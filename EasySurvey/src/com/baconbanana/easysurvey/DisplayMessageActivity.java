@@ -1,20 +1,24 @@
 package com.baconbanana.easysurvey;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.security.spec.InvalidParameterSpecException;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -40,84 +44,75 @@ public class DisplayMessageActivity extends Activity {
 		String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 		 TextView textView = new TextView(this);
 		    textView.setTextSize(40);
-		    
-		
+		   
 		    byte[] secret = null;
 			try {
 				secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
-			} catch (DecoderException e) {
+			} catch (DecoderException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 
-		    
+	
 		    SecretKeySpec secretKey = new SecretKeySpec(secret, "AES");
-
-		    
-		    SecureRandom random = new SecureRandom();
-
-		   
-		    Cipher eCipher = null;
-			try {
-				eCipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
-			} catch (NoSuchAlgorithmException e) {
+		
+		   try {
+				textView.setText(decryptMsg(encryptMsg(message, secretKey), secretKey));
+			} catch (InvalidKeyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (NoSuchPaddingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-
-		    
-		    byte[] realIV = new byte[eCipher.getBlockSize()];
-
-		   
-		    random.nextBytes(realIV);
-
-		    
-		    IvParameterSpec ivSpec = new IvParameterSpec(realIV);
-
-
-		    try {
-				eCipher.init(Cipher.ENCRYPT_MODE, secretKey, ivSpec);
-			} catch (InvalidKeyException e) {
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidParameterSpecException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvalidAlgorithmParameterException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-
-		    
-		    String messageToEncrypt = message;
-
-		    
-		    byte[] dataToEncrypt = messageToEncrypt.getBytes(Charset.forName("UTF-8"));
-
-		 
-		  
-			try {
-				encryptedData = eCipher.doFinal(dataToEncrypt);
-			} catch (IllegalBlockSizeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (BadPaddingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (IllegalBlockSizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
 
-		
-		 
-			
-			 String s = new String(encryptedData);
-		    textView.setText(s);
-
-		    // Set the text view as the activity layout
+		    
 		    setContentView(textView);
 		// Show the Up button in the action bar.
 		//setupActionBar();
 	}
+ 
+
+
+	public static byte[] encryptMsg(String message, SecretKey secret) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
+	
+	    Cipher cipher = null;
+	    cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+	    cipher.init(Cipher.ENCRYPT_MODE, secret);
+	    byte[] encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
+	    
+	    return encryptedText;
+	}
+
+	public static String decryptMsg(byte[] encryptedText, SecretKey secret) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+
+	    Cipher cipher = null;
+	    cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+	   cipher.init(Cipher.DECRYPT_MODE, secret);
+	    String decryptString = new String(cipher.doFinal(encryptedText), "UTF-8");
+	    
+	    return decryptString;
+	}
+	
+	
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
