@@ -1,9 +1,13 @@
 package com.baconbanana.easysurveydesigner.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,8 +17,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ConnectionPage {
 
@@ -86,10 +93,94 @@ public class ConnectionPage {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
+					sendPage();
 				}
+
+				private void sendPage() {
+				
+					JFrame frame = new JFrame("send");
+					
+					JPanel thePanel= new JPanel();
+					thePanel.setLayout(new FlowLayout());
+					
+					JPanel theOtherPanel= new JPanel();
+					thePanel.setLayout(new FlowLayout());
+					  
+					
+					JTextField name= new JTextField();
+					JComboBox day;
+					final JComboBox month;
+					JComboBox year;
+					String s;
+					
+					
+					String months[] = {"may","june","april","september"};
+					String days[] = {"1","2","3"};
+					String years[] = {"1994", "1996", "1998"};
+					
+					  
+					  month = new JComboBox(months);
+					  month.setBackground(Color.white);
+					  month.setForeground(Color.red);
+					  //-----------
+					  
+					  day = new JComboBox(days);
+					  day.setBackground(Color.white);
+					  day.setForeground(Color.red);
+					  
+					  
+					 year= new JComboBox(years);
+					 year.setBackground(Color.white);
+					 year.setForeground(Color.red);
+					  
+					 JTextField tf= new JTextField();
+					 tf.setSize(new Dimension(20,100));
+					 
+					 JLabel l=new JLabel();
+					 l.setText("Enter Name:");
+					 tf.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						 
+					 });
+					 
+					 thePanel.add(new JLabel("Date of birth:"));
+					  thePanel.add(day);
+					  thePanel.add(month);
+					  thePanel.add(year);
+					  theOtherPanel.add(l);
+					  theOtherPanel.add(tf);
+					 
+					  //sendPage.add(new JLabe);
+					  frame.setLayout(new GridLayout(2,1));
+					  
+					  frame.add(thePanel);
+					  frame.add(theOtherPanel);
+					  month.addItemListener(new ItemListener(){
+
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+							String s = (String)month.getSelectedItem();
+							// TODO Auto-generated method stub
+							
+						}
+						  
+					  });
+					  
+					  
+					  frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					  frame.setSize(400,400);
+					  frame.setVisible(true);
+					  
+				}
+				
 			});
 
+			
 			cancel.addActionListener(new ActionListener() {
 
 				@Override
@@ -107,6 +198,9 @@ public class ConnectionPage {
 
 	}
 
+	
+		  
+		  
 	public class Connection extends Thread {
 
 		public void run() {

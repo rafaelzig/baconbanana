@@ -1,18 +1,13 @@
 package com.baconbanana.easysurvey;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.text.ParseException;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,7 +19,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,7 +41,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
-	final SurveyActivity contex = this;
+	
 
 	private int size, cursor;
 	private Survey survey;
@@ -65,14 +59,7 @@ public class SurveyActivity extends Activity
 	private int subsequentCursor;
 	private boolean isSubsequent;
 
-	int[] listOfSockets;
-	ListView listIP;
-	Button button;
-	String IP = "10.230.149.130";
-	String deviceIP;
-	String JSON;
-	Socket skt = null;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -87,10 +74,12 @@ public class SurveyActivity extends Activity
 		buildLayout();
 	}
 
+	
 	/**
 	 * Reads Survey object from the specified json string, saving its contents
 	 * to the survey object.
 	 */
+	
 	private void getSurvey(String jsonString)
 	{
 		try
@@ -464,6 +453,7 @@ public class SurveyActivity extends Activity
 	 */
 	private void finishSurvey()
 	{
+		
 		if (Storage.isExternalStorageWritable())
 		{
 			Storage.createRootDirectory();
@@ -472,7 +462,8 @@ public class SurveyActivity extends Activity
 			{
 				Operations.writeFile(survey.getJSON().toJSONString(),
 						Storage.ROOT_DIRECTORY + Operations.FILENAME);
-				submit(true);
+				
+				//TODO
 			}
 			catch (IOException e)
 			{
@@ -480,11 +471,11 @@ public class SurveyActivity extends Activity
 				e.printStackTrace();
 			}
 		}
+		
+		Intent intent = new Intent(this, getSurvey.class);
+		startActivity(intent);
+		
 	}
-
-	// ---------------------------------------------------------------------------------
-
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
 	/**
 	 * Selects the radio button which the user has pressed, deselecting the
@@ -500,204 +491,6 @@ public class SurveyActivity extends Activity
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	// ------------------------------------------------------------------------
-	/**
-	 * called when the SIBMIT button is pressed. It first checks if all of the
-	 * questions are answered. If no, dialog box showing not answered questions
-	 * appears. If yes, confirmation dialog box appears. once pressed ok, it
-	 * tries too connect to server.
-	 * 
-	 * @param b
-	 *            Boolean TODO
-	 */
-	private void submit(boolean b)
-	{
-		// move to entirely new activity and do the shit
-		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				switch (which)
-				{
-					case DialogInterface.BUTTON_POSITIVE:
-						// Yes button clicked
-						(new ConnectToServer()).execute();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						// No button clicked
-						break;
-				}
-			}
-		};
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure?")
-				.setPositiveButton("Yes", dialogClickListenerSure)
-				.setNegativeButton("No", dialogClickListenerSure).show();
-
-	}
-
-	// -----------------------------------------------------------------------------
-	/**
-	 * Tries to connect to server by calling the method createSocket. On post
-	 * execute it checks if the socket was created. If created, try to send
-	 * data. If not, tells it was unsuccessful.
-	 * 
-	 * @param b
-	 *            Boolean
-	 * 
-	 *            TODO
-	 */
-	public class ConnectToServer extends AsyncTask<String, Void, String>
-	{
-
-		@Override
-		protected String doInBackground(String... arg0)
-		{
-
-			listOfSockets = new int[2000];
-			for (int x = 0; x < 2000; x++)
-			{
-				listOfSockets[x] = 2000 + x;
-			}
-
-			try
-			{
-				skt = createSocket(listOfSockets, IP);
-			}
-			catch (IOException e)
-			{
-				System.out.println(e);
-			}
-
-			return null;
-
-		}
-
-		protected void onPostExecute(String result)
-		{
-
-			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
-				{
-					switch (which)
-					{
-						case DialogInterface.BUTTON_POSITIVE:
-
-							(new SendToServer()).execute();// <---
-
-							break;
-
-						case DialogInterface.BUTTON_NEGATIVE:
-							// No button clicked
-							break;
-					}
-				}
-			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(contex);
-			String message = "";
-			if (skt == null)
-			{
-				message = "Could not connect to Server";
-				builder.setMessage(message)
-						.setNegativeButton("close", dialogClickListenerSend)
-						.show();
-			}
-			else
-			{
-				message = "Successfully Connected to Server";
-				builder.setMessage(message)
-						.setPositiveButton("Send My Answers",
-								dialogClickListenerSend)
-						.setNegativeButton("Cancel", dialogClickListenerSend)
-						.show();
-			}
-
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------
-	/**
-	 * tries to get output stream and write lines to the server then on post
-	 * execute dialog box pops up with the result of attempt
-	 */
-	public class SendToServer extends AsyncTask<String, Void, String>
-	{
-		String message = "";
-
-		@Override
-		protected String doInBackground(String... arg0)
-		{
-
-			try
-			{
-				PrintStream output = null;
-				output = new PrintStream(skt.getOutputStream());
-				output.print("try");
-				message = "successfully sent";
-				// TODO
-			}
-			catch (IOException e)
-			{
-				System.out.println(e);
-				message = "could not send it";
-			}
-			return null;
-		}
-
-		protected void onPostExecute(String result)
-		{
-
-			AlertDialog.Builder dlgAlert = new AlertDialog.Builder(contex);
-
-			dlgAlert.setMessage(message);
-			dlgAlert.setPositiveButton("OK", null);
-			dlgAlert.create().show();
-
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------
-	/**
-	 * loops through the array of ports passed as a parameter and then tries to
-	 * create a socket with the given ip
-	 * 
-	 * @param ports
-	 *            array of int
-	 * @param IP
-	 *            string
-	 */
-	public static Socket createSocket(int[] ports, String IP)
-			throws IOException
-	{
-
-		for (int port : ports)
-		{
-			try
-			{
-				Socket s = new Socket(IP, port);
-				String st = "" + s.getPort();
-				Log.d("port", st);
-				return s;
-			}
-			catch (IOException ex)
-			{
-				Log.d("noport", "" + port);
-				continue; // try next port
-			}
-		}
-
-		// no portfound
-		throw new IOException("no free port found");
-	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
@@ -706,4 +499,6 @@ public class SurveyActivity extends Activity
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	
 }
