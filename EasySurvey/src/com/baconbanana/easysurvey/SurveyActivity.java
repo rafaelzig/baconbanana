@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
@@ -30,6 +31,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
@@ -55,6 +57,7 @@ public class SurveyActivity extends Activity
 	private List<String> choiceList;
 	private LinearLayout placeholder, questions;
 	private OnTouchListener touchListener;
+	private OnClickListener clickListener;
 	private OnKeyListener keyListener;
 	private TextView txtContent, txtHelpMessage, txtPage;
 	private ProgressBar pgrBar;
@@ -113,6 +116,10 @@ public class SurveyActivity extends Activity
 		subsequentCursor = -1;
 		questionList = survey.getQuestionList();
 		currentQuestion = questionList.get(cursor);
+	}
+
+	public void setCurrentDateOnView()
+	{
 	}
 
 	/**
@@ -230,7 +237,7 @@ public class SurveyActivity extends Activity
 				buildOpenEndedQuestion(InputType.TYPE_CLASS_NUMBER);
 				break;
 			case DATE:
-				buildOpenEndedQuestion(InputType.TYPE_CLASS_DATETIME);
+				buildDateQuestion();
 				break;
 			case MULTIPLE_CHOICE:
 			case CONTINGENCY:
@@ -244,7 +251,38 @@ public class SurveyActivity extends Activity
 	}
 
 	/**
-	 * Builds the necessary views to display the open ended question
+	 * Builds the necessary views to display the date question.
+	 */
+	private void buildDateQuestion()
+	{
+		questions.get = (TextView) findViewById(R.id.tvDate);
+		dpResult = (DatePicker) findViewById(R.id.dpResult);
+		
+		final Calendar c = Calendar.getInstance();
+		year = c.get(Calendar.YEAR);
+		month = c.get(Calendar.MONTH);
+		day = c.get(Calendar.DAY_OF_MONTH);
+		
+		// set current date into textview
+		tvDisplayDate.setText(new StringBuilder()
+		// Month is 0 based, just add 1
+		.append(month + 1).append("-").append(day).append("-")
+		.append(year).append(" "));
+		
+		// set current date into datepicker
+		dpResult.init(year, month, day, null);
+		
+		lineView = inf.inflate(R.layout.textbox, questions, false);
+
+		if (currentQuestion.isAnswered())
+			((EditText) lineView).setText(currentQuestion.getAnswer());
+
+		lineView.setOnClickListener(clickListener);
+		questions.addView(lineView);
+	}
+
+	/**
+	 * Builds the necessary views to display the open ended question.
 	 * 
 	 * @param inputType
 	 *            Integer representing the inputType of the view to be set.
@@ -490,8 +528,7 @@ public class SurveyActivity extends Activity
 	{
 		try
 		{
-			Operations.writeFile(survey.getJSON().toJSONString(),
-					openFileOutput(Operations.FILENAME, Context.MODE_PRIVATE));
+			Storage.writeToInternal(this, survey.getJSON().toJSONString());
 		}
 		catch (FileNotFoundException e)
 		{
