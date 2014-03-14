@@ -19,11 +19,21 @@ public class DBOperation {
 	
 	public static Connection getConnect(){
 		if (con == null){
-			String systemDir = System.getenv("USERPROFILE");
+			String osName = System.getProperty("os.name");
+			String systemDir = "";
+			if(osName.contains("Windows")){
+				systemDir = System.getenv("USERPROFILE");
+			}else if(osName.contains("Mac")){
+				systemDir = System.getenv("HOME");
+			}
 			try{
 				Class.forName("org.sqlite.JDBC");
-				//That is the lane that creates the database.				
-				con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
+				//That is the lane that creates the database.
+				if(osName.contains("Windows")){
+					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
+				}else if(osName.contains("Mac")){
+					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"/Documents/SQLite/easysurvey.db");
+				}
 				Statement s = con.createStatement();
 				s.execute("PRAGMA foreign_keys = ON");
 				s.close();
@@ -35,13 +45,14 @@ public class DBOperation {
 		}
 		return con;
 	}
-	
 	private static void executeStatement(String stmt)throws SQLException{
 		Connection c = getConnect();
 		Statement s = null;
 		s = c.createStatement();
 		s.executeUpdate(stmt);
 		s.close();
+		c.close();
+
 	}
 	//considering not that
 	public static boolean createTable(String sql){
@@ -52,8 +63,6 @@ public class DBOperation {
 			return false;
 		}
 	}
-	//or this
-	//NO WONDER ITS BROKE
 	public static boolean insertRecord(String sql){
 		try{
 			executeStatement("INSERT INTO " + sql);
