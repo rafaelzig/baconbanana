@@ -76,8 +76,7 @@ public class MainActivity extends Activity
 //
 //			rawData = Operations.parseJSON(jsonString);
 //			survey = new Survey(rawData);
-//			Operations.writeFile(survey.getJSON().toJSONString(),
-//					openFileOutput(Operations.FILENAME, Context.MODE_PRIVATE));
+//			Storage.writeToInternal(this, survey.getJSON().toJSONString());
 //		}
 //		catch (IOException e)
 //		{
