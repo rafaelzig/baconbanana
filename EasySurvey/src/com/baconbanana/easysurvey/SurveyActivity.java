@@ -19,7 +19,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
@@ -52,6 +51,12 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
+	private static final int FULL_SCREEN = 8;
+	private static final String SURVEY_KEY = "survey";
+	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
+	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
+	private static final String CURSOR_KEY = "cursor";
+
 	private final Calendar calendar = Calendar.getInstance();
 	private int cursor = 0, subsequentCursor = -1;
 	private boolean isSubsequent = false;
@@ -101,6 +106,8 @@ public class SurveyActivity extends Activity
 
 		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
 		placeholder.setOnTouchListener(touchListener);
+		placeholder.setSystemUiVisibility(FULL_SCREEN);
+		
 		buildStaticViews();
 		buildQuestionViews();
 	}
@@ -110,10 +117,11 @@ public class SurveyActivity extends Activity
 	{
 		super.onSaveInstanceState(savedInstanceState);
 
-		savedInstanceState.putInt("cursor", cursor);
-		savedInstanceState.putInt("subsequentCursor", subsequentCursor);
-		savedInstanceState.putBoolean("isSubsequent", isSubsequent);
-		savedInstanceState.putString("survey", survey.getJSON().toJSONString());
+		savedInstanceState.putInt(CURSOR_KEY, cursor);
+		savedInstanceState.putInt(SUBSEQUENT_CURSOR_KEY, subsequentCursor);
+		savedInstanceState.putBoolean(IS_SUBSEQUENT_KEY, isSubsequent);
+		savedInstanceState.putString(SURVEY_KEY, survey.getJSON()
+				.toJSONString());
 	}
 
 	/**
@@ -124,12 +132,12 @@ public class SurveyActivity extends Activity
 	 */
 	private void restoreInstanceState(Bundle savedInstanceState)
 	{
-		cursor = savedInstanceState.getInt("cursor", cursor);
-		subsequentCursor = savedInstanceState.getInt("subsequentCursor",
+		cursor = savedInstanceState.getInt(CURSOR_KEY, cursor);
+		subsequentCursor = savedInstanceState.getInt(SUBSEQUENT_CURSOR_KEY,
 				subsequentCursor);
-		isSubsequent = savedInstanceState.getBoolean("isSubsequent",
+		isSubsequent = savedInstanceState.getBoolean(IS_SUBSEQUENT_KEY,
 				isSubsequent);
-		prepareSurvey(savedInstanceState.getString("survey", getIntent()
+		prepareSurvey(savedInstanceState.getString(SURVEY_KEY, getIntent()
 				.getStringExtra(MainActivity.EXTRA_MESSAGE)));
 
 		if (isSubsequent)
@@ -210,6 +218,7 @@ public class SurveyActivity extends Activity
 				return true;
 			}
 		});
+
 		keyListener = new OnKeyListener()
 		{
 			@Override
@@ -820,14 +829,6 @@ public class SurveyActivity extends Activity
 
 		// no portfound
 		throw new IOException("no free port found");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 }
