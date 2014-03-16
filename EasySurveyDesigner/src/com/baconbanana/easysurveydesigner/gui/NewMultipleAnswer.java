@@ -149,7 +149,7 @@ public class NewMultipleAnswer {
 				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
-				
+				/*
 				String sql = "SELECT * FROM Type WHERE Type = 'Multiple Answer'";
 				if (!DBOperation.existsRecord(sql)) {
 					String sql1 = "Type VALUES ('Multiple Answer')";
@@ -158,7 +158,7 @@ public class NewMultipleAnswer {
 				
 				String sql2 = "Question VALUES (NULL, '" + question.getText() + "', 'Multiple Answer')";
 				DBOperation.insertRecord(sql2);
-				
+				*/
 				new AddNewTemplate("test");
 				window.dispose();
 			}
@@ -176,17 +176,17 @@ public class NewMultipleAnswer {
 
 	}
 	//this methord should ideally be in the model
-	/*
-	private void saveQuestion(){
+	
+	/*private void saveQuestion(){
 		//Add question to question table
-		String sql = "INSERT INTO Question (Content, Type) VALUES ('" + question.getText() + "', " + questionType + "')";
+		String sql = "Question (Content, Type) VALUES ('" + question.getText() + "', '" + questionType + "')";
 		System.out.println(sql);
 		DBOperation.insertRecord(sql);
 		//Add choices to choices table
 		String[] choices = new String[9];
 		for(int i = 0;i < answerLimit; i++){
 			choices[i] = ((String) model.getValueAt(0, i));
-			sql = "INSERT INTO Choices (Choice) Values ('" + choices[i] + "')";
+			sql = "Choices (Choice) Values ('" + choices[i] + "')";
 			int lastId;
 			if((lastId = DBOperation.insertRecordReturnID(sql)) > 0){
 				System.out.println(lastId);
@@ -194,8 +194,8 @@ public class NewMultipleAnswer {
 			System.out.println(lastId);
 		}
 		
-	}
-	*/
+	}*/
+	
 	
 	private void reDraw(DefaultTableModel m, String[] data){
 		for(int i = 0; i < answerLimit; i++){
