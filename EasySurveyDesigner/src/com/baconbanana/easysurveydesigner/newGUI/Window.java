@@ -19,7 +19,6 @@ public abstract class Window implements ActionListener{
 	
 	public Window(String tit, int width, int height){
 		title = tit;
-		border = BorderFactory.createLineBorder(Color.GRAY, 1);
 		window = new JFrame(title);
 		window.setSize(width, height);
 		window.setLocationRelativeTo(null);
@@ -44,6 +43,7 @@ public abstract class Window implements ActionListener{
 	}
 	
 	public Border getBorder(){
+		border = BorderFactory.createLineBorder(Color.GRAY, 2);
 		return border;
 	}
 	

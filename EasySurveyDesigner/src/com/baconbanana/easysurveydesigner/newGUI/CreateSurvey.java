@@ -31,11 +31,12 @@ public class CreateSurvey extends SQLWindow{
 	final static DefaultListModel<String> myModel1 = new DefaultListModel<String>();
 	public CreateSurvey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
-		// TODO Auto-generated constructor stub
+		initiWidgets();
 	}
 	
 	public void initiWidgets(){
 		//TODO ask Becka how to comment this all nice
+		//TODO change layout here to make it look better
 		addBtn = new JButton("Add");
 		editBtn = new JButton("Edit");
 		deleteBtn = new JButton("Delete");
@@ -53,41 +54,48 @@ public class CreateSurvey extends SQLWindow{
 		surveyPrevList = new JList<String>();
 		
 		getWindow().setLayout(new BorderLayout());
+		Border border = getBorder();
 		
 		JPanel jpTemplates = new JPanel(new BorderLayout());
 		getWindow().add(jpTemplates, BorderLayout.WEST);
 
 		jpTemplates.add(templatesLbl, BorderLayout.NORTH);
 		jpTemplates.add(templateList, BorderLayout.CENTER);
-		templateList.setBorder(getBorder());
+		templateList.setBorder(border);
 			
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
 		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
 		jpTemplatesButtons.add(addBtn);
+		addBtn.addActionListener(this);
 		jpTemplatesButtons.add(editBtn);
+		editBtn.addActionListener(this);
 		jpTemplatesButtons.add(deleteBtn);
+		deleteBtn.addActionListener(this);
 		jpTemplatesButtons.add(moveBtn);
+		moveBtn.addActionListener(this);
 		
 		JPanel jpTemplatesPreview = new JPanel(new BorderLayout());
 		getWindow().add(jpTemplatesPreview, BorderLayout.CENTER);
 
 		jpTemplatesPreview.add(templatePrevLbl, BorderLayout.NORTH);
 		jpTemplatesPreview.add(templatePrevList, BorderLayout.CENTER);
-		templatePrevList.setBorder(getBorder());
+		templatePrevList.setBorder(border);
 		
 		JPanel jpQuestionsPreview = new JPanel(new BorderLayout());
 		getWindow().add(jpQuestionsPreview, BorderLayout.SOUTH);
 
 		jpQuestionsPreview.add(surveyPrevLbl, BorderLayout.NORTH);
 		jpQuestionsPreview.add(surveyPrevList, BorderLayout.CENTER);
-		surveyPrevList.setBorder(getBorder());
+		surveyPrevList.setBorder(border);
 		
 		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
 		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);
 		jpQuestionsButton.add(saveBtn);
+		saveBtn.addActionListener(this);
 		jpQuestionsButton.add(cancelBtn);
+		cancelBtn.addActionListener(this);
 		jpQuestionsButton.add(sendBtn);
-		
+		sendBtn.addActionListener(this);
 		
 		
 		
