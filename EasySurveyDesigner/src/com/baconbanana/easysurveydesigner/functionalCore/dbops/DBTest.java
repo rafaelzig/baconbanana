@@ -43,11 +43,10 @@ public class DBTest
 		ResultSetMetaData rsmd = rs.getMetaData();
 		while (rs.next())
 		{
-			for (int i = 1; i < rsmd.getColumnCount(); i++)
-			{
-				System.out.println(rs.getString(i));
-			}
+			System.out.println("name = " + rs.getString("name"));
+			System.out.println("job = " + rs.getString("occupation"));
 		}
+		stat.close();
 		conn.close();
 	}
 
