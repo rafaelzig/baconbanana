@@ -84,6 +84,7 @@ public class SurveyActivity extends Activity {
 		keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
 		setContentView(R.layout.placeholder);
+		
 		getSurvey(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
 		buildListeners();
 		buildLayout();
@@ -234,30 +235,30 @@ public class SurveyActivity extends Activity {
 	 */
 	private void buildDateQuestion()
 	{
-		questions.get = (TextView) findViewById(R.id.tvDate);
-		dpResult = (DatePicker) findViewById(R.id.dpResult);
-		
-		final Calendar c = Calendar.getInstance();
-		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
-		day = c.get(Calendar.DAY_OF_MONTH);
-		
-		// set current date into textview
-		tvDisplayDate.setText(new StringBuilder()
-		// Month is 0 based, just add 1
-		.append(month + 1).append("-").append(day).append("-")
-		.append(year).append(" "));
-		
-		// set current date into datepicker
-		dpResult.init(year, month, day, null);
-		
-		lineView = inf.inflate(R.layout.textbox, questions, false);
-
-		if (currentQuestion.isAnswered())
-			((EditText) lineView).setText(currentQuestion.getAnswer());
-
-		lineView.setOnClickListener(clickListener);
-		questions.addView(lineView);
+//		questions.get = (TextView) findViewById(R.id.tvDate);
+//		dpResult = (DatePicker) findViewById(R.id.dpResult);
+//		
+//		final Calendar c = Calendar.getInstance();
+//		year = c.get(Calendar.YEAR);
+//		month = c.get(Calendar.MONTH);
+//		day = c.get(Calendar.DAY_OF_MONTH);
+//		
+//		// set current date into textview
+//		tvDisplayDate.setText(new StringBuilder()
+//		// Month is 0 based, just add 1
+//		.append(month + 1).append("-").append(day).append("-")
+//		.append(year).append(" "));
+//		
+//		// set current date into datepicker
+//		dpResult.init(year, month, day, null);
+//		
+//		lineView = inf.inflate(R.layout.textbox, questions, false);
+//
+//		if (currentQuestion.isAnswered())
+//			((EditText) lineView).setText(currentQuestion.getAnswer());
+//
+//		lineView.setOnClickListener(clickListener);
+//		questions.addView(lineView);
 	}
 
 	/**

@@ -10,4 +10,8 @@
     <string name="title_activity_radio_btn_question">RadioBtnQuestion</string>
     <string name="title_activity_check_box_question">CheckBoxQuestion</string>
     <string name="title_activity_ratin_question">RatinQuestion</string>
+    <string name="title_activity_new">NewActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_beka_seka">BekaSeka</string>
+
 </resources>
