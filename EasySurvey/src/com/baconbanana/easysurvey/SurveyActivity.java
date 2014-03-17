@@ -107,7 +107,7 @@ public class SurveyActivity extends Activity
 		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
 		placeholder.setOnTouchListener(touchListener);
 		placeholder.setSystemUiVisibility(FULL_SCREEN);
-		
+
 		buildStaticViews();
 		buildQuestionViews();
 	}

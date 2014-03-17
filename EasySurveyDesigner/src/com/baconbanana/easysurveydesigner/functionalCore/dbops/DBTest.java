@@ -20,11 +20,14 @@ public class DBTest
 		stat.executeUpdate("create table people (name, occupation)");
 		stat.close();
 
-		SqlTask tasks[] = { new SqlTask(conn, "Gandhi", "politics"),
-				new SqlTask(conn, "Turing", "computers"),
-				new SqlTask(conn, "Picaso", "artist"),
-				new SqlTask(conn, "shakespeare", "writer"),
-				new SqlTask(conn, "tesla", "inventor"), };
+		Runnable tasks[] = { new SQLInsert(conn, "Gandhi", "politics"),
+				new SQLSelect(conn, "people"),
+				new SQLInsert(conn, "Picaso", "artist"),
+				new SQLSelect(conn, "people"),
+				new SQLInsert(conn, "shakespeare", "writer"),
+				new SQLSelect(conn, "people"),
+				new SQLInsert(conn, "tesla", "inventor"),
+				new SQLSelect(conn, "people"), };
 
 		System.out.println("Sequential DB access:");
 
@@ -40,7 +43,6 @@ public class DBTest
 
 		stat = conn.createStatement();
 		ResultSet rs = stat.executeQuery("SELECT * FROM people");
-		ResultSetMetaData rsmd = rs.getMetaData();
 		while (rs.next())
 		{
 			System.out.println("name = " + rs.getString("name"));
@@ -50,12 +52,12 @@ public class DBTest
 		conn.close();
 	}
 
-	private static class SqlTask implements Runnable
+	private static class SQLInsert implements Runnable
 	{
 		Connection conn;
 		String name, occupation;
 
-		public SqlTask(Connection conn, String name, String occupation)
+		public SQLInsert(Connection conn, String name, String occupation)
 		{
 			this.conn = conn;
 			this.name = name;
@@ -90,8 +92,52 @@ public class DBTest
 			catch (SQLException e)
 			{
 				long duration = System.currentTimeMillis() - startTime;
-				System.out.print("   SQL Insert failed: " + duration);
-				System.out.println(" SQLException: " + e);
+				System.out.print("SQL Insert failed: " + duration);
+				System.out.println("SQLException: " + e);
+			}
+		}
+	}
+
+	private static class SQLSelect implements Runnable
+	{
+		Connection conn;
+		String table;
+		ResultSet rs;
+
+		public SQLSelect(Connection conn, String table)
+		{
+			this.conn = conn;
+			this.table = table;
+		}
+
+		public void run()
+		{
+			PreparedStatement prep = null;
+			long startTime = System.currentTimeMillis();
+
+			try
+			{
+				try
+				{
+					prep = conn.prepareStatement("SELECT * FROM ?");
+
+					prep.setString(1, table);
+					rs = prep.executeQuery();
+
+					long duration = System.currentTimeMillis() - startTime;
+					System.out.println("SQL SELECT completed in :" + duration);
+				}
+				finally
+				{
+					if (prep != null)
+						prep.close();
+				}
+			}
+			catch (SQLException e)
+			{
+				long duration = System.currentTimeMillis() - startTime;
+				System.out.print("SQL SELECT failed: " + duration);
+				System.out.println("SQLException: " + e);
 			}
 		}
 	}
