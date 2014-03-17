@@ -3,10 +3,26 @@ package com.baconbanana.easysurveydesigner.gui;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 
 public class MenuFrame {
 	private JFrame window;
@@ -88,8 +104,21 @@ public class MenuFrame {
 		window.setSize(600, 600);
 		window.setVisible(true);
 	}
-	public static void main(String args[])
+	public static void main(String args[]) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
 	{
+		//-----------------------
+		  byte[] secret = null;
+		 SecretKeySpec secretKey = null;
+		 
+		  try {
+			  secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
+			  secretKey = new SecretKeySpec(secret, "AES");
+			} catch (DecoderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		  //------------------------
 		new MenuFrame();
+	
 	}
 }

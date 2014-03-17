@@ -122,8 +122,9 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
 			return "password="+password;
 		}
 		*/
-		public static void main(String args[])
+		/*public static void main(String args[])
 		{
 			new LoginPage();
 		}
+		*/
 	}
