@@ -114,7 +114,7 @@ public class AddNewTemplate {
 			
 			public void actionPerformed(ActionEvent e) {
 				String sql = "Question where QuestionID=" + Template.getSelectedIndex();
-				DBOperation.deleteRecord(sql);
+				//DBOperation.deleteRecord(sql);
 				
 				myModel2.remove(Template.getSelectedIndex());
 				Template.setModel(myModel2);

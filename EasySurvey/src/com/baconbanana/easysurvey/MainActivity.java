@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.Toast;
@@ -27,6 +26,8 @@ public class MainActivity extends Activity
 	 * Name of the extra data.
 	 */
 	static final String EXTRA_MESSAGE = "com.baconbanana.easysurvey.json";
+	private static final int FULL_SCREEN = 8;
+
 	private Survey survey;
 
 	@Override
@@ -34,9 +35,9 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		findViewById(R.id.mainLayout).setSystemUiVisibility(FULL_SCREEN);
 
 		prepareVideo();
-
 	}
 
 	/**
@@ -76,8 +77,7 @@ public class MainActivity extends Activity
 //
 //			rawData = Operations.parseJSON(jsonString);
 //			survey = new Survey(rawData);
-//			Operations.writeFile(survey.getJSON().toJSONString(),
-//					openFileOutput(Operations.FILENAME, Context.MODE_PRIVATE));
+//			Storage.writeToInternal(this, survey.getJSON().toJSONString());
 //		}
 //		catch (IOException e)
 //		{
@@ -137,13 +137,5 @@ public class MainActivity extends Activity
 		}
 		else
 			Toast.makeText(this, "Survey completed", Toast.LENGTH_LONG).show();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 }

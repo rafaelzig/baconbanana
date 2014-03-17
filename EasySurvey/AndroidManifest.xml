@@ -8,9 +8,9 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<uses-permission android:name="android.permission.INTERNET" /> 
-	  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo_green"
@@ -23,10 +23,6 @@
             android:screenOrientation="landscape" >
         </activity>
         <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.ParseQuestion"
-            android:label="@string/title_activity_question" >
-        </activity>
-        <activity
             android:name="com.baconbanana.easysurvey.MainActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
@@ -36,56 +32,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-          
         </activity>
         <activity
             android:name="com.baconbanana.easysurvey.getSurvey"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
-              
-            </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.DisplayMessageActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.Question"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.TextBoxQuestion"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.RadioBtnQuestion"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.CheckBoxQuestion"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
-        </activity>
-        <activity
-            android:name="com.baconbanana.easysurvey.old.questtemp.RatingQuestion"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape" >
         </activity>
         <activity
             android:name="com.baconbanana.easysurvey.SurveyActivity"
-            android:configChanges="orientation"
-            android:label="@string/app_name"
-            android:screenOrientation="landscape">
+            android:label="@string/app_name" >
         </activity>
     </application>
 
