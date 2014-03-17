@@ -12,12 +12,26 @@ import com.baconbanana.easysurveydesigner.gui.LoginPage;
 
 public class MySQLInstaller {
 	public static void main(String[] args){
-		String workingDir = System.getProperty("user.dir");
-		File scrFolder = new File(workingDir + "\\Database");
+		String osName = System.getProperty("os.name");
+		System.out.println(osName);
+		String workingDir = "";
+		File scrFolder = null;
+		if(osName.contains("Mac")){
+			workingDir = System.getProperty("user.dir");
+			scrFolder = new File(workingDir + "/DatabaseMac");
+		}else if(osName.contains("Windows")){
+			workingDir = System.getProperty("user.dir");
+			scrFolder = new File(workingDir + "/Database");
+		}
 		//check that system is 64bit or not
 		File destFolder = null;
 		//get location of my documents
-		String docLoc = System.getenv("USERPROFILE") + "\\My Documents";
+		String docLoc = "";
+		if(osName.contains("Mac")){
+			docLoc = System.getenv("HOME") + "/Documents";
+		}else if(osName.contains("Windows")){
+			docLoc = System.getenv("USERPROFILE") + "/My Documents";
+		}
 		try{
 			destFolder = new File(docLoc);
 		}catch(Exception e){
@@ -25,7 +39,7 @@ public class MySQLInstaller {
 		}
 		MySQLInstaller sqlLite = new MySQLInstaller();
 		sqlLite.copyFolder(scrFolder, destFolder);
-		sqlLite.installSQLLite(docLoc);
+		//sqlLite.installSQLLite(docLoc);
 	}
 	
 	public void copyFolder(File scr, File dest){
@@ -74,7 +88,7 @@ public class MySQLInstaller {
 		//Get the command propt
 		Runtime rt = Runtime.getRuntime();
 		Process p = null;
-		String comand = loc + "\\SQLite\\sqlite3";
+		String comand = loc + "/SQLite/sqlite3";
 		//Can also create database by apending it to the end of staement.
 		try{
 			System.out.println(comand);

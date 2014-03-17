@@ -1,7 +1,7 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
 public class DBCreator {
-	public static void checkAndCreate(){
+	public static void checkAndCreateTables(){
 		String sql = "";
 		if(!DBOperation.exists("Survey")){
 			sql = "Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +
@@ -43,8 +43,8 @@ public class DBCreator {
 		if(!DBOperation.exists("Survey_Template")){
 			sql = "Survey_Template (Survey VARCHAR NOT NULL," +
 					"Template INT NOT NULL," +
-					"PRIMARY KEY(Survey,Template)," +
-					"FOREIGN KEY(Survey) REFERENCES Survey(Survey))" +
+					"PRIMARY KEY(Survey, Template)," +
+					"FOREIGN KEY(Survey) REFERENCES Survey(Survey)," +
 					"FOREIGN KEY(Template) REFERENCES Template(Template))";
 			DBOperation.createTable(sql);
 		}
@@ -111,4 +111,8 @@ public class DBCreator {
 		}
 		
 	}
+	
+	public void checkAndCreateTypes(){
+		
+	}	
 }

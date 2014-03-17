@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,15 +19,13 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -38,6 +37,7 @@ import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
@@ -49,23 +49,29 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  * @author Rafael da Silva Costa & Team
  * 
  */
-public class SurveyActivity extends Activity {
-	private int size, cursor;
+public class SurveyActivity extends Activity
+{
+	private static final int FULL_SCREEN = 8;
+	private static final String SURVEY_KEY = "survey";
+	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
+	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
+	private static final String CURSOR_KEY = "cursor";
+
+	private final Calendar calendar = Calendar.getInstance();
+	private int cursor = 0, subsequentCursor = -1;
+	private boolean isSubsequent = false;
+
 	private Survey survey;
 	private Question currentQuestion;
 	private List<Question> questionList;
-	private List<String> choiceList;
 	private LinearLayout placeholder, questions;
 	private OnTouchListener touchListener;
-	private OnClickListener clickListener;
 	private OnKeyListener keyListener;
 	private TextView txtContent, txtHelpMessage, txtPage;
+	private InputMethodManager keyboard;
+	private LayoutInflater inf;
 	private ProgressBar pgrBar;
 	private View lineView;
-	private LayoutInflater inf;
-	private InputMethodManager keyboard;
-	private int subsequentCursor;
-	private boolean isSubsequent;
 
 	final SurveyActivity contex = this;
 	int[] listOfSockets;
@@ -77,67 +83,126 @@ public class SurveyActivity extends Activity {
 	Socket skt = null;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.placeholder);
 
 		inf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		setContentView(R.layout.placeholder);
-		
-		getSurvey(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
 		buildListeners();
-		buildLayout();
+
+		// If this is the first time loading the activity
+		if (savedInstanceState == null)
+		{
+			prepareSurvey(getIntent()
+					.getStringExtra(MainActivity.EXTRA_MESSAGE));
+			questionList = survey.getQuestionList();
+			currentQuestion = questionList.get(cursor);
+		}
+		else
+			restoreInstanceState(savedInstanceState);
+
+		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
+		placeholder.setOnTouchListener(touchListener);
+		placeholder.setSystemUiVisibility(FULL_SCREEN);
+		
+		buildStaticViews();
+		buildQuestionViews();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putInt(CURSOR_KEY, cursor);
+		savedInstanceState.putInt(SUBSEQUENT_CURSOR_KEY, subsequentCursor);
+		savedInstanceState.putBoolean(IS_SUBSEQUENT_KEY, isSubsequent);
+		savedInstanceState.putString(SURVEY_KEY, survey.getJSON()
+				.toJSONString());
+	}
+
+	/**
+	 * Restores the instance state from the specified Bundle object.
+	 * 
+	 * @param savedInstanceState
+	 *            Bundle object containing the information to be restored.
+	 */
+	private void restoreInstanceState(Bundle savedInstanceState)
+	{
+		cursor = savedInstanceState.getInt(CURSOR_KEY, cursor);
+		subsequentCursor = savedInstanceState.getInt(SUBSEQUENT_CURSOR_KEY,
+				subsequentCursor);
+		isSubsequent = savedInstanceState.getBoolean(IS_SUBSEQUENT_KEY,
+				isSubsequent);
+		prepareSurvey(savedInstanceState.getString(SURVEY_KEY, getIntent()
+				.getStringExtra(MainActivity.EXTRA_MESSAGE)));
+
+		if (isSubsequent)
+		{
+			questionList = ((ContingencyQuestion) survey.getQuestionList().get(
+					cursor)).getSubsequentList();
+			currentQuestion = questionList.get(subsequentCursor);
+		}
+		else
+		{
+			questionList = survey.getQuestionList();
+			currentQuestion = questionList.get(cursor);
+		}
 	}
 
 	/**
 	 * Reads Survey object from the specified json string, saving its contents
-	 * to the survey object.
+	 * to the survey object and initialising other fields which necessary
+	 * information.
 	 */
-
-	private void getSurvey(String jsonString) {
-		try {
+	private void prepareSurvey(String jsonString)
+	{
+		try
+		{
 			survey = new Survey(Operations.parseJSON(jsonString));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (org.json.simple.parser.ParseException e) {
+		}
+		catch (ParseException e)
+		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		size = survey.size();
-		cursor = 0;
-		subsequentCursor = -1;
-		questionList = survey.getQuestionList();
-		currentQuestion = questionList.get(cursor);
-	}
-
-	public void setCurrentDateOnView()
-	{
+		catch (org.json.simple.parser.ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Builds the listener objects used in this activity.
 	 */
-	private void buildListeners() {
-		touchListener = new TouchListener(this, new GestureListener() {
+	private void buildListeners()
+	{
+		touchListener = new TouchListener(this, new GestureListener()
+		{
 			@Override
-			public boolean onRightToLeftSwipe() {
+			public boolean onRightToLeftSwipe()
+			{
 				skipQuestion(true);
 				return true;
 			}
 
 			@Override
-			public boolean onLeftToRightSwipe() {
+			public boolean onLeftToRightSwipe()
+			{
 				skipQuestion(false);
 				return true;
 			}
 
 			@Override
-			public boolean onBottomToTopSwipe() {
+			public boolean onBottomToTopSwipe()
+			{
 				if (currentQuestion.getType() == QuestionType.TEXTUAL
-						|| currentQuestion.getType() == QuestionType.NUMERIC) {
+						|| currentQuestion.getType() == QuestionType.NUMERIC)
+				{
 					keyboard.showSoftInput(lineView, 0);
 					return true;
 				}
@@ -146,18 +211,22 @@ public class SurveyActivity extends Activity {
 			}
 
 			@Override
-			public boolean onTopToBottomSwipe() {
+			public boolean onTopToBottomSwipe()
+			{
 				keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(),
 						0);
 				return true;
 			}
 		});
 
-		keyListener = new OnKeyListener() {
+		keyListener = new OnKeyListener()
+		{
 			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
+			public boolean onKey(View v, int keyCode, KeyEvent event)
+			{
 				if ((event.getAction() == KeyEvent.ACTION_DOWN)
-						&& (keyCode == KeyEvent.KEYCODE_ENTER)) {
+						&& (keyCode == KeyEvent.KEYCODE_ENTER))
+				{
 					skipQuestion(true);
 					return true;
 				}
@@ -167,20 +236,10 @@ public class SurveyActivity extends Activity {
 	}
 
 	/**
-	 * Constructs the layout of the activity.
-	 */
-	private void buildLayout() {
-		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
-		placeholder.setOnTouchListener(touchListener);
-
-		buildStaticViews();
-		buildQuestionViews();
-	}
-
-	/**
 	 * Builds the header views and places them on the placeholder layout.
 	 */
-	private void buildStaticViews() {
+	private void buildStaticViews()
+	{
 		lineView = inf.inflate(R.layout.header, placeholder, false);
 		placeholder.addView(lineView);
 
@@ -195,7 +254,7 @@ public class SurveyActivity extends Activity {
 		txtHelpMessage = (TextView) findViewById(R.id.txtHelpMessage);
 
 		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
-		pgrBar.setMax(size);
+		pgrBar.setMax(survey.size());
 
 		txtPage = (TextView) findViewById(R.id.txtPage);
 	}
@@ -203,13 +262,15 @@ public class SurveyActivity extends Activity {
 	/**
 	 * Builds the question views and places them on the placeholder layout.
 	 */
-	private void buildQuestionViews() {
+	private void buildQuestionViews()
+	{
 		pgrBar.setProgress(survey.getAnswerCount());
 		txtContent.setText(currentQuestion.getContent());
 		txtHelpMessage.setText(currentQuestion.getHelpMessage());
 		txtPage.setText(getPageNumber());
 
-		switch (currentQuestion.getType()) {
+		switch (currentQuestion.getType())
+		{
 			case TEXTUAL:
 				buildOpenEndedQuestion(InputType.TYPE_CLASS_TEXT);
 				break;
@@ -231,91 +292,12 @@ public class SurveyActivity extends Activity {
 	}
 
 	/**
-	 * Builds the necessary views to display the date question.
-	 */
-	private void buildDateQuestion()
-	{
-//		questions.get = (TextView) findViewById(R.id.tvDate);
-//		dpResult = (DatePicker) findViewById(R.id.dpResult);
-//		
-//		final Calendar c = Calendar.getInstance();
-//		year = c.get(Calendar.YEAR);
-//		month = c.get(Calendar.MONTH);
-//		day = c.get(Calendar.DAY_OF_MONTH);
-//		
-//		// set current date into textview
-//		tvDisplayDate.setText(new StringBuilder()
-//		// Month is 0 based, just add 1
-//		.append(month + 1).append("-").append(day).append("-")
-//		.append(year).append(" "));
-//		
-//		// set current date into datepicker
-//		dpResult.init(year, month, day, null);
-//		
-//		lineView = inf.inflate(R.layout.textbox, questions, false);
-//
-//		if (currentQuestion.isAnswered())
-//			((EditText) lineView).setText(currentQuestion.getAnswer());
-//
-//		lineView.setOnClickListener(clickListener);
-//		questions.addView(lineView);
-	}
-
-	/**
-	 * Builds the necessary views to display the open ended question.
-	 * 
-	 * @param inputType
-	 *            Integer representing the inputType of the view to be set.
-	 */
-	private void buildOpenEndedQuestion(int inputType) {
-		lineView = inf.inflate(R.layout.textbox, questions, false);
-		((TextView) lineView).setInputType(inputType);
-
-		if (currentQuestion.isAnswered())
-			((EditText) lineView).setText(currentQuestion.getAnswer());
-
-		lineView.setOnKeyListener(keyListener);
-		questions.addView(lineView);
-		lineView.requestFocus();
-		keyboard.showSoftInput(lineView, 0);
-	}
-
-	/**
-	 * Builds the necessary views to display the close ended question.
-	 * 
-	 * @param viewType
-	 *            Integer representing the type of the view to be constructed.
-	 */
-	private void buildCloseEndedQuestion(int viewType) {
-		String[] sortedAnswers;
-		String[] unsortedAnswers;
-
-		choiceList = ((CloseEndedQuestion) currentQuestion).getChoiceList();
-
-		unsortedAnswers = Operations.parseAnswers(currentQuestion.getAnswer());
-		sortedAnswers = new String[choiceList.size()];
-
-		for (String answer : unsortedAnswers)
-			sortedAnswers[choiceList.indexOf(answer)] = answer;
-
-		for (int i = 0; i < choiceList.size(); i++) {
-			lineView = inf.inflate(viewType, questions, false);
-
-			((TextView) lineView).setText(choiceList.get(i));
-
-			if (sortedAnswers != null && sortedAnswers[i] != null)
-				((CompoundButton) lineView).setChecked(true);
-
-			questions.addView(lineView);
-		}
-	}
-
-	/**
 	 * Gets the current page number.
 	 * 
 	 * @return String object representing the text to be displayed.
 	 */
-	private CharSequence getPageNumber() {
+	private CharSequence getPageNumber()
+	{
 		String pageNumber = String.valueOf(cursor + 1);
 
 		if (isSubsequent)
@@ -327,41 +309,110 @@ public class SurveyActivity extends Activity {
 	}
 
 	/**
-	 * Saves the answer of the current question.
+	 * Builds the necessary views to display the open ended question.
+	 * 
+	 * @param inputType
+	 *            Integer representing the inputType of the view to be set.
 	 */
-	private void saveAnswer() {
-		String answer = new String();
+	private void buildOpenEndedQuestion(int inputType)
+	{
+		lineView = inf.inflate(R.layout.textbox, questions, false);
+		((TextView) lineView).setInputType(inputType);
 
-		try {
-			if (currentQuestion.getType() == QuestionType.TEXTUAL
-					|| currentQuestion.getType() == QuestionType.NUMERIC
-					|| currentQuestion.getType() == QuestionType.DATE) {
-				answer = ((TextView) questions.getChildAt(0)).getText()
-						.toString();
-				if (!answer.isEmpty())
-					currentQuestion.setAnswer(answer);
-			} else {
-				boolean flag = (currentQuestion.getType() == QuestionType.MULTIPLE_ANSWER);
+		if (currentQuestion.isAnswered())
+			((TextView) lineView).setText(currentQuestion.getAnswer());
 
-				for (int i = 0; i < questions.getChildCount(); i++) {
-					if (((CompoundButton) questions.getChildAt(i)).isChecked()) {
-						answer += ((TextView) questions.getChildAt(i))
-								.getText().toString();
-						if (flag)
-							answer += Operations.SEPARATOR;
-						else
-							break;
-					}
-				}
-				if (!answer.isEmpty())
-					currentQuestion.setAnswer(answer);
-			}
-		} catch (InvalidAnswerException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		lineView.setOnKeyListener(keyListener);
+		lineView.setId(0);
+		questions.addView(lineView);
+
+		keyboard.showSoftInput(lineView, 0);
+	}
+
+	/**
+	 * Builds the necessary views to display the date question.
+	 */
+	private void buildDateQuestion()
+	{
+		int year, month, day;
+
+		lineView = inf.inflate(R.layout.datepicker, questions, false);
+
+		if (currentQuestion.isAnswered())
+		{
+			year = ((DateQuestion) currentQuestion).getYear();
+			month = ((DateQuestion) currentQuestion).getMonth() - 1;
+			day = ((DateQuestion) currentQuestion).getDay();
+		}
+		else
+		{
+			year = calendar.get(Calendar.YEAR);
+			month = calendar.get(Calendar.MONTH);
+			day = calendar.get(Calendar.DAY_OF_MONTH);
+		}
+
+		((DatePicker) lineView).init(year, month, day, null);
+		lineView.setId(0);
+		questions.addView(lineView);
+
+		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
+	}
+
+	/**
+	 * Builds the necessary views to display the close ended question.
+	 * 
+	 * @param viewType
+	 *            Integer representing the type of the view to be constructed.
+	 */
+	private void buildCloseEndedQuestion(int viewType)
+	{
+		String[] sortedAnswers;
+		String[] unsortedAnswers;
+
+		List<String> choiceList = ((CloseEndedQuestion) currentQuestion)
+				.getChoiceList();
+
+		unsortedAnswers = Operations.parseAnswers(currentQuestion.getAnswer());
+		sortedAnswers = new String[choiceList.size()];
+
+		for (String answer : unsortedAnswers)
+			sortedAnswers[choiceList.indexOf(answer)] = answer;
+
+		for (int i = 0; i < choiceList.size(); i++)
+		{
+			lineView = inf.inflate(viewType, questions, false);
+
+			((CompoundButton) lineView).setText(choiceList.get(i));
+
+			if (sortedAnswers != null && sortedAnswers[i] != null)
+				((CompoundButton) lineView).setChecked(true);
+
+			lineView.setId(i);
+			questions.addView(lineView);
+		}
+
+		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
+	}
+
+	/**
+	 * Method fired when the user presses buttons in the application.
+	 * 
+	 * @param v
+	 *            View object which the event originates.
+	 */
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.btnFinish:
+				finishSurvey();
+				break;
+			case R.id.btnPrevious:
+				skipQuestion(false);
+				break;
+			case R.id.btnNext:
+				skipQuestion(true);
+				break;
 		}
 	}
 
@@ -373,23 +424,100 @@ public class SurveyActivity extends Activity {
 	 *            Represents the action of the method, true if next question,
 	 *            false if previous question.
 	 */
-	private void skipQuestion(boolean next) {
+	private void skipQuestion(boolean next)
+	{
 		saveAnswer();
 		questions.removeAllViews();
 
 		checkAnswer(next);
 		loadNextQuestion(next);
-
 		buildQuestionViews();
 
-		if (currentQuestion.getType() != QuestionType.TEXTUAL
-				|| currentQuestion.getType() != QuestionType.NUMERIC)
-			keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
+		if (pgrBar.getProgress() == pgrBar.getMax())
+			findViewById(R.id.btnFinish).setVisibility(Button.VISIBLE);
+	}
 
-		if (pgrBar.getProgress() == pgrBar.getMax()) {
-			lineView = findViewById(R.id.btnFinish);
-			lineView.setVisibility(Button.VISIBLE);
+	/**
+	 * Saves the answer of the current question.
+	 */
+	private void saveAnswer()
+	{
+		String answer = new String();
+
+		switch (currentQuestion.getType())
+		{
+			case TEXTUAL:
+			case NUMERIC:
+				answer = ((TextView) lineView).getText().toString();
+				break;
+			case DATE:
+				answer = getDateQuestionAnswer();
+				break;
+			case MULTIPLE_CHOICE:
+			case CONTINGENCY:
+			case SCALAR:
+				answer = getCloseEndedQuestionAnswer(false);
+				break;
+			case MULTIPLE_ANSWER:
+				answer = getCloseEndedQuestionAnswer(true);
+				break;
 		}
+
+		try
+		{
+			if (!answer.isEmpty())
+				currentQuestion.setAnswer(answer);
+		}
+		catch (InvalidAnswerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Gets the answer of the Date Question.
+	 * 
+	 * @return String object representing the answer to this question.
+	 */
+	private String getDateQuestionAnswer()
+	{
+		DatePicker dp = (DatePicker) lineView;
+		return dp.getYear() + "-" + (dp.getMonth() + 1) + "-"
+				+ dp.getDayOfMonth();
+	}
+
+	/**
+	 * Gets the answer of the Close Ended Question.
+	 * 
+	 * @param isMultipleAnswer
+	 *            True if the current question has multiple answers, false
+	 *            otherwise.
+	 * @return String object representing the answer to this question.
+	 */
+	private String getCloseEndedQuestionAnswer(boolean isMultipleAnswer)
+	{
+		String answer = new String();
+
+		for (int i = 0; i < questions.getChildCount(); i++)
+		{
+			if (((CompoundButton) questions.getChildAt(i)).isChecked())
+			{
+				answer += ((CompoundButton) questions.getChildAt(i)).getText()
+						.toString();
+				if (isMultipleAnswer)
+					answer += Operations.SEPARATOR;
+				else
+					return answer;
+			}
+		}
+
+		return answer;
 	}
 
 	/**
@@ -400,19 +528,24 @@ public class SurveyActivity extends Activity {
 	 *            True if the cursor should be incremented, false if it should
 	 *            be decremented.
 	 */
-	private void checkAnswer(boolean next) {
+	private void checkAnswer(boolean next)
+	{
 		if (!isSubsequent
-				&& currentQuestion.getType() == QuestionType.CONTINGENCY) {
+				&& currentQuestion.getType() == QuestionType.CONTINGENCY)
+		{
 			if (currentQuestion.getAnswer().equals(
 					((ContingencyQuestion) currentQuestion)
-							.getContingencyAnswer())) {
-				if (next) {
-					List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
+							.getContingencyAnswer()))
+			{
+				if (next)
+				{
+					questionList = ((ContingencyQuestion) currentQuestion)
 							.getSubsequentList();
-					questionList = subsequent;
 					isSubsequent = true;
 				}
-			} else {
+			}
+			else
+			{
 				((ContingencyQuestion) currentQuestion)
 						.clearSubsequentAnswers();
 			}
@@ -426,8 +559,10 @@ public class SurveyActivity extends Activity {
 	 *            True if the cursor should be incremented, false if it should
 	 *            be decremented.
 	 */
-	public void loadNextQuestion(boolean next) {
-		if (!isSubsequent) {
+	public void loadNextQuestion(boolean next)
+	{
+		if (!isSubsequent)
+		{
 			cursor = (next) ? cursor + 1 : cursor - 1;
 
 			if (cursor >= questionList.size())
@@ -436,38 +571,22 @@ public class SurveyActivity extends Activity {
 				cursor = questionList.size() - 1;
 
 			currentQuestion = questionList.get(cursor);
-		} else {
+		}
+		else
+		{
 			subsequentCursor = (next) ? subsequentCursor + 1
 					: subsequentCursor - 1;
 
 			if (subsequentCursor >= 0 && subsequentCursor < questionList.size())
 				currentQuestion = questionList.get(subsequentCursor);
-			else {
+			else
+			{
 				isSubsequent = false;
 				questionList = survey.getQuestionList();
 				cursor = (subsequentCursor < 0) ? cursor : cursor + 1;
 				subsequentCursor = -1;
 				currentQuestion = questionList.get(cursor);
 			}
-		}
-	}
-
-	/**
-	 * Method fired when the user presses buttons in the application.
-	 * 
-	 * @param v
-	 *            View object which the event originates.
-	 */
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btnFinish:
-			finishSurvey();
-			break;
-
-		case R.id.btnPrevious:
-		case R.id.btnNext:
-			skipQuestion((v.getId() == R.id.btnNext));
-			break;
 		}
 	}
 
@@ -503,7 +622,8 @@ public class SurveyActivity extends Activity {
 	 * @param v
 	 *            The Radio Button object which receives the event.
 	 */
-	public void checkRadioButtons(View v) {
+	public void checkRadioButtons(View v)
+	{
 		for (int i = 0; i < questions.getChildCount(); i++)
 			if (questions.getChildAt(i) != v)
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
@@ -523,20 +643,24 @@ public class SurveyActivity extends Activity {
 	 * @param b
 	 *            Boolean TODO
 	 */
-	private void submit(boolean b) {
+	private void submit(boolean b)
+	{
 		// move to entirely new activity and do the shit
-		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener() {
+		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
+		{
 			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					// Yes button clicked
-					(new ConnectToServer()).execute();
-					break;
+			public void onClick(DialogInterface dialog, int which)
+			{
+				switch (which)
+				{
+					case DialogInterface.BUTTON_POSITIVE:
+						// Yes button clicked
+						(new ConnectToServer()).execute();
+						break;
 
-				case DialogInterface.BUTTON_NEGATIVE:
-					// No button clicked
-					break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						// No button clicked
+						break;
 				}
 			}
 		};
@@ -559,19 +683,25 @@ public class SurveyActivity extends Activity {
 	 * 
 	 *            TODO
 	 */
-	public class ConnectToServer extends AsyncTask<String, Void, String> {
+	public class ConnectToServer extends AsyncTask<String, Void, String>
+	{
 
 		@Override
-		protected String doInBackground(String... arg0) {
+		protected String doInBackground(String... arg0)
+		{
 
 			listOfSockets = new int[2000];
-			for (int x = 0; x < 2000; x++) {
+			for (int x = 0; x < 2000; x++)
+			{
 				listOfSockets[x] = 2000 + x;
 			}
 
-			try {
+			try
+			{
 				skt = createSocket(listOfSockets, IP);
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				System.out.println(e);
 			}
 
@@ -579,33 +709,40 @@ public class SurveyActivity extends Activity {
 
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 
-			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener() {
+			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener()
+			{
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
+				public void onClick(DialogInterface dialog, int which)
+				{
+					switch (which)
+					{
+						case DialogInterface.BUTTON_POSITIVE:
 
-						(new SendToServer()).execute();// <---
+							(new SendToServer()).execute();// <---
 
-						break;
+							break;
 
-					case DialogInterface.BUTTON_NEGATIVE:
-						// No button clicked
-						break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							// No button clicked
+							break;
 					}
 				}
 			};
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(contex);
 			String message = "";
-			if (skt == null) {
+			if (skt == null)
+			{
 				message = "Could not connect to Server";
 				builder.setMessage(message)
 						.setNegativeButton("close", dialogClickListenerSend)
 						.show();
-			} else {
+			}
+			else
+			{
 				message = "Successfully Connected to Server";
 				builder.setMessage(message)
 						.setPositiveButton("Send My Answers",
@@ -623,26 +760,32 @@ public class SurveyActivity extends Activity {
 	 * tries to get output stream and write lines to the server then on post
 	 * execute dialog box pops up with the result of attempt
 	 */
-	public class SendToServer extends AsyncTask<String, Void, String> {
+	public class SendToServer extends AsyncTask<String, Void, String>
+	{
 		String message = "";
 
 		@Override
-		protected String doInBackground(String... arg0) {
+		protected String doInBackground(String... arg0)
+		{
 
-			try {
+			try
+			{
 				PrintStream output = null;
 				output = new PrintStream(skt.getOutputStream());
 				output.print("try");
 				message = "successfully sent";
 				// TODO
-			} catch (IOException e) {
+			}
+			catch (IOException e)
+			{
 				System.out.println(e);
 				message = "could not send it";
 			}
 			return null;
 		}
 
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String result)
+		{
 
 			AlertDialog.Builder dlgAlert = new AlertDialog.Builder(contex);
 
@@ -665,15 +808,20 @@ public class SurveyActivity extends Activity {
 	 *            string
 	 */
 	public static Socket createSocket(int[] ports, String IP)
-			throws IOException {
+			throws IOException
+	{
 
-		for (int port : ports) {
-			try {
+		for (int port : ports)
+		{
+			try
+			{
 				Socket s = new Socket(IP, port);
 				String st = "" + s.getPort();
 				Log.d("port", st);
 				return s;
-			} catch (IOException ex) {
+			}
+			catch (IOException ex)
+			{
 				Log.d("noport", "" + port);
 				continue; // try next port
 			}
@@ -681,13 +829,6 @@ public class SurveyActivity extends Activity {
 
 		// no portfound
 		throw new IOException("no free port found");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 }

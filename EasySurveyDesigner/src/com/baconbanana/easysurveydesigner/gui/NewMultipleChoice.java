@@ -106,7 +106,7 @@ public class NewMultipleChoice {
 		window.setLocationRelativeTo(null);
 	}
 	//TODO edit this class eventally get to this bit
-	private void saveQuestion(){
+	/*private void saveQuestion(){
 		//Add question to question table
 		String sql = "INSERT INTO Question (Content, Type) VALUES ('" + question.getText() + "', " + questionType + "')";
 		System.out.println(sql);
@@ -120,7 +120,7 @@ public class NewMultipleChoice {
 			System.out.println(lastId);
 		}
 		
-	}
+	}*/
 
 	public void setListeners() {
 		add.addActionListener(new ActionListener() {

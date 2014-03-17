@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class AddNewTemplate {
@@ -105,6 +106,18 @@ public class AddNewTemplate {
 				}
 				
 				window.dispose();
+			}
+		});
+		
+		save.addActionListener(new ActionListener() {
+			
+			
+			public void actionPerformed(ActionEvent e) {
+				String sql = "Question where QuestionID=" + Template.getSelectedIndex();
+				//DBOperation.deleteRecord(sql);
+				
+				myModel2.remove(Template.getSelectedIndex());
+				Template.setModel(myModel2);
 			}
 		});
 
