@@ -753,8 +753,7 @@ public class SurveyActivity extends Activity
 
 		}
 
-	}
-
+	}//test
 	// ---------------------------------------------------------------------------------
 	/**
 	 * tries to get output stream and write lines to the server then on post

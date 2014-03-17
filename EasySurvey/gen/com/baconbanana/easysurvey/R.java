@@ -97,6 +97,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int display_message=0x7f080000;
+        public static final int maenu_new=0x7f080001;
     }
     public static final class raw {
         public static final int intro=0x7f040000;

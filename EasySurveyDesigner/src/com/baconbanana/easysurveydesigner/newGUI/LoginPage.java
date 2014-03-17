@@ -10,15 +10,15 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBCreator;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
 import com.baconbanana.easysurveydesigner.gui.MenuFrame;
 
 public class LoginPage extends Window{
 	
 	private JPanel panel;
-	private JTextField userNameField;
-	private JTextField passwordField;
-	private JButton loginButton;
+	private JTextField userNameTxf;
+	private JTextField passwordTxf;
+	private JButton loginBtn;
 
 	public LoginPage(String tit) {
 		super(tit, 200, 200);
@@ -31,27 +31,27 @@ public class LoginPage extends Window{
 		//create panel for widgets and layout
 		panel = new JPanel(new GridLayout(5,1));
 		getWindow().add(panel);
-		//Creates lable and textfeild to panel
+		//Creates label and text field to panel
 		//TODO remove barry and xxx
 		panel.add(new JLabel("User name"));
-		userNameField = new JTextField("Barry");
-		panel.add(userNameField);
+		userNameTxf = new JTextField("Barry");
+		panel.add(userNameTxf);
 		
 		panel.add(new JLabel("Password"));
-		passwordField = new JPasswordField("xxx");
-		panel.add(passwordField);
-		//Createas and add login button
-		loginButton = new JButton("Log in");
-		loginButton.addActionListener(this);
-		panel.add(loginButton);
+		passwordTxf = new JPasswordField("xxx");
+		panel.add(passwordTxf);
+		//Creates and add login button
+		loginBtn = new JButton("Log in");
+		loginBtn.addActionListener(this);
+		panel.add(loginBtn);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getSource().equals(loginButton)){
+		if(e.getSource().equals(loginBtn)){
 			//TODO change to getpassword
-			checkPassword(userNameField.getText(), passwordField.getText());
+			checkPassword(userNameTxf.getText(), passwordTxf.getText());
 		}
 		
 		
