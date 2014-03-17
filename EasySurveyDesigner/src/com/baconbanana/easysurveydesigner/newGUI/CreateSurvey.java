@@ -54,14 +54,13 @@ public class CreateSurvey extends SQLWindow{
 		surveyPrevList = new JList<String>();
 		
 		getWindow().setLayout(new BorderLayout());
-		Border border = getBorder();
 		
 		JPanel jpTemplates = new JPanel(new BorderLayout());
 		getWindow().add(jpTemplates, BorderLayout.WEST);
 
 		jpTemplates.add(templatesLbl, BorderLayout.NORTH);
 		jpTemplates.add(templateList, BorderLayout.CENTER);
-		templateList.setBorder(border);
+		templateList.setBorder(getBorder());
 			
 		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
 		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
@@ -79,14 +78,14 @@ public class CreateSurvey extends SQLWindow{
 
 		jpTemplatesPreview.add(templatePrevLbl, BorderLayout.NORTH);
 		jpTemplatesPreview.add(templatePrevList, BorderLayout.CENTER);
-		templatePrevList.setBorder(border);
+		templatePrevList.setBorder(getBorder());
 		
 		JPanel jpQuestionsPreview = new JPanel(new BorderLayout());
 		getWindow().add(jpQuestionsPreview, BorderLayout.SOUTH);
 
 		jpQuestionsPreview.add(surveyPrevLbl, BorderLayout.NORTH);
 		jpQuestionsPreview.add(surveyPrevList, BorderLayout.CENTER);
-		surveyPrevList.setBorder(border);
+		surveyPrevList.setBorder(getBorder());
 		
 		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
 		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);

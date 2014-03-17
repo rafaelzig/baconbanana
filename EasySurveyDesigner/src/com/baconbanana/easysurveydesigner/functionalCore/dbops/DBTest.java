@@ -50,7 +50,7 @@ public class DBTest
 			threads[i].join();
 	}
 
-	private static class SqlTask implements Runnable
+	public static class SqlTask implements Runnable
 	{
 		private Connection conn;
 		private String statement;

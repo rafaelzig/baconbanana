@@ -18,7 +18,6 @@ public class DBOperation {
 	private static Connection con;
 
 	public static Connection getConnect(){
-		if (con == null){
 			String osName = System.getProperty("os.name");
 			String systemDir = "";
 			if(osName.contains("Windows")){
@@ -42,7 +41,6 @@ public class DBOperation {
 				System.err.println(e.getClass().getName() + " : " + e.getMessage());
 				System.exit(0);
 			}
-		}
 		return con;
 	}
 	private static void executeStatement(String stmt)throws SQLException{
@@ -206,6 +204,95 @@ public class DBOperation {
 		else{
 			return false;
 			}
+	}
+	//----------------------------------------------------------------------------------------
+	public static void raf() throws SQLException{
+		Connection c = getConnect();
+
+		Statement stat = c.createStatement();
+		stat.executeUpdate("drop table if exists people");
+		stat.executeUpdate("create table people (name, occupation)");
+
+		SqlTask tasks[] = { new SqlTask(c, "SELECT * FROM MYTABLE"),
+				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"),
+				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"),
+				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"), };
+
+		System.out.println("Sequential DB access:");
+
+		Thread threads[] = new Thread[tasks.length];
+		for (int i = 0; i < tasks.length; i++)
+			threads[i] = new Thread(tasks[i]);
+
+		for (int i = 0; i < tasks.length; i++)
+		{
+			threads[i].start();
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		System.out.println("Concurrent DB access:");
+
+		for (int i = 0; i < tasks.length; i++)
+			threads[i] = new Thread(tasks[i]);
+
+		for (int i = 0; i < tasks.length; i++)
+			threads[i].start();
+
+		for (int i = 0; i < tasks.length; i++)
+			try {
+				threads[i].join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+
+	public static class SqlTask implements Runnable
+	{
+		private Connection conn;
+		private String statement;
+
+		public SqlTask(Connection connection, String statement)
+		{
+			this.conn = connection;
+			this.statement = statement;
+		}
+
+		public void run()
+		{
+			PreparedStatement ps = null;
+			long startTime = System.currentTimeMillis();
+
+			try
+			{
+				try
+				{
+					ps = conn.prepareStatement(statement);
+
+					ps.setString(1, statement);
+					ps.executeUpdate();
+
+					long duration = System.currentTimeMillis() - startTime;
+					System.out.println("SQL Insert completed: " + duration);
+				}
+				finally
+				{
+					if (ps != null)
+						ps.close();
+				}
+			}
+			catch (SQLException e)
+			{
+				long duration = System.currentTimeMillis() - startTime;
+				System.out.print("   SQL Insert failed: " + duration);
+				System.out.println(" SQLException: " + e);
+			}
+		}
 	}
 
 }
