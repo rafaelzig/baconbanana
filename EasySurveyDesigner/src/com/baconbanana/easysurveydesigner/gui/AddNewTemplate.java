@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class AddNewTemplate {

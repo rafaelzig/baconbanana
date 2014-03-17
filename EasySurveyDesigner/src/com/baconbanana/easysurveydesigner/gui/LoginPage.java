@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBCreator;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
 //Note for future pondering, SQLite does not have usernames or passwords so we will have to implement new security (encrypt files pos)
 	public class LoginPage {
 		public static JFrame loginPageFrame;
@@ -90,14 +90,14 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
 		//method below adds user. It will have to be moved to different class in future but I wanted to hardcode user just to test it.
 		public void insertUser(){
 			String sql = "login VALUES ('Barry', 'xxx')";
-			DBOperation.insertRecord(sql);
+			DBOperationOld.insertRecord(sql);
 		}
 		public void checkPassword(){                    
 			String sql = "SELECT * FROM Login WHERE Username = '" + username + "' AND Password = '" + password + "'";
 			
 			
 			
-			if (DBOperation.existsRecord(sql)) {
+			if (DBOperationOld.existsRecord(sql)) {
 					new MenuFrame();
 					loginPageFrame.dispose();
 					System.out.println("Good job");

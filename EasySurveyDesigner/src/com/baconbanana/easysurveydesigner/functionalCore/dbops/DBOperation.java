@@ -8,16 +8,22 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import com.baconbanana.easysurveydesigner.gui.LoginPage;
-import com.baconbanana.easysurveydesigner.gui.MenuFrame;
-
+import java.util.LinkedList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+/*
+ * This class is not for use it is an exsample of concurancy, it is shit
+ */
 
 public class DBOperation {
-
+	
 	private static Connection con;
-
+	private static LinkedList<Thread> cmdLine = new LinkedList<Thread>();
+	
 	public static Connection getConnect(){
+		if (con == null){
 			String osName = System.getProperty("os.name");
 			String systemDir = "";
 			if(osName.contains("Windows")){
@@ -27,12 +33,13 @@ public class DBOperation {
 			}
 			try{
 				Class.forName("org.sqlite.JDBC");
-				//That is the lane that creates the database.
+				//That is the line that creates the database.
 				if(osName.contains("Windows")){
 					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"\\My Documents\\SQLite\\easysurvey.db");
 				}else if(osName.contains("Mac")){
 					con = DriverManager.getConnection("jdbc:sqlite:"+ systemDir +"/Documents/SQLite/easysurvey.db");
 				}
+				con.setAutoCommit(false);
 				Statement s = con.createStatement();
 				s.execute("PRAGMA foreign_keys = ON");
 				s.close();
@@ -41,38 +48,80 @@ public class DBOperation {
 				System.err.println(e.getClass().getName() + " : " + e.getMessage());
 				System.exit(0);
 			}
+		}
 		return con;
 	}
-	private static void executeStatement(String stmt)throws SQLException{
-		Connection c = getConnect();
-		Statement s = null;
-		s = c.createStatement();
-		s.executeUpdate(stmt);
-		s.close();
-		//c.close();
+	
 
-	}
-	//considering not that
 	public static boolean createTable(String sql){
-		try{
-			executeStatement("CREATE TABLE " + sql);
-			return true;
-		}catch(SQLException e){
-			return false;
+		final String stmt = "CREATE TABLE " + sql;
+		Thread createTableThread = new Thread(){			
+			public void run(){
+				Connection c = getConnect();
+				Statement s = null;
+				try {
+					s = c.createStatement();
+					s.executeUpdate(stmt);
+					s.close();
+					c.commit();
+				} catch (SQLException e) {
+					System.out.println("An error acoured in the DBStatement thread " + this.getId() + " : " + this.getName());
+					e.printStackTrace();
+				}finally{
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		createTableThread.start();
+		try {
+			createTableThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return true;
 	}
 	public static boolean insertRecord(String sql){
-		try{
-			executeStatement("INSERT INTO " + sql);
-			return true;
-		}catch(SQLException e){
+		final String stmt = "INSERT INTO " + sql;
+		Thread insertThread = new Thread(){			
+			public void run(){
+				Connection c = getConnect();
+				Statement s = null;
+				try {
+					s = c.createStatement();
+					s.executeUpdate(stmt);
+					s.close();
+					c.commit();
+				} catch (SQLException e) {
+					System.out.println("An error acoured in the DBStatement thread " + this.getId() + " : " + this.getName());
+					e.printStackTrace();
+				}finally{
+					try {
+						con.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		};
+		insertThread.start();
+		try {
+			insertThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.err.println(e.getClass().getName() + " : " + e.getMessage());
-			return false;
 		}
+		return true;
 	}
-
-	public static boolean deleteRecord(String sql){
+	
+	/*public static boolean deleteRecord(String sql){
 		try{
 			executeStatement("DELETE from " + sql);
 			return true;
@@ -82,7 +131,7 @@ public class DBOperation {
 			return false;
 		}
 	}
-
+	
 	public static boolean onUpdate(String sql){
 		try{
 			executeStatement(sql);
@@ -93,31 +142,57 @@ public class DBOperation {
 			return false;
 		}
 	}
-
+	
 	public static int insertRecordReturnID(String sql){
 		try{
 			executeStatement(sql);
 			sql = "SELECT last_insert_rowID()";
 			ArrayList<String[]> lastRow = selectRecord(sql);
-			return Integer.parseInt(lastRow.get(0)[0]);
+			return Integer.parseInt(lastRow.get(0)[1]);
 		}catch(SQLException e){
 			e.printStackTrace();
 			System.err.println(e.getClass().getName() + " : " + e.getMessage());
 			return -1;
 		}
-	}
+	}*/
 	//questionable output
 	public static ArrayList<String[]> selectRecord(String sql){
-		Connection c = getConnect();
-		Statement s;
-		ResultSet rs;
-		ResultSetMetaData rsmd;
+		final String stmt = "SELECT * FROM " + sql;
+		ResultSet rs = null;
+		ResultSetMetaData rsmd = null;
 		ArrayList<String[]> results = new ArrayList<String[]>();
-		try{
-			c.setAutoCommit(false);
-			s = c.createStatement();
-			rs = s.executeQuery(sql);
+		Callable<ResultSet> selectCallable = new Callable<ResultSet>(){			
+			public ResultSet call(){
+				Connection c = getConnect();
+				Statement s;
+				ResultSet rs = null;
+				try{
+					s = c.createStatement();
+					rs = s.executeQuery(stmt);
+				}catch (SQLException e){
+					e.printStackTrace();
+					System.err.println(e.getClass().getName() + " : " + e.getMessage());
+					System.exit(0);
+				}
+				return rs;
+		}};
+		try {
+			ExecutorService pool = Executors.newSingleThreadExecutor();
+			Future<ResultSet> future = pool.submit(selectCallable);
+			rs = future.get();
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
 			rsmd = rs.getMetaData();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try {
 			while(rs.next()){
 				int colCount = rsmd.getColumnCount();
 				String[] row = new String[colCount];
@@ -127,14 +202,13 @@ public class DBOperation {
 				}
 				results.add(row);
 			}
-		}catch (SQLException e){
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.err.println(e.getClass().getName() + " : " + e.getMessage());
-			System.exit(0);
 		}
 		return results;
 	}
-
+	
 	public static boolean exists(String table){
 		Connection c = getConnect();
 		Statement s = null;
@@ -159,12 +233,12 @@ public class DBOperation {
 			c.setAutoCommit(false);
 			s = c.createStatement();
 			rs = s.executeQuery(sql);
-
+			
 			while(rs.next()){
 				String data = rs.getString(colName);
 				results.add(data);
 				System.out.println(data);
-
+				
 			}
 		}catch (SQLException e){
 			e.printStackTrace();
@@ -173,7 +247,7 @@ public class DBOperation {
 		}
 		return results;
 	}	
-
+	
 	public static String checkPassword2(){
 		Connection c = getConnect();
 		String s = null;
@@ -190,109 +264,20 @@ public class DBOperation {
 			System.err.println(e.getClass().getName() + " : " + e.getMessage());
 			System.exit(0);
 		}
-
+		
 		return s;
-
+		
 	}
 	//TO DO change to throws SQL exception
 	public static boolean existsRecord(String sql){
 		ArrayList<String[]> result = selectRecord(sql);
 		if(result.size() > 0){
 			return true;
-
+			
 		}
 		else{
 			return false;
 			}
 	}
-	//----------------------------------------------------------------------------------------
-	public static void raf() throws SQLException{
-		Connection c = getConnect();
-
-		Statement stat = c.createStatement();
-		stat.executeUpdate("drop table if exists people");
-		stat.executeUpdate("create table people (name, occupation)");
-
-		SqlTask tasks[] = { new SqlTask(c, "SELECT * FROM MYTABLE"),
-				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"),
-				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"),
-				new SqlTask(c, "INSERT BLABLA INTO MYTABLE"), };
-
-		System.out.println("Sequential DB access:");
-
-		Thread threads[] = new Thread[tasks.length];
-		for (int i = 0; i < tasks.length; i++)
-			threads[i] = new Thread(tasks[i]);
-
-		for (int i = 0; i < tasks.length; i++)
-		{
-			threads[i].start();
-			try {
-				threads[i].join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		System.out.println("Concurrent DB access:");
-
-		for (int i = 0; i < tasks.length; i++)
-			threads[i] = new Thread(tasks[i]);
-
-		for (int i = 0; i < tasks.length; i++)
-			threads[i].start();
-
-		for (int i = 0; i < tasks.length; i++)
-			try {
-				threads[i].join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
-
-	public static class SqlTask implements Runnable
-	{
-		private Connection conn;
-		private String statement;
-
-		public SqlTask(Connection connection, String statement)
-		{
-			this.conn = connection;
-			this.statement = statement;
-		}
-
-		public void run()
-		{
-			PreparedStatement ps = null;
-			long startTime = System.currentTimeMillis();
-
-			try
-			{
-				try
-				{
-					ps = conn.prepareStatement(statement);
-
-					ps.setString(1, statement);
-					ps.executeUpdate();
-
-					long duration = System.currentTimeMillis() - startTime;
-					System.out.println("SQL Insert completed: " + duration);
-				}
-				finally
-				{
-					if (ps != null)
-						ps.close();
-				}
-			}
-			catch (SQLException e)
-			{
-				long duration = System.currentTimeMillis() - startTime;
-				System.out.print("   SQL Insert failed: " + duration);
-				System.out.println(" SQLException: " + e);
-			}
-		}
-	}
-
+	
 }
