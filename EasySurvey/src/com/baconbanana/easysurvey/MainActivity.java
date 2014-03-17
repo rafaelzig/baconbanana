@@ -34,15 +34,14 @@ public class MainActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		
+		Intent intent= getIntent();
 		setContentView(R.layout.activity_main);
 		findViewById(R.id.mainLayout).setSystemUiVisibility(FULL_SCREEN);
 
 		prepareVideo();
 	}
 
-	/**
-	 * 
-	 */
 	private void prepareVideo()
 	{
 		VideoView video = (VideoView) findViewById(R.id.videoView);
