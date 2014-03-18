@@ -1,6 +1,7 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,7 @@ public abstract class Window implements ActionListener{
 	public Window(String tit, int width, int height){
 		title = tit;
 		window = new JFrame(title);
-		window.setSize(width, height);
+		window.setMinimumSize(new Dimension(width, height));
 		window.setLocationRelativeTo(null);
 		initiLayout();
 	}
@@ -29,6 +30,7 @@ public abstract class Window implements ActionListener{
 		window = new JFrame(title);
 		if(fullScreen == true){
 			window.setExtendedState(Frame.MAXIMIZED_BOTH); 
+			window.setMinimumSize(new Dimension(400,400));
 		}
 		initiLayout();
 	}
