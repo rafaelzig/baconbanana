@@ -9,7 +9,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 public class LoginPage extends Window{
 	
@@ -18,10 +17,10 @@ public class LoginPage extends Window{
 	private JTextField passwordTxf;
 	private JButton loginBtn;
 
-	public LoginPage(String tit) {
-		super(tit, 300, 300);
+	public LoginPage(String tit, int width, int height) {
+		super(tit, width, height);
 		initiWidgets();
-		getWindow().pack();
+		setFrameOptions();
 	}
 	
 	private void initiWidgets(){
@@ -97,7 +96,7 @@ public class LoginPage extends Window{
 	public void checkPassword(String username, String password){                    
 		//String sql = "SELECT * FROM Login WHERE Username = '" + username + "' AND Password = '" + password + "'";
 		//if (DBOperation.existsRecord(sql)) {
-				new Menu("Menu", 300, 300);
+				new Menu("Menu", 250, 300);
 				getWindow().dispose();
 		/*	}
 			else {
@@ -108,7 +107,7 @@ public class LoginPage extends Window{
 	}
 	public static void main(String args[])
 	{
-		new LoginPage("Login Page");
+		new LoginPage("Login Page", 300, 300);
 	}
 	
 }

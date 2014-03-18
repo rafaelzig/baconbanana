@@ -106,8 +106,8 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate("Create New Template", true);
-			getWindow().dispose();
+			new AddTemplate("Create New Template", 500, 800);
+			getWindow().setEnabled(false);
 		}else if(e.getSource().equals(editBtn)){
 			//TODO edit
 		}

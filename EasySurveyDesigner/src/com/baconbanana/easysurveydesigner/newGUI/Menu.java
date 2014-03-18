@@ -1,7 +1,6 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ public class Menu extends Window{
 	public Menu(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
-		getWindow().setSize(width, height);
+		setFrameOptions();
 	}
 	
 	private void initiWidgets(){

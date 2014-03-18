@@ -23,14 +23,14 @@ public class AddTemplate extends SQLWindow{
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private static JTextField nameOfTemplateTxf;
-	private JComboBox typeComboBox;
+	private JComboBox<QuestionType> typeComboBox;
 
 	private static JList<String> templateList = new JList<String>();
 	private final static DefaultListModel<String> templateListModel = new DefaultListModel<String>();
 
 
-	public AddTemplate(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
+	public AddTemplate(String tit, int width, int height) {
+		super(tit, width, height);
 		initiWidgets();
 	}
 	private void initiWidgets(){
@@ -44,7 +44,7 @@ public class AddTemplate extends SQLWindow{
 		nameOfTemplateTxf = new JTextField("Type name for this template here");
 
 		// ---------------------set combo box-----------------------------------
-		typeComboBox = new JComboBox(QuestionType.values());
+		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 
 		// --------------------------------------------------------------------
 
