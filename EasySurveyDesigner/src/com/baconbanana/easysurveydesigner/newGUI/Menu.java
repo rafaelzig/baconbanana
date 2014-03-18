@@ -1,12 +1,9 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.LayoutManager;
-import java.awt.Rectangle;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -29,21 +26,38 @@ public class Menu extends Window{
 	private void initiWidgets(){
 		//TODO fix button size
 		getWindow().setLayout(new BorderLayout());
+		getWindow().setResizable(false);
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(4,1));
+		buttonPanel.setLayout(new GridBagLayout());
+		
+		GridBagConstraints btnCon = new GridBagConstraints();
+		btnCon.gridx = 0;
+		//subject to change
+		btnCon.gridy = 0;
+		btnCon.gridheight = 1;
+		btnCon.gridwidth = 1;
+		btnCon.fill = GridBagConstraints.HORIZONTAL;
+		btnCon.anchor = GridBagConstraints.CENTER;
+		
 		
 		createSurvey = new JButton ("Create new Survey");
 		createSurvey.addActionListener(this);
-		buttonPanel.add(createSurvey);
+		buttonPanel.add(createSurvey, btnCon);
+		btnCon.gridy++;
+		
 		openSurvey = new JButton ("Open Survey"); 
 		openSurvey.addActionListener(this);
-		buttonPanel.add(openSurvey);
+		buttonPanel.add(openSurvey, btnCon);
+		btnCon.gridy++;
+		
 		previewAnswers = new JButton ("<html>View Patients Answers</html>");
 		previewAnswers.addActionListener(this);
-		buttonPanel.add(previewAnswers);
+		buttonPanel.add(previewAnswers, btnCon);
+		btnCon.gridy++;
+		
 		getConnect = new JButton ("Connect to Device");
 		getConnect.addActionListener(this);
-		buttonPanel.add(getConnect);
+		buttonPanel.add(getConnect, btnCon);
 		
 		getWindow().add(buttonPanel, BorderLayout.CENTER);
 		

@@ -27,7 +27,7 @@ public class LoginPage extends Window{
 	}
 	
 	private void initiWidgets(){
-		DBCreator.checkAndCreateTables();
+		//DBCreator.checkAndCreateTables();
 		//create panel for widgets and layout
 		panel = new JPanel(new GridLayout(5,1));
 		getWindow().add(panel);
@@ -60,7 +60,7 @@ public class LoginPage extends Window{
 	public void checkPassword(String username, String password){                    
 		//String sql = "SELECT * FROM Login WHERE Username = '" + username + "' AND Password = '" + password + "'";
 		//if (DBOperation.existsRecord(sql)) {
-				new Menu("Menu", 400, 400);
+				new Menu("Menu", 300, 300);
 				getWindow().dispose();
 		/*	}
 			else {
