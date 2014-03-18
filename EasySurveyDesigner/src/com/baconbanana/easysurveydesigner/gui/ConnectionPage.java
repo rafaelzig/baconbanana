@@ -42,7 +42,7 @@ import org.apache.commons.codec.binary.Hex;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
-
+//----------------------------------------------------
 public class ConnectionPage {
 
 	String localIP;
@@ -73,7 +73,49 @@ public class ConnectionPage {
 	
 
 	}
+	
+	public String encrypt(String str) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidParameterSpecException {
 
+		//-----------------------
+		  byte[] secret = null;
+		 SecretKeySpec secretKey = null;
+		 
+		  try {
+			  secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
+			  secretKey = new SecretKeySpec(secret, "AES");
+			} catch (DecoderException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		  //------------------------
+
+		try {
+            
+            byte[] enc = Encryption.encryptMsg(str, secretKey);
+           
+            
+            return  DatatypeConverter.printBase64Binary(enc);
+            
+        } catch (javax.crypto.BadPaddingException e) {
+        } catch (IllegalBlockSizeException e) {
+        } catch (UnsupportedEncodingException e) {
+        }
+        return null;
+    }
+	
+	public ServerSocket createServerSocket(int[] ports) throws IOException {
+		for (int port : ports) {
+			try {
+				return new ServerSocket(port);
+		
+			} catch (IOException ex) {
+				continue; // try next port
+			}
+		}
+
+		throw new IOException("no free port found");
+	}
+//-------------------------------------------------------------------------------------------------------
 	public class setGUI extends Thread {
 
 		public void run() {
@@ -225,7 +267,7 @@ public class ConnectionPage {
 		}
 
 	}
-
+//--------------------------------------------------------------------------------------------------------------
 	public class Connection extends Thread {
 
 		public void run() {
@@ -258,7 +300,7 @@ public class ConnectionPage {
 		}
 
 	}
-
+//--------------------------------------------------------------------------------------------------------------------------
 	public class waitForDevice extends Thread {
 		public void run() {
 			while (clientSocket == null) {
@@ -276,20 +318,7 @@ public class ConnectionPage {
 		}
 	}
 
-	// ---------------------------------------------------
-	public ServerSocket createServerSocket(int[] ports) throws IOException {
-		for (int port : ports) {
-			try {
-				return new ServerSocket(port);
-		
-			} catch (IOException ex) {
-				continue; // try next port
-			}
-		}
-
-		throw new IOException("no free port found");
-	}
-
+//----------------------------------------------------------------------------------------------------------
 	public class getData extends Thread {
 		public void run() {
 
@@ -307,7 +336,7 @@ public class ConnectionPage {
 			}
 		}
 	}
-
+//-------------------------------------------------------------------------------------------------------------
 	public class sendData extends Thread {
 		String name;
 		String date;
@@ -369,32 +398,7 @@ public class ConnectionPage {
 	
 	}
 	
-	public String encrypt(String str) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidParameterSpecException {
-
-		//-----------------------
-		  byte[] secret = null;
-		 SecretKeySpec secretKey = null;
-		 
-		  try {
-			  secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
-			  secretKey = new SecretKeySpec(secret, "AES");
-			} catch (DecoderException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		  //------------------------
-
-		try {
-            
-            byte[] enc = Encryption.encryptMsg(str, secretKey);
-           
-            
-            return  DatatypeConverter.printBase64Binary(enc);
-            
-        } catch (javax.crypto.BadPaddingException e) {
-        } catch (IllegalBlockSizeException e) {
-        } catch (UnsupportedEncodingException e) {
-        }
-        return null;
-    }
+	
 }
+
+

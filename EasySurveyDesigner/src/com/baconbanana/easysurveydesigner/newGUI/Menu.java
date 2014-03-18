@@ -81,7 +81,7 @@ public class Menu extends Window{
 			getWindow().dispose();
 		}
 		else if(e.getSource().equals(getConnect)){
-			new GetConnection("Connection Page");
+			new SendSurvey("Connection Page", 400, 400);
 			getWindow().dispose();
 		}
 		
