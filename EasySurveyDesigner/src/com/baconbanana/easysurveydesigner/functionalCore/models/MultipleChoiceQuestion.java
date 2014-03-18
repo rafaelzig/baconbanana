@@ -39,7 +39,7 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	public MultipleChoiceQuestion(String content, List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.MULTIPLE_CHOICE, choiceList);
+		super(content, HELP_MESSAGE, QuestionType.MULTIPLECHOICE, choiceList);
 	}
 
 	/**

@@ -29,7 +29,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQu
 import com.baconbanana.easysurveydesigner.functionalCore.models.NumericQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.RatingQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 
 /**
@@ -188,20 +188,21 @@ public class Operations
 		for (int index = 0; index < questionListRaw.size(); index++)
 		{
 			questionRaw = (JSONObject) questionListRaw.get(index);
-			type = QuestionType.valueOf((String) questionRaw.get("type"));
 
+			type = getQuestionType((String) questionRaw.get("type"));
+					
 			switch (type)
 			{
-				case MULTIPLE_ANSWER:
+				case MULTIPLEANSWER:
 					questionList.add(new MultipleAnswerQuestion(questionRaw));
 					break;
-				case MULTIPLE_CHOICE:
+				case MULTIPLECHOICE:
 					questionList.add(new MultipleChoiceQuestion(questionRaw));
 					break;
 				case CONTINGENCY:
 					questionList.add(new ContingencyQuestion(questionRaw));
 					break;
-				case NUMERIC:
+				case NUMERICAL:
 					questionList.add(new NumericQuestion(questionRaw));
 					break;
 				case DATE:
@@ -210,8 +211,8 @@ public class Operations
 				case TEXTUAL:
 					questionList.add(new TextualQuestion(questionRaw));
 					break;
-				case SCALAR:
-					questionList.add(new ScalarQuestion(questionRaw));
+				case RATING:
+					questionList.add(new RatingQuestion(questionRaw));
 					break;
 			}
 		}
@@ -236,8 +237,31 @@ public class Operations
 		return new Date(format.parse(date).getTime());
 	}
 
+	/**
+	 * Parses a String object containing the answers to a question, returning a
+	 * String array containing answers.
+	 * 
+	 * @param answer
+	 *            Answer to the question.
+	 * @return String array containing answers
+	 */
 	public static String[] parseAnswers(String answer)
 	{
 		return (answer.isEmpty()) ? new String[0] : p.split(answer);
+	}
+	
+	/**
+	 * Returns the QuestionType which corresponds to the value specified.
+	 * 
+	 * @param value
+	 *            String object to be parsed, case insensitive.
+	 * @return Corresponding Enum object, or null if the parameters are null.
+	 */
+	public static QuestionType getQuestionType(String value)
+	{
+		if (value != null)
+			return QuestionType.valueOf(value.replaceAll("\\s+","").toUpperCase());
+
+		return null;
 	}
 }

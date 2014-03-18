@@ -201,7 +201,7 @@ public class SurveyActivity extends Activity
 			public boolean onBottomToTopSwipe()
 			{
 				if (currentQuestion.getType() == QuestionType.TEXTUAL
-						|| currentQuestion.getType() == QuestionType.NUMERIC)
+						|| currentQuestion.getType() == QuestionType.NUMERICAL)
 				{
 					keyboard.showSoftInput(lineView, 0);
 					return true;
@@ -274,18 +274,18 @@ public class SurveyActivity extends Activity
 			case TEXTUAL:
 				buildOpenEndedQuestion(InputType.TYPE_CLASS_TEXT);
 				break;
-			case NUMERIC:
+			case NUMERICAL:
 				buildOpenEndedQuestion(InputType.TYPE_CLASS_NUMBER);
 				break;
 			case DATE:
 				buildDateQuestion();
 				break;
-			case MULTIPLE_CHOICE:
+			case MULTIPLECHOICE:
 			case CONTINGENCY:
-			case SCALAR:
+			case RATING:
 				buildCloseEndedQuestion(R.layout.radiobutton);
 				break;
-			case MULTIPLE_ANSWER:
+			case MULTIPLEANSWER:
 				buildCloseEndedQuestion(R.layout.checkbox);
 				break;
 		}
@@ -447,18 +447,18 @@ public class SurveyActivity extends Activity
 		switch (currentQuestion.getType())
 		{
 			case TEXTUAL:
-			case NUMERIC:
+			case NUMERICAL:
 				answer = ((TextView) lineView).getText().toString();
 				break;
 			case DATE:
 				answer = getDateQuestionAnswer();
 				break;
-			case MULTIPLE_CHOICE:
+			case MULTIPLECHOICE:
 			case CONTINGENCY:
-			case SCALAR:
+			case RATING:
 				answer = getCloseEndedQuestionAnswer(false);
 				break;
-			case MULTIPLE_ANSWER:
+			case MULTIPLEANSWER:
 				answer = getCloseEndedQuestionAnswer(true);
 				break;
 		}

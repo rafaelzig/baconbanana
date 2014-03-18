@@ -8,6 +8,7 @@ import java.text.ParseException;
 import org.json.simple.JSONObject;
 
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -33,10 +34,10 @@ public abstract class Question
 	 *            displayed.
 	 * @param type
 	 *            An enumeration representing the type of the question.
-	 * @see QuestionType#MULTIPLE_ANSWER
-	 * @see QuestionType#MULTIPLE_CHOICE
-	 * @see QuestionType#NUMERIC
-	 * @see QuestionType#SCALAR
+	 * @see QuestionType#MULTIPLEANSWER
+	 * @see QuestionType#MULTIPLECHOICE
+	 * @see QuestionType#NUMERICAL
+	 * @see QuestionType#RATING
 	 */
 	public Question(String content, String helpMessage, QuestionType type)
 	{
@@ -60,7 +61,7 @@ public abstract class Question
 	{
 		super();
 
-		this.type = QuestionType.valueOf((String) rawData.get("type"));
+		this.type = Operations.getQuestionType((String) rawData.get("type"));
 		this.showName = (Boolean) rawData.get("showName");
 		this.content = (String) rawData.get("content");
 		this.helpMessage = (String) rawData.get("helpMessage");
