@@ -5,21 +5,17 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
+import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
+
 public class Connection extends Thread {
 	
-	private ServerSocket serverSocket;
 	private int[] listOfSockets;
 	private String localIP;
-	
-	public Connection(ServerSocket ss, int[] sl, String lip){
-		serverSocket = ss;
-		listOfSockets = sl;
-		localIP = lip;
-	}
+
 
 	public void run() {
 
-		while (serverSocket == null) {
+		while (SendSurvey.getServerSocket() == null) {
 			listOfSockets = new int[100];
 			for (int x = 0; x < 100; x++) {
 				listOfSockets[x] = 2000 + x;
@@ -27,7 +23,7 @@ public class Connection extends Thread {
 			// -------------get my ip--------------------------
 			try {
 				InetAddress myself = InetAddress.getLocalHost();
-				localIP = ("Local IP Address : "
+				SendSurvey.setLocalIP("Local IP Address : "
 						+ (myself.getHostAddress()) + "\n");
 			} catch (UnknownHostException ex) {
 				System.out.println("Failed to find ");
@@ -35,10 +31,10 @@ public class Connection extends Thread {
 			}
 			// ------------------------------------------------
 			try {
-				serverSocket = createServerSocket(listOfSockets);
+				SendSurvey.setServerSocket(createServerSocket(listOfSockets));
 
 				System.out.println("listening on port: "
-						+ serverSocket.getLocalPort() + "\n");
+						+ SendSurvey.getServerSocket().getLocalPort() + "\n");
 			} catch (IOException ex) {
 				System.err.println("no available ports");
 			}

@@ -24,9 +24,9 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
 
 public class SendSurvey extends Window{
 	
-	private String localIP;
-	private ServerSocket serverSocket;
-	private Socket clientSocket;
+	private static String localIP;
+	private static ServerSocket serverSocket;
+	private static Socket clientSocket;
 	private int[] listOfSockets;
 	private String receivedData;
 	private Boolean notReceived;
@@ -37,8 +37,8 @@ public class SendSurvey extends Window{
 
 	public SendSurvey(String tit, int width, int height) {
 		super(tit, width, height);
-		Thread connect = new Connection(serverSocket, listOfSockets, localIP);
-		Thread waiter = new DeviceWaiter(serverSocket, clientSocket);
+		Thread connect = new Connection();
+		Thread waiter = new DeviceWaiter();
 		
 		connect.start();
 		try {
@@ -54,7 +54,7 @@ public class SendSurvey extends Window{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(accept)){
-			Thread dataThread = new DataGetter(clientSocket, receivedData);
+			Thread dataThread = new DataGetter();
 			dataThread.start();
 		}
 		else if(e.getSource().equals(send)){
@@ -147,11 +147,25 @@ public class SendSurvey extends Window{
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				String s = (String) month.getSelectedItem();
-				// TODO Auto-generated method stub
 
 			}
 		});
 		
 	}
+	public static synchronized void setServerSocket(ServerSocket s){
+		serverSocket = s;
 	}
+	public static synchronized ServerSocket getServerSocket(){
+		return serverSocket;
+	}
+	public static synchronized void setClientSocket(Socket s){
+		clientSocket = s;
+	}
+	public static synchronized Socket getClientSocket(){
+		return clientSocket;
+	}
+	public static synchronized void setLocalIP(String lip){
+		localIP = lip;
+	}
+}
 

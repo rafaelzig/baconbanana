@@ -20,14 +20,13 @@ import org.apache.commons.codec.binary.Hex;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 import com.baconbanana.easysurveydesigner.gui.Encryption;
+import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
 
 public class DataSender extends Thread {
 	String name;
 	String date;
-	Socket clientSocket;
 
-	public DataSender(Socket cs,String name, String date) {
-		clientSocket = cs;
+	public DataSender(String name, String date) {
 		this.name = name;
 		this.date = date;
 	}
@@ -37,7 +36,7 @@ public class DataSender extends Thread {
 		try {
 			System.out.println(name+"*"+date);
 
-			output = new PrintStream(clientSocket.getOutputStream());
+			output = new PrintStream(SendSurvey.getClientSocket().getOutputStream());
 			Operations.readFile("Survey.json");
 			
 			try (BufferedReader br = new BufferedReader(new FileReader("Survey.json"))) {

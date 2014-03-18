@@ -5,21 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
+
 public class DataGetter extends Thread {
 	
-	Socket clientSocket = null;
 	String receivedData;
 	
-	public DataGetter(Socket cs, String rd){
-		clientSocket = cs;
-		receivedData = rd;
+	public DataGetter(){
 	}
 	
 	public void run() {
 
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					clientSocket.getInputStream()));
+					SendSurvey.getClientSocket().getInputStream()));
 			
 			receivedData = in.readLine();
 			System.out.println("Android says:" + receivedData + "\n");

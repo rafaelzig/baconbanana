@@ -4,19 +4,17 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
+
 public class DeviceWaiter extends Thread {
 	
-	Socket clientSocket;
-	ServerSocket serverSocket;
-	
-	public DeviceWaiter(ServerSocket ss, Socket cs){
-		serverSocket = ss;
-		clientSocket = cs;
+	public DeviceWaiter(){
+		
 	}
 	public void run() {
-		while (clientSocket == null) {
+		while (SendSurvey.getClientSocket() == null) {
 			try {
-				clientSocket = serverSocket.accept();
+				SendSurvey.setClientSocket(SendSurvey.getServerSocket().accept());
 				Thread.sleep(1000);
 			} catch (IOException | InterruptedException e) {
 				// TODO Auto-generated catch block
