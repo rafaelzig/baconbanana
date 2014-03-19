@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBCreator;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
 //Note for future pondering, SQLite does not have usernames or passwords so we will have to implement new security (encrypt files pos)
 	public class LoginPage {
 		public static JFrame loginPageFrame;

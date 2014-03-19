@@ -1,5 +1,7 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
+
 public class DBCreator {
 	public static void checkAndCreateTables(){
 		String sql = "";

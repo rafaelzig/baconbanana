@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.functionalCore.dbops;
+package com.baconbanana.easysurveydesigner.functionalCore.dbops.old;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
  * This class is not for use it is an exsample of concurancy, it is shit
  */
 
-public class DBOperation {
+public class DBOperationOldv2 {
 	
 	private static Connection con;
 	private static LinkedList<Thread> cmdLine = new LinkedList<Thread>();

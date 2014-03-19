@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class AddNewTemplate {
@@ -92,16 +92,16 @@ public class AddNewTemplate {
 				QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
 				System.out.println(type);
 				switch(type){
-				case MULTIPLE_CHOICE :
+				case MULTIPLECHOICE :
 					new NewMultipleChoice(type);
 					break;
-				case MULTIPLE_ANSWER :
+				case MULTIPLEANSWER :
 					new NewMultipleAnswer(type);
 					break;
-				case NUMERIC :
+				case NUMERICAL :
 					new NewOpenEnded(type);
 					break;
-				case SCALAR :
+				case RATING :
 					break;
 				}
 				

@@ -108,6 +108,7 @@ public class CreateSurvey extends SQLWindow{
 		if(e.getSource().equals(addBtn)){
 			new AddTemplate("Create New Template", 500, 800);
 			getWindow().setEnabled(false);
+			
 		}else if(e.getSource().equals(editBtn)){
 			//TODO edit
 		}
