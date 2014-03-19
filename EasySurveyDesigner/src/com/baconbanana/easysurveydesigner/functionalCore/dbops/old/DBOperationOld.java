@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.functionalCore.dbops;
+package com.baconbanana.easysurveydesigner.functionalCore.dbops.old;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBTest.SqlTask;
+import com.baconbanana.easysurveydesigner.DBTest.SqlTask;
 import com.baconbanana.easysurveydesigner.gui.LoginPage;
 import com.baconbanana.easysurveydesigner.gui.MenuFrame;
 

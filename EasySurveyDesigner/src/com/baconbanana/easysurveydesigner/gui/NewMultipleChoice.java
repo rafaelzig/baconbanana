@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperationOld;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class NewMultipleChoice {
