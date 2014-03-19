@@ -43,4 +43,31 @@ public class DateQuestion extends OpenEndedQuestion
 	{
 		super.setAnswer(Operations.parseDate(answer).toString());
 	}
+	
+	/**
+	 * Gets the year of the answer to this question.
+	 * @return Integer representing the year of the answer to this question.
+	 */
+	public int getYear()
+	{
+		return (isAnswered()) ? Integer.valueOf(answer.substring(0,4)) : -1;
+	}
+	
+	/**
+	 * Gets the month of the answer to this question.
+	 * @return Integer representing the month of the answer to this question.
+	 */
+	public int getMonth()
+	{
+		return (isAnswered()) ? Integer.valueOf(answer.substring(5,7)) : -1;
+	}
+	
+	/**
+	 * Gets the day of the answer to this question.
+	 * @return Integer representing the day of the answer to this question.
+	 */
+	public int getDay()
+	{
+		return (isAnswered()) ? Integer.valueOf(answer.substring(8,10)) : -1;
+	}
 }

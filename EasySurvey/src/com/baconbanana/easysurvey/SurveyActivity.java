@@ -10,8 +10,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,16 +19,13 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -42,6 +37,7 @@ import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
@@ -55,17 +51,21 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
+	private static final int FULL_SCREEN = 8;
+	private static final String SURVEY_KEY = "survey";
+	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
+	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
+	private static final String CURSOR_KEY = "cursor";
+
 	private final Calendar calendar = Calendar.getInstance();
-	private int size, cursor, subsequentCursor;
-	private boolean isSubsequent;
+	private int cursor = 0, subsequentCursor = -1;
+	private boolean isSubsequent = false;
+
 	private Survey survey;
 	private Question currentQuestion;
 	private List<Question> questionList;
-	private List<String> choiceList;
 	private LinearLayout placeholder, questions;
-	private OnDateSetListener datePickerListener;
 	private OnTouchListener touchListener;
-	private OnClickListener clickListener;
 	private OnKeyListener keyListener;
 	private TextView txtContent, txtHelpMessage, txtPage;
 	private InputMethodManager keyboard;
@@ -86,22 +86,79 @@ public class SurveyActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.placeholder);
 
 		inf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		setContentView(R.layout.placeholder);
-		getSurvey(getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE));
 		buildListeners();
-		buildLayout();
+
+		// If this is the first time loading the activity
+		if (savedInstanceState == null)
+		{
+			prepareSurvey(getIntent()
+					.getStringExtra(MainActivity.EXTRA_MESSAGE));
+			questionList = survey.getQuestionList();
+			currentQuestion = questionList.get(cursor);
+		}
+		else
+			restoreInstanceState(savedInstanceState);
+
+		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
+		placeholder.setOnTouchListener(touchListener);
+		placeholder.setSystemUiVisibility(FULL_SCREEN);
+		
+		buildStaticViews();
+		buildQuestionViews();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle savedInstanceState)
+	{
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putInt(CURSOR_KEY, cursor);
+		savedInstanceState.putInt(SUBSEQUENT_CURSOR_KEY, subsequentCursor);
+		savedInstanceState.putBoolean(IS_SUBSEQUENT_KEY, isSubsequent);
+		savedInstanceState.putString(SURVEY_KEY, survey.getJSON()
+				.toJSONString());
+	}
+
+	/**
+	 * Restores the instance state from the specified Bundle object.
+	 * 
+	 * @param savedInstanceState
+	 *            Bundle object containing the information to be restored.
+	 */
+	private void restoreInstanceState(Bundle savedInstanceState)
+	{
+		cursor = savedInstanceState.getInt(CURSOR_KEY, cursor);
+		subsequentCursor = savedInstanceState.getInt(SUBSEQUENT_CURSOR_KEY,
+				subsequentCursor);
+		isSubsequent = savedInstanceState.getBoolean(IS_SUBSEQUENT_KEY,
+				isSubsequent);
+		prepareSurvey(savedInstanceState.getString(SURVEY_KEY, getIntent()
+				.getStringExtra(MainActivity.EXTRA_MESSAGE)));
+
+		if (isSubsequent)
+		{
+			questionList = ((ContingencyQuestion) survey.getQuestionList().get(
+					cursor)).getSubsequentList();
+			currentQuestion = questionList.get(subsequentCursor);
+		}
+		else
+		{
+			questionList = survey.getQuestionList();
+			currentQuestion = questionList.get(cursor);
+		}
 	}
 
 	/**
 	 * Reads Survey object from the specified json string, saving its contents
-	 * to the survey object.
+	 * to the survey object and initialising other fields which necessary
+	 * information.
 	 */
-
-	private void getSurvey(String jsonString)
+	private void prepareSurvey(String jsonString)
 	{
 		try
 		{
@@ -117,16 +174,6 @@ public class SurveyActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		size = survey.size();
-		cursor = 0;
-		subsequentCursor = -1;
-		questionList = survey.getQuestionList();
-		currentQuestion = questionList.get(cursor);
-	}
-
-	public void setCurrentDateOnView()
-	{
 	}
 
 	/**
@@ -172,18 +219,6 @@ public class SurveyActivity extends Activity
 			}
 		});
 
-		datePickerListener = new DatePickerDialog.OnDateSetListener()
-		{
-			public void onDateSet(DatePicker view, int year, int month, int day)
-			{
-				((EditText) questions.getChildAt(0)).setText(day + "-"
-						+ (month + 1) + "-" + year);
-
-				((DatePicker) questions.getChildAt(1)).init(year, month, day, null);
-
-			}
-		};
-
 		keyListener = new OnKeyListener()
 		{
 			@Override
@@ -198,18 +233,6 @@ public class SurveyActivity extends Activity
 				return false;
 			}
 		};
-	}
-
-	/**
-	 * Constructs the layout of the activity.
-	 */
-	private void buildLayout()
-	{
-		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
-		placeholder.setOnTouchListener(touchListener);
-
-		buildStaticViews();
-		buildQuestionViews();
 	}
 
 	/**
@@ -231,7 +254,7 @@ public class SurveyActivity extends Activity
 		txtHelpMessage = (TextView) findViewById(R.id.txtHelpMessage);
 
 		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
-		pgrBar.setMax(size);
+		pgrBar.setMax(survey.size());
 
 		txtPage = (TextView) findViewById(R.id.txtPage);
 	}
@@ -269,80 +292,6 @@ public class SurveyActivity extends Activity
 	}
 
 	/**
-	 * Builds the necessary views to display the open ended question.
-	 * 
-	 * @param inputType
-	 *            Integer representing the inputType of the view to be set.
-	 */
-	private void buildOpenEndedQuestion(int inputType)
-	{
-		lineView = inf.inflate(R.layout.textbox, questions, false);
-		((TextView) lineView).setInputType(inputType);
-
-		if (currentQuestion.isAnswered())
-			((EditText) lineView).setText(currentQuestion.getAnswer());
-
-		lineView.setOnKeyListener(keyListener);
-		questions.addView(lineView);
-		lineView.requestFocus();
-		keyboard.showSoftInput(lineView, 0);
-	}
-
-	/**
-	 * Builds the necessary views to display the date question.
-	 */
-	private void buildDateQuestion()
-	{
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-		lineView = inf.inflate(R.layout.textbox, questions, false);
-		((EditText) lineView)
-				.setText((currentQuestion.isAnswered() ? currentQuestion
-						.getAnswer() : day + "-" + (month + 1) + "-" + year));
-
-		lineView.setOnClickListener(clickListener);
-		questions.addView(lineView);
-
-		lineView = inf.inflate(R.layout.datepicker, questions, false);
-		((DatePicker) lineView).init(year, month, day, null);
-		questions.addView(lineView);
-	}
-
-	/**
-	 * Builds the necessary views to display the close ended question.
-	 * 
-	 * @param viewType
-	 *            Integer representing the type of the view to be constructed.
-	 */
-	private void buildCloseEndedQuestion(int viewType)
-	{
-		String[] sortedAnswers;
-		String[] unsortedAnswers;
-
-		choiceList = ((CloseEndedQuestion) currentQuestion).getChoiceList();
-
-		unsortedAnswers = Operations.parseAnswers(currentQuestion.getAnswer());
-		sortedAnswers = new String[choiceList.size()];
-
-		for (String answer : unsortedAnswers)
-			sortedAnswers[choiceList.indexOf(answer)] = answer;
-
-		for (int i = 0; i < choiceList.size(); i++)
-		{
-			lineView = inf.inflate(viewType, questions, false);
-
-			((TextView) lineView).setText(choiceList.get(i));
-
-			if (sortedAnswers != null && sortedAnswers[i] != null)
-				((CompoundButton) lineView).setChecked(true);
-
-			questions.addView(lineView);
-		}
-	}
-
-	/**
 	 * Gets the current page number.
 	 * 
 	 * @return String object representing the text to be displayed.
@@ -360,52 +309,110 @@ public class SurveyActivity extends Activity
 	}
 
 	/**
-	 * Saves the answer of the current question.
+	 * Builds the necessary views to display the open ended question.
+	 * 
+	 * @param inputType
+	 *            Integer representing the inputType of the view to be set.
 	 */
-	private void saveAnswer()
+	private void buildOpenEndedQuestion(int inputType)
 	{
-		String answer = new String();
+		lineView = inf.inflate(R.layout.textbox, questions, false);
+		((TextView) lineView).setInputType(inputType);
 
-		try
-		{
-			if (currentQuestion.getType() == QuestionType.TEXTUAL
-					|| currentQuestion.getType() == QuestionType.NUMERIC
-					|| currentQuestion.getType() == QuestionType.DATE)
-			{
-				answer = ((TextView) questions.getChildAt(0)).getText()
-						.toString();
-				if (!answer.isEmpty())
-					currentQuestion.setAnswer(answer);
-			}
-			else
-			{
-				boolean flag = (currentQuestion.getType() == QuestionType.MULTIPLE_ANSWER);
+		if (currentQuestion.isAnswered())
+			((TextView) lineView).setText(currentQuestion.getAnswer());
 
-				for (int i = 0; i < questions.getChildCount(); i++)
-				{
-					if (((CompoundButton) questions.getChildAt(i)).isChecked())
-					{
-						answer += ((TextView) questions.getChildAt(i))
-								.getText().toString();
-						if (flag)
-							answer += Operations.SEPARATOR;
-						else
-							break;
-					}
-				}
-				if (!answer.isEmpty())
-					currentQuestion.setAnswer(answer);
-			}
-		}
-		catch (InvalidAnswerException e)
+		lineView.setOnKeyListener(keyListener);
+		lineView.setId(0);
+		questions.addView(lineView);
+
+		keyboard.showSoftInput(lineView, 0);
+	}
+
+	/**
+	 * Builds the necessary views to display the date question.
+	 */
+	private void buildDateQuestion()
+	{
+		int year, month, day;
+
+		lineView = inf.inflate(R.layout.datepicker, questions, false);
+
+		if (currentQuestion.isAnswered())
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			year = ((DateQuestion) currentQuestion).getYear();
+			month = ((DateQuestion) currentQuestion).getMonth() - 1;
+			day = ((DateQuestion) currentQuestion).getDay();
 		}
-		catch (ParseException e)
+		else
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			year = calendar.get(Calendar.YEAR);
+			month = calendar.get(Calendar.MONTH);
+			day = calendar.get(Calendar.DAY_OF_MONTH);
+		}
+
+		((DatePicker) lineView).init(year, month, day, null);
+		lineView.setId(0);
+		questions.addView(lineView);
+
+		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
+	}
+
+	/**
+	 * Builds the necessary views to display the close ended question.
+	 * 
+	 * @param viewType
+	 *            Integer representing the type of the view to be constructed.
+	 */
+	private void buildCloseEndedQuestion(int viewType)
+	{
+		String[] sortedAnswers;
+		String[] unsortedAnswers;
+
+		List<String> choiceList = ((CloseEndedQuestion) currentQuestion)
+				.getChoiceList();
+
+		unsortedAnswers = Operations.parseAnswers(currentQuestion.getAnswer());
+		sortedAnswers = new String[choiceList.size()];
+
+		for (String answer : unsortedAnswers)
+			sortedAnswers[choiceList.indexOf(answer)] = answer;
+
+		for (int i = 0; i < choiceList.size(); i++)
+		{
+			lineView = inf.inflate(viewType, questions, false);
+
+			((CompoundButton) lineView).setText(choiceList.get(i));
+
+			if (sortedAnswers != null && sortedAnswers[i] != null)
+				((CompoundButton) lineView).setChecked(true);
+
+			lineView.setId(i);
+			questions.addView(lineView);
+		}
+
+		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
+	}
+
+	/**
+	 * Method fired when the user presses buttons in the application.
+	 * 
+	 * @param v
+	 *            View object which the event originates.
+	 */
+	public void onClick(View v)
+	{
+		switch (v.getId())
+		{
+			case R.id.btnFinish:
+				finishSurvey();
+				break;
+			case R.id.btnPrevious:
+				skipQuestion(false);
+				break;
+			case R.id.btnNext:
+				skipQuestion(true);
+				break;
 		}
 	}
 
@@ -424,18 +431,93 @@ public class SurveyActivity extends Activity
 
 		checkAnswer(next);
 		loadNextQuestion(next);
-
 		buildQuestionViews();
 
-		if (currentQuestion.getType() != QuestionType.TEXTUAL
-				|| currentQuestion.getType() != QuestionType.NUMERIC)
-			keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
-
 		if (pgrBar.getProgress() == pgrBar.getMax())
+			findViewById(R.id.btnFinish).setVisibility(Button.VISIBLE);
+	}
+
+	/**
+	 * Saves the answer of the current question.
+	 */
+	private void saveAnswer()
+	{
+		String answer = new String();
+
+		switch (currentQuestion.getType())
 		{
-			lineView = findViewById(R.id.btnFinish);
-			lineView.setVisibility(Button.VISIBLE);
+			case TEXTUAL:
+			case NUMERIC:
+				answer = ((TextView) lineView).getText().toString();
+				break;
+			case DATE:
+				answer = getDateQuestionAnswer();
+				break;
+			case MULTIPLE_CHOICE:
+			case CONTINGENCY:
+			case SCALAR:
+				answer = getCloseEndedQuestionAnswer(false);
+				break;
+			case MULTIPLE_ANSWER:
+				answer = getCloseEndedQuestionAnswer(true);
+				break;
 		}
+
+		try
+		{
+			if (!answer.isEmpty())
+				currentQuestion.setAnswer(answer);
+		}
+		catch (InvalidAnswerException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ParseException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Gets the answer of the Date Question.
+	 * 
+	 * @return String object representing the answer to this question.
+	 */
+	private String getDateQuestionAnswer()
+	{
+		DatePicker dp = (DatePicker) lineView;
+		return dp.getYear() + "-" + (dp.getMonth() + 1) + "-"
+				+ dp.getDayOfMonth();
+	}
+
+	/**
+	 * Gets the answer of the Close Ended Question.
+	 * 
+	 * @param isMultipleAnswer
+	 *            True if the current question has multiple answers, false
+	 *            otherwise.
+	 * @return String object representing the answer to this question.
+	 */
+	private String getCloseEndedQuestionAnswer(boolean isMultipleAnswer)
+	{
+		String answer = new String();
+
+		for (int i = 0; i < questions.getChildCount(); i++)
+		{
+			if (((CompoundButton) questions.getChildAt(i)).isChecked())
+			{
+				answer += ((CompoundButton) questions.getChildAt(i)).getText()
+						.toString();
+				if (isMultipleAnswer)
+					answer += Operations.SEPARATOR;
+				else
+					return answer;
+			}
+		}
+
+		return answer;
 	}
 
 	/**
@@ -457,9 +539,8 @@ public class SurveyActivity extends Activity
 			{
 				if (next)
 				{
-					List<Question> subsequent = ((ContingencyQuestion) currentQuestion)
+					questionList = ((ContingencyQuestion) currentQuestion)
 							.getSubsequentList();
-					questionList = subsequent;
 					isSubsequent = true;
 				}
 			}
@@ -506,27 +587,6 @@ public class SurveyActivity extends Activity
 				subsequentCursor = -1;
 				currentQuestion = questionList.get(cursor);
 			}
-		}
-	}
-
-	/**
-	 * Method fired when the user presses buttons in the application.
-	 * 
-	 * @param v
-	 *            View object which the event originates.
-	 */
-	public void onClick(View v)
-	{
-		switch (v.getId())
-		{
-			case R.id.btnFinish:
-				finishSurvey();
-				break;
-
-			case R.id.btnPrevious:
-			case R.id.btnNext:
-				skipQuestion((v.getId() == R.id.btnNext));
-				break;
 		}
 	}
 
@@ -769,14 +829,6 @@ public class SurveyActivity extends Activity
 
 		// no portfound
 		throw new IOException("no free port found");
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 }
