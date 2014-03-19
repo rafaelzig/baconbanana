@@ -23,8 +23,9 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
-				if (controller.exists(TABLE_NAME));
+				if (controller.exists(TABLE_NAME)){
 					controller.deleteTable(TABLE_NAME);
+				}
 					
 				Map<String, String> param = new HashMap<>();
 				param.put("Name", "varchar(20)");
