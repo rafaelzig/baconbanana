@@ -86,7 +86,7 @@ public class AddTemplate extends SQLWindow{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(createQuestionBtn)){
 			QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
-			String tit = new String("New " + QuestionType.getType());
+			String tit = new String("New " + type.toString());
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :

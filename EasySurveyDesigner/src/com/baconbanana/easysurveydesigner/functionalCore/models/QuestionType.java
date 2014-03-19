@@ -12,7 +12,7 @@ public enum QuestionType
 			"Multiple Choice"), MULTIPLEANSWER("Multiple Answer"), RATING(
 			"Rating"), CONTINGENCY("Contingency");
 
-	private static String type;
+	private String type;
 
 	/**
 	 * Constructor to assign database values
@@ -21,18 +21,12 @@ public enum QuestionType
 	 */
 	private QuestionType(String type)
 	{
-		this.setType(type);
+		this.type = type;
 	}
+	
+	@Override
 	public String toString()
 	{
-		return getType();
-	}
-
-	public static String getType() {
 		return type;
-	}
-
-	public void setType(String type) {
-		QuestionType.type = type;
 	}
 }

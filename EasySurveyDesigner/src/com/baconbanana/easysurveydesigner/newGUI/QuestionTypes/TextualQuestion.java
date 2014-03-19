@@ -9,8 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.newGUI.AddTemplate;
 import com.baconbanana.easysurveydesigner.newGUI.Question;
 
 public class TextualQuestion extends Question{
