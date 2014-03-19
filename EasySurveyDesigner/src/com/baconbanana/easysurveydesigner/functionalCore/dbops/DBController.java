@@ -1,7 +1,6 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -117,15 +116,18 @@ public class DBController
 	 */
 	public void loadResources() throws SQLException
 	{
-		genericStatement = conn.createStatement();
-		genericStatement.execute("PRAGMA foreign_keys = ON");
+		if (!isReady)
+		{
+			genericStatement = conn.createStatement();
+			genericStatement.execute("PRAGMA foreign_keys = ON");
 
-		selectGeneratedIdStatement = conn
-				.prepareStatement("SELECT last_insert_rowid();");
-		existsStatement = conn
-				.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
+			selectGeneratedIdStatement = conn
+					.prepareStatement("SELECT last_insert_rowid();");
+			existsStatement = conn
+					.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
 
-		isReady = true;
+			isReady = true;
+		}
 	}
 
 	/**
@@ -250,55 +252,9 @@ public class DBController
 
 			List<Object[]> test = prepareResult(genericStatement
 					.executeQuery(sql));
-
 		}
 
 		return null;
-	}
-
-	/**
-	 * TODO
-	 * 
-	 * @throws SQLException
-	 */
-	public List<Object[]> prepareResult(ResultSet rs) throws SQLException
-	{
-		ResultSetMetaData rsMetaData = rs.getMetaData();
-		int columnCount = rsMetaData.getColumnCount();
-
-		ArrayList<Object[]> table = new ArrayList<Object[]>();
-		Object[] header = new String[columnCount];
-
-		Object columnHeader;
-
-		for (int i = 1; i <= columnCount; ++i)
-		{
-			columnHeader = rsMetaData.getColumnLabel(i);
-			header[i - 1] = columnHeader;
-		}
-
-		table.add((Object[]) header);
-
-		Object[] tuple = null;
-
-		while (rs.next())
-		{
-			tuple = (Object[]) Operations.getArray(tuple.getClass(), columnCount);
-
-			Object value;
-
-			for (int i = 1; i <= columnCount; ++i)
-			{
-				value = (Object) rs.getObject(i);
-				tuple[i - 1] = value;
-			}
-
-			table.add(tuple);
-		}
-
-		rs.close();
-
-		return table;
 	}
 
 	/**
@@ -322,6 +278,52 @@ public class DBController
 			throws SQLException, InvalidStateException
 	{
 		return select(tableName, columns, null);
+	}
+
+	/**
+	 * TODO
+	 * 
+	 * @throws SQLException
+	 */
+	private List<Object[]> prepareResult(ResultSet rs) throws SQLException
+	{
+		ResultSetMetaData rsMetaData = rs.getMetaData();
+		int columnCount = rsMetaData.getColumnCount();
+
+		ArrayList<Object[]> table = new ArrayList<Object[]>();
+		Object[] header = new String[columnCount];
+
+		Object columnHeader;
+
+		for (int i = 1; i <= columnCount; ++i)
+		{
+			columnHeader = rsMetaData.getColumnLabel(i);
+			header[i - 1] = columnHeader;
+		}
+
+		table.add((Object[]) header);
+
+		Object[] tuple = null;
+
+		while (rs.next())
+		{
+			tuple = (Object[]) Operations.getArray(tuple.getClass(),
+					columnCount);
+
+			Object value;
+
+			for (int i = 1; i <= columnCount; ++i)
+			{
+				value = (Object) rs.getObject(i);
+				tuple[i - 1] = value;
+			}
+
+			table.add(tuple);
+		}
+
+		rs.close();
+
+		return table;
 	}
 
 	/**

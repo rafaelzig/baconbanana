@@ -16,6 +16,7 @@ public class DBTest
 	public static void main(String[] args)
 	{
 		DBController controller = null;
+		
 		try
 		{
 			try
@@ -23,7 +24,7 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
-				if (controller.exists(TABLE_NAME));
+				if (controller.exists(TABLE_NAME))
 					controller.deleteTable(TABLE_NAME);
 					
 				Map<String, String> param = new HashMap<>();
@@ -38,7 +39,6 @@ public class DBTest
 
 				controller.insertInto(TABLE_NAME, values);
 				
-				System.out.println();
 				controller.printResult(controller.getLastGeneratedKey());
 
 				values = new LinkedList<>();
