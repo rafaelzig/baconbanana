@@ -30,7 +30,8 @@ public abstract class Window implements ActionListener{
 		window = new JFrame(title);
 		if(fullScreen == true){
 			window.setExtendedState(Frame.MAXIMIZED_BOTH); 
-			window.setMinimumSize(new Dimension(400,400));
+			window.setMinimumSize(new Dimension(400,400));	
+			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
 		initiLayout();
 	}
@@ -41,7 +42,6 @@ public abstract class Window implements ActionListener{
 		window.setLocationRelativeTo(null);
 	}
 	public void initiLayout(){
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
 	}
 	
@@ -53,6 +53,4 @@ public abstract class Window implements ActionListener{
 		border = BorderFactory.createLineBorder(Color.GRAY, 2);
 		return border;
 	}
-	
-	
 }

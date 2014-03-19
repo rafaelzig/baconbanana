@@ -21,8 +21,12 @@ public class MultipleQuestion extends Question{
 	private JTable choicesTable;
 	private String[] options = new String[9];
 
-	public MultipleQuestion(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
+	public MultipleQuestion(String tit, int width, int height) {
+		super(tit, width, height);
+		initiWidgets();
+		initiWidgetsMq();
+		setFrameOptions();
+		initiLayout();
 	}
 
 	public void initiWidgetsMq(){
@@ -54,8 +58,7 @@ public class MultipleQuestion extends Question{
 		options[answerLimit++] = "Type Option Here";
 		options[answerLimit++] = "Type Option Here";
 		//I have broken reDraw thing :( but I only renamed the model :(
-		//this.reDraw(choicesTableModel, options);
-
+		//getWindow().reDraw(choicesTableModel, options);
 		JScrollPane scrollPane = new JScrollPane(choicesTable);
 		scrollPane.setPreferredSize(new Dimension(200, 400));
 
@@ -98,7 +101,7 @@ public class MultipleQuestion extends Question{
 			}
 		}
 		else if(e.getSource().equals(removeBtn)){
-//TODO fix it
+            //TODO fix it
 			for (int x = 0; x < choicesTableModel.getRowCount(); x++) {
 
 				if ((boolean) choicesTableModel.getValueAt(x, 1) == true) {

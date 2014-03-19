@@ -16,10 +16,12 @@ public class TextualQuestion extends Question{
 
 	JTextArea answerTxa;
 
-	public TextualQuestion(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
+	public TextualQuestion(String tit, int width, int height) {
+		super(tit, width, height);
 		initiWidgets();
 		initiWidgetsTq();
+		setFrameOptions();
+		initiLayout();
 	}
 	public void initiWidgetsTq() {
 		

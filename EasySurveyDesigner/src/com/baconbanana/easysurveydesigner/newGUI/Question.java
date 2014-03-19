@@ -16,8 +16,10 @@ public class Question extends SQLWindow{
 	private JButton saveBtn;
 	private JButton cancelBtn;
 
-	public Question(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
+	public Question(String tit, int width, int height) {
+		super(tit, width, height);
+		setFrameOptions();
+		initiLayout();
 	}
 
 	public void initiWidgets(){
@@ -33,12 +35,11 @@ public class Question extends SQLWindow{
 		
 
 	}
-	//This method adds general functionality to each cancel button in every type of the question.
+	//This method controls general functionality to each cancel button in every type of the question.
 	public void cancelQuestion(){
-		new AddTemplate("Create New Template", 500, 800);
 		getWindow().dispose();
 	}
-	
+	//This method controls general functionality to each select button in every type of the question.
 	public void saveQuestion(){
 		AddTemplate.getTemplatelistmodel().addElement(getQuestionTxa().getText() + "("
 				+ getQuestionType() + ")");

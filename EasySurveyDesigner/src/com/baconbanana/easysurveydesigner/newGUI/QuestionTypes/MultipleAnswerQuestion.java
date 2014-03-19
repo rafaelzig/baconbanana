@@ -4,10 +4,8 @@ import com.baconbanana.easysurveydesigner.newGUI.MultipleQuestion;
 
 public class MultipleAnswerQuestion extends MultipleQuestion{
 
-	public MultipleAnswerQuestion(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
-		initiWidgets();
-		initiWidgetsMq();
+	public MultipleAnswerQuestion(String tit, int width, int height) {
+		super(tit, width, height);
 	}
 
 }

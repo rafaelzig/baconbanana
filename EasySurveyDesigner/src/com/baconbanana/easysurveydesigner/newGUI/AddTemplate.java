@@ -36,8 +36,12 @@ public class AddTemplate extends SQLWindow{
 	public AddTemplate(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
+		setFrameOptions();
+		initiLayout();
 	}
 	private void initiWidgets(){
+
+		
 		getWindow().setLayout(new BorderLayout());
 
 		createQuestionBtn = new JButton("Create question");
@@ -96,13 +100,13 @@ public class AddTemplate extends SQLWindow{
 				new NumericQuestion();
 				break;	
 			case TEXTUAL :
-				new TextualQuestion(tit, true);
+				new TextualQuestion(tit, 800, 800);
 				break;	
 			case MULTIPLECHOICE :
-				new MultipleChoiceQuestion(tit, true);
+				new MultipleChoiceQuestion(tit, 800, 800);
 				break;
 			case MULTIPLEANSWER :
-				new MultipleAnswerQuestion(tit, true);
+				new MultipleAnswerQuestion(tit, 800, 800);
 				break;
 			case RATING :
 				new RantingQuestion();
