@@ -109,7 +109,7 @@ public class AddTemplate extends SQLWindow{
 				new MultipleAnswerQuestion(tit, 800, 800);
 				break;
 			case RATING :
-				new RantingQuestion();
+				new RatingQuestion();
 				break;
 			case CONTINGENCY :
 				new ContingencyQuestion();
