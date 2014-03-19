@@ -1,9 +1,11 @@
 package com.baconbanana.easysurveydesigner.functionalCore.exceptions;
 
 /**
- * TODO
+ * Exception class which describes when an error occurs when the database
+ * resources have not been loaded prior to its utilisation.
+ * 
  * @author Rafael da Silva Costa & Team
- *
+ * 
  */
 @SuppressWarnings("serial")
 public class InvalidStateException extends Exception
