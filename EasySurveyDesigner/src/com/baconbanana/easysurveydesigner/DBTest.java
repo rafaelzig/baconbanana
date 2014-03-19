@@ -21,8 +21,11 @@ public class DBTest
 			try
 			{
 				controller = DBController.getInstance();
-				controller.prepareDB();
+				controller.loadResources();
 
+				if (controller.exists(TABLE_NAME));
+					controller.deleteTable(TABLE_NAME);
+					
 				Map<String, String> param = new HashMap<>();
 				param.put("Name", "varchar(20)");
 				param.put("Occupation", "varchar(20)");
@@ -34,6 +37,9 @@ public class DBTest
 				values.add("'Student'");
 
 				controller.insertInto(TABLE_NAME, values);
+				
+				System.out.println();
+				controller.printResult(controller.getLastGeneratedKey());
 
 				values = new LinkedList<>();
 				values.add("'Igor'");
@@ -106,11 +112,11 @@ public class DBTest
 				controller.printResult(controller
 						.selectAll(TABLE_NAME));
 				
-				controller.deleteAll(TABLE_NAME);
-				
-				System.out.println();
-				controller.printResult(controller
-						.selectAll(TABLE_NAME));
+//				controller.deleteAll(TABLE_NAME);
+//				
+//				System.out.println();
+//				controller.printResult(controller
+//						.selectAll(TABLE_NAME));
 				
 			}
 			catch (InvalidStateException e)

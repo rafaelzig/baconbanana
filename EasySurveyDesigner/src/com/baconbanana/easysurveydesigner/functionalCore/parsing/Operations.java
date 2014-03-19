@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,8 +36,8 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 /**
  * @author Rafael da Silva Costa & Team
  * 
- *         This class contains static methods for reading and writing to a file,
- *         and for parsing a JSON string into a JSONObject.
+ *         This class contains various static methods which assist the other classes, these range from reading and writing to a file,
+ *         parsing a JSON string into a JSONObject and also handling generic array generation.
  * 
  */
 public class Operations
@@ -263,5 +264,11 @@ public class Operations
 			return QuestionType.valueOf(value.replaceAll("\\s+","").toUpperCase());
 
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <K> K[] getArray(Class<K> arrayClass, int arraySize)
+	{
+		return (K[]) Array.newInstance(arrayClass, arraySize);
 	}
 }
