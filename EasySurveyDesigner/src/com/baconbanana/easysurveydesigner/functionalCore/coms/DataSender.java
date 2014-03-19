@@ -19,7 +19,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-import com.baconbanana.easysurveydesigner.gui.Encryption;
+import com.baconbanana.easysurveydesigner.newGUI.Encryption;
 import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
 
 public class DataSender extends Thread {

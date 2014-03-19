@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBTest.SqlTask;
 import com.baconbanana.easysurveydesigner.gui.LoginPage;
 import com.baconbanana.easysurveydesigner.gui.MenuFrame;
 
@@ -207,49 +206,7 @@ public class DBOperationOld {
 		}
 	}
 	//----------------------------------------------------------------------------------------
-	public static void raf() throws SQLException{
-		try {
-			Class.forName("org.sqlite.JDBC");
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		Connection c = getConnect();
 
-		SqlTask tasks[] = { new SqlTask(c, "Gandhi", "politics"),
-				new SqlTask(c, "Turing", "computers"),
-				new SqlTask(c, "Picaso", "artist"),
-				new SqlTask(c, "shakespeare", "writer"),
-				new SqlTask(c, "tesla", "inventor"), };
-
-		System.out.println("Sequential DB access:");
-
-		Thread threads[] = new Thread[tasks.length];
-		for (int i = 0; i < tasks.length; i++)
-			threads[i] = new Thread(tasks[i]);
-
-		for (int i = 0; i < tasks.length; i++)
-		{
-			threads[i].start();
-			try {
-				threads[i].join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		stat = c.createStatement();
-		ResultSet rs = stat.executeQuery("SELECT * FROM people");
-		ResultSetMetaData rsmd = rs.getMetaData();
-		while (rs.next())
-		{
-			System.out.println("name = " + rs.getString("name"));
-			System.out.println("job = " + rs.getString("occupation"));
-		}
-		stat.close();
-		c.close();
-	}
 
 	public static class SqlTask implements Runnable
 	{

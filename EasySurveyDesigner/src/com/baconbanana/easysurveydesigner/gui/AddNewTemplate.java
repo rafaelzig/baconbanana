@@ -37,7 +37,7 @@ public class AddNewTemplate {
 	public AddNewTemplate(String stage) {
 		this.stage = stage;
 		setThings();
-		setListeners();
+		//setListeners();
 		window.setLocationRelativeTo(null);
 
 	}
@@ -83,9 +83,9 @@ public class AddNewTemplate {
 		window.setSize(800, 800);
 		window.setVisible(true);
 
-	}
+	
 
-	public void setListeners() {
+	/*public void setListeners() {
 		createQuestion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e1) {
@@ -107,7 +107,7 @@ public class AddNewTemplate {
 				
 				window.dispose();
 			}
-		});
+		});*/
 		
 		save.addActionListener(new ActionListener() {
 			
