@@ -94,10 +94,10 @@ public class AddTemplate extends SQLWindow{
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				new NumericQuestion();
+				new NumericQuestion(tit, 800, 800);
 				break;
 			case DATE :
-				new NumericQuestion();
+				new DateQuestion(tit, 800, 800);
 				break;	
 			case TEXTUAL :
 				new TextualQuestion(tit, 800, 800);
