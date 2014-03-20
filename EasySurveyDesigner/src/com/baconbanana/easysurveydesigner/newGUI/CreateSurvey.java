@@ -55,7 +55,7 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
-		SQLList templateModel = new SQLList("Template", 1 , "Template", "QuestionID");
+		SQLList templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
 		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
 		templateList = new JList<String>(templateModel);
