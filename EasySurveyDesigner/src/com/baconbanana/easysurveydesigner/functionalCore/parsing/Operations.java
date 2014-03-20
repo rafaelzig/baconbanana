@@ -35,8 +35,8 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 /**
  * @author Rafael da Silva Costa & Team
  * 
- *         This class contains static methods for reading and writing to a file,
- *         and for parsing a JSON string into a JSONObject.
+ *         This class contains various static methods which assist the other classes, these range from reading and writing to a file,
+ *         parsing a JSON string into a JSONObject and also handling generic array generation.
  * 
  */
 public class Operations

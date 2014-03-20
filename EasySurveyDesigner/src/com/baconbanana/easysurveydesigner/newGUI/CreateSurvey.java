@@ -106,8 +106,10 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate("Create New Template", 500, 800);
-			getWindow().setEnabled(false);
+			new AddTemplate("Create New Template", 800, 800);
+			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
+			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
+			//getWindow().setEnabled(false);
 			
 		}else if(e.getSource().equals(editBtn)){
 			//TODO edit

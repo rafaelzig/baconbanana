@@ -1,39 +1,45 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.baconbanana.easysurveydesigner.DBTest;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
+/**
+ * Singleton Class used to perform Database operations.
+ * 
+ * @author Rafael da Silva Costa & Team
+ * 
+ */
 public class DBController
 {
-	private static final String DB_NAME = "easysurvey";
-	private static final String MAC_DB_PATH = "/Documents/SQLite/" + DB_NAME
-			+ ".db";
-	private static final String MAC_SYS_DIR = System.getenv("HOME");
-	private static final String WIN_DB_PATH = "\\My Documents\\SQLite\\"
-			+ DB_NAME + ".db";
-	private static final String WIN_SYS_DIR = System.getenv("USERPROFILE");
-	private static DBController instance = null;
+	private static final String DB_NAME = "easysurvey.db";
+	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
+			+ "/Documents/SQLite");
+	private static final File WIN_WORKING_DIR = new File(
+			System.getenv("USERPROFILE") + "\\My Documents\\SQLite");
 
+	private static DBController instance = null;
 	private Connection conn;
 	private Statement genericStatement;
+	private PreparedStatement selectGeneratedIdStatement, existsStatement;
 	private boolean isReady = false;
 
 	/**
-	 * TODO
+	 * Returns the instance of this singleton class.
 	 * 
-	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * @return The instance of this singleton class.
 	 */
 	public static DBController getInstance() throws ClassNotFoundException,
 			SQLException
@@ -42,35 +48,14 @@ public class DBController
 	}
 
 	/**
-	 * TODO
-	 * 
-	 * @throws SQLException
-	 */
-	public void close() throws SQLException
-	{
-		closeResources();
-		isReady = false;
-		instance = null;
-	}
-
-	/**
-	 * TODO
-	 * 
-	 * @throws SQLException
-	 */
-	private void closeResources() throws SQLException
-	{
-		if (genericStatement != null)
-			genericStatement.close();
-		if (conn != null)
-			conn.close();
-	}
-
-	/**
-	 * TODO
+	 * Private constructor of this singleton class.
 	 * 
 	 * @throws ClassNotFoundException
+	 *             Signals an error that no definition for the class with the
+	 *             specified name could be found.
 	 * @throws SQLException
+	 *             Signals an error has occurred when closing the sqlite
+	 *             resources.
 	 */
 	private DBController() throws ClassNotFoundException, SQLException
 	{
@@ -79,55 +64,88 @@ public class DBController
 	}
 
 	/**
-	 * TODO
-	 * 
-	 * @throws ClassNotFoundException
-	 * @throws SQLException
+	 * Closes the resources associated with this singleton class.
 	 */
-	private void openConnection() throws ClassNotFoundException, SQLException
+	public void close() throws SQLException
 	{
-		String connString = "jdbc:sqlite:";
-		String osName = System.getProperty("os.name");
+		try
+		{
+			if (genericStatement != null)
+				genericStatement.close();
+			if (selectGeneratedIdStatement != null)
+				selectGeneratedIdStatement.close();
+			if (existsStatement != null)
+				existsStatement.close();
+		}
+		finally
+		{
+			if (conn != null)
+				conn.close();
+		}
 
-		if (osName.contains("Windows"))
-			connString += WIN_SYS_DIR + WIN_DB_PATH;
-		else if (osName.contains("Mac"))
-			connString += MAC_SYS_DIR + MAC_DB_PATH;
-
-		Class.forName("org.sqlite.JDBC");
-
-		// conn = DriverManager.getConnection(connString);
-		conn = DriverManager.getConnection("jdbc:sqlite:" + DB_NAME + ".db");
-	}
-
-	public void prepareDB() throws SQLException
-	{
-		genericStatement = conn.createStatement();
-		genericStatement.execute("PRAGMA foreign_keys = ON");
-		genericStatement.executeUpdate("drop table if exists " + DBTest.TABLE_NAME + ";");
-
-		isReady = true;
+		isReady = false;
+		instance = null;
 	}
 
 	/**
-	 * TODO
+	 * Opens the database SQLite connection.
+	 */
+	private void openConnection() throws ClassNotFoundException, SQLException
+	{
+		String osName = System.getProperty("os.name");
+		String connString = "jdbc:sqlite:";
+
+		if (osName.contains("Windows"))
+		{
+			WIN_WORKING_DIR.mkdirs();
+			connString += WIN_WORKING_DIR + "\\";
+		}
+		else if (osName.contains("Mac"))
+		{
+			MAC_WORKING_DIR.mkdirs();
+			connString += MAC_WORKING_DIR + "/";
+		}
+
+		Class.forName("org.sqlite.JDBC");
+
+		conn = DriverManager.getConnection(connString + DB_NAME);
+	}
+
+	/**
+	 * Loads the required SQLite resources for this Singleton class to function.
+	 */
+	public void loadResources() throws SQLException
+	{
+		if (!isReady)
+		{
+			genericStatement = conn.createStatement();
+			genericStatement.execute("PRAGMA foreign_keys = ON");
+
+			selectGeneratedIdStatement = conn
+					.prepareStatement("SELECT last_insert_rowid();");
+			existsStatement = conn
+					.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
+
+			isReady = true;
+		}
+	}
+
+	/**
+	 * Creates a Database table with the specified table name and parameters.
 	 * 
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 * @throws InvalidStateException
+	 * @see Example: CREATE TABLE table_name ( column_name1 data_type(size),
+	 *      column_name2 data_type(size), column_name3 data_type(size), .... );
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param parameters
+	 *            Map<String, String> containing the key values representing the
+	 *            parameters.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
 	 */
 	public int createTable(String tableName, Map<String, String> parameters)
 			throws SQLException, InvalidStateException
 	{
-		// CREATE TABLE table_name
-		// (
-		// column_name1 data_type(size),
-		// column_name2 data_type(size),
-		// column_name3 data_type(size),
-		// ....
-		// );
-
 		if (!isReady)
 			throw new InvalidStateException();
 
@@ -139,23 +157,28 @@ public class DBController
 
 			return genericStatement.executeUpdate(sql);
 		}
-		return -1;
+		return 0;
 	}
 
 	/**
-	 * TODO
+	 * Inserts the specified values into the specified columns into the database
+	 * table with the specified name.
 	 * 
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 * @throws InvalidStateException
+	 * @see Example: INSERT INTO tableName (column1,column2,column3,...) VALUES
+	 *      (value1,value2,value3,...);
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            List of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param values
+	 *            List of String objects representing the values to be inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> columns,
 			List<String> values) throws SQLException, InvalidStateException
 	{
-		// INSERT INTO table_name (column1,column2,column3,...)
-		// VALUES (value1,value2,value3,...);
-
 		if (!isReady)
 			throw new InvalidStateException();
 
@@ -168,46 +191,100 @@ public class DBController
 
 			sql += " VALUES " + prepareSql(values, true) + ";";
 
-			return genericStatement.executeUpdate(sql);
-
+			genericStatement.executeUpdate(sql);
+			
+			return getLastGeneratedKey();
 		}
 
-		return -1;
+		return 0;
 	}
 
 	/**
-	 * TODO
+	 * Inserts the specified values into the specified columns into the database
+	 * table with the specified name.
 	 * 
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 * @throws InvalidStateException
+	 * @see Example: INSERT INTO tableName (column1,column2,column3,...) VALUES
+	 *      (value1,value2,value3,...);
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param values
+	 *            Array of String objects representing the values to be
+	 *            inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
+	 */
+	public int insertInto(String tableName, String[] columns, String[] values)
+			throws SQLException, InvalidStateException
+	{
+		return insertInto(tableName, Arrays.asList(columns),
+				Arrays.asList(values));
+	}
+
+	/**
+	 * Inserts the specified values into the database table with the specified
+	 * name.
+	 * 
+	 * @see Example: INSERT INTO tableName VALUES (value1,value2,value3,...);
+	 * 
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param values
+	 *            List of String objects representing the values to be inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> values)
 			throws SQLException, InvalidStateException
 	{
-		// INSERT INTO table_name
-		// VALUES (value1,value2,value3,...);
-
 		return insertInto(tableName, null, values);
 	}
 
 	/**
-	 * TODO
+	 * Inserts the specified values into the database table with the specified
+	 * name.
 	 * 
-	 * @param colName
-	 * @param value
-	 * @return
-	 * @throws SQLException
-	 * @throws InvalidStateException
+	 * @see Example: INSERT INTO tableName VALUES (value1,value2,value3,...);
+	 * 
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param values
+	 *            Array of String objects representing the values to be
+	 *            inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
 	 */
-	public ResultSet select(String tableName, List<String> columns,
+	public int insertInto(String tableName, String[] values)
+			throws SQLException, InvalidStateException
+	{
+		return insertInto(tableName, null, values);
+	}
+
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition.
+	 * 
+	 * @see Example: SELECT column1, column2 FROM tableName WHERE condition;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            List of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, List<String> columns,
 			String condition) throws SQLException, InvalidStateException
 	{
-		// SELECT column_name,column_name
-		// FROM table_name
-		// WHERE condition;
-
 		if (!isReady)
 			throw new InvalidStateException();
 
@@ -219,65 +296,191 @@ public class DBController
 			if (condition != null && !condition.isEmpty())
 				sql += " WHERE " + condition + ";";
 
-			return genericStatement.executeQuery(sql);
+			return prepareResult(genericStatement.executeQuery(sql));
 		}
 
 		return null;
 	}
-
 	/**
-	 * TODO
-	 * 
-	 * @param colName
-	 * @param value
-	 * @return
-	 * @throws SQLException
-	 * @throws InvalidStateException
+	 * Selects data from column and sorts it in ascending order
 	 */
-	public ResultSet select(String tableName, List<String> columns)
+	public List<Object[]> selectSort(String tableName, List<String> columns,
+			String condition, int sortCol) throws SQLException, InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+		if (tableName != null && !tableName.isEmpty())
+		{
+			String sql = "SELECT " + prepareSql(columns, false);
+			sql += " FROM " + tableName;
+
+			if (condition != null && !condition.isEmpty())
+				sql += " WHERE " + condition + "ORDER BY " + columns.get(sortCol) + " ASC;";
+
+			return prepareResult(genericStatement.executeQuery(sql));
+
+		}
+
+		return null;
+	}
+	
+	/**
+	 * Selects data from column and sorts it in ascending order
+	 */
+	public List<Object[]> selectSort(String tableName, String[] columns, int sortCol)
 			throws SQLException, InvalidStateException
 	{
-		// SELECT column_name,column_name
-		// FROM table_name;
+		return selectSort(tableName, Arrays.asList(columns), null, sortCol);
+	}
+	
+	
+	
 
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition.
+	 * 
+	 * @see Example: SELECT column1, column2 FROM tableName WHERE condition;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, String[] columns,
+			String condition) throws SQLException, InvalidStateException
+	{
+		return select(tableName, Arrays.asList(columns), condition);
+	}
+
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name and columns.
+	 * 
+	 * @see Example: SELECT column1, column2 FROM tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            List of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, List<String> columns)
+			throws SQLException, InvalidStateException
+	{
 		return select(tableName, columns, null);
 	}
 
 	/**
-	 * TODO
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name and columns.
 	 * 
-	 * @param colName
-	 * @return
-	 * @throws SQLException
+	 * @see Example: SELECT column1, column2 FROM tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
 	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
-	public ResultSet selectAll(String tableName) throws SQLException,
-			InvalidStateException
+	public List<Object[]> select(String tableName, String[] columns)
+			throws SQLException, InvalidStateException
 	{
-		// SELECT * FROM table_name;
-
-		String sql = "SELECT * FROM " + tableName + ";";
-		return genericStatement.executeQuery(sql);
+		return select(tableName, Arrays.asList(columns), null);
 	}
 
 	/**
-	 * TODO
+	 * Gets the all values from the database table with the specified table
+	 * name.
 	 * 
-	 * @param colName
-	 * @param value
-	 * @param criteriaCol
-	 * @param criteriaValue
-	 * @return
-	 * @throws SQLException
+	 * @see Example: SELECT * FROM tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
 	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> selectAll(String tableName) throws SQLException,
+			InvalidStateException
+	{
+		String sql = "SELECT * FROM " + tableName + ";";
+		return prepareResult(genericStatement.executeQuery(sql));
+	}
+
+	/**
+	 * Checks if the database table with the specified table name exists or not.
+	 * 
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @return true if the database table with the specified table name exists,
+	 *         false otherwise.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public boolean exists(String tableName) throws SQLException,
+			InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+		existsStatement.setString(1, tableName);
+
+		ResultSet rs = existsStatement.executeQuery();
+
+		boolean exists = rs.next();
+
+		rs.close();
+
+		return exists;
+	}
+
+	/**
+	 * Updates the database table with the specified table name, with the
+	 * specified parameters and condition.
+	 * 
+	 * @see Example: UPDATE tableName SET column1=value1,column2=value2,...
+	 *      WHERE condition;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param parameters
+	 *            Map<String, String> containing the key values representing the
+	 *            parameters of this SQL UPDATE statement.
+	 * @param condition
+	 *            String object representing the condition to be applied on this
+	 *            SQL UPDATE statement.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
 	public int update(String tableName, Map<String, String> parameters,
 			String condition) throws SQLException, InvalidStateException
 	{
-		// UPDATE table_name
-		// SET column1=value1,column2=value2,...
-		// WHERE condition;
-
 		if (!isReady)
 			throw new InvalidStateException();
 
@@ -293,42 +496,51 @@ public class DBController
 
 			return genericStatement.executeUpdate(sql);
 		}
-		return -1;
+		return 0;
 	}
 
 	/**
-	 * TODO
+	 * Updates all the values of the database table with the specified table
+	 * name, with the specified parameters.
 	 * 
+	 * @see Example: UPDATE tableName SET column1=value1,column2=value2,...;
 	 * @param tableName
+	 *            String object representing the table name.
 	 * @param parameters
-	 * @return
-	 * @throws SQLException
+	 *            Map<String, String> containing the key values representing the
+	 *            parameters of this SQL UPDATE statement.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
 	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
 	public int updateAll(String tableName, Map<String, String> parameters)
 			throws SQLException, InvalidStateException
 	{
-		// UPDATE table_name
-		// SET column1=value1,column2=value2,...
-
 		return update(tableName, parameters, null);
 	}
 
 	/**
-	 * TODO
+	 * Deletes the rows of the database table with the specified table name,
+	 * which meet the specified criteria.
 	 * 
-	 * @param colName
-	 * @param colValue
-	 * @return
-	 * @throws SQLException
+	 * @see Example: DELETE FROM tableName WHERE condition;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param condition
+	 *            String object representing the condition to be applied on this
+	 *            SQL UPDATE statement.
+	 * 
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
 	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
-	public int delete(String tableName, String criteria) throws SQLException,
+	public int delete(String tableName, String condition) throws SQLException,
 			InvalidStateException
 	{
-		// DELETE FROM table_name
-		// WHERE some_column=some_value;
-
 		if (!isReady)
 			throw new InvalidStateException();
 
@@ -336,39 +548,169 @@ public class DBController
 		{
 			String sql = "DELETE FROM " + tableName;
 
-			if (criteria != null)
-				sql += " WHERE " + criteria;
+			if (condition != null)
+				sql += " WHERE " + condition;
 
 			sql += ";";
 
 			return genericStatement.executeUpdate(sql);
 		}
-		return -1;
+		return 0;
 	}
 
 	/**
-	 * TODO
+	 * Deletes all rows of the database table with the specified table name,
 	 * 
-	 * @param colName
-	 * @param colValue
-	 * @return
-	 * @throws SQLException
+	 * @see Example: DELETE FROM tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
 	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
 	public int deleteAll(String tableName) throws SQLException,
 			InvalidStateException
 	{
-		// DELETE FROM table_name
-
 		return delete(tableName, null);
 	}
 
 	/**
-	 * TODO
+	 * Deletes the database table with the specified table name.
+	 * 
+	 * @see Example: DROP TABLE tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public int deleteTable(String tableName) throws SQLException,
+			InvalidStateException
+	{
+		return drop(tableName, true);
+	}
+
+	/**
+	 * Deletes the database table with the specified table name.
+	 * 
+	 * @see Example: DROP DATABASE databaseName;
+	 * @param databaseName
+	 *            String object representing the database name.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public int deleteDatabase(String databaseName) throws SQLException,
+			InvalidStateException
+	{
+		return drop(databaseName, false);
+	}
+
+	/**
+	 * Helper method which deletes either the database with the specified name
+	 * or the database table with the specified name.
+	 * 
+	 * @param name
+	 *            String object representing the resource name to be deleted.
+	 * @param isTable
+	 *            Boolean representing wheter or not the resource to be deleted
+	 *            is a table.
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	private int drop(String name, boolean isTable)
+			throws InvalidStateException, SQLException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+		if (name != null && !name.isEmpty())
+		{
+			String sql = (isTable) ? "DROP TABLE " : "DROP DATABASE ";
+
+			sql += name + ";";
+
+			return genericStatement.executeUpdate(sql);
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Retrieves any auto-generated keys created as a result of the last SQL
+	 * INSERT statement. If this statement did not generate any keys, an empty
+	 * ResultSet object is returned.
+	 * 
+	 * @return Integer containing the auto-generated key generated
+	 *         by the execution of the last SQL INSERT statement.
+	 */
+	public int getLastGeneratedKey() throws SQLException,
+			InvalidStateException
+	{
+		ResultSet rs = selectGeneratedIdStatement.executeQuery();
+		int generatedId = rs.getInt(1);
+		rs.close();
+		
+		return generatedId;
+	}
+
+	/**
+	 * Auxiliary method which takes a ResultSet object and parses the result
+	 * into a List of Object arrays.
+	 * 
+	 * @param rs
+	 *            ResultSet object containing the data to parse.
+	 * @return List of Object arrays containing the result.
+	 */
+	private List<Object[]> prepareResult(ResultSet rs) throws SQLException
+	{
+		ResultSetMetaData rsMetaData = rs.getMetaData();
+		int columnCount = rsMetaData.getColumnCount();
+	
+		List<Object[]> resultTable = new LinkedList<>();
+		String[] header = new String[columnCount];
+	
+		for (int i = 1; i <= columnCount; ++i)
+			header[i - 1] = rsMetaData.getColumnLabel(i);
+	
+		resultTable.add(header);
+	
+		Object[] tuple = null;
+	
+		while (rs.next())
+		{
+			tuple = new Object[columnCount];
+	
+			for (int i = 1; i <= columnCount; ++i)
+				tuple[i - 1] = rs.getObject(i);
+	
+			resultTable.add(tuple);
+		}
+	
+		rs.close();
+	
+		return resultTable;
+	}
+
+	/**
+	 * Helper method which prepares the SQL string to be used in the Statement
+	 * object.
 	 * 
 	 * @param columns
+	 *            List of String objects representing the columns.
 	 * @param addBrackets
-	 * @return
+	 *            Whether or not the String object to be returned should be
+	 *            enclosed by brackets.
+	 * @return String object containing the prepared SQL statement.
 	 */
 	private String prepareSql(List<String> columns, boolean addBrackets)
 	{
@@ -387,11 +729,16 @@ public class DBController
 	}
 
 	/**
-	 * TODO
+	 * Helper method which prepares the SQL string to be used in the Statement
+	 * object.
 	 * 
 	 * @param parameters
+	 *            Map<String, String> containing the key values representing the
+	 *            parameters.
 	 * @param separator
-	 * @return
+	 *            String object representing the separator to be used between
+	 *            the parameters.
+	 * @return String object containing the prepared SQL statement.
 	 */
 	private String prepareSql(Map<String, String> parameters, String separator)
 	{
@@ -409,29 +756,24 @@ public class DBController
 	}
 
 	/**
-	 * TODO
+	 * Convenience method which takes a List of Object arrays as argument and prints
+	 * the results, line by line, to the console.
 	 * 
-	 * @param rs
-	 * @throws SQLException
+	 * @param resultTable
+	 *            List of Object arrays containing the result.
 	 */
-	public void printResult(ResultSet rs) throws SQLException
+	public void printResult(List<Object[]> resultTable) throws SQLException
 	{
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int columnsNumber = rsmd.getColumnCount();
-
-		System.out.println("SELECT STATEMENT :");
-
-		while (rs.next())
+		for (Object[] row : resultTable)
 		{
-			for (int i = 1; i <= columnsNumber; i++)
+			for (int i = 0; i < row.length; i++)
 			{
-				if (i > 1)
-					System.out.print(" - ");
-				System.out
-						.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
-
+				if (i > 0)
+					System.out.print("\t\t");
+				
+				System.out.print(row[i]);
 			}
-
+			
 			System.out.println();
 		}
 	}

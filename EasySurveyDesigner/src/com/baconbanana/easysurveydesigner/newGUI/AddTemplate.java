@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.*;
 
 
@@ -36,8 +37,12 @@ public class AddTemplate extends SQLWindow{
 	public AddTemplate(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
+		setFrameOptions();
+		initiLayout();
 	}
 	private void initiWidgets(){
+
+		
 		getWindow().setLayout(new BorderLayout());
 
 		createQuestionBtn = new JButton("Create question");
@@ -57,28 +62,28 @@ public class AddTemplate extends SQLWindow{
 
 		// --------------------------------------------------------------------
 
-				getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
-				getWindow().add(getTemplateList(), BorderLayout.CENTER);
-				getTemplateList().setBorder(getBorder());
+		getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
+		getWindow().add(getTemplateList(), BorderLayout.CENTER);
+		getTemplateList().setBorder(getBorder());
 				
-				JPanel jpButtons = new JPanel(new FlowLayout());
-				jpButtons.add(typeComboBox);
-				jpButtons.add(createQuestionBtn);
-				createQuestionBtn.addActionListener(this);
-				jpButtons.add(addExistingQuestionBtn);
-				addExistingQuestionBtn.addActionListener(this);
-				jpButtons.add(deleteBtn);
-				deleteBtn.addActionListener(this);
-				jpButtons.add(saveBtn);
-				saveBtn.addActionListener(this);
-				jpButtons.add(cancelBtn);
-				cancelBtn.addActionListener(this);
-				
-				getWindow().add(jpButtons, BorderLayout.SOUTH);
-
-				getTemplateList().setModel(getTemplatelistmodel());
-				
-				setFrameOptions();
+		JPanel jpButtons = new JPanel(new FlowLayout());
+		jpButtons.add(typeComboBox);
+		jpButtons.add(createQuestionBtn);
+		createQuestionBtn.addActionListener(this);
+		jpButtons.add(addExistingQuestionBtn);
+		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(deleteBtn);
+		deleteBtn.addActionListener(this);
+		jpButtons.add(saveBtn);
+		saveBtn.addActionListener(this);
+		jpButtons.add(cancelBtn);
+		cancelBtn.addActionListener(this);
+		
+		getWindow().add(jpButtons, BorderLayout.SOUTH);
+		SQLList templateModel = new SQLList("Template", new String[] {"'Template'"} , 0);
+		populateList(templateList, templateModel);
+		
+		setFrameOptions();
 	}
 
 	@Override
@@ -86,26 +91,26 @@ public class AddTemplate extends SQLWindow{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(createQuestionBtn)){
 			QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
-			String tit = new String("New " + QuestionType.getType());
+			String tit = new String("New " + type.toString());
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				new NumericQuestion();
+				new NumericQuestion(tit, 800, 800);
 				break;
 			case DATE :
-				new NumericQuestion();
+				new DateQuestion(tit, 800, 800);
 				break;	
 			case TEXTUAL :
-				new TextualQuestion(tit, true);
+				new TextualQuestion(tit, 800, 800);
 				break;	
 			case MULTIPLECHOICE :
-				new MultipleChoiceQuestion(tit, true);
+				new MultipleChoiceQuestion(tit, 800, 800);
 				break;
 			case MULTIPLEANSWER :
-				new MultipleAnswerQuestion(tit, true);
+				new MultipleAnswerQuestion(tit, 800, 800);
 				break;
 			case RATING :
-				new RantingQuestion();
+				new RatingQuestion();
 				break;
 			case CONTINGENCY :
 				new ContingencyQuestion();
@@ -122,7 +127,7 @@ public class AddTemplate extends SQLWindow{
 		else if(e.getSource().equals(saveBtn)){
 			//TODO saveBtn
 		}else if(e.getSource().equals(cancelBtn)){
-			new Menu("Menu", 400, 400);
+			new Menu("Menu", 300, 300);
 			getWindow().dispose();
 		}
 		
