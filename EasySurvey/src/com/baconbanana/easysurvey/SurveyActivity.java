@@ -610,7 +610,7 @@ public class SurveyActivity extends Activity
 			e.printStackTrace();
 		}
 
-		Intent intent = new Intent(this, getSurvey.class);
+		Intent intent = new Intent(this, ConnectionActivity.class);
 		startActivity(intent);
 		submit(true);
 	}

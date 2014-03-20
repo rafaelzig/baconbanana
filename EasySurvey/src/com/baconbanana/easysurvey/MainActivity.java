@@ -69,28 +69,28 @@ public class MainActivity extends Activity
 		JSONObject rawData = null;
 		String jsonString;
 
-//		try
-//		{
-//			jsonString = Operations.readFile(getAssets().open(
-//					Operations.FILENAME));
-//
-//			rawData = Operations.parseJSON(jsonString);
-//			survey = new Survey(rawData);
-//			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-//		}
-//		catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		catch (java.text.ParseException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		catch (ParseException e)
-//		{
-//			e.printStackTrace();
-//		}
-//
+		try
+		{
+			jsonString = Operations.readFile(getAssets().open(
+					Operations.FILENAME));
+
+			rawData = Operations.parseJSON(jsonString);
+			survey = new Survey(rawData);
+			Storage.writeToInternal(this, survey.getJSON().toJSONString());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (java.text.ParseException e)
+		{
+			e.printStackTrace();
+		}
+	catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+
 //		return true;
 
 		try

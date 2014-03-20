@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
+import com.baconbanana.easysurveydesigner.gui.ConnectionPage;
 
 
 public class Menu extends Window{
@@ -96,7 +97,13 @@ public class Menu extends Window{
 			getWindow().dispose();
 		}
 		else if(e.getSource().equals(getConnect)){
-			new SendSurvey("Connection Page", 400, 400);
+			//new SendSurvey("Connection Page", 400, 400);
+			try {
+				new ConnectionPage();
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			getWindow().dispose();
 		}else if(e.getSource().equals(importBtn)){
 			new ImportExport().startImport();
