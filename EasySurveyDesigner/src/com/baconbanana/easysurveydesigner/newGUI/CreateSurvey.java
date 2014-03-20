@@ -1,24 +1,30 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class CreateSurvey extends SQLWindow{
 
 	private static JList<String> templateList;
 	private JList<String> templatePrevList;
 	private JList<String> surveyPrevList;
+	
+	private ListSelectionModel templatelsm;
+	//private ListSelectionModel templatePrevlsm;
+	
+	private SQLList templateModel;
+	private SQLList templatePrevModel;
+	private SQLList surveyPrevModel;
 
 	private JButton addBtn;
 	private JButton editBtn;
@@ -27,8 +33,8 @@ public class CreateSurvey extends SQLWindow{
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private JButton sendBtn;
+	
 		
-	final static DefaultListModel<String> myModel1 = new DefaultListModel<String>();
 	public CreateSurvey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
 		initiWidgets();
@@ -49,9 +55,17 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
-		templateList = new JList<String>();
-		templatePrevList = new JList<String>();
+		SQLList templateModel = new SQLList("Template", new String[] {"Template, QuestionID"} , 0);
+		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+		
+		templateList = new JList<String>(templateModel);
+		templatePrevList = new JList<String>(templateModel);
 		surveyPrevList = new JList<String>();
+		
+		populateList(templateList, templateModel);
+		
+		templatelsm = templateList.getSelectionModel();
+		//templatePrevlsm = templatePrevList.getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
 		
@@ -106,7 +120,7 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate("Create New Template", 800, 800);
+			new AddTemplate("Create New Template", 800, 500);
 			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
 			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
 			//getWindow().setEnabled(false);
@@ -130,6 +144,15 @@ public class CreateSurvey extends SQLWindow{
 			//TODO send
 		}
 		
+	}
+
+	@Override
+	public void setList(ListSelectionEvent e) {
+		if(e.getSource().equals(templatelsm)){
+			templatePrevModel = new SQLList("Template_Question NATURAL JOIN Question", new String[] {"Question"}, "QuestionID=" + templateModel.getId(e.getFirstIndex()), 0);
+			populateList(templatePrevList, templatePrevModel);
+			
+		}		
 	}
 
 }

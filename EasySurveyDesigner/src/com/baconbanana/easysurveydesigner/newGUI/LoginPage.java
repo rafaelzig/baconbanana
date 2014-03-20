@@ -151,18 +151,18 @@ public class LoginPage extends Window
 			// getting late and my brain is starting
 			// to sleep so I will figure it out tomorrow or maybe some1 can help
 			// me with it :P
-			if (checkPassword())
-			{
+//			if (checkPassword())
+//			{
 				new Menu("Menu", 250, 300);
 				getWindow().dispose();
 			}
-			else if (!checkPassword())
-			{
-				getWindow().dispose();
-				new LoginPage("Login Page", 300, 300);
-				System.out.println("you have fucked up!!");
-			}
-		}
+//			else if (!checkPassword())
+//			{
+//				getWindow().dispose();
+//				new LoginPage("Login Page", 300, 300);
+//				System.out.println("you have fucked up!!");
+//			}
+//		}
 		else if (e.getSource().equals(createUserBtn))
 		{
 			new CreateUser("Create new user", 300, 300);

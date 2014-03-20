@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
@@ -81,7 +82,9 @@ public class AddTemplate extends SQLWindow{
 		cancelBtn.addActionListener(this);
 		
 		getWindow().add(jpButtons, BorderLayout.SOUTH);
-		SQLList templateModel = new SQLList(Table.TEMPLATE.getName(), new String[] {"Template"} , 0);
+		
+		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
+
 		populateList(templateList, templateModel);
 		
 		setFrameOptions();
@@ -141,6 +144,10 @@ public class AddTemplate extends SQLWindow{
 	}
 	public static void setTemplateList(JList<String> templateList) {
 		AddTemplate.templateList = templateList;
+	}
+	@Override
+	public void setList(ListSelectionEvent e) {
+		
 	}
 
 }

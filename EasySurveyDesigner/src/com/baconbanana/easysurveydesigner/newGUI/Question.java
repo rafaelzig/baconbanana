@@ -3,10 +3,16 @@ package com.baconbanana.easysurveydesigner.newGUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JTextArea;
+import javax.swing.event.ListSelectionEvent;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class Question extends SQLWindow{
@@ -41,13 +47,7 @@ public class Question extends SQLWindow{
 	}
 	//This method controls general functionality to each select button in every type of the question.
 	public void saveQuestion(){
-		AddTemplate.getTemplatelistmodel().addElement(getQuestionTxa().getText() + "("
-				+ getQuestionType() + ")");
-		AddTemplate.getTemplateList().setModel(AddTemplate.getTemplatelistmodel());
 		
-		QuestionType Type = getQuestionType();
-		
-	
 		new AddTemplate("Create New Template", 500, 800);
 		getWindow().dispose();
 	}
@@ -84,8 +84,41 @@ public class Question extends SQLWindow{
 		this.saveBtn = saveBtn;
 	}
 
+	public void saveQuestionOq(QuestionType qt){
+		DBController controller = null;
+		String tableName = new String(Table.QUESTION.getName());
+		ArrayList<String> values = new ArrayList<String>();
+		values.add("null");
+		values.add("'" + questionTxa.getText() + "'");
+		values.add("'" + qt.toString()+"'");
+		try {
+			try {
+				controller = DBController.getInstance();
+				controller.loadResources();
+				controller.insertInto(tableName, values);
+			}catch (InvalidStateException e1) {
+				e1.printStackTrace();
+			}finally{
+				if (controller != null)
+					controller.close();
+			}
+		}catch (SQLException | ClassNotFoundException e2){
+		
+			e2.printStackTrace();
+			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
+			System.exit(-1);
+		}
+		new AddTemplate("Create New Template", 500, 800);
+		getWindow().dispose();
+	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setList(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
