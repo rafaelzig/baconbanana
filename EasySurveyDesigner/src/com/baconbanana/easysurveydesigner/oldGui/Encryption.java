@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.gui;
+package com.baconbanana.easysurveydesigner.oldGui;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;

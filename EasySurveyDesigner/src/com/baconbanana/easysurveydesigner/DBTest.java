@@ -24,9 +24,9 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
-//				System.out.println(controller.createAllTables());
-//				System.out.println(controller.deleteAllTables());
-				
+				// System.out.println(controller.createAllTables());
+				// System.out.println(controller.deleteAllTables());
+
 				if (controller.exists(TABLE_NAME))
 					controller.deleteTable(TABLE_NAME);
 
@@ -37,10 +37,13 @@ public class DBTest
 				controller.createTable(TABLE_NAME, param);
 
 				List<String> values = new LinkedList<>();
-				 				values.add("'Rafael'");
-				 				values.add("'Student'");
+				values.add("'Rafael'");
+				values.add("'Student'");
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
+
+				System.out.println("Does Rafael exist in the database: "
+						+ controller.exists(TABLE_NAME, "Name='Rafael'"));
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, new String[] {
@@ -53,7 +56,7 @@ public class DBTest
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
-				
+
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
@@ -99,7 +102,6 @@ public class DBTest
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
-				
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
@@ -115,11 +117,10 @@ public class DBTest
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
 
-				 controller.deleteAllRows(TABLE_NAME);
-				
-				 System.out.println();
-				 DBController.printResult(controller
-				 .selectAll(TABLE_NAME));
+				controller.deleteAllRows(TABLE_NAME);
+
+				System.out.println();
+				DBController.printResult(controller.selectAll(TABLE_NAME));
 
 			}
 			catch (InvalidStateException e)
