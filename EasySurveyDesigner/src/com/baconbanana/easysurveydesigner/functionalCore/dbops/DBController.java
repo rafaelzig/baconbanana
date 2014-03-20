@@ -8,13 +8,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 /**
  * Singleton Class used to perform Database operations.
@@ -173,7 +173,7 @@ public class DBController
 	 *            the values will be inserted.
 	 * @param values
 	 *            List of String objects representing the values to be inserted.
-	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
 	 *         statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> columns,
@@ -191,10 +191,36 @@ public class DBController
 
 			sql += " VALUES " + prepareSql(values, true) + ";";
 
-			return genericStatement.executeUpdate(sql);
+			genericStatement.executeUpdate(sql);
+			
+			return getLastGeneratedKey();
 		}
 
 		return 0;
+	}
+
+	/**
+	 * Inserts the specified values into the specified columns into the database
+	 * table with the specified name.
+	 * 
+	 * @see Example: INSERT INTO tableName (column1,column2,column3,...) VALUES
+	 *      (value1,value2,value3,...);
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param values
+	 *            Array of String objects representing the values to be
+	 *            inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
+	 */
+	public int insertInto(String tableName, String[] columns, String[] values)
+			throws SQLException, InvalidStateException
+	{
+		return insertInto(tableName, Arrays.asList(columns),
+				Arrays.asList(values));
 	}
 
 	/**
@@ -207,10 +233,30 @@ public class DBController
 	 *            String object representing the table name.
 	 * @param values
 	 *            List of String objects representing the values to be inserted.
-	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
 	 *         statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> values)
+			throws SQLException, InvalidStateException
+	{
+		return insertInto(tableName, null, values);
+	}
+
+	/**
+	 * Inserts the specified values into the database table with the specified
+	 * name.
+	 * 
+	 * @see Example: INSERT INTO tableName VALUES (value1,value2,value3,...);
+	 * 
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param values
+	 *            Array of String objects representing the values to be
+	 *            inserted.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
+	 *         statements that return nothing.
+	 */
+	public int insertInto(String tableName, String[] values)
 			throws SQLException, InvalidStateException
 	{
 		return insertInto(tableName, null, values);
@@ -229,14 +275,14 @@ public class DBController
 	 * @param condition
 	 *            String object representing the condition applied on the SELECT
 	 *            statement.
-	 * @return ResultSet object that contains the data produced by the given
+	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public ResultSet select(String tableName, List<String> columns,
+	public List<Object[]> select(String tableName, List<String> columns,
 			String condition) throws SQLException, InvalidStateException
 	{
 		if (!isReady)
@@ -250,11 +296,36 @@ public class DBController
 			if (condition != null && !condition.isEmpty())
 				sql += " WHERE " + condition + ";";
 
-			List<Object[]> test = prepareResult(genericStatement
-					.executeQuery(sql));
+			return prepareResult(genericStatement.executeQuery(sql));
 		}
 
 		return null;
+	}
+
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition.
+	 * 
+	 * @see Example: SELECT column1, column2 FROM tableName WHERE condition;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, String[] columns,
+			String condition) throws SQLException, InvalidStateException
+	{
+		return select(tableName, Arrays.asList(columns), condition);
 	}
 
 	/**
@@ -267,63 +338,40 @@ public class DBController
 	 * @param columns
 	 *            List of String objects representing the column names in which
 	 *            the values will be inserted.
-	 * @return ResultSet object that contains the data produced by the given
+	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public ResultSet select(String tableName, List<String> columns)
+	public List<Object[]> select(String tableName, List<String> columns)
 			throws SQLException, InvalidStateException
 	{
 		return select(tableName, columns, null);
 	}
 
 	/**
-	 * TODO
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name and columns.
 	 * 
-	 * @throws SQLException
+	 * @see Example: SELECT column1, column2 FROM tableName;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
-	private List<Object[]> prepareResult(ResultSet rs) throws SQLException
+	public List<Object[]> select(String tableName, String[] columns)
+			throws SQLException, InvalidStateException
 	{
-		ResultSetMetaData rsMetaData = rs.getMetaData();
-		int columnCount = rsMetaData.getColumnCount();
-
-		ArrayList<Object[]> table = new ArrayList<Object[]>();
-		Object[] header = new String[columnCount];
-
-		Object columnHeader;
-
-		for (int i = 1; i <= columnCount; ++i)
-		{
-			columnHeader = rsMetaData.getColumnLabel(i);
-			header[i - 1] = columnHeader;
-		}
-
-		table.add((Object[]) header);
-
-		Object[] tuple = null;
-
-		while (rs.next())
-		{
-			tuple = (Object[]) Operations.getArray(tuple.getClass(),
-					columnCount);
-
-			Object value;
-
-			for (int i = 1; i <= columnCount; ++i)
-			{
-				value = (Object) rs.getObject(i);
-				tuple[i - 1] = value;
-			}
-
-			table.add(tuple);
-		}
-
-		rs.close();
-
-		return table;
+		return select(tableName, Arrays.asList(columns), null);
 	}
 
 	/**
@@ -333,20 +381,20 @@ public class DBController
 	 * @see Example: SELECT * FROM tableName;
 	 * @param tableName
 	 *            String object representing the table name.
-	 * @return ResultSet object that contains the data produced by the given
+	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public ResultSet selectAll(String tableName) throws SQLException,
+	public List<Object[]> selectAll(String tableName) throws SQLException,
 			InvalidStateException
 	{
 		// SELECT * FROM table_name;
 
 		String sql = "SELECT * FROM " + tableName + ";";
-		return genericStatement.executeQuery(sql);
+		return prepareResult(genericStatement.executeQuery(sql));
 	}
 
 	/**
@@ -569,19 +617,61 @@ public class DBController
 	 * INSERT statement. If this statement did not generate any keys, an empty
 	 * ResultSet object is returned.
 	 * 
-	 * @return ResultSet object containing the auto-generated key(s) generated
+	 * @return Integer containing the auto-generated key generated
 	 *         by the execution of the last SQL INSERT statement.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public ResultSet getLastGeneratedKey() throws SQLException,
+	private int getLastGeneratedKey() throws SQLException,
 			InvalidStateException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
 
-		return selectGeneratedIdStatement.executeQuery();
+		ResultSet rs = selectGeneratedIdStatement.executeQuery();
+		int generatedId = rs.getInt(1);
+		rs.close();
+		
+		return generatedId;
+	}
+
+	/**
+	 * Auxiliary method which takes a ResultSet object and parses the result
+	 * into a List of Object arrays.
+	 * 
+	 * @param rs
+	 *            ResultSet object containing the data to parse.
+	 * @return List of Object arrays containing the result.
+	 */
+	private List<Object[]> prepareResult(ResultSet rs) throws SQLException
+	{
+		ResultSetMetaData rsMetaData = rs.getMetaData();
+		int columnCount = rsMetaData.getColumnCount();
+	
+		List<Object[]> resultTable = new LinkedList<>();
+		String[] header = new String[columnCount];
+	
+		for (int i = 1; i <= columnCount; ++i)
+			header[i - 1] = rsMetaData.getColumnLabel(i);
+	
+		resultTable.add(header);
+	
+		Object[] tuple = null;
+	
+		while (rs.next())
+		{
+			tuple = new Object[columnCount];
+	
+			for (int i = 1; i <= columnCount; ++i)
+				tuple[i - 1] = rs.getObject(i);
+	
+			resultTable.add(tuple);
+		}
+	
+		rs.close();
+	
+		return resultTable;
 	}
 
 	/**
@@ -639,33 +729,25 @@ public class DBController
 	}
 
 	/**
-	 * Convenience method which takes a ResultSet object as argument and prints
+	 * Convenience method which takes a List of Object arrays as argument and prints
 	 * the results, line by line, to the console.
 	 * 
-	 * @param rs
-	 *            ResultSet object containing the result to be printed.
+	 * @param resultTable
+	 *            List of Object arrays containing the result.
 	 */
-	public void printResult(ResultSet rs) throws SQLException
+	public void printResult(List<Object[]> resultTable) throws SQLException
 	{
-		ResultSetMetaData rsmd = rs.getMetaData();
-		int columnsNumber = rsmd.getColumnCount();
-
-		System.out.println("SELECT STATEMENT :");
-
-		while (rs.next())
+		for (Object[] row : resultTable)
 		{
-			for (int i = 1; i <= columnsNumber; i++)
+			for (int i = 0; i < row.length; i++)
 			{
-				if (i > 1)
-					System.out.print(" - ");
-				System.out
-						.print(rsmd.getColumnName(i) + ": " + rs.getString(i));
-
+				if (i > 0)
+					System.out.print("\t\t");
+				
+				System.out.print(row[i]);
 			}
-
+			
 			System.out.println();
 		}
-
-		rs.close();
 	}
 }

@@ -37,21 +37,19 @@ public class DBTest
 				values.add("'Rafael'");
 				values.add("'Student'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 				
-				controller.printResult(controller.getLastGeneratedKey());
-
 				values = new LinkedList<>();
 				values.add("'Igor'");
 				values.add("'Musician'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Tommy'");
 				values.add("'Developer'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
@@ -61,19 +59,19 @@ public class DBTest
 				values.add("'Matt'");
 				values.add("'Slacker'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Beka'");
 				values.add("'Dancer'");
 
-				controller.insertInto(TABLE_NAME, values);
-
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				
 				values = new LinkedList<>();
 				values.add("'Almira'");
 				values.add("'Professional'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				System.out.println();
 				controller.printResult(controller
@@ -83,20 +81,19 @@ public class DBTest
 				values.add("'Bob'");
 				values.add("'Builder'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Wally'");
 				values.add("'Spy'");
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Smith'");
 				values.add("'Agent'");
 
-				
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
 				System.out.println();
 				controller.printResult(controller
@@ -106,7 +103,8 @@ public class DBTest
 				param.put("Name", "'NEO'");
 				param.put("Occupation", "'The Chosen One'");
 				
-				controller.updateAll(TABLE_NAME, param);
+				System.out.println();
+				System.out.println(controller.updateAll(TABLE_NAME, param) + " rows changed!");
 				
 				System.out.println();
 				controller.printResult(controller
