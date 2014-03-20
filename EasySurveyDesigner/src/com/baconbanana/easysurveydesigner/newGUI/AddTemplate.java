@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.*;
 
 
@@ -61,28 +62,31 @@ public class AddTemplate extends SQLWindow{
 
 		// --------------------------------------------------------------------
 
-				getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
-				getWindow().add(getTemplateList(), BorderLayout.CENTER);
-				getTemplateList().setBorder(getBorder());
+		getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
+		getWindow().add(getTemplateList(), BorderLayout.CENTER);
+		getTemplateList().setBorder(getBorder());
 				
-				JPanel jpButtons = new JPanel(new FlowLayout());
-				jpButtons.add(typeComboBox);
-				jpButtons.add(createQuestionBtn);
-				createQuestionBtn.addActionListener(this);
-				jpButtons.add(addExistingQuestionBtn);
-				addExistingQuestionBtn.addActionListener(this);
-				jpButtons.add(deleteBtn);
-				deleteBtn.addActionListener(this);
-				jpButtons.add(saveBtn);
-				saveBtn.addActionListener(this);
-				jpButtons.add(cancelBtn);
-				cancelBtn.addActionListener(this);
+		JPanel jpButtons = new JPanel(new FlowLayout());
+		jpButtons.add(typeComboBox);
+		jpButtons.add(createQuestionBtn);
+		createQuestionBtn.addActionListener(this);
+		jpButtons.add(addExistingQuestionBtn);
+		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(deleteBtn);
+		deleteBtn.addActionListener(this);
+		jpButtons.add(saveBtn);
+		saveBtn.addActionListener(this);
+		jpButtons.add(cancelBtn);
+		cancelBtn.addActionListener(this);
+		
+		getWindow().add(jpButtons, BorderLayout.SOUTH);
+		
+		populateList(templateList, 
+				new SQLList("Template", 
+						new String[] {"'Template'"} , 0));
+		getTemplateList().setModel(getTemplatelistmodel());
 				
-				getWindow().add(jpButtons, BorderLayout.SOUTH);
-
-				getTemplateList().setModel(getTemplatelistmodel());
-				
-				setFrameOptions();
+		setFrameOptions();
 	}
 
 	@Override

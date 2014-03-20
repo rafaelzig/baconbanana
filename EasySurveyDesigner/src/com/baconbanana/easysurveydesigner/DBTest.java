@@ -33,71 +33,31 @@ public class DBTest
 
 				controller.createTable(TABLE_NAME, param);
 
-				List<String> values = new LinkedList<>();
-				values.add("'Rafael'");
-				values.add("'Student'");
+				String[] values  = {"'Rafael'" ,"'Arse'"};
 
 				controller.insertInto(TABLE_NAME, values);
 				
 				System.out.println();
 				controller.printResult(controller.getLastGeneratedKey());
 
-				values = new LinkedList<>();
-				values.add("'Igor'");
-				values.add("'Musician'");
+				String[] values1  = {"'Igor'" ,"'Musition'"};
 
-				controller.insertInto(TABLE_NAME, values);
+				controller.insertInto(TABLE_NAME, dw);
 
-				values = new LinkedList<>();
-				values.add("'Tommy'");
-				values.add("'Developer'");
+				String[] values2  = {"'Tommy'" ,"'Developer'"};
 
-				controller.insertInto(TABLE_NAME, values);
+				controller.insertInto(TABLE_NAME, values2);
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
 				controller.printResult(controller.selectAll(TABLE_NAME));
 
-				values = new LinkedList<>();
-				values.add("'Matt'");
-				values.add("'Slacker'");
+				String[] values3  = {"'Matt'" ,"'Slacker'"};
 
-				controller.insertInto(TABLE_NAME, values);
 
-				values = new LinkedList<>();
-				values.add("'Beka'");
-				values.add("'Dancer'");
-
-				controller.insertInto(TABLE_NAME, values);
-
-				values = new LinkedList<>();
-				values.add("'Almira'");
-				values.add("'Professional'");
-
-				controller.insertInto(TABLE_NAME, values);
-
-				System.out.println();
-				controller.printResult(controller
-						.selectAll(TABLE_NAME));
-
-				values = new LinkedList<>();
-				values.add("'Bob'");
-				values.add("'Builder'");
-
-				controller.insertInto(TABLE_NAME, values);
-
-				values = new LinkedList<>();
-				values.add("'Wally'");
-				values.add("'Spy'");
-
-				controller.insertInto(TABLE_NAME, values);
-
-				values = new LinkedList<>();
-				values.add("'Smith'");
-				values.add("'Agent'");
+				controller.insertInto(TABLE_NAME, values3);
 
 				
-				controller.insertInto(TABLE_NAME, values);
 
 				System.out.println();
 				controller.printResult(controller

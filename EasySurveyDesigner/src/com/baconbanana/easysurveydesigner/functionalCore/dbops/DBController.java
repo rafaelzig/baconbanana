@@ -255,6 +255,42 @@ public class DBController
 
 		return null;
 	}
+	/**
+	 * Selects data from column and sorts it in ascending order
+	 */
+	public ResultSet selectSort(String tableName, List<String> columns,
+			String condition, int sortCol) throws SQLException, InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+		if (tableName != null && !tableName.isEmpty())
+		{
+			String sql = "SELECT " + prepareSql(columns, false);
+			sql += " FROM " + tableName;
+
+			if (condition != null && !condition.isEmpty())
+				sql += " WHERE " + condition + "ORDER BY " + columns.get(sortCol) + " ASC;";
+
+			List<Object[]> test = prepareResult(genericStatement
+					.executeQuery(sql));
+
+		}
+
+		return null;
+	}
+	
+	/**
+	 * Selects data from column and sorts it in ascending order
+	 */
+	public ResultSet selectSort(String tableName, List<String> columns, int sortCol)
+			throws SQLException, InvalidStateException
+	{
+		return selectSort(tableName, columns, null, sortCol);
+	}
+	
+	
+	
 
 	/**
 	 * TODO
