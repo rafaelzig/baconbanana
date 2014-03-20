@@ -14,13 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+
 public class NewMultipleChoice {
 
-	String questionType;
+	QuestionType questionType;
 	JFrame window;
 	JTextArea question;
 	JButton add;
@@ -31,9 +32,9 @@ public class NewMultipleChoice {
 	DefaultTableModel model;
 	JTable table;
 
-	public NewMultipleChoice(String type) {
+	public NewMultipleChoice(QuestionType type) {
 		this.questionType = type;
-		window = new JFrame("New " + questionType + " question");
+		window = new JFrame("New " + questionType.toString() + " Question");
 		setThings();
 		setListeners();
 	}
@@ -103,6 +104,22 @@ public class NewMultipleChoice {
 
 		window.setLocationRelativeTo(null);
 	}
+	//TODO edit this class eventally get to this bit
+	/*private void saveQuestion(){
+		//Add question to question table
+		String sql = "INSERT INTO Question (Content, Type) VALUES ('" + question.getText() + "', " + questionType + "')";
+		System.out.println(sql);
+		DBOperation.insertRecord(sql);
+		//Add choices to choices table
+		String[] choices = new String[9];
+		for(int i = 0;i < answerLimit; i++){
+			choices[i] = ((String) model.getValueAt(0, i));
+			sql = "INSERT INTO Choices (Choice) Values ('" + choices[i] + "')";
+			int lastId = DBOperation.insertRecordReturnID(sql);
+			System.out.println(lastId);
+		}
+		
+	}*/
 
 	public void setListeners() {
 		add.addActionListener(new ActionListener() {

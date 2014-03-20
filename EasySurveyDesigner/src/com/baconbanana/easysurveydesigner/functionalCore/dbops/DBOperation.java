@@ -9,8 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import com.baconbanana.easysurveydesigner.gui.LoginPage;
-import com.baconbanana.easysurveydesigner.gui.MenuFrame;
+import com.baconbanana.easysurveydesigner.oldGui.LoginPage;
+import com.baconbanana.easysurveydesigner.oldGui.MenuFrame;
 
 
 public class DBOperation {

@@ -334,8 +334,40 @@ public class DBController
 	 * specified table name, columns and condition, sorted by either Ascending
 	 * or Descending.
 	 * 
-	 * @see Example: SELECT column_name,column_name FROM tableName WHERE condition ORDER BY
-	 *      column_name,column_name ASC|DESC;
+	 * @see Example: SELECT column_name,column_name FROM tableName WHERE
+	 *      condition ORDER BY column_name,column_name ASC|DESC;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            Array of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @param isAscending
+	 *            True if the results should be sorted in ascending order, false
+	 *            if the results should be sorted in descending order.
+	 * @return List of Array objects containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, String[] columns,
+			String condition, int sortCol, boolean isAscending)
+			throws SQLException, InvalidStateException
+	{
+		return select(tableName, columns, condition, sortCol, isAscending);
+	}
+
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition, sorted by either Ascending
+	 * or Descending.
+	 * 
+	 * @see Example: SELECT column_name,column_name FROM tableName WHERE
+	 *      condition ORDER BY column_name,column_name ASC|DESC;
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
@@ -365,35 +397,33 @@ public class DBController
 
 	/**
 	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name, columns and condition, sorted by either Ascending
-	 * or Descending.
+	 * specified table name, columns and NO condition, sorted by either
+	 * Ascending or Descending.
 	 * 
-	 * @see Example: SELECT column_name,column_name FROM tableName WHERE condition ORDER BY
-	 *      column_name,column_name ASC|DESC;
+	 * @see Example: SELECT column_name,column_name FROM tableName WHERE
+	 *      condition ORDER BY column_name,column_name ASC|DESC;
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
 	 *            Array of String objects representing the column names in which
 	 *            the values will be inserted.
-	 * @param condition
-	 *            String object representing the condition applied on the SELECT
-	 *            statement.
 	 * @param isAscending
 	 *            True if the results should be sorted in ascending order, false
 	 *            if the results should be sorted in descending order.
-	 * @return List of Array objects containing the data produced by the given
+	 * @return Array of String objects containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, String[] columns, String condition,
-			int sortCol, boolean isAscending) throws SQLException, InvalidStateException
+	public List<Object[]> select(String tableName, String[] columns,
+			int sortCol, boolean isAscending) throws SQLException,
+			InvalidStateException
 	{
-		return select(tableName, columns, condition, sortCol, isAscending);
+		return select(tableName, columns, new String(), sortCol, isAscending);
 	}
-	
+
 	/**
 	 * Gets the result of the SQL Select statement on the database with the
 	 * specified table name and columns.
@@ -414,38 +444,34 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, List<String> columns, int sortCol, boolean isAscending)
-			throws SQLException, InvalidStateException
+	public List<Object[]> select(String tableName, List<String> columns,
+			int sortCol, boolean isAscending) throws SQLException,
+			InvalidStateException
 	{
 		return select(tableName, columns, new String(), sortCol, isAscending);
 	}
 
 	/**
 	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name, columns and NO condition, sorted by either Ascending
-	 * or Descending.
+	 * specified table name and columns.
 	 * 
-	 * @see Example: SELECT column_name,column_name FROM tableName WHERE condition ORDER BY
-	 *      column_name,column_name ASC|DESC;
+	 * @see Example: SELECT column1, column2 FROM tableName;
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
 	 *            Array of String objects representing the column names in which
 	 *            the values will be inserted.
-	 * @param isAscending
-	 *            True if the results should be sorted in ascending order, false
-	 *            if the results should be sorted in descending order.
-	 * @return Array of String objects containing the data produced by the given
+	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
 	 * @throws InvalidStateException
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, String[] columns,
-			int sortCol, boolean isAscending) throws SQLException, InvalidStateException
+	public List<Object[]> select(String tableName, String[] columns)
+			throws SQLException, InvalidStateException
 	{
-		return select(tableName, columns, new String(), sortCol, isAscending);
+		return select(tableName, Arrays.asList(columns), null);
 	}
 
 	/**
@@ -472,29 +498,6 @@ public class DBController
 			String condition) throws SQLException, InvalidStateException
 	{
 		return select(tableName, Arrays.asList(columns), condition);
-	}
-
-	/**
-	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name and columns.
-	 * 
-	 * @see Example: SELECT column1, column2 FROM tableName;
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
-	 * @return List of Object arrays containing the data produced by the given
-	 *         query, or null if invalid parameters have been passed to this
-	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public List<Object[]> select(String tableName, String[] columns)
-			throws SQLException, InvalidStateException
-	{
-		return select(tableName, Arrays.asList(columns), null);
 	}
 
 	/**
@@ -547,9 +550,10 @@ public class DBController
 	}
 
 	/**
-	 * Checks if a row exists in the specified database table with the specified
+	 * Checks if a row exist in the specified database table with the specified
 	 * conditions.
 	 * 
+	 * @see Example: SELECT EXISTS(SELECT 1 FROM tableName WHERE condition)
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param condition
@@ -559,21 +563,22 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public boolean exists(String tableName, String condition) throws SQLException,
-			InvalidStateException
+	public boolean exists(String tableName, String condition)
+			throws SQLException, InvalidStateException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
 
-		genericStatement.executeQuery("SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE " + condition);
+		String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE "
+				+ condition + " LIMIT 1);";
+		
+		ResultSet rs = genericStatement.executeQuery(sql);
 
-		ResultSet rs = existsStatement.executeQuery();
-
-		boolean exists = rs.next();
+		boolean exists = rs.getInt(1) > 0;
 
 		rs.close();
 
-		return true;
+		return exists;
 	}
 
 	/**
