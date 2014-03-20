@@ -3,6 +3,9 @@ package com.baconbanana.easysurveydesigner.newGUI;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -10,12 +13,17 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
+
 public class LoginPage extends Window{
 	
 	private JPanel panel;
 	private JTextField userNameTxf;
 	private JTextField passwordTxf;
 	private JButton loginBtn;
+	private JButton createUserBtn;
+	private JButton deleteUserBtn;
 
 	public LoginPage(String tit, int width, int height) {
 		super(tit, width, height);
@@ -74,6 +82,22 @@ public class LoginPage extends Window{
 		bagCon.gridy++;
 		bagCon.fill = GridBagConstraints.NONE;
 		bagCon.weighty = 0.3;
+		//Creates and add create user button
+		createUserBtn = new JButton("Create new user");
+		createUserBtn.addActionListener(this);
+		panel.add(createUserBtn, bagCon);
+		
+		bagCon.gridy++;
+		bagCon.fill = GridBagConstraints.NONE;
+		bagCon.weighty = 0.3;
+		//Creates and add create user button
+		deleteUserBtn = new JButton("Delete user");
+		deleteUserBtn.addActionListener(this);
+		panel.add(deleteUserBtn, bagCon);
+		
+		bagCon.gridy++;
+		bagCon.fill = GridBagConstraints.NONE;
+		bagCon.weighty = 0.3;
 		//Creates and add login button
 		loginBtn = new JButton("Log in");
 		loginBtn.addActionListener(this);
@@ -86,24 +110,69 @@ public class LoginPage extends Window{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(loginBtn)){
-			//TODO change to getpassword
-			checkPassword(userNameTxf.getText(), passwordTxf.getText());
-		}
-		
-		
-	}
-	//WHENEVER YOU click login you will you lucky thing
-	public void checkPassword(String username, String password){                    
-		//String sql = "SELECT * FROM Login WHERE Username = '" + username + "' AND Password = '" + password + "'";
-		//if (DBOperation.existsRecord(sql)) {
+			//TODO it appears that check password always give me true. It is getting late and my brain is starting 
+			//	to sleep so I will figure it out tomorrow or maybe some1 can help me with it :P
+			if (checkPassword()){
 				new Menu("Menu", 250, 300);
 				getWindow().dispose();
-		/*	}
-			else {
+			}else if(!checkPassword()){
 				getWindow().dispose();
-				new LoginPage("Login Page");
+				new LoginPage("Login Page", 300, 300);
 				System.out.println("you have fucked up!!");
-			}*/
+			}
+		}else if(e.getSource().equals(createUserBtn)){
+			new CreateUser("Create new user", 300, 300);
+			getWindow().dispose();
+		}else if(e.getSource().equals(deleteUserBtn)){
+			new DeleteUser("Delete user", 300, 300);
+			getWindow().dispose();
+		}
+	}
+	//WHENEVER YOU click login you will you lucky thing
+//	public void checkPassword(){  
+//				
+//		 if (check = true) {
+//				new Menu("Menu", 250, 300);
+//				getWindow().dispose();
+//			}
+//			else {
+//				getWindow().dispose();
+//				new LoginPage("Login Page");
+//				System.out.println("you have fucked up!!");
+//			}
+//	}
+	public  boolean checkPassword(){
+		DBController controller = null;
+		boolean check = false;
+		String tableName = new String("Login");
+		ArrayList<String> columns = new ArrayList<String>();
+		columns.add("Username");
+		columns.add("Password");
+		String condition = new String("Username='" + userNameTxf + "' AND Password='" + passwordTxf + "'");
+		try {
+			try {
+				controller = DBController.getInstance();
+				controller.loadResources();
+				if(controller.select(tableName, columns, condition).size() == 1){
+					check = true;
+				}else if(controller.select(tableName, columns, condition).size() != 1) {
+					check = false;
+				}
+			}catch (InvalidStateException e1) {
+				e1.printStackTrace();
+			}finally{
+				if (controller != null)
+					controller.close();
+			}
+		}catch (SQLException | ClassNotFoundException e2){
+		
+			e2.printStackTrace();
+			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
+			System.exit(-1);
+		}
+		return check;
+
+		
 	}
 	public static void main(String args[])
 	{

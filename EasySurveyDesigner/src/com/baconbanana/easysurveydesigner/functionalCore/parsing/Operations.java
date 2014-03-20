@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -264,11 +263,5 @@ public class Operations
 			return QuestionType.valueOf(value.replaceAll("\\s+","").toUpperCase());
 
 		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static <K> K[] getArray(Class<K> arrayClass, int arraySize)
-	{
-		return (K[]) Array.newInstance(arrayClass, arraySize);
 	}
 }

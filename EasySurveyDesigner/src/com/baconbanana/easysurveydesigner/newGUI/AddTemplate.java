@@ -80,12 +80,9 @@ public class AddTemplate extends SQLWindow{
 		cancelBtn.addActionListener(this);
 		
 		getWindow().add(jpButtons, BorderLayout.SOUTH);
+		SQLList templateModel = new SQLList("Template", new String[] {"'Template'"} , 0);
+		populateList(templateList, templateModel);
 		
-		populateList(templateList, 
-				new SQLList("Template", 
-						new String[] {"'Template'"} , 0));
-		getTemplateList().setModel(getTemplatelistmodel());
-				
 		setFrameOptions();
 	}
 
@@ -130,7 +127,7 @@ public class AddTemplate extends SQLWindow{
 		else if(e.getSource().equals(saveBtn)){
 			//TODO saveBtn
 		}else if(e.getSource().equals(cancelBtn)){
-			new Menu("Menu", 400, 400);
+			new Menu("Menu", 300, 300);
 			getWindow().dispose();
 		}
 		

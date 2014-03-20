@@ -16,6 +16,7 @@ public class DBTest
 	public static void main(String[] args)
 	{
 		DBController controller = null;
+		
 		try
 		{
 			try
@@ -23,9 +24,8 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
-				if (controller.exists(TABLE_NAME)){
+				if (controller.exists(TABLE_NAME))
 					controller.deleteTable(TABLE_NAME);
-				}
 					
 				Map<String, String> param = new HashMap<>();
 				param.put("Name", "varchar(20)");
@@ -33,20 +33,26 @@ public class DBTest
 
 				controller.createTable(TABLE_NAME, param);
 
-				String[] values  = {"'Rafael'" ,"'Arse'"};
+				String[] values0  = {"'Rafael'" ,"'Arse'"};
 
-				controller.insertInto(TABLE_NAME, values);
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values0));
 				
 				System.out.println();
-				controller.printResult(controller.getLastGeneratedKey());
+				//controller.printResult(controller.getLastGeneratedKey());
 
 				String[] values1  = {"'Igor'" ,"'Musition'"};
+				
+				controller.insertInto(TABLE_NAME, values1);
+				
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values1));
 
-				controller.insertInto(TABLE_NAME, dw);
 
 				String[] values2  = {"'Tommy'" ,"'Developer'"};
 
 				controller.insertInto(TABLE_NAME, values2);
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values2));
+
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
@@ -55,9 +61,44 @@ public class DBTest
 				String[] values3  = {"'Matt'" ,"'Slacker'"};
 
 
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values3));
+
 				controller.insertInto(TABLE_NAME, values3);
 
+				LinkedList<String> values = new LinkedList<>();
+				values.add("'Beka'");
+				values.add("'Dancer'");
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 				
+				values = new LinkedList<>();
+				values.add("'Almira'");
+				values.add("'Professional'");
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+
+				System.out.println();
+				controller.printResult(controller
+						.selectAll(TABLE_NAME));
+
+				values = new LinkedList<>();
+				values.add("'Bob'");
+				values.add("'Builder'");
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+
+				values = new LinkedList<>();
+				values.add("'Wally'");
+				values.add("'Spy'");
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+
+				values = new LinkedList<>();
+				values.add("'Smith'");
+				values.add("'Agent'");
+				
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+
 
 				System.out.println();
 				controller.printResult(controller
@@ -67,7 +108,8 @@ public class DBTest
 				param.put("Name", "'NEO'");
 				param.put("Occupation", "'The Chosen One'");
 				
-				controller.updateAll(TABLE_NAME, param);
+				System.out.println();
+				System.out.println(controller.updateAll(TABLE_NAME, param) + " rows changed!");
 				
 				System.out.println();
 				controller.printResult(controller

@@ -12,7 +12,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidState
 
 public class SQLList extends AbstractListModel<String>{
 	
-	private Map<Integer, String> data;
+	private List<String> data;
 	private String table;
 	private String[] columns;
 	private int sortColumn;
@@ -28,7 +28,7 @@ public class SQLList extends AbstractListModel<String>{
 			dbCon = DBController.getInstance();
 			dbCon.loadResources();
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 		getData(table, columns);
@@ -46,9 +46,9 @@ public class SQLList extends AbstractListModel<String>{
 	
 	public void getData(String tableName, String[] col){
 			try {
-				rs = dbCon.selectSort(table, col, sortColumn);
-				for(Object l : dbCon.prepareResult(rs)){
-					data.add((String) l);
+				List<Object[]> result = dbCon.select(table, col);
+				for(Object[]  i : result){
+					data.add((String) i[0]);
 				}
 			} catch (SQLException | InvalidStateException e) {
 				// TODO Auto-generated catch block
