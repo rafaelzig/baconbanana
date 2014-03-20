@@ -27,13 +27,8 @@ public class SendSurvey extends Window{
 	private static String localIP;
 	private static ServerSocket serverSocket;
 	private static Socket clientSocket;
-	private int[] listOfSockets;
-	private String receivedData;
-	private Boolean notReceived;
-	private String json;
 	private JButton send, accept, cancel;
 	private JLabel status;
-	private JFrame fram;
 
 	public SendSurvey(String tit, int width, int height) {
 		super(tit, width, height);

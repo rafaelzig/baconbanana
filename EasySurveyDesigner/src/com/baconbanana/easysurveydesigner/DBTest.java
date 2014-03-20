@@ -33,35 +33,39 @@ public class DBTest
 
 				controller.createTable(TABLE_NAME, param);
 
-				List<String> values = new LinkedList<>();
-				values.add("'Rafael'");
-				values.add("'Student'");
+				String[] values0  = {"'Rafael'" ,"'Arse'"};
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values0));
 				
-				values = new LinkedList<>();
-				values.add("'Igor'");
-				values.add("'Musician'");
+				System.out.println();
+				//controller.printResult(controller.getLastGeneratedKey());
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				String[] values1  = {"'Igor'" ,"'Musition'"};
+				
+				controller.insertInto(TABLE_NAME, values1);
+				
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values1));
 
-				values = new LinkedList<>();
-				values.add("'Tommy'");
-				values.add("'Developer'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				String[] values2  = {"'Tommy'" ,"'Developer'"};
+
+				controller.insertInto(TABLE_NAME, values2);
+
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values2));
+
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
 				controller.printResult(controller.selectAll(TABLE_NAME));
 
-				values = new LinkedList<>();
-				values.add("'Matt'");
-				values.add("'Slacker'");
+				String[] values3  = {"'Matt'" ,"'Slacker'"};
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
 
-				values = new LinkedList<>();
+				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values3));
+
+				controller.insertInto(TABLE_NAME, values3);
+
+				LinkedList<String> values = new LinkedList<>();
 				values.add("'Beka'");
 				values.add("'Dancer'");
 
@@ -92,8 +96,9 @@ public class DBTest
 				values = new LinkedList<>();
 				values.add("'Smith'");
 				values.add("'Agent'");
-
+				
 				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+
 
 				System.out.println();
 				controller.printResult(controller

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.*;
 
 
@@ -61,28 +62,28 @@ public class AddTemplate extends SQLWindow{
 
 		// --------------------------------------------------------------------
 
-				getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
-				getWindow().add(getTemplateList(), BorderLayout.CENTER);
-				getTemplateList().setBorder(getBorder());
+		getWindow().add(nameOfTemplateTxf, BorderLayout.NORTH);
+		getWindow().add(getTemplateList(), BorderLayout.CENTER);
+		getTemplateList().setBorder(getBorder());
 				
-				JPanel jpButtons = new JPanel(new FlowLayout());
-				jpButtons.add(typeComboBox);
-				jpButtons.add(createQuestionBtn);
-				createQuestionBtn.addActionListener(this);
-				jpButtons.add(addExistingQuestionBtn);
-				addExistingQuestionBtn.addActionListener(this);
-				jpButtons.add(deleteBtn);
-				deleteBtn.addActionListener(this);
-				jpButtons.add(saveBtn);
-				saveBtn.addActionListener(this);
-				jpButtons.add(cancelBtn);
-				cancelBtn.addActionListener(this);
-				
-				getWindow().add(jpButtons, BorderLayout.SOUTH);
-
-				getTemplateList().setModel(getTemplatelistmodel());
-				
-				setFrameOptions();
+		JPanel jpButtons = new JPanel(new FlowLayout());
+		jpButtons.add(typeComboBox);
+		jpButtons.add(createQuestionBtn);
+		createQuestionBtn.addActionListener(this);
+		jpButtons.add(addExistingQuestionBtn);
+		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(deleteBtn);
+		deleteBtn.addActionListener(this);
+		jpButtons.add(saveBtn);
+		saveBtn.addActionListener(this);
+		jpButtons.add(cancelBtn);
+		cancelBtn.addActionListener(this);
+		
+		getWindow().add(jpButtons, BorderLayout.SOUTH);
+		SQLList templateModel = new SQLList("Template", new String[] {"'Template'"} , 0);
+		populateList(templateList, templateModel);
+		
+		setFrameOptions();
 	}
 
 	@Override
@@ -126,7 +127,7 @@ public class AddTemplate extends SQLWindow{
 		else if(e.getSource().equals(saveBtn)){
 			//TODO saveBtn
 		}else if(e.getSource().equals(cancelBtn)){
-			new Menu("Menu", 400, 400);
+			new Menu("Menu", 300, 300);
 			getWindow().dispose();
 		}
 		
