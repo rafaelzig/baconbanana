@@ -391,8 +391,6 @@ public class DBController
 	public List<Object[]> selectAll(String tableName) throws SQLException,
 			InvalidStateException
 	{
-		// SELECT * FROM table_name;
-
 		String sql = "SELECT * FROM " + tableName + ";";
 		return prepareResult(genericStatement.executeQuery(sql));
 	}
@@ -619,16 +617,10 @@ public class DBController
 	 * 
 	 * @return Integer containing the auto-generated key generated
 	 *         by the execution of the last SQL INSERT statement.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	private int getLastGeneratedKey() throws SQLException,
 			InvalidStateException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		ResultSet rs = selectGeneratedIdStatement.executeQuery();
 		int generatedId = rs.getInt(1);
 		rs.close();
