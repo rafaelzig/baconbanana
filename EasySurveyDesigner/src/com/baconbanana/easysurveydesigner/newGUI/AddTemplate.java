@@ -80,7 +80,7 @@ public class AddTemplate extends SQLWindow{
 		cancelBtn.addActionListener(this);
 		
 		getWindow().add(jpButtons, BorderLayout.SOUTH);
-		SQLList templateModel = new SQLList("Template", new String[] {"'Template'"} , 0);
+		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
 		populateList(templateList, templateModel);
 		
 		setFrameOptions();

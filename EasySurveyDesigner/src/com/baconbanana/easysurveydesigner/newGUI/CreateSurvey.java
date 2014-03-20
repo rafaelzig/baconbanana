@@ -28,7 +28,6 @@ public class CreateSurvey extends SQLWindow{
 	private JButton cancelBtn;
 	private JButton sendBtn;
 		
-	final static DefaultListModel<String> myModel1 = new DefaultListModel<String>();
 	public CreateSurvey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
 		initiWidgets();
