@@ -7,9 +7,6 @@ import java.util.List;
 
 import javax.swing.AbstractListModel;
 
-import org.apache.commons.codec.StringEncoder;
-import org.apache.commons.codec.binary.StringUtils;
-
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 

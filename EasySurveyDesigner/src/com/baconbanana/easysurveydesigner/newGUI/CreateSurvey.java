@@ -1,18 +1,16 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.ListSelectionModel;
+
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class CreateSurvey extends SQLWindow{
 
@@ -48,9 +46,15 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
-		templateList = new JList<String>();
-		templatePrevList = new JList<String>();
-		surveyPrevList = new JList<String>();
+		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
+		SQLList templatePrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+		SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+		
+		templateList = new JList<String>(templateModel);
+		templatePrevList = new JList<String>(templateModel);
+		surveyPrevList = new JList<String>(surveyPrevModel);
+		
+		ListSelectionModel templatelsm = templateList.getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
 		

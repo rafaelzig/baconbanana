@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.*;
@@ -80,7 +81,9 @@ public class AddTemplate extends SQLWindow{
 		cancelBtn.addActionListener(this);
 		
 		getWindow().add(jpButtons, BorderLayout.SOUTH);
+		
 		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
+
 		populateList(templateList, templateModel);
 		
 		setFrameOptions();
