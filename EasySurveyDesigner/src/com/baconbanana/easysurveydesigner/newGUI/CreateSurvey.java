@@ -55,7 +55,7 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
-		SQLList templateModel = new SQLList("Template", new String[] {"Template, QuestionID"} , 0);
+		SQLList templateModel = new SQLList("Template", 1 , "Template", "QuestionID");
 		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
 		templateList = new JList<String>(templateModel);
@@ -149,7 +149,7 @@ public class CreateSurvey extends SQLWindow{
 	@Override
 	public void setList(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm)){
-			templatePrevModel = new SQLList("Template_Question NATURAL JOIN Question", new String[] {"Question"}, "QuestionID=" + templateModel.getId(e.getFirstIndex()), 0);
+			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "QuestionID=" + templateModel.getId(e.getFirstIndex()), 0, "Question");
 			populateList(templatePrevList, templatePrevModel);
 			
 		}		

@@ -95,9 +95,9 @@ public class MultipleQuestion extends Question{
 	public void saveQuestionMa(String questionAnswerText){
 		DBController controller = null;
 		String tableName = new String("Choices");
-		ArrayList<String> values = new ArrayList<String>();
-		values.add("null");
-		values.add("'" + questionAnswerText + "'");
+		String[] values = new String[2];
+		values[0] = ("null");
+		values[1] = ("'" + questionAnswerText + "'");
 		try {
 			try {
 				controller = DBController.getInstance();
