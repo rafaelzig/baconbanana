@@ -9,6 +9,10 @@ public class MultipleChoiceQuestion extends MultipleQuestion{
 
 	public MultipleChoiceQuestion(String tit, int width, int height) {
 		super(tit, width, height);
+		initiWidgets();
+		initiWidgetsMq();
+		setFrameOptions();
+		initiLayout();
 	}
 
 	public void actionPerformed(ActionEvent e) {

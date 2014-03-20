@@ -77,9 +77,9 @@ public class SQLList extends AbstractListModel<String>{
 	public void getData(String tableName, String... col){
 		try {
 			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
-			int count = 0;
+			
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
+				String[] item = (String[]) i;
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {

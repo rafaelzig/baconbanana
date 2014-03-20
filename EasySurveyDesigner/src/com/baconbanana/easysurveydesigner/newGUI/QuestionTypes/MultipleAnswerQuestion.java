@@ -9,12 +9,16 @@ public class MultipleAnswerQuestion extends MultipleQuestion{
 
 	public MultipleAnswerQuestion(String tit, int width, int height) {
 		super(tit, width, height);
+		initiWidgets();
+		initiWidgetsMq();
+		setFrameOptions();
+		initiLayout();
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
 			saveQuestionOq(QuestionType.MULTIPLEANSWER);
-			
+			saveQuestionMa(getChoicesTable());
 		}
 	}
 }
