@@ -680,12 +680,13 @@ public class DBController
 		int columnCount = rsMetaData.getColumnCount();
 
 		List<Object[]> resultTable = new LinkedList<>();
-		String[] header = new String[columnCount];
-
-		for (int i = 1; i <= columnCount; ++i)
-			header[i - 1] = rsMetaData.getColumnLabel(i);
-
-		resultTable.add(header);
+		
+//		String[] header = new String[columnCount];
+//
+//		for (int i = 1; i <= columnCount; ++i)
+//			header[i - 1] = rsMetaData.getColumnLabel(i);
+//
+//		resultTable.add(header);
 
 		Object[] tuple = null;
 
