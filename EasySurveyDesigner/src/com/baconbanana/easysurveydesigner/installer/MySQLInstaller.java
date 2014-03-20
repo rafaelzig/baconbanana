@@ -30,7 +30,7 @@ public class MySQLInstaller {
 		if(osName.contains("Mac")){
 			docLoc = System.getenv("HOME") + "/Documents";
 		}else if(osName.contains("Windows")){
-			docLoc = System.getenv("USERPROFILE") + "/My Documents";
+			docLoc = System.getenv("USERPROFILE") + "/Documents";
 		}
 		try{
 			destFolder = new File(docLoc);

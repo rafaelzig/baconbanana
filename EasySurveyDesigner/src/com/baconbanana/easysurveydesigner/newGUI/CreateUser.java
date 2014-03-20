@@ -100,12 +100,16 @@ public class CreateUser extends Window{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(okBtn)){
+			
 			DBController controller = null;
 			String tableName = new String("Login");
 			ArrayList<String> values = new ArrayList<String>();
 			values.add("'" + createUserTxt.getText() + "'");
 			values.add("'" + createPasswordPf.getText() + "'");
-
+			if((createUserTxt.getText().trim().isEmpty()) || (createPasswordPf.getText().trim().isEmpty())){
+				getWindow().dispose();
+				new CreateUser("Create new user", 300, 300);
+			}else{
 			try {
 				try {
 					controller = DBController.getInstance();
@@ -125,7 +129,9 @@ public class CreateUser extends Window{
 			}
 			new LoginPage("Create new user", 300, 300);
 			getWindow().dispose();
-		}else if(e.getSource().equals(cancelBtn)){
+			}
+		}
+		else if(e.getSource().equals(cancelBtn)){
 			new LoginPage("Create new user", 300, 300);
 			getWindow().dispose();
 		}

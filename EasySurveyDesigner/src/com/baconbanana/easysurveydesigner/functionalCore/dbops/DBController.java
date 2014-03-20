@@ -28,7 +28,7 @@ public class DBController
 	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
 			+ "/Documents/SQLite");
 	private static final File WIN_WORKING_DIR = new File(
-			System.getenv("USERPROFILE") + "\\My Documents\\SQLite");
+			System.getenv("USERPROFILE") + "\\Documents\\SQLite");
 
 	private static DBController instance = null;
 	private Connection conn;
