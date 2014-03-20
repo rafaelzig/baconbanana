@@ -77,9 +77,7 @@ public class ImportExport  {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	 
-		
-	
+	moveFile();
   }
   public void startImport()
   {
