@@ -42,7 +42,7 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	public MultipleAnswerQuestion(String content, List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.MULTIPLE_ANSWER, choiceList);
+		super(content, HELP_MESSAGE, QuestionType.MULTIPLEANSWER, choiceList);
 	}
 
 	/**

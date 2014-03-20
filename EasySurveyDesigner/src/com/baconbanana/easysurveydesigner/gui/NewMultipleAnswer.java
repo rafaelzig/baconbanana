@@ -17,7 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOldv2;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class NewMultipleAnswer {
@@ -149,16 +150,16 @@ public class NewMultipleAnswer {
 				AddNewTemplate.myModel2.addElement(question.getText() + "("
 						+ questionType + ")");
 				AddNewTemplate.Template.setModel(AddNewTemplate.myModel2);
-				/*
-				String sql = "SELECT * FROM Type WHERE Type = 'Multiple Answer'";
-				if (!DBOperation.existsRecord(sql)) {
+				
+				String sql = "Select * Type WHERE Type = 'Multiple Answer'";
+				if (!DBOperationOldv2.existsRecord(sql)) {
 					String sql1 = "Type VALUES ('Multiple Answer')";
-					DBOperation.insertRecord(sql1);
+					DBOperationOldv2.insertRecord(sql1);
 				}
 				
 				String sql2 = "Question VALUES (NULL, '" + question.getText() + "', 'Multiple Answer')";
-				DBOperation.insertRecord(sql2);
-				*/
+				DBOperationOldv2.insertRecord(sql2);
+				
 				new AddNewTemplate("test");
 				window.dispose();
 			}

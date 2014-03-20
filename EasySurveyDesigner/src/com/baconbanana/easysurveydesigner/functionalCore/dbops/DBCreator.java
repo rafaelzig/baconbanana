@@ -1,61 +1,63 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
+
 public class DBCreator {
 	public static void checkAndCreateTables(){
 		String sql = "";
-		if(!DBOperation.exists("Survey")){
+		if(!DBOperationOld.exists("Survey")){
 			sql = "Survey (Survey VARCHAR PRIMARY KEY NOT NULL," +
 					"Date_Created DATE," +
 					"Date_Modified DATE)";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Stage")){
+		if(!DBOperationOld.exists("Stage")){
 			sql = "Stage (Stage INT PRIMARY KEY NOT NULL)";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Survey_Stage")){
+		if(!DBOperationOld.exists("Survey_Stage")){
 			sql = "Survey_Stage (Survey VARCHAR NOT NULL," +
 					"Stage INT NOT NULL," +
 					"PRIMARY KEY(Survey, Stage)," +
 					"FOREIGN KEY(Survey) REFERENCES Survey(Survey)," +
 					"FOREIGN KEY(Stage) REFERENCES Stage(Stage))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Type")){
+		if(!DBOperationOld.exists("Type")){
 			sql = "Type (Type VARCHAR PRIMARY KEY NOT NULL)";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Question")){
+		if(!DBOperationOld.exists("Question")){
 			sql = "Question (QuestionID INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"Content VARCHAR NOT NULL," +
 					"Type VARCHAR NOT NULL," +
 					"FOREIGN KEY(Type) REFERENCES Type(Type))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Template")){
+		if(!DBOperationOld.exists("Template")){
 			sql = "Template (Template VARCHAR NOT NULL," +
 					"QuestionID INT NOT NULL," +
 					"PRIMARY KEY(Template, QuestionID)," +
 					"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
 		//I have added Survey_Template table because it was missing for whatever reason 
-		if(!DBOperation.exists("Survey_Template")){
+		if(!DBOperationOld.exists("Survey_Template")){
 			sql = "Survey_Template (Survey VARCHAR NOT NULL," +
 					"Template INT NOT NULL," +
 					"PRIMARY KEY(Survey, Template)," +
 					"FOREIGN KEY(Survey) REFERENCES Survey(Survey)," +
 					"FOREIGN KEY(Template) REFERENCES Template(Template))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
 		
-		if(!DBOperation.exists("Patient")){
+		if(!DBOperationOld.exists("Patient")){
 			sql = "Patient (PatientID INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"Name VARCHAR NOT NULL," +
 					"DoB DATE NOT NULL)";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Patient_Survey")){
+		if(!DBOperationOld.exists("Patient_Survey")){
 			sql = "Patient_Survey(PatientSurveyID INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"PatientID INT NOT NULL," +
 					"Survey VARCHAR NOT NULL," +
@@ -63,21 +65,21 @@ public class DBCreator {
 					"FOREIGN KEY(PatientID) REFERENCES Patient(PatientID)," +
 					"FOREIGN KEY(Survey) REFERENCES Survey(Survey)," +
 					"FOREIGN KEY(Stage) REFERENCES Stage(Stage))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Choices")){
+		if(!DBOperationOld.exists("Choices")){
 			sql = "Choices (ChoiceID INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"Choice VARCHAR NOT NULL)";
-			DBOperation.createTable(sql);						
+			DBOperationOld.createTable(sql);						
 		}
-		if(!DBOperation.exists("Question_Choice")){
+		if(!DBOperationOld.exists("Question_Choice")){
 			sql = "Patient_Question_Choice (QuestionID INT NOT NULL," +
 					"ChoiceID INT NOT NULL," +
 					"PRIMARY KEY(QuestionID, ChoiceID)," +
 					"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)," +
 					"FOREIGN KEY(ChoiceID) REFERENCES Choice(ChoiceID))";
 		}
-		if(!DBOperation.exists("Patient_Question_Choice")){
+		if(!DBOperationOld.exists("Patient_Question_Choice")){
 			sql = "Patient_Question_Choice (PatientSurveyID INT NOT NULL," +
 					"QuestionID INT NOT NULL," +
 					"ChoiceID INT NOT NULL," +
@@ -85,14 +87,14 @@ public class DBCreator {
 					"FOREIGN KEY(PatientSurveyID) REFERENCES Patient_Survey(PatientSurveyID)," +
 					"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)," +
 					"FOREIGN KEY(ChoiceID) REFERENCES Choice(ChoiceID))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Answer")){
+		if(!DBOperationOld.exists("Answer")){
 			sql = "Answer(AnswerID INTEGER PRIMARY KEY AUTOINCREMENT," +
 					"Answer VARCHAR NOT NULL)";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
-		if(!DBOperation.exists("Patient_Question_Answer")){
+		if(!DBOperationOld.exists("Patient_Question_Answer")){
 			sql = "Patient_Question_Answer (PatientSurveyID INT NOT NULL," +
 					"QuestionID INT NOT NULL," +
 					"AnswerID INT NOT NULL," +
@@ -100,14 +102,14 @@ public class DBCreator {
 					"FOREIGN KEY(PatientSurveyID) REFERENCES Patient_Survey(PatientSurveyID)," +
 					"FOREIGN KEY(QuestionID) REFERENCES Question(QuestionID)," +
 					"FOREIGN KEY(AnswerID) REFERENCES Answer(AnswerID))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
 		//new table used to log in to the software. 
-		if(!DBOperation.exists("Login")){
+		if(!DBOperationOld.exists("Login")){
 			sql = "Login (Username VARCHAR NOT NULL," +
 					"Password VARCHAR NOT NULL," +
 					"PRIMARY KEY(Username, Password))";
-			DBOperation.createTable(sql);
+			DBOperationOld.createTable(sql);
 		}
 		
 	}

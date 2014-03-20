@@ -22,7 +22,7 @@ public class NumericQuestion extends OpenEndedQuestion
 
 	public NumericQuestion(String content)
 	{
-		super(content, HELP_MESSAGE, QuestionType.NUMERIC);
+		super(content, HELP_MESSAGE, QuestionType.NUMERICAL);
 	}
 
 	public NumericQuestion(JSONObject questionRaw)

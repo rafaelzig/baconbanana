@@ -15,7 +15,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQu
 import com.baconbanana.easysurveydesigner.functionalCore.models.NumericQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Patient;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.models.ScalarQuestion;
+import com.baconbanana.easysurveydesigner.functionalCore.models.RatingQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
@@ -82,14 +82,14 @@ public class JSONTest
 			questionList.add(new MultipleAnswerQuestion(
 					"Select your favourite fruits:", choiceList));
 			// Adding ScalarQuestion objects
-			questionList.add(new ScalarQuestion(
+			questionList.add(new RatingQuestion(
 					"How would you rate Rafael's importance to this project?",
-					ScalarQuestion.IMPORTANCE_SCALE));
-			questionList.add(new ScalarQuestion(
+					RatingQuestion.IMPORTANCE_SCALE));
+			questionList.add(new RatingQuestion(
 					"How would you rate Rafael's performance on this project?",
-					ScalarQuestion.INFLUENCE_SCALE));
-			questionList.add(new ScalarQuestion("Rafael is awesome.",
-					ScalarQuestion.LIKERT_SCALE));
+					RatingQuestion.INFLUENCE_SCALE));
+			questionList.add(new RatingQuestion("Rafael is awesome.",
+					RatingQuestion.LIKERT_SCALE));
 			
 			// Initialising the Patient object
 			patient = new Patient(1, "John Wayne", "1970-01-01");

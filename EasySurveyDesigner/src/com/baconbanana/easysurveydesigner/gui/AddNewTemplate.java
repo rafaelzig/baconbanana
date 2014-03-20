@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBOperation;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOld;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class AddNewTemplate {
@@ -37,7 +37,7 @@ public class AddNewTemplate {
 	public AddNewTemplate(String stage) {
 		this.stage = stage;
 		setThings();
-		setListeners();
+		//setListeners();
 		window.setLocationRelativeTo(null);
 
 	}
@@ -83,31 +83,31 @@ public class AddNewTemplate {
 		window.setSize(800, 800);
 		window.setVisible(true);
 
-	}
+	
 
-	public void setListeners() {
+	/*public void setListeners() {
 		createQuestion.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e1) {
 				QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
 				System.out.println(type);
 				switch(type){
-				case MULTIPLE_CHOICE :
+				case MULTIPLECHOICE :
 					new NewMultipleChoice(type);
 					break;
-				case MULTIPLE_ANSWER :
+				case MULTIPLEANSWER :
 					new NewMultipleAnswer(type);
 					break;
-				case NUMERIC :
+				case NUMERICAL :
 					new NewOpenEnded(type);
 					break;
-				case SCALAR :
+				case RATING :
 					break;
 				}
 				
 				window.dispose();
 			}
-		});
+		});*/
 		
 		save.addActionListener(new ActionListener() {
 			

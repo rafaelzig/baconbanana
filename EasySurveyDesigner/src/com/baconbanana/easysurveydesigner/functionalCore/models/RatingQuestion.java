@@ -13,10 +13,10 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoic
 /**
  * @author Rafael da Silva Costa & Team
  * 
- *         This class represents a Scalar Question, where the respondent should
+ *         This class represents a Rating Question, where the respondent should
  *         decide to rate the situation in along the scale continuum.
  */
-public class ScalarQuestion extends CloseEndedQuestion
+public class RatingQuestion extends CloseEndedQuestion
 {
 	/**
 	 * String object containing the question's help message to be displayed.
@@ -24,7 +24,7 @@ public class ScalarQuestion extends CloseEndedQuestion
 	private static final String HELP_MESSAGE = "Please select one of the below choices:";
 
 	/**
-	 * Static fields representing the type of Scalar Question to be constructed.
+	 * Static fields representing the type of Rating Question to be constructed.
 	 */
 	public static final String ACCEPTABILITY_SCALE = "acceptable",
 			LIKERT_SCALE = "agree", APPROPRIATENESS_SCALE = "appropriate",
@@ -34,7 +34,7 @@ public class ScalarQuestion extends CloseEndedQuestion
 			LIKELIHOOD_SCALE = "likely", SATISFACTION_SCALE = "satisfied";
 
 	/**
-	 * Builds a ScalarQuestion object with the specified content, keyword and
+	 * Builds a RatingQuestion object with the specified content, keyword and
 	 * list of subsequent questions.
 	 * 
 	 * @param content
@@ -45,34 +45,34 @@ public class ScalarQuestion extends CloseEndedQuestion
 	 * @throws InvalidChoiceListException
 	 *             Signals an error when a choice list for a question given by
 	 *             the user has less than two choices.
-	 * @see ScalarQuestion#ACCEPTABILITY_SCALE
-	 * @see ScalarQuestion#AGREEMENT_SCALE
-	 * @see ScalarQuestion#APPROPRIATENESS_SCALE
-	 * @see ScalarQuestion#AWARENESS_SCALE
-	 * @see ScalarQuestion#CONCERN_SCALE
-	 * @see ScalarQuestion#FAMILIARITY_SCALE
-	 * @see ScalarQuestion#FREQUENCY_SCALE
-	 * @see ScalarQuestion#IMPORTANCE_SCALE
-	 * @see ScalarQuestion#INFLUENCE_SCALE
-	 * @see ScalarQuestion#LIKELIHOOD_SCALE
-	 * @see ScalarQuestion#PRIORITY_SCALE
-	 * @see ScalarQuestion#QUALITY_SCALE
-	 * @see ScalarQuestion#SATISFACTION_SCALE
+	 * @see RatingQuestion#ACCEPTABILITY_SCALE
+	 * @see RatingQuestion#AGREEMENT_SCALE
+	 * @see RatingQuestion#APPROPRIATENESS_SCALE
+	 * @see RatingQuestion#AWARENESS_SCALE
+	 * @see RatingQuestion#CONCERN_SCALE
+	 * @see RatingQuestion#FAMILIARITY_SCALE
+	 * @see RatingQuestion#FREQUENCY_SCALE
+	 * @see RatingQuestion#IMPORTANCE_SCALE
+	 * @see RatingQuestion#INFLUENCE_SCALE
+	 * @see RatingQuestion#LIKELIHOOD_SCALE
+	 * @see RatingQuestion#PRIORITY_SCALE
+	 * @see RatingQuestion#QUALITY_SCALE
+	 * @see RatingQuestion#SATISFACTION_SCALE
 	 */
-	public ScalarQuestion(String content, String keyword)
+	public RatingQuestion(String content, String keyword)
 			throws InvalidChoiceListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.SCALAR,
+		super(content, HELP_MESSAGE, QuestionType.RATING,
 				prepareChoiceList(keyword));
 	}
 
 	/**
-	 * Builds a ScalarQuestion object with the specified JSONObject.
+	 * Builds a RatingQuestion object with the specified JSONObject.
 	 * 
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public ScalarQuestion(JSONObject rawData)
+	public RatingQuestion(JSONObject rawData)
 	{
 		super(rawData);
 	}
