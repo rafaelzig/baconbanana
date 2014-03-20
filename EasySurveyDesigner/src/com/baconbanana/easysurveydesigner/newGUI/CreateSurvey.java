@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
@@ -17,6 +18,12 @@ public class CreateSurvey extends SQLWindow{
 	private static JList<String> templateList;
 	private JList<String> templatePrevList;
 	private JList<String> surveyPrevList;
+	
+	private ListSelectionModel templatelsm;
+	
+	private SQLList templateModel;
+	private SQLList templatePrevModel;
+	private SQLList surveyPrevModel;
 
 	private JButton addBtn;
 	private JButton editBtn;
@@ -25,6 +32,7 @@ public class CreateSurvey extends SQLWindow{
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private JButton sendBtn;
+	
 		
 	public CreateSurvey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
@@ -47,14 +55,13 @@ public class CreateSurvey extends SQLWindow{
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
 		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
-		SQLList templatePrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
 		templateList = new JList<String>(templateModel);
 		templatePrevList = new JList<String>(templateModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 		
-		ListSelectionModel templatelsm = templateList.getSelectionModel();
+		templatelsm = templateList.getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
 		
@@ -133,6 +140,17 @@ public class CreateSurvey extends SQLWindow{
 			//TODO send
 		}
 		
+	}
+
+	@Override
+	public void setList(ListSelectionEvent e) {
+		if(e.getSource().equals(templatelsm)){
+			templatePrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+			populateList(templatePrevList, templatePrevModel);
+			
+		}else if(e.getSource().equals(editBtn)){
+			//TODO edit
+		}		
 	}
 
 }
