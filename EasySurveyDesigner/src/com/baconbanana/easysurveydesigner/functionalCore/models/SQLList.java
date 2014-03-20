@@ -2,12 +2,10 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
-
-import org.apache.commons.codec.StringEncoder;
-import org.apache.commons.codec.binary.StringUtils;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
@@ -22,7 +20,7 @@ public class SQLList extends AbstractListModel<String>{
 	private ResultSet rs;
 	//get ID at some point
 	public SQLList(String tableName, String[] col, int sortCol){
-		
+		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
 		sortColumn = sortCol;
