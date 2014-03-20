@@ -328,41 +328,71 @@ public class DBController
 
 		return null;
 	}
+
 	/**
-	 * Selects data from column and sorts it in ascending order
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition, sorted by either Ascending
+	 * or Descending.
+	 * 
+	 * @see Example: SELECT column_name,column_name FROM tableName ORDER BY
+	 *      column_name,column_name ASC|DESC;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            List of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @param isAscending
+	 *            True if the results should be sorted in ascending order, false
+	 *            if the results should be sorted in descending order.
+	 * @return List of Object arrays containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> selectSort(String tableName, List<String> columns,
-			String condition, int sortCol) throws SQLException, InvalidStateException
-	{
-		if (!isReady)
-			throw new InvalidStateException();
-
-		if (tableName != null && !tableName.isEmpty())
-		{
-			String sql = "SELECT " + prepareSql(columns, false);
-			sql += " FROM " + tableName;
-
-			if (condition != null && !condition.isEmpty())
-				sql += " WHERE " + condition + "ORDER BY " + columns.get(sortCol) + " ASC;";
-
-			return prepareResult(genericStatement.executeQuery(sql));
-
-		}
-
-		return null;
-	}
-	
-	/**
-	 * Selects data from column and sorts it in ascending order
-	 */
-	public List<Object[]> selectSort(String tableName, String[] columns, int sortCol)
+	public List<Object[]> select(String tableName, List<String> columns,
+			String condition, int sortCol, boolean isAscending)
 			throws SQLException, InvalidStateException
 	{
-		return selectSort(tableName, Arrays.asList(columns), null, sortCol);
+		condition += (isAscending) ? " ORDER BY DESC" : " ORDER BY ASC";
+
+		return select(tableName, columns, condition);
 	}
-	
-	
-	
+
+	/**
+	 * Gets the result of the SQL Select statement on the database with the
+	 * specified table name, columns and condition, sorted by either Ascending
+	 * or Descending.
+	 * 
+	 * @see Example: SELECT column_name,column_name FROM tableName ORDER BY
+	 *      column_name,column_name ASC|DESC;
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param columns
+	 *            List of String objects representing the column names in which
+	 *            the values will be inserted.
+	 * @param condition
+	 *            String object representing the condition applied on the SELECT
+	 *            statement.
+	 * @param isAscending
+	 *            True if the results should be sorted in ascending order, false
+	 *            if the results should be sorted in descending order.
+	 * @return Array of String objects containing the data produced by the given
+	 *         query, or null if invalid parameters have been passed to this
+	 *         method.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public List<Object[]> select(String tableName, String[] columns, String condition,
+			int sortCol, boolean isAscending) throws SQLException, InvalidStateException
+	{
+		return select(tableName, columns, condition, sortCol, isAscending);
+	}
 
 	/**
 	 * Gets the result of the SQL Select statement on the database with the
@@ -483,6 +513,36 @@ public class DBController
 		rs.close();
 
 		return exists;
+	}
+
+	/**
+	 * Checks if a row exists in the specified database table with the specified
+	 * conditions.
+	 * 
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @param condition
+	 *            String object representing the condition to be applied.
+	 * @return true if the row exists in the table, false otherwise.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public boolean exists(String tableName, String condition) throws SQLException,
+			InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+//		genericStatement
+//		"SELECT EXISTS(SELECT 1 FROM " + Table.SURVEY.getName() + " WHERE );
+//		ResultSet rs = existsStatement.executeQuery();
+
+//		boolean exists = rs.next();
+//
+//		rs.close();
+
+		return true;
 	}
 
 	/**
@@ -622,7 +682,8 @@ public class DBController
 			throw new InvalidStateException();
 
 		if (tableName != null && !tableName.isEmpty())
-			return genericStatement.executeUpdate("DROP TABLE " + tableName	+ ";");
+			return genericStatement.executeUpdate("DROP TABLE " + tableName
+					+ ";");
 
 		return 0;
 	}
@@ -638,13 +699,13 @@ public class DBController
 	{
 		if (!isReady)
 			throw new InvalidStateException();
-	
+
 		int count = 0;
-	
+
 		for (Table table : Table.values())
 			if (exists(table.getName()))
 				count += (deleteTable(table.getName()));
-	
+
 		return count;
 	}
 
@@ -656,8 +717,7 @@ public class DBController
 	 * @return Integer containing the auto-generated key generated by the
 	 *         execution of the last SQL INSERT statement.
 	 */
-	public int getLastGeneratedKey() throws SQLException,
-			InvalidStateException
+	public int getLastGeneratedKey() throws SQLException, InvalidStateException
 	{
 		ResultSet rs = selectGeneratedIdStatement.executeQuery();
 		int generatedId = rs.getInt(1);
@@ -680,13 +740,13 @@ public class DBController
 		int columnCount = rsMetaData.getColumnCount();
 
 		List<Object[]> resultTable = new LinkedList<>();
-		
-//		String[] header = new String[columnCount];
-//
-//		for (int i = 1; i <= columnCount; ++i)
-//			header[i - 1] = rsMetaData.getColumnLabel(i);
-//
-//		resultTable.add(header);
+
+		// String[] header = new String[columnCount];
+		//
+		// for (int i = 1; i <= columnCount; ++i)
+		// header[i - 1] = rsMetaData.getColumnLabel(i);
+		//
+		// resultTable.add(header);
 
 		Object[] tuple = null;
 
@@ -760,13 +820,14 @@ public class DBController
 	}
 
 	/**
-	 * Convenience static method which takes a List of Object arrays as argument and
-	 * prints the results, line by line, to the console.
+	 * Convenience static method which takes a List of Object arrays as argument
+	 * and prints the results, line by line, to the console.
 	 * 
 	 * @param resultTable
 	 *            List of Object arrays containing the result.
 	 */
-	public static void printResult(List<Object[]> resultTable) throws SQLException
+	public static void printResult(List<Object[]> resultTable)
+			throws SQLException
 	{
 		for (Object[] row : resultTable)
 		{
