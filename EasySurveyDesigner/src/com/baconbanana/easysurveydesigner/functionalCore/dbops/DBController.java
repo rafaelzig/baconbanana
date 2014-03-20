@@ -153,10 +153,11 @@ public class DBController
 			{
 				if (createTable(tableName, table.getParameters()))
 					count++;
-				if (tableName.equals(Table.TYPE) && isTableEmpty(tableName))
-					populateTable(tableName);
 			}
 		}
+		
+		if (isTableEmpty(Table.TYPE.getName()))
+			populateTable(Table.TYPE.getName());
 
 		conn.commit();
 		conn.setAutoCommit(true);
@@ -174,7 +175,7 @@ public class DBController
 			InvalidStateException
 	{
 		for (QuestionType type : QuestionType.values())
-			insertInto(tableName, type.toString());
+			insertInto(tableName, "'" + type.toString()+ "'");
 	}
 
 	/**
