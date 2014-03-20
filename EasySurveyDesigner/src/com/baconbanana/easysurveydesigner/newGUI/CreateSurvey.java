@@ -20,6 +20,7 @@ public class CreateSurvey extends SQLWindow{
 	private JList<String> surveyPrevList;
 	
 	private ListSelectionModel templatelsm;
+	//private ListSelectionModel templatePrevlsm;
 	
 	private SQLList templateModel;
 	private SQLList templatePrevModel;
@@ -55,13 +56,16 @@ public class CreateSurvey extends SQLWindow{
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
 		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
-		SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
 		templateList = new JList<String>(templateModel);
 		templatePrevList = new JList<String>(templateModel);
-		surveyPrevList = new JList<String>(surveyPrevModel);
+		surveyPrevList = new JList<String>();
+		
+		populateList(templateList, templateModel);
 		
 		templatelsm = templateList.getSelectionModel();
+		//templatePrevlsm = templatePrevList.getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
 		
@@ -145,11 +149,9 @@ public class CreateSurvey extends SQLWindow{
 	@Override
 	public void setList(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm)){
-			templatePrevModel = new SQLList("Template", new String[] {"Template"} , 0);
+			templatePrevModel = new SQLList("Template_Question NATURAL JOIN Question ON ", new String[] {"Template"}, "", 0);
 			populateList(templatePrevList, templatePrevModel);
 			
-		}else if(e.getSource().equals(editBtn)){
-			//TODO edit
 		}		
 	}
 

@@ -25,7 +25,6 @@ public enum Table
 			"Template",
 			new SimpleEntry("Template", "VARCHAR NOT NULL"),
 			new SimpleEntry("QuestionID", "INT NOT NULL"),
-			new SimpleEntry("QuestionID", "INT NOT NULL"),
 			new SimpleEntry("PRIMARY KEY", "(Template, QuestionID)"),
 			new SimpleEntry("FOREIGN KEY",
 					"(QuestionID) REFERENCES Question(QuestionID)")),

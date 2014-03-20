@@ -358,7 +358,7 @@ public class DBController
 			String condition, int sortCol, boolean isAscending)
 			throws SQLException, InvalidStateException
 	{
-		condition += (isAscending) ? " ORDER BY DESC" : " ORDER BY ASC";
+		condition += (isAscending) ? " ORDER BY " + columns.get(sortCol) + " DESC" : " ORDER BY " + columns.get(sortCol) + " ASC";
 
 		return select(tableName, columns, condition);
 	}
@@ -391,7 +391,7 @@ public class DBController
 	public List<Object[]> select(String tableName, String[] columns, String condition,
 			int sortCol, boolean isAscending) throws SQLException, InvalidStateException
 	{
-		return select(tableName, columns, condition, sortCol, isAscending);
+		return select(tableName, Arrays.asList(columns), condition, sortCol, isAscending);
 	}
 	
 	/**
