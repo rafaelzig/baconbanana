@@ -147,7 +147,7 @@ public class DBController
 		for (Table table : Table.values())
 		{
 			if (!exists(table.getName()))
-				if (createTable(table.getName(), table.getParameters()))
+			if (createTable(table.getName(), table.getParameters()))
 					count++;
 		}
 

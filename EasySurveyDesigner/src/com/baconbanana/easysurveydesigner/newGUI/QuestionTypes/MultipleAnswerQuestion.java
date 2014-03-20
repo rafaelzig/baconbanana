@@ -14,6 +14,7 @@ public class MultipleAnswerQuestion extends MultipleQuestion{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
 			saveQuestionOq(QuestionType.MULTIPLEANSWER);
+			
 		}
 	}
 }

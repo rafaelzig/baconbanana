@@ -111,6 +111,7 @@ public class Question extends SQLWindow{
 		new AddTemplate("Create New Template", 500, 800);
 		getWindow().dispose();
 	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
