@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
+
 
 public class Menu extends Window{
 
@@ -62,12 +64,12 @@ public class Menu extends Window{
 		buttonPanel.add(getConnect, btnCon);
 		btnCon.gridy++;
 		
-		importBtn = new JButton ("Import/Export");
+		importBtn = new JButton ("Import");
 		importBtn.addActionListener(this);
 		buttonPanel.add(importBtn, btnCon);
 		btnCon.gridy++;
 		
-		exportBtn = new JButton ("Import/Export");
+		exportBtn = new JButton ("Export");
 		exportBtn.addActionListener(this);
 		buttonPanel.add(exportBtn, btnCon);
 		
@@ -97,9 +99,9 @@ public class Menu extends Window{
 			new SendSurvey("Connection Page", 400, 400);
 			getWindow().dispose();
 		}else if(e.getSource().equals(importBtn)){
-			//TODO import code here
+			new ImportExport().startImport();
 		}else if(e.getSource().equals(exportBtn)){
-			//TODO import code here
+			new ImportExport().startExport();
 		}
 	
 		
