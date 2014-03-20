@@ -2,8 +2,6 @@ package com.baconbanana.easysurveydesigner;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
@@ -36,26 +34,21 @@ public class DBTest
 
 				controller.createTable(TABLE_NAME, param);
 
-				List<String> values = new LinkedList<>();
-				values.add("'Rafael'");
-				values.add("'Student'");
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
-
+						+ controller.insertInto(TABLE_NAME, "'Rafael'", "'Student'"));
+				
+				System.out.println();
+				System.out.println("Is the table empty? " + controller.isTableEmpty(TABLE_NAME));
+				
 				System.out.println("Does Rafael exist in the database: "
 						+ controller.exists(TABLE_NAME, "Name='Rafael'"));
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, new String[] {
-								"Name", "Occupation" }, new String[] {
-								"'Joshua'", "'Artist'" }));
-
-				values = new LinkedList<>();
-				values.add("'Tommy'");
-				values.add("'Developer'");
+								"Name", "Occupation" }, "'Joshua'", "'Artist'"));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
+						+ controller.insertInto(TABLE_NAME, "'Tommy'","'Developer'"));
 
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
@@ -63,45 +56,25 @@ public class DBTest
 				DBController.printResult(controller.selectAll(TABLE_NAME));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
-
-				values = new LinkedList<>();
-				values.add("'Beka'");
-				values.add("'Dancer'");
+						+ controller.insertInto(TABLE_NAME, "'Mitchel'","'Cleaner'"));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
-
-				values = new LinkedList<>();
-				values.add("'Almira'");
-				values.add("'Professional'");
+						+ controller.insertInto(TABLE_NAME, "'Batman'","'Superhero'"));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
+						+ controller.insertInto(TABLE_NAME, "'Almira'","'Professional'"));
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
 
-				values = new LinkedList<>();
-				values.add("'Bob'");
-				values.add("'Builder'");
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, "'Bob'","'Builder'"));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
-
-				values = new LinkedList<>();
-				values.add("'Wally'");
-				values.add("'Spy'");
+						+ controller.insertInto(TABLE_NAME, "'Wally'","'Spy'"));
 
 				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
-
-				values = new LinkedList<>();
-				values.add("'Smith'");
-				values.add("'Agent'");
-
-				System.out.println("ID GENERATED:"
-						+ controller.insertInto(TABLE_NAME, values));
+						+ controller.insertInto(TABLE_NAME, "'Smith'","'Agent'"));
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
@@ -117,11 +90,11 @@ public class DBTest
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
 
-				controller.deleteAllRows(TABLE_NAME);
-
 				System.out.println();
-				DBController.printResult(controller.selectAll(TABLE_NAME));
-
+				System.out.println("Table Rows Deleted: " + controller.deleteAllRows(TABLE_NAME));
+				
+				System.out.println();
+				System.out.println("Is the table empty? " + controller.isTableEmpty(TABLE_NAME));
 			}
 			catch (InvalidStateException e)
 			{

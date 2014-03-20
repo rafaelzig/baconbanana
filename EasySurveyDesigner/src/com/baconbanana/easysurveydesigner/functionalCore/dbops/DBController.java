@@ -8,13 +8,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
+import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 /**
  * Singleton Class used to perform Database operations.
@@ -142,16 +142,39 @@ public class DBController
 		if (!isReady)
 			throw new InvalidStateException();
 
+		conn.setAutoCommit(false);
 		int count = 0;
 
 		for (Table table : Table.values())
 		{
-			if (!exists(table.getName()))
-				if (createTable(table.getName(), table.getParameters()))
+			String tableName = table.getName();
+
+			if (!exists(tableName))
+			{
+				if (createTable(tableName, table.getParameters()))
 					count++;
+				if (tableName.equals(Table.TYPE) && isTableEmpty(tableName))
+					populateTable(tableName);
+			}
 		}
 
+		conn.commit();
+		conn.setAutoCommit(true);
+
 		return count;
+	}
+
+	/**
+	 * Auxiliary method which populates the specified database table with the
+	 * initial values defined on the enum class.
+	 * 
+	 * @param tableName String object representing the database table name.
+	 */
+	private void populateTable(String tableName) throws SQLException,
+			InvalidStateException
+	{
+		for (QuestionType type : QuestionType.values())
+			insertInto(tableName, type.toString());
 	}
 
 	/**
@@ -196,15 +219,15 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
-	 *            List of String objects representing the column names in which
+	 *            Array of String objects representing the column names in which
 	 *            the values will be inserted.
 	 * @param values
-	 *            List of String objects representing the values to be inserted.
+	 *            String objects representing the values to be inserted.
 	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
 	 *         for SQL statements that return nothing.
 	 */
-	public int insertInto(String tableName, List<String> columns,
-			List<String> values) throws SQLException, InvalidStateException
+	public int insertInto(String tableName, String[] columns, String... values)
+			throws SQLException, InvalidStateException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
@@ -227,30 +250,6 @@ public class DBController
 	}
 
 	/**
-	 * Inserts the specified values into the specified columns into the database
-	 * table with the specified name.
-	 * 
-	 * @see Example: INSERT INTO tableName (column1,column2,column3,...) VALUES
-	 *      (value1,value2,value3,...);
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
-	 * @param values
-	 *            Array of String objects representing the values to be
-	 *            inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
-	 *         for SQL statements that return nothing.
-	 */
-	public int insertInto(String tableName, String[] columns, String[] values)
-			throws SQLException, InvalidStateException
-	{
-		return insertInto(tableName, Arrays.asList(columns),
-				Arrays.asList(values));
-	}
-
-	/**
 	 * Inserts the specified values into the database table with the specified
 	 * name.
 	 * 
@@ -259,31 +258,11 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param values
-	 *            List of String objects representing the values to be inserted.
+	 *            String objects representing the values to be inserted.
 	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
 	 *         for SQL statements that return nothing.
 	 */
-	public int insertInto(String tableName, List<String> values)
-			throws SQLException, InvalidStateException
-	{
-		return insertInto(tableName, null, values);
-	}
-
-	/**
-	 * Inserts the specified values into the database table with the specified
-	 * name.
-	 * 
-	 * @see Example: INSERT INTO tableName VALUES (value1,value2,value3,...);
-	 * 
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param values
-	 *            Array of String objects representing the values to be
-	 *            inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
-	 *         for SQL statements that return nothing.
-	 */
-	public int insertInto(String tableName, String[] values)
+	public int insertInto(String tableName, String... values)
 			throws SQLException, InvalidStateException
 	{
 		return insertInto(tableName, null, values);
@@ -297,8 +276,8 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
-	 *            List of String objects representing the column names in which
-	 *            the values will be inserted.
+	 *            String objects representing the column names in which the
+	 *            values will be inserted.
 	 * @param condition
 	 *            String object representing the condition applied on the SELECT
 	 *            statement.
@@ -309,8 +288,8 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, List<String> columns,
-			String condition) throws SQLException, InvalidStateException
+	public List<Object[]> select(String tableName, String condition,
+			String... columns) throws SQLException, InvalidStateException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
@@ -339,40 +318,8 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
-	 * @param condition
-	 *            String object representing the condition applied on the SELECT
-	 *            statement.
-	 * @param isAscending
-	 *            True if the results should be sorted in ascending order, false
-	 *            if the results should be sorted in descending order.
-	 * @return List of Array objects containing the data produced by the given
-	 *         query, or null if invalid parameters have been passed to this
-	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public List<Object[]> select(String tableName, String[] columns,
-			String condition, int sortCol, boolean isAscending)
-			throws SQLException, InvalidStateException
-	{
-		return select(tableName, columns, condition, sortCol, isAscending);
-	}
-
-	/**
-	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name, columns and condition, sorted by either Ascending
-	 * or Descending.
-	 * 
-	 * @see Example: SELECT column_name,column_name FROM tableName WHERE
-	 *      condition ORDER BY column_name,column_name ASC|DESC;
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            List of String objects representing the column names in which
-	 *            the values will be inserted.
+	 *            String objects representing the column names in which the
+	 *            values will be inserted.
 	 * @param condition
 	 *            String object representing the condition applied on the SELECT
 	 *            statement.
@@ -386,42 +333,14 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, List<String> columns,
-			String condition, int sortCol, boolean isAscending)
+	public List<Object[]> select(String tableName, String condition,
+			int sortCol, boolean isAscending, String... columns)
 			throws SQLException, InvalidStateException
 	{
-		condition += (isAscending) ? " ORDER BY " + columns.get(sortCol) + " DESC" : " ORDER BY " + columns.get(sortCol) + " ASC";
+		condition += (isAscending) ? " ORDER BY " + columns[sortCol] + " DESC"
+				: " ORDER BY " + columns[sortCol] + " ASC";
 
-		return select(tableName, columns, condition);
-	}
-
-	/**
-	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name, columns and NO condition, sorted by either
-	 * Ascending or Descending.
-	 * 
-	 * @see Example: SELECT column_name,column_name FROM tableName WHERE
-	 *      condition ORDER BY column_name,column_name ASC|DESC;
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
-	 * @param isAscending
-	 *            True if the results should be sorted in ascending order, false
-	 *            if the results should be sorted in descending order.
-	 * @return Array of String objects containing the data produced by the given
-	 *         query, or null if invalid parameters have been passed to this
-	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public List<Object[]> select(String tableName, String[] columns,
-			int sortCol, boolean isAscending) throws SQLException,
-			InvalidStateException
-	{
-		return select(tableName, Arrays.asList(columns), new String(), sortCol, isAscending);
+		return select(tableName, condition, columns);
 	}
 
 	/**
@@ -432,8 +351,8 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
-	 *            List of String objects representing the column names in which
-	 *            the values will be inserted.
+	 *            String objects representing the column names in which the
+	 *            values will be inserted.
 	 * @param isAscending
 	 *            True if the results should be sorted in ascending order, false
 	 *            if the results should be sorted in descending order.
@@ -444,11 +363,11 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, List<String> columns,
-			int sortCol, boolean isAscending) throws SQLException,
+	public List<Object[]> select(String tableName, int sortCol,
+			boolean isAscending, String... columns) throws SQLException,
 			InvalidStateException
 	{
-		return select(tableName, columns, new String(), sortCol, isAscending);
+		return select(tableName, new String(), sortCol, isAscending, columns);
 	}
 
 	/**
@@ -459,8 +378,8 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
+	 *            String objects representing the column names in which the
+	 *            values will be inserted.
 	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
@@ -468,36 +387,10 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> select(String tableName, String[] columns)
+	public List<Object[]> select(String tableName, String... columns)
 			throws SQLException, InvalidStateException
 	{
-		return select(tableName, Arrays.asList(columns), null);
-	}
-
-	/**
-	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name, columns and condition.
-	 * 
-	 * @see Example: SELECT column1, column2 FROM tableName WHERE condition;
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            Array of String objects representing the column names in which
-	 *            the values will be inserted.
-	 * @param condition
-	 *            String object representing the condition applied on the SELECT
-	 *            statement.
-	 * @return List of Object arrays containing the data produced by the given
-	 *         query, or null if invalid parameters have been passed to this
-	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public List<Object[]> select(String tableName, String[] columns,
-			String condition) throws SQLException, InvalidStateException
-	{
-		return select(tableName, Arrays.asList(columns), condition);
+		return select(tableName, null, columns);
 	}
 
 	/**
@@ -553,7 +446,8 @@ public class DBController
 	 * Checks if a row exist in the specified database table with the specified
 	 * conditions.
 	 * 
-	 * @see Example: SELECT EXISTS(SELECT 1 FROM tableName WHERE condition)
+	 * @see Example: SELECT EXISTS(SELECT 1 FROM tableName WHERE condition LIMIT
+	 *      1)
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @param condition
@@ -569,9 +463,13 @@ public class DBController
 		if (!isReady)
 			throw new InvalidStateException();
 
-		String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName + " WHERE "
-				+ condition + " LIMIT 1);";
-		
+		String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName;
+
+		if (condition != null && !condition.isEmpty())
+			sql += " WHERE " + condition;
+
+		sql += " LIMIT 1);";
+
 		ResultSet rs = genericStatement.executeQuery(sql);
 
 		boolean exists = rs.getInt(1) > 0;
@@ -579,6 +477,23 @@ public class DBController
 		rs.close();
 
 		return exists;
+	}
+
+	/**
+	 * Checks if the specified Database table is empty.
+	 * 
+	 * @see Example: SELECT EXISTS(SELECT 1 FROM tableName LIMIT 1)
+	 * @param tableName
+	 *            String object representing the table name.
+	 * @return true if the database table is empty, false otherwise.
+	 * @throws InvalidStateException
+	 *             Signals an error has occurred when the database resources
+	 *             have not been loaded prior to this method call.
+	 */
+	public boolean isTableEmpty(String tableName) throws SQLException,
+			InvalidStateException
+	{
+		return !exists(tableName, null);
 	}
 
 	/**
@@ -812,17 +727,16 @@ public class DBController
 	 *            enclosed by brackets.
 	 * @return String object containing the prepared SQL statement.
 	 */
-	private String prepareSql(List<String> columns, boolean addBrackets)
+	private String prepareSql(String[] columns, boolean addBrackets)
 	{
-		int count = columns.size();
-
 		String sql = (addBrackets) ? "(" : new String();
 
-		for (String col : columns)
+		for (int index = 0; index < columns.length; index++)
 		{
-			sql += col;
-			if (--count > 0)
+			if (index > 0)
 				sql += ",";
+
+			sql += columns[index];
 		}
 
 		return (addBrackets) ? sql + ")" : sql;
