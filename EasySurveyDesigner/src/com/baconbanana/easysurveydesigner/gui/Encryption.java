@@ -12,51 +12,91 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
+/**
+ * 
+ * @author Team
+ *
+ */
 public class Encryption {
-	byte[] encryptedData;
-	  byte[] decryptedData;
-	  
-	  public Encryption(){
-	  byte[] secret = null;
-		
-	  try {
-			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
+
+	public static byte[] secret = null;
+	public static SecretKeySpec secretKey = null;
+
+	public static void setKeys() {
+		try {
+			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff"
+					.toCharArray());
+			secretKey = new SecretKeySpec(secret, "AES");
 		} catch (DecoderException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
+	}
 
-	    SecretKeySpec secretKey = new SecretKeySpec(secret, "AES");
+	/**
+	 * This method, using another method in Encryption class, encrypts data.
+	 * Then converts it bytes string. Then returnes it.
+	 * @param message
+	 * @return encrypted
+	 * @throws NoSuchAlgorithmException
+	 * @throws NoSuchPaddingException
+	 * @throws InvalidKeyException
+	 * @throws InvalidParameterSpecException
+	 * @throws IllegalBlockSizeException
+	 * @throws BadPaddingException
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String encryptMsg(String message)
+			throws NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeyException, InvalidParameterSpecException,
+			IllegalBlockSizeException, BadPaddingException,
+			UnsupportedEncodingException {
+		setKeys();
+		Cipher cipher = null;
+		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey );
+		
+		byte[] encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
+		String encrypted = DatatypeConverter.printBase64Binary(encryptedText);
+		
+		return encrypted;
+	}
 	
-	   //decryptMsg(encryptMsg(message, secretKey), secretKey));
-		
-	  }
-	  
-	  public static byte[] encryptMsg(String message, SecretKey secret) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidParameterSpecException, IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException {
-			
-		    Cipher cipher = null;
-		    cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		    cipher.init(Cipher.ENCRYPT_MODE, secret);
-		    byte[] encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
-		    
-		    return encryptedText;
-		}
+	/**
+	 *  This method converts string into bytes then using method in Encryption
+	 * class decrypts data. Then it returns string.
+	 * @param message
+	 * @return decrypted
+	 * @throws NoSuchPaddingException
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidParameterSpecException
+	 * @throws InvalidAlgorithmParameterException
+	 * @throws InvalidKeyException
+	 * @throws BadPaddingException
+	 * @throws IllegalBlockSizeException
+	 * @throws UnsupportedEncodingException
+	 */
+	public static String decryptMsg(String message)
+			throws NoSuchPaddingException, NoSuchAlgorithmException,
+			InvalidParameterSpecException, InvalidAlgorithmParameterException,
+			InvalidKeyException, BadPaddingException,
+			IllegalBlockSizeException, UnsupportedEncodingException {
+		setKeys();
+		Cipher cipher = null;
+		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		byte[] data = DatatypeConverter.parseBase64Binary(message);
+		String decrypt = new String(cipher.doFinal(data),"UTF-8");
 
-		public static String decryptMsg(byte[] encryptedText, SecretKey secret) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidParameterSpecException, InvalidAlgorithmParameterException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
-
-		    Cipher cipher = null;
-		    cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		   cipher.init(Cipher.DECRYPT_MODE, secret);
-		    String decryptString = new String(cipher.doFinal(encryptedText), "UTF-8");
-		    
-		    return decryptString;
-		}
-		
+		return decrypt;
+	}
 
 
+	 
+	
 }

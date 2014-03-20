@@ -144,7 +144,7 @@ public class LoginPage extends Window
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// TODO Auto-generated method stub
+		/*// TODO Auto-generated method stub
 		if (e.getSource().equals(loginBtn))
 		{
 			// TODO it appears that check password always give me true. It is
@@ -173,6 +173,8 @@ public class LoginPage extends Window
 			new DeleteUser("Delete user", 300, 300);
 			getWindow().dispose();
 		}
+		*/
+		new Menu("Menu", 250, 300);
 	}
 
 	// WHENEVER YOU click login you will you lucky thing
