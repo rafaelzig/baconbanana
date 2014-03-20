@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class OpenQuestion extends Question{
 
@@ -47,11 +51,13 @@ public class OpenQuestion extends Question{
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
-			saveQuestion();
+			 
 		}
 		else if(e.getSource().equals(getCancelBtn())){
 			cancelQuestion();
 		}
 	}
+	
+	
 
 }
