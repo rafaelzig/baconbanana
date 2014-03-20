@@ -55,7 +55,7 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
-		SQLList templateModel = new SQLList("Template", new String[] {"Template"} , 0);
+		SQLList templateModel = new SQLList("Template", new String[] {"Template, QuestionID"} , 0);
 		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
 		templateList = new JList<String>(templateModel);
@@ -120,7 +120,7 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate("Create New Template", 800, 800);
+			new AddTemplate("Create New Template", 800, 500);
 			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
 			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
 			//getWindow().setEnabled(false);
@@ -149,7 +149,7 @@ public class CreateSurvey extends SQLWindow{
 	@Override
 	public void setList(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm)){
-			templatePrevModel = new SQLList("Template_Question NATURAL JOIN Question ON ", new String[] {"Template"}, "", 0);
+			templatePrevModel = new SQLList("Template_Question NATURAL JOIN Question", new String[] {"Question"}, "QuestionID=" + templateModel.getId(e.getFirstIndex()), 0);
 			populateList(templatePrevList, templatePrevModel);
 			
 		}		

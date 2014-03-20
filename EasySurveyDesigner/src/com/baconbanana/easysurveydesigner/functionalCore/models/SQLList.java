@@ -12,7 +12,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidState
 
 public class SQLList extends AbstractListModel<String>{
 	
-	private List<String> data;
+	private List<String[]> data;
 	private String table;
 	private String[] columns;
 	private int sortColumn;
@@ -55,7 +55,11 @@ public class SQLList extends AbstractListModel<String>{
 	
 	@Override
 	public String getElementAt(int i) {
-		return data.get(i);
+		return data.get(i)[sortColumn];
+	}
+	
+	public int getId(int i){
+		return Integer.parseInt(data.get(i)[0]);
 	}
 
 	@Override
@@ -66,8 +70,9 @@ public class SQLList extends AbstractListModel<String>{
 	public void getData(String tableName, String[] col){
 		try {
 			List<Object[]> result = dbCon.select(table, col, sortColumn, true);
+			int count = 0;
 			for(Object[]  i : result){
-				String item = (String) i[0];
+				String[] item = (String[]) i[count++];
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {
@@ -78,8 +83,9 @@ public class SQLList extends AbstractListModel<String>{
 	public void getData(String tableName, String[] col, String cond){
 		try {
 			List<Object[]> result = dbCon.select(table, col, cond, sortColumn, true);
+			int count = 0;
 			for(Object[]  i : result){
-				String item = (String) i[0];
+				String[] item = (String[]) i[count++];
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {
