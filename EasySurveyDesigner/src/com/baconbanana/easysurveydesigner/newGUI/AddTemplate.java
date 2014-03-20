@@ -99,19 +99,19 @@ public class AddTemplate extends SQLWindow{
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				new NumericQuestion(tit, 800, 800);
+				new NumericQuestion(tit, 800, 500);
 				break;
 			case DATE :
-				new DateQuestion(tit, 800, 800);
+				new DateQuestion(tit, 800, 500);
 				break;	
 			case TEXTUAL :
-				new TextualQuestion(tit, 800, 800);
+				new TextualQuestion(tit, 800, 500);
 				break;	
 			case MULTIPLECHOICE :
-				new MultipleChoiceQuestion(tit, 800, 800);
+				new MultipleChoiceQuestion(tit, 800, 500);
 				break;
 			case MULTIPLEANSWER :
-				new MultipleAnswerQuestion(tit, 800, 800);
+				new MultipleAnswerQuestion(tit, 800, 500);
 				break;
 			case RATING :
 				new RatingQuestion();

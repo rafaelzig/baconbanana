@@ -49,6 +49,13 @@ public class SQLList extends AbstractListModel<String>{
 		} catch (ClassNotFoundException | SQLException e) {
 		
 			e.printStackTrace();
+		}finally{
+			try {
+				dbCon.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		getData(table, columns);
 	}

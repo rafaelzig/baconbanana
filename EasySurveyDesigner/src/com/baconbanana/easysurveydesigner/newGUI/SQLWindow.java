@@ -27,6 +27,14 @@ public abstract class SQLWindow extends Window implements ListSelectionListener{
 		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if (dbCon != null)
+				try {
+					dbCon.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 	}
 	

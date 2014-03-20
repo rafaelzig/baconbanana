@@ -48,7 +48,7 @@ public class Question extends SQLWindow{
 	//This method controls general functionality to each select button in every type of the question.
 	public void saveQuestion(){
 		
-		new AddTemplate("Create New Template", 500, 800);
+		new AddTemplate("Create New Template", 800, 500);
 		getWindow().dispose();
 	}
 
