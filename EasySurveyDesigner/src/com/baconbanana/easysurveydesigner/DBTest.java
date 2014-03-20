@@ -16,7 +16,7 @@ public class DBTest
 	public static void main(String[] args)
 	{
 		DBController controller = null;
-		
+
 		try
 		{
 			try
@@ -24,9 +24,12 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
+//				System.out.println(controller.createAllTables());
+//				System.out.println(controller.deleteAllTables());
+				
 				if (controller.exists(TABLE_NAME))
 					controller.deleteTable(TABLE_NAME);
-					
+
 				Map<String, String> param = new HashMap<>();
 				param.put("Name", "varchar(20)");
 				param.put("Occupation", "varchar(20)");
@@ -37,85 +40,94 @@ public class DBTest
 				values.add("'Rafael'");
 				values.add("'Student'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
-				
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
+
 				values = new LinkedList<>();
 				values.add("'Igor'");
 				values.add("'Musician'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, new String[] {
+								"Name", "Occupation" }, new String[] {
+								"'Joshua'", "'Artist'" }));
 
 				values = new LinkedList<>();
 				values.add("'Tommy'");
 				values.add("'Developer'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
-				controller.printResult(controller.selectAll(TABLE_NAME));
+				DBController.printResult(controller.selectAll(TABLE_NAME));
 
 				values = new LinkedList<>();
 				values.add("'Matt'");
 				values.add("'Slacker'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Beka'");
 				values.add("'Dancer'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
-				
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
+
 				values = new LinkedList<>();
 				values.add("'Almira'");
 				values.add("'Professional'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 
 				System.out.println();
-				controller.printResult(controller
-						.selectAll(TABLE_NAME));
+				DBController.printResult(controller.selectAll(TABLE_NAME));
 
 				values = new LinkedList<>();
 				values.add("'Bob'");
 				values.add("'Builder'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Wally'");
 				values.add("'Spy'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 
 				values = new LinkedList<>();
 				values.add("'Smith'");
 				values.add("'Agent'");
 
-				System.out.println("ID GENERATED:" + controller.insertInto(TABLE_NAME, values));
+				System.out.println("ID GENERATED:"
+						+ controller.insertInto(TABLE_NAME, values));
 
 				System.out.println();
-				controller.printResult(controller
-						.selectAll(TABLE_NAME));
-				
+				DBController.printResult(controller.selectAll(TABLE_NAME));
+
 				param = new HashMap<String, String>();
 				param.put("Name", "'NEO'");
 				param.put("Occupation", "'The Chosen One'");
-				
+
 				System.out.println();
-				System.out.println(controller.updateAll(TABLE_NAME, param) + " rows changed!");
-				
+				System.out.println(controller.updateAll(TABLE_NAME, param)
+						+ " rows changed!");
+
 				System.out.println();
-				controller.printResult(controller
-						.selectAll(TABLE_NAME));
+				DBController.printResult(controller.selectAll(TABLE_NAME));
+
+				 controller.deleteAllRows(TABLE_NAME);
 				
-//				controller.deleteAll(TABLE_NAME);
-//				
-//				System.out.println();
-//				controller.printResult(controller
-//						.selectAll(TABLE_NAME));
-				
+				 System.out.println();
+				 DBController.printResult(controller
+				 .selectAll(TABLE_NAME));
+
 			}
 			catch (InvalidStateException e)
 			{
