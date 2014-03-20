@@ -22,8 +22,8 @@ public class DBTest
 				controller = DBController.getInstance();
 				controller.loadResources();
 
-				 System.out.println(controller.createAllTables());
-				 System.out.println(controller.deleteAllTables());
+//				 System.out.println(controller.createAllTables());
+//				 System.out.println(controller.deleteAllTables());
 
 				if (controller.exists(TABLE_NAME))
 					controller.deleteTable(TABLE_NAME);
@@ -78,12 +78,23 @@ public class DBTest
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
+				
+				System.out.println();
+				DBController.printResult(controller.select(TABLE_NAME, 0, true, "Name"));
+				
+				System.out.println();
+				DBController.printResult(controller.select(TABLE_NAME, 0, false, "Name"));
+				
+				System.out.println();
+				DBController.printResult(controller.select(TABLE_NAME, "Occupation='Student'", 0, true, "Name","Occupation"));
 
+				System.out.println();
+				DBController.printResult(controller.select(TABLE_NAME, "Occupation='Student'", 0, false, "Name","Occupation"));
+				
 				param = new HashMap<String, String>();
 				param.put("Name", "'NEO'");
 				param.put("Occupation", "'The Chosen One'");
 
-				System.out.println();
 				System.out.println(controller.updateAll(TABLE_NAME, param)
 						+ " rows changed!");
 
