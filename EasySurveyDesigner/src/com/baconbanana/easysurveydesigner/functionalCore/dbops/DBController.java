@@ -337,8 +337,8 @@ public class DBController
 			int sortCol, boolean isAscending, String... columns)
 			throws SQLException, InvalidStateException
 	{
-		condition += (isAscending) ? " ORDER BY " + columns[sortCol] + " DESC"
-				: " ORDER BY " + columns[sortCol] + " ASC";
+		condition += (isAscending) ? " ORDER BY " + columns[sortCol] + " ASC"
+				: " ORDER BY " + columns[sortCol] + " DESC";
 
 		return select(tableName, condition, columns);
 	}

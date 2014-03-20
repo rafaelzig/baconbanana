@@ -22,7 +22,7 @@ public class SQLList extends AbstractListModel<String>{
 	
 	
 	//get ID at some point
-	public SQLList(String tableName, String[] col, int sortCol){
+	public SQLList(String tableName, int sortCol, String... col){
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -37,7 +37,7 @@ public class SQLList extends AbstractListModel<String>{
 		getData(table, columns);
 	}
 	
-	public SQLList(String tableName, String[] col, String condition, int sortCol){
+	public SQLList(String tableName, String condition, int sortCol, String...col){
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -74,9 +74,9 @@ public class SQLList extends AbstractListModel<String>{
 		return data.size();
 	}
 	
-	public void getData(String tableName, String[] col){
+	public void getData(String tableName, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, col, sortColumn, true);
+			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
 			int count = 0;
 			for(Object[]  i : result){
 				String[] item = (String[]) i[count++];
@@ -87,9 +87,9 @@ public class SQLList extends AbstractListModel<String>{
 			e.printStackTrace();
 		}
 	}
-	public void getData(String tableName, String[] col, String cond){
+	public void getData(String tableName, String cond, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, col, cond, sortColumn, true);
+			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
 			int count = 0;
 			for(Object[]  i : result){
 				String[] item = (String[]) i[count++];
