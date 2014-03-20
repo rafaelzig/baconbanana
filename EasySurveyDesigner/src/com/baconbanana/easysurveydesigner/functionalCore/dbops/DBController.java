@@ -24,7 +24,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidState
  */
 public class DBController
 {
-	private static final String DB_NAME = "easysurvey.db";
+	public static final String DB_NAME = "easysurvey.db";
 	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
 			+ "/Documents/SQLite");
 	private static final File WIN_WORKING_DIR = new File(
@@ -131,6 +131,30 @@ public class DBController
 	}
 
 	/**
+	 * Creates all Database Tables if they don't already exist, returning the
+	 * row count;
+	 * 
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 */
+	public int createAllTables() throws SQLException, InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+
+		int count = 0;
+
+		for (Table table : Table.values())
+		{
+			if (!exists(table.getName()))
+				if (createTable(table.getName(), table.getParameters()))
+					count++;
+		}
+
+		return count;
+	}
+
+	/**
 	 * Creates a Database table with the specified table name and parameters.
 	 * 
 	 * @see Example: CREATE TABLE table_name ( column_name1 data_type(size),
@@ -140,10 +164,10 @@ public class DBController
 	 * @param parameters
 	 *            Map<String, String> containing the key values representing the
 	 *            parameters.
-	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
-	 *         statements that return nothing.
+	 * @return True if the database table has been created successfully, false
+	 *         otherwise.
 	 */
-	public int createTable(String tableName, Map<String, String> parameters)
+	public boolean createTable(String tableName, Map<String, String> parameters)
 			throws SQLException, InvalidStateException
 	{
 		if (!isReady)
@@ -155,9 +179,12 @@ public class DBController
 			sql += prepareSql(parameters, " ");
 			sql += " );";
 
-			return genericStatement.executeUpdate(sql);
+			genericStatement.executeUpdate(sql);
+
+			return true;
 		}
-		return 0;
+
+		return false;
 	}
 
 	/**
@@ -173,8 +200,8 @@ public class DBController
 	 *            the values will be inserted.
 	 * @param values
 	 *            List of String objects representing the values to be inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
-	 *         statements that return nothing.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
+	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> columns,
 			List<String> values) throws SQLException, InvalidStateException
@@ -192,7 +219,7 @@ public class DBController
 			sql += " VALUES " + prepareSql(values, true) + ";";
 
 			genericStatement.executeUpdate(sql);
-			
+
 			return getLastGeneratedKey();
 		}
 
@@ -213,8 +240,8 @@ public class DBController
 	 * @param values
 	 *            Array of String objects representing the values to be
 	 *            inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
-	 *         statements that return nothing.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
+	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String[] columns, String[] values)
 			throws SQLException, InvalidStateException
@@ -233,8 +260,8 @@ public class DBController
 	 *            String object representing the table name.
 	 * @param values
 	 *            List of String objects representing the values to be inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
-	 *         statements that return nothing.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
+	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, List<String> values)
 			throws SQLException, InvalidStateException
@@ -253,8 +280,8 @@ public class DBController
 	 * @param values
 	 *            Array of String objects representing the values to be
 	 *            inserted.
-	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0 for SQL
-	 *         statements that return nothing.
+	 * @return Either (1) the generated id for the SQL INSERT statement or (2) 0
+	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String[] values)
 			throws SQLException, InvalidStateException
@@ -570,7 +597,7 @@ public class DBController
 	 *             Signals an error has occurred when the database resources
 	 *             have not been loaded prior to this method call.
 	 */
-	public int deleteAll(String tableName) throws SQLException,
+	public int deleteAllRows(String tableName) throws SQLException,
 			InvalidStateException
 	{
 		return delete(tableName, null);
@@ -591,58 +618,34 @@ public class DBController
 	public int deleteTable(String tableName) throws SQLException,
 			InvalidStateException
 	{
-		return drop(tableName, true);
-	}
-
-	/**
-	 * Deletes the database table with the specified table name.
-	 * 
-	 * @see Example: DROP DATABASE databaseName;
-	 * @param databaseName
-	 *            String object representing the database name.
-	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
-	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public int deleteDatabase(String databaseName) throws SQLException,
-			InvalidStateException
-	{
-		return drop(databaseName, false);
-	}
-
-	/**
-	 * Helper method which deletes either the database with the specified name
-	 * or the database table with the specified name.
-	 * 
-	 * @param name
-	 *            String object representing the resource name to be deleted.
-	 * @param isTable
-	 *            Boolean representing wheter or not the resource to be deleted
-	 *            is a table.
-	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
-	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	private int drop(String name, boolean isTable)
-			throws InvalidStateException, SQLException
-	{
 		if (!isReady)
 			throw new InvalidStateException();
 
-		if (name != null && !name.isEmpty())
-		{
-			String sql = (isTable) ? "DROP TABLE " : "DROP DATABASE ";
-
-			sql += name + ";";
-
-			return genericStatement.executeUpdate(sql);
-		}
+		if (tableName != null && !tableName.isEmpty())
+			return genericStatement.executeUpdate("DROP TABLE " + tableName	+ ";");
 
 		return 0;
+	}
+
+	/**
+	 * Deletes all Database Tables if they already exist. WARNING, THIS
+	 * OPERATIONS CANNOT BE REVERSED!!!
+	 * 
+	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
+	 *         statements that return nothing.
+	 */
+	public int deleteAllTables() throws SQLException, InvalidStateException
+	{
+		if (!isReady)
+			throw new InvalidStateException();
+	
+		int count = 0;
+	
+		for (Table table : Table.values())
+			if (exists(table.getName()))
+				count += (deleteTable(table.getName()));
+	
+		return count;
 	}
 
 	/**
@@ -650,8 +653,8 @@ public class DBController
 	 * INSERT statement. If this statement did not generate any keys, an empty
 	 * ResultSet object is returned.
 	 * 
-	 * @return Integer containing the auto-generated key generated
-	 *         by the execution of the last SQL INSERT statement.
+	 * @return Integer containing the auto-generated key generated by the
+	 *         execution of the last SQL INSERT statement.
 	 */
 	public int getLastGeneratedKey() throws SQLException,
 			InvalidStateException
@@ -659,7 +662,7 @@ public class DBController
 		ResultSet rs = selectGeneratedIdStatement.executeQuery();
 		int generatedId = rs.getInt(1);
 		rs.close();
-		
+
 		return generatedId;
 	}
 
@@ -675,29 +678,29 @@ public class DBController
 	{
 		ResultSetMetaData rsMetaData = rs.getMetaData();
 		int columnCount = rsMetaData.getColumnCount();
-	
+
 		List<Object[]> resultTable = new LinkedList<>();
 		String[] header = new String[columnCount];
-	
+
 		for (int i = 1; i <= columnCount; ++i)
 			header[i - 1] = rsMetaData.getColumnLabel(i);
-	
+
 		resultTable.add(header);
-	
+
 		Object[] tuple = null;
-	
+
 		while (rs.next())
 		{
 			tuple = new Object[columnCount];
-	
+
 			for (int i = 1; i <= columnCount; ++i)
 				tuple[i - 1] = rs.getObject(i);
-	
+
 			resultTable.add(tuple);
 		}
-	
+
 		rs.close();
-	
+
 		return resultTable;
 	}
 
@@ -756,13 +759,13 @@ public class DBController
 	}
 
 	/**
-	 * Convenience method which takes a List of Object arrays as argument and prints
-	 * the results, line by line, to the console.
+	 * Convenience static method which takes a List of Object arrays as argument and
+	 * prints the results, line by line, to the console.
 	 * 
 	 * @param resultTable
 	 *            List of Object arrays containing the result.
 	 */
-	public void printResult(List<Object[]> resultTable) throws SQLException
+	public static void printResult(List<Object[]> resultTable) throws SQLException
 	{
 		for (Object[] row : resultTable)
 		{
@@ -770,10 +773,10 @@ public class DBController
 			{
 				if (i > 0)
 					System.out.print("\t\t");
-				
+
 				System.out.print(row[i]);
 			}
-			
+
 			System.out.println();
 		}
 	}

@@ -25,7 +25,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOl
 			loginPageFrame  = new JFrame("Login Page");
 			loginPageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			//create database tables if they don't exist
-			DBCreator.checkAndCreateTables();
+			DBCreator.createAllTables();
 			initLayout();
 			loginPageFrame.setVisible(true);
 			
