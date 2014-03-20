@@ -37,15 +37,10 @@ public class DBTest
 				controller.createTable(TABLE_NAME, param);
 
 				List<String> values = new LinkedList<>();
-				values.add("'Rafael'");
-				values.add("'Student'");
-
+				 				values.add("'Rafael'");
+				 				values.add("'Student'");
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
-
-				values = new LinkedList<>();
-				values.add("'Igor'");
-				values.add("'Musician'");
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, new String[] {
@@ -58,14 +53,11 @@ public class DBTest
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
+				
 				controller.delete(TABLE_NAME, "name='Rafael'");
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));
-
-				values = new LinkedList<>();
-				values.add("'Matt'");
-				values.add("'Slacker'");
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
@@ -107,6 +99,7 @@ public class DBTest
 
 				System.out.println("ID GENERATED:"
 						+ controller.insertInto(TABLE_NAME, values));
+				
 
 				System.out.println();
 				DBController.printResult(controller.selectAll(TABLE_NAME));

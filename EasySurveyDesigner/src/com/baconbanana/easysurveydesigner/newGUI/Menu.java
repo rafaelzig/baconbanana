@@ -15,6 +15,9 @@ public class Menu extends Window{
 	private JButton openSurvey;
 	private JButton previewAnswers;
 	private JButton getConnect;
+	private JButton importBtn;
+	private JButton exportBtn;
+	
 	
 	public Menu(String tit, int width, int height) {
 		super(tit, width, height);
@@ -57,6 +60,16 @@ public class Menu extends Window{
 		getConnect = new JButton ("Connect to Device");
 		getConnect.addActionListener(this);
 		buttonPanel.add(getConnect, btnCon);
+		btnCon.gridy++;
+		
+		importBtn = new JButton ("Import/Export");
+		importBtn.addActionListener(this);
+		buttonPanel.add(importBtn, btnCon);
+		btnCon.gridy++;
+		
+		exportBtn = new JButton ("Import/Export");
+		exportBtn.addActionListener(this);
+		buttonPanel.add(exportBtn, btnCon);
 		
 		getWindow().add(buttonPanel, BorderLayout.CENTER);
 		
@@ -83,8 +96,12 @@ public class Menu extends Window{
 		else if(e.getSource().equals(getConnect)){
 			new SendSurvey("Connection Page", 400, 400);
 			getWindow().dispose();
+		}else if(e.getSource().equals(importBtn)){
+			//TODO import code here
+		}else if(e.getSource().equals(exportBtn)){
+			//TODO import code here
 		}
-		
+	
 		
 		
 	}
