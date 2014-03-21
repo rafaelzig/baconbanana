@@ -595,13 +595,16 @@ public class SurveyActivity extends Activity
 	 */
 	private void finishSurvey()
 	{
+		
 		try
 		{
 			Storage.writeToInternal(this, survey.getJSON().toJSONString());
+			
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -609,10 +612,13 @@ public class SurveyActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
+		  
+		ConnectionActivity.setBooleanSurveyCompleted(true);//  <-------------new
+		
 		Intent intent = new Intent(this, ConnectionActivity.class);
 		startActivity(intent);
-		submit(true);
+		
 	}
 
 	/**
@@ -629,205 +635,5 @@ public class SurveyActivity extends Activity
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
-	// ---------------------------------------------------------------------------------
-
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	// -*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
-	// ------------------------------------------------------------------------
-	/**
-	 * called when the SIBMIT button is pressed. It first checks if all of the
-	 * questions are answered. If no, dialog box showing not answered questions
-	 * appears. If yes, confirmation dialog box appears. once pressed ok, it
-	 * tries too connect to server.
-	 * 
-	 * @param b
-	 *            Boolean TODO
-	 */
-	private void submit(boolean b)
-	{
-		// move to entirely new activity and do the shit
-		DialogInterface.OnClickListener dialogClickListenerSure = new DialogInterface.OnClickListener()
-		{
-			@Override
-			public void onClick(DialogInterface dialog, int which)
-			{
-				switch (which)
-				{
-					case DialogInterface.BUTTON_POSITIVE:
-						// Yes button clicked
-						(new ConnectToServer()).execute();
-						break;
-
-					case DialogInterface.BUTTON_NEGATIVE:
-						// No button clicked
-						break;
-				}
-			}
-		};
-
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Are you sure?")
-				.setPositiveButton("Yes", dialogClickListenerSure)
-				.setNegativeButton("No", dialogClickListenerSure).show();
-
-	}
-
-	// -----------------------------------------------------------------------------
-	/**
-	 * Tries to connect to server by calling the method createSocket. On post
-	 * execute it checks if the socket was created. If created, try to send
-	 * data. If not, tells it was unsuccessful.
-	 * 
-	 * @param b
-	 *            Boolean
-	 * 
-	 *            TODO
-	 */
-	public class ConnectToServer extends AsyncTask<String, Void, String>
-	{
-
-		@Override
-		protected String doInBackground(String... arg0)
-		{
-
-			listOfSockets = new int[2000];
-			for (int x = 0; x < 2000; x++)
-			{
-				listOfSockets[x] = 2000 + x;
-			}
-
-			try
-			{
-				skt = createSocket(listOfSockets, IP);
-			}
-			catch (IOException e)
-			{
-				System.out.println(e);
-			}
-
-			return null;
-
-		}
-
-		protected void onPostExecute(String result)
-		{
-
-			DialogInterface.OnClickListener dialogClickListenerSend = new DialogInterface.OnClickListener()
-			{
-				@Override
-				public void onClick(DialogInterface dialog, int which)
-				{
-					switch (which)
-					{
-						case DialogInterface.BUTTON_POSITIVE:
-
-							(new SendToServer()).execute();// <---
-
-							break;
-
-						case DialogInterface.BUTTON_NEGATIVE:
-							// No button clicked
-							break;
-					}
-				}
-			};
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(contex);
-			String message = "";
-			if (skt == null)
-			{
-				message = "Could not connect to Server";
-				builder.setMessage(message)
-						.setNegativeButton("close", dialogClickListenerSend)
-						.show();
-			}
-			else
-			{
-				message = "Successfully Connected to Server";
-				builder.setMessage(message)
-						.setPositiveButton("Send My Answers",
-								dialogClickListenerSend)
-						.setNegativeButton("Cancel", dialogClickListenerSend)
-						.show();
-			}
-
-		}
-
-	}//test
-	// ---------------------------------------------------------------------------------
-	/**
-	 * tries to get output stream and write lines to the server then on post
-	 * execute dialog box pops up with the result of attempt
-	 */
-	public class SendToServer extends AsyncTask<String, Void, String>
-	{
-		String message = "";
-
-		@Override
-		protected String doInBackground(String... arg0)
-		{
-
-			try
-			{
-				PrintStream output = null;
-				output = new PrintStream(skt.getOutputStream());
-				output.print("try");
-				message = "successfully sent";
-				// TODO
-			}
-			catch (IOException e)
-			{
-				System.out.println(e);
-				message = "could not send it";
-			}
-			return null;
-		}
-
-		protected void onPostExecute(String result)
-		{
-
-			AlertDialog.Builder dlgAlert = new AlertDialog.Builder(contex);
-
-			dlgAlert.setMessage(message);
-			dlgAlert.setPositiveButton("OK", null);
-			dlgAlert.create().show();
-
-		}
-
-	}
-
-	// ---------------------------------------------------------------------------------
-	/**
-	 * loops through the array of ports passed as a parameter and then tries to
-	 * create a socket with the given ip
-	 * 
-	 * @param ports
-	 *            array of int
-	 * @param IP
-	 *            string
-	 */
-	public static Socket createSocket(int[] ports, String IP)
-			throws IOException
-	{
-
-		for (int port : ports)
-		{
-			try
-			{
-				Socket s = new Socket(IP, port);
-				String st = "" + s.getPort();
-				Log.d("port", st);
-				return s;
-			}
-			catch (IOException ex)
-			{
-				Log.d("noport", "" + port);
-				continue; // try next port
-			}
-		}
-
-		// no portfound
-		throw new IOException("no free port found");
-	}
-
 }
+// new: removed all not used ones 

@@ -51,19 +51,40 @@ public class EncryptionJ {
 	 * @throws BadPaddingException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String encryptMsg(String message)
-			throws NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeyException, InvalidParameterSpecException,
-			IllegalBlockSizeException, BadPaddingException,
-			UnsupportedEncodingException {
+	public static String encryptMsg(String message) {
+		byte[] encryptedText;
 		setKeys();
 		Cipher cipher = null;
-		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(Cipher.ENCRYPT_MODE, secretKey );
+		String encrypted="";
 		
-		byte[] encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
-		String encrypted = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+		try {
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey );
+		
+			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
+		
+			encrypted = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			
+			}catch (IllegalBlockSizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return encrypted;
 	}
 	
@@ -81,17 +102,37 @@ public class EncryptionJ {
 	 * @throws IllegalBlockSizeException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String decryptMsg(String message)
-			throws NoSuchPaddingException, NoSuchAlgorithmException,
-			InvalidParameterSpecException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException,
-			IllegalBlockSizeException, UnsupportedEncodingException {
+	public static String decryptMsg(String message) {
 		setKeys();
 		Cipher cipher = null;
+		String decrypt="";
+		
+		try {
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		byte[] data = Base64.decode(message, Base64.DEFAULT);;
-		String decrypt = new String(cipher.doFinal(data),"UTF-8");
+		
+		decrypt = new String(cipher.doFinal(data),"UTF-8");
+		
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return decrypt;
 	}

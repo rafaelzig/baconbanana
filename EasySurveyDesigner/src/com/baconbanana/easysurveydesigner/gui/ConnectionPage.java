@@ -35,6 +35,7 @@ import javax.swing.JTextField;
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 import com.baconbanana.easysurveydesigner.newGUI.Menu;
 
+
 /**
  *1) in the constructor the frame and all the buttons 
  *2) in the constructor the tread connection and setIP will start and finish
@@ -119,7 +120,7 @@ public class ConnectionPage {
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent e) {
 
-				new Menu();
+				//new Menu();
 				frame.dispose();
 
 				try {
@@ -156,7 +157,7 @@ public class ConnectionPage {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new MenuFrame();
+				//new Menu();
 				frame.dispose();
 				// serverSocket.close();
 
