@@ -159,7 +159,6 @@ public class LoginPage extends Window
 			{
 				getWindow().dispose();
 				new LoginPage("Login Page", 300, 300);
-				System.out.println("you have fucked up!!");
 			}
 		}
 		else if (e.getSource().equals(createUserBtn))
