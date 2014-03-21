@@ -2,6 +2,7 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import javax.swing.AbstractListModel;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
-public class SQLList extends AbstractListModel<String>{
+public class SQLList extends AbstractListModel{
 	
 	private List<String[]> data;
 	private String table;
@@ -22,7 +23,7 @@ public class SQLList extends AbstractListModel<String>{
 	
 	
 	//get ID at some point
-	public SQLList(String tableName, String[] col, int sortCol){
+	public SQLList(String tableName, int sortCol, String... col){
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -37,7 +38,7 @@ public class SQLList extends AbstractListModel<String>{
 		getData(table, columns);
 	}
 	
-	public SQLList(String tableName, String[] col, String condition, int sortCol){
+	public SQLList(String tableName, String condition, int sortCol, String...col){
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -74,12 +75,12 @@ public class SQLList extends AbstractListModel<String>{
 		return data.size();
 	}
 	
-	public void getData(String tableName, String[] col){
+	public void getData(String tableName, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, col, sortColumn, true);
-			int count = 0;
+			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
+			
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
+				String[] item = Arrays.asList(i).toArray(new String[i.length]);
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {
@@ -87,12 +88,12 @@ public class SQLList extends AbstractListModel<String>{
 			e.printStackTrace();
 		}
 	}
-	public void getData(String tableName, String[] col, String cond){
+	public void getData(String tableName, String cond, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, col, cond, sortColumn, true);
+			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
 			int count = 0;
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
+				String[] item = Arrays.asList(i).toArray(new String[i.length]);
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {

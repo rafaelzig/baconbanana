@@ -33,7 +33,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-import com.baconbanana.easysurveydesigner.oldGui.MenuFrame;
+import com.baconbanana.easysurveydesigner.newGUI.Menu;
+
 
 /**
  *1) in the constructor the frame and all the buttons 
@@ -119,7 +120,7 @@ public class ConnectionPage {
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(java.awt.event.WindowEvent e) {
 
-				new MenuFrame();
+				//new Menu();
 				frame.dispose();
 
 				try {
@@ -156,7 +157,7 @@ public class ConnectionPage {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new MenuFrame();
+				//new Menu();
 				frame.dispose();
 				// serverSocket.close();
 

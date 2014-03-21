@@ -84,7 +84,7 @@ public class DeleteUser extends Window {
 			try {
 				controller = DBController.getInstance();
 				controller.loadResources();
-				for (Object[] row : controller.selectAll("Login").subList(1, controller.selectAll("Login").size()))
+				for (Object[] row : controller.selectAll("Login"))
 				{
 					for (int i = 0; i < row.length - 1; i += 2)
 					{

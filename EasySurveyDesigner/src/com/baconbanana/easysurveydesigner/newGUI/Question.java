@@ -87,15 +87,15 @@ public class Question extends SQLWindow{
 	public void saveQuestionOq(QuestionType qt){
 		DBController controller = null;
 		String tableName = new String(Table.QUESTION.getName());
-		ArrayList<String> values = new ArrayList<String>();
-		values.add("null");
-		values.add("'" + questionTxa.getText() + "'");
-		values.add("'" + qt.toString()+"'");
+		String[] values = new String[3];
+		values[0] =  "null";
+		values[1] = ("'" + questionTxa.getText() + "'");
+		values[2] = ("'" + qt.toString()+"'");
 		try {
 			try {
 				controller = DBController.getInstance();
 				controller.loadResources();
-				controller.insertInto(tableName, values);
+				controller.insertInto(tableName, values );
 			}catch (InvalidStateException e1) {
 				e1.printStackTrace();
 			}finally{

@@ -103,9 +103,9 @@ public class CreateUser extends Window{
 			
 			DBController controller = null;
 			String tableName = new String("Login");
-			ArrayList<String> values = new ArrayList<String>();
-			values.add("'" + createUserTxt.getText() + "'");
-			values.add("'" + createPasswordPf.getText() + "'");
+			String[] values = new String[2];
+			values[0] = ("'" + createUserTxt.getText() + "'");
+			values[1] = ("'" + createPasswordPf.getText() + "'");
 			if((createUserTxt.getText().trim().isEmpty()) || (createPasswordPf.getText().trim().isEmpty())){
 				getWindow().dispose();
 				new CreateUser("Create new user", 300, 300);
