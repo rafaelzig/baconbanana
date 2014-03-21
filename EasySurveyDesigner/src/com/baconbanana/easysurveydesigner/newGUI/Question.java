@@ -21,9 +21,11 @@ public class Question extends SQLWindow{
 	private JTextArea questionTxa;
 	private JButton saveBtn;
 	private JButton cancelBtn;
+	private Template template;
 
-	public Question(String tit, int width, int height) {
+	public Question(String tit, int width, int height, Template t) {
 		super(tit, width, height);
+		template = t;
 		setFrameOptions();
 		initiLayout();
 	}

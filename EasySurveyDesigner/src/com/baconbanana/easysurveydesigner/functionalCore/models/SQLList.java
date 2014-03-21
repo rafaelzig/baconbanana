@@ -2,6 +2,7 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,9 +11,9 @@ import javax.swing.AbstractListModel;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
-public class SQLList extends AbstractListModel<String>{
+public class SQLList extends AbstractListModel{
 	
-	private List<String[]> data;
+	private List<Object[]> data;
 	private String table;
 	private String[] columns;
 	private int sortColumn;
@@ -34,7 +35,6 @@ public class SQLList extends AbstractListModel<String>{
 		
 			e.printStackTrace();
 		}
-		getData(table, columns);
 	}
 	
 	public SQLList(String tableName, String condition, int sortCol, String...col){
@@ -57,16 +57,15 @@ public class SQLList extends AbstractListModel<String>{
 				e.printStackTrace();
 			}
 		}
-		getData(table, columns);
 	}
 	
 	@Override
 	public String getElementAt(int i) {
-		return data.get(i)[sortColumn];
+		return (String) data.get(i)[sortColumn];
 	}
 	
 	public int getId(int i){
-		return Integer.parseInt(data.get(i)[0]);
+		return (int) data.get(i)[0];
 	}
 
 	@Override
@@ -77,10 +76,9 @@ public class SQLList extends AbstractListModel<String>{
 	public void getData(String tableName, String... col){
 		try {
 			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
-			int count = 0;
+			
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
-				data.add(item);
+				data.add(i);
 			}
 		} catch (SQLException | InvalidStateException e) {
 			// TODO Auto-generated catch block
@@ -90,15 +88,36 @@ public class SQLList extends AbstractListModel<String>{
 	public void getData(String tableName, String cond, String... col){
 		try {
 			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
-			int count = 0;
+			
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
-				data.add(item);
+				data.add(i);
 			}
 		} catch (SQLException | InvalidStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-}
+		
+	}
+	
+	public void insertElement(String table, String...values ){
+		try {
+			try {
+				dbCon.insertInto(table, values);
+			}catch (InvalidStateException e1) {
+				e1.printStackTrace();
+			}finally{
+				if (dbCon != null)
+					dbCon.close();
+			}
+			data.add(values);
+		}catch (SQLException e2){
+		
+			e2.printStackTrace();
+			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
+			System.exit(-1);
+		}
+	}
+	
+	
 
 }

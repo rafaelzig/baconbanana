@@ -2,29 +2,44 @@ package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.Socket;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 
-import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
 public class DataGetter extends Thread {
-	
+	InputStream inS;
 	String receivedData;
-	
-	public DataGetter(){
+	public DataGetter(InputStream i ){
+		this.inS=i;
 	}
-	
 	public void run() {
 
 		try {
+
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					SendSurvey.getClientSocket().getInputStream()));
-			
+					inS));
+
 			receivedData = in.readLine();
-			System.out.println("Android says:" + receivedData + "\n");
+			SendSurveyGetAnswers.setReceivedData(receivedData);
+			//TODO set id there 
+			System.out.println(receivedData);
+			String decrypted;
+			
+				decrypted = Encryption.decryptMsg(receivedData);
 
-			//in.close();
-
+				System.out.println("Android sent this:" + decrypted + "\n");
+				// Database TODO save
+				// in.close();
+		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -26,12 +26,9 @@ public class MultipleQuestion extends Question{
 	private JTable choicesTable;
 	private String[] options = new String[9];
 
-	public MultipleQuestion(String tit, int width, int height) {
-		super(tit, width, height);
-		initiWidgets();
-		initiWidgetsMq();
-		setFrameOptions();
-		initiLayout();
+	public MultipleQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
+		
 	}
 
 	public void initiWidgetsMq(){
@@ -92,28 +89,22 @@ public class MultipleQuestion extends Question{
 		getWindow().add(panelSouth, BorderLayout.SOUTH);
 	}
 	
-	public void saveQuestionMa(String questionAnswerText){
+	public void saveQuestionMa(String[] choices){
 		DBController controller = null;
 		String tableName = new String("Choices");
-		String[] values = new String[2];
-		values[0] = ("null");
-		values[1] = ("'" + questionAnswerText + "'");
-		try {
+		try{
 			try {
 				controller = DBController.getInstance();
 				controller.loadResources();
-				controller.insertInto(tableName, values);
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
+				for(int i = 0;i < choices.length;i++){
+					controller.insertInto(tableName, "null", choices[i]);
+				}
 			}finally{
 				if (controller != null)
 					controller.close();
 			}
-		}catch (SQLException | ClassNotFoundException e2){
-		
-			e2.printStackTrace();
-			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
-			System.exit(-1);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -141,6 +132,16 @@ public class MultipleQuestion extends Question{
 			}
 		}
 	}
-
-
+	
+	public String[] getChoicesTable(){
+		String[] cho = new String[choicesTableModel.getRowCount()];
+		for(int i = 0; i < choicesTableModel.getRowCount();i++){
+			System.out.println(choicesTableModel.getValueAt(i, 0));
+			cho[i] = (String) choicesTableModel.getValueAt(i, 0).toString();
+		}
+		return cho;
+	}
 }
+
+
+
