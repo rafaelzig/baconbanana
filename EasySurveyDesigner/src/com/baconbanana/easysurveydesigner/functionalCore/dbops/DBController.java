@@ -808,7 +808,7 @@ public class DBController
 		}
 	}
 	/**
-	 * Returns a list a values with apostrophies appended
+	 * Returns a list a values with apostrophes appended
 	 * 
 	 * @param values
 	 * 			values to go into database
