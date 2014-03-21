@@ -154,7 +154,7 @@ public class Template extends SQLWindow{
 	public void setList(ListSelectionEvent e) {
 		
 	}
-	public SQLList getList(){
+	public SQLList getListModel(){
 		return templateModel;
 	}
 	public String getTemplateName(){

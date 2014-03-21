@@ -16,7 +16,7 @@ public class TextualQuestion extends OpenQuestion{
 		super(tit, width, height, t);
 		answerText = "Type your answer here";
 		answerTxa = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
-		t.getList().insertElement("Question", "null", answerTxa, QuestionType.TEXTUAL.toString());
+		t.getListModel().insertElement("Question", "null", answerTxa, QuestionType.TEXTUAL.toString());
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
