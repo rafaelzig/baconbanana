@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.baconbanana.easysurveydesigner.oldGui.LoginPage;
+
 
 public class MySQLInstaller {
 	public static void main(String[] args){

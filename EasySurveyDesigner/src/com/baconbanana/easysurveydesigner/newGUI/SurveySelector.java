@@ -37,7 +37,7 @@ public class SurveySelector extends SQLWindow {
 		getWindow().add(nameOfSurveyTxf,BorderLayout.NORTH);
 		getSurveyList().setBorder(getBorder());
 		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
-		populateList(surveyList, surveyModel);
+	//	populateList(surveyList, surveyModel);
 		setFrameOptions();
 		
 		

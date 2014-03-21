@@ -23,6 +23,7 @@ public class OpenQuestion extends Question{
 		setFrameOptions();
 		initiLayout();
 	}
+	//TODO Think about a layout for this
 	public void initiWidgetsOq(String answerText) {
 
 		JPanel panelSouth = new JPanel(new BorderLayout());
