@@ -33,6 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveydesigner.oldGui.MenuFrame;
 
 /**
  *1) in the constructor the frame and all the buttons 
