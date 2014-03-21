@@ -2,6 +2,7 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class SQLList extends AbstractListModel<String>{
 			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
 			
 			for(Object[]  i : result){
-				String[] item = (String[]) i;
+				String[] item = Arrays.asList(i).toArray(new String[i.length]);
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {
@@ -92,7 +93,7 @@ public class SQLList extends AbstractListModel<String>{
 			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
 			int count = 0;
 			for(Object[]  i : result){
-				String[] item = (String[]) i[count++];
+				String[] item = Arrays.asList(i).toArray(new String[i.length]);
 				data.add(item);
 			}
 		} catch (SQLException | InvalidStateException e) {

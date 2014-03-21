@@ -135,8 +135,9 @@ public class MultipleQuestion extends Question{
 	
 	public String[] getChoicesTable(){
 		String[] cho = new String[choicesTableModel.getRowCount()];
-		for(int i = 1; i < choicesTableModel.getRowCount();i++){
-			cho[i] = (String) choicesTableModel.getValueAt(i, 1);
+		for(int i = 0; i < choicesTableModel.getRowCount();i++){
+			System.out.println(choicesTableModel.getValueAt(i, 0));
+			cho[i] = (String) choicesTableModel.getValueAt(i, 0).toString();
 		}
 		return cho;
 	}

@@ -2,6 +2,8 @@ package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -33,6 +35,7 @@ public class CreateSurvey extends SQLWindow{
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private JButton sendBtn;
+	private GridBagConstraints bagCon;
 	
 		
 	public CreateSurvey(String tit, boolean fullScreen) {
@@ -41,8 +44,7 @@ public class CreateSurvey extends SQLWindow{
 	}
 	
 	public void initiWidgets(){
-		//TODO ask Becka how to comment this all nice
-		//TODO change layout here to make it look better
+
 		addBtn = new JButton("Add");
 		editBtn = new JButton("Edit");
 		deleteBtn = new JButton("Delete");
@@ -55,6 +57,7 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template preview");
 		JLabel surveyPrevLbl = new JLabel("Survey preview");
 		
+		//This really needs to be fixed = tommy
 		SQLList templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
 		//SQLList surveyPrevModel = new SQLList("Template", new String[] {"Template"} , 0);
 		
@@ -153,6 +156,10 @@ public class CreateSurvey extends SQLWindow{
 			populateList(templatePrevList, templatePrevModel);
 			
 		}		
+	}
+	
+	private void setBagCon(){
+		bagCon.
 	}
 
 }
