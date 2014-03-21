@@ -144,7 +144,6 @@ public class Template extends SQLWindow{
 		else if(e.getSource().equals(saveBtn)){
 			
 		}else if(e.getSource().equals(cancelBtn)){
-			new Menu("Menu", 300, 300);
 			getWindow().dispose();
 		}
 		

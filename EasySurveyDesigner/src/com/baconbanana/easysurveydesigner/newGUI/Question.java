@@ -108,7 +108,6 @@ public class Question extends SQLWindow{
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
 			System.exit(-1);
 		}
-		new AddTemplate("Create New Template", 500, 800);
 		getWindow().dispose();
 	}
 	
