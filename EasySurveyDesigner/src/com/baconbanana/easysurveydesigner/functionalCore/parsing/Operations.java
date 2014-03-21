@@ -5,12 +5,14 @@ package com.baconbanana.easysurveydesigner.functionalCore.parsing;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,8 +37,10 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
 /**
  * @author Rafael da Silva Costa & Team
  * 
- *         This class contains various static methods which assist the other classes, these range from reading and writing to a file,
- *         parsing a JSON string into a JSONObject and also handling generic array generation.
+ *         This class contains various static methods which assist the other
+ *         classes, these range from reading and writing to a file, parsing a
+ *         JSON string into a JSONObject and also handling generic array
+ *         generation.
  * 
  */
 public class Operations
@@ -56,6 +60,7 @@ public class Operations
 			DATE_FORMAT);
 	private final static Pattern p = Pattern.compile(SEPARATOR);
 	private final static JSONParser parser = new JSONParser();
+	private static BufferedWriter writer;
 	private static OutputStream outputStream;
 	private static InputStream inputStream;
 
@@ -82,7 +87,7 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static String readFile(InputStream is) throws IOException
+	private static String readFile(InputStream is) throws IOException
 	{
 		byte[] output = new byte[is.available()];
 
@@ -122,10 +127,28 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static void writeFile(String input, String filename)
+	public static void writeFile(String filename, String input)
 			throws IOException
 	{
-		writeFile(input, new FileOutputStream(new File(filename)));
+			writeFile(new FileOutputStream(new File(filename)), input);
+	}
+	
+	/**
+	 * Attempts to write the specified String object to a file with the
+	 * specified filename.
+	 * 
+	 * @param input
+	 *            String object containing the content to be written.
+	 * @param filename
+	 *            Array of String object representing the filename.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
+	 */
+	public static void writeFile(String filename, String[] input)
+			throws IOException
+	{
+			writeFile(new FileOutputStream(new File(filename)), input);
 	}
 
 	/**
@@ -140,8 +163,7 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static void writeFile(String input, FileOutputStream fos)
-			throws IOException
+	private static void writeFile(FileOutputStream fos, String input) throws IOException
 	{
 		outputStream = new BufferedOutputStream(fos);
 
@@ -154,7 +176,41 @@ public class Operations
 			if (outputStream != null)
 				outputStream.close();
 		}
+	}
 
+	/**
+	 * Attempts to write the specified String object contained in the array to
+	 * the specified FileOutputStream object, adding new line in between them.
+	 * 
+	 * @param input
+	 *            An Array of String object containing the content to be
+	 *            written.
+	 * @param fos
+	 *            FileOutputStream object containing the stream to be used.
+	 * 
+	 * @throws IOException
+	 *             Signals that an I/O exception of some sort has occurred.
+	 */
+	private static void writeFile(FileOutputStream fos, String[] input)
+			throws IOException
+	{
+		writer = new BufferedWriter(new OutputStreamWriter(fos));
+
+		try
+		{
+			for (int index = 0; index < input.length; index++)
+			{
+				if (index > 0)
+					writer.newLine();
+
+				writer.write(input[index]);
+			}
+		}
+		finally
+		{
+			if (writer != null)
+				writer.close();
+		}
 	}
 
 	/**
@@ -190,7 +246,7 @@ public class Operations
 			questionRaw = (JSONObject) questionListRaw.get(index);
 
 			type = getQuestionType((String) questionRaw.get("type"));
-					
+
 			switch (type)
 			{
 				case MULTIPLEANSWER:
@@ -249,7 +305,7 @@ public class Operations
 	{
 		return (answer.isEmpty()) ? new String[0] : p.split(answer);
 	}
-	
+
 	/**
 	 * Returns the QuestionType which corresponds to the value specified.
 	 * 
@@ -260,7 +316,8 @@ public class Operations
 	public static QuestionType getQuestionType(String value)
 	{
 		if (value != null)
-			return QuestionType.valueOf(value.replaceAll("\\s+","").toUpperCase());
+			return QuestionType.valueOf(value.replaceAll("\\s+", "")
+					.toUpperCase());
 
 		return null;
 	}

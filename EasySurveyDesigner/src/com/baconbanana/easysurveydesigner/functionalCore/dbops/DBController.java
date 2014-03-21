@@ -25,10 +25,10 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 public class DBController
 {
 	public static final String DB_NAME = "easysurvey.db";
-	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
-			+ "/Documents/SQLite");
-	private static final File WIN_WORKING_DIR = new File(
-			System.getenv("USERPROFILE") + "\\Documents\\SQLite");
+	public static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
+			+ "/Documents/SQLite/");
+	public static final File WIN_WORKING_DIR = new File(
+			System.getenv("USERPROFILE") + "\\Documents\\SQLite\\");
 
 	private static DBController instance = null;
 	private Connection conn;
@@ -64,6 +64,30 @@ public class DBController
 	}
 
 	/**
+	 * Opens the database SQLite connection.
+	 */
+	private void openConnection() throws ClassNotFoundException, SQLException
+	{
+		String osName = System.getProperty("os.name");
+		String connString = "jdbc:sqlite:";
+	
+		if (osName.contains("Windows"))
+		{
+			WIN_WORKING_DIR.mkdirs();
+			connString += WIN_WORKING_DIR + "\\";
+		}
+		else if (osName.contains("Mac"))
+		{
+			MAC_WORKING_DIR.mkdirs();
+			connString += MAC_WORKING_DIR + "/";
+		}
+	
+		Class.forName("org.sqlite.JDBC");
+	
+		conn = DriverManager.getConnection(connString + DB_NAME);
+	}
+
+	/**
 	 * Closes the resources associated with this singleton class.
 	 */
 	public void close() throws SQLException
@@ -85,30 +109,6 @@ public class DBController
 
 		isReady = false;
 		instance = null;
-	}
-
-	/**
-	 * Opens the database SQLite connection.
-	 */
-	private void openConnection() throws ClassNotFoundException, SQLException
-	{
-		String osName = System.getProperty("os.name");
-		String connString = "jdbc:sqlite:";
-
-		if (osName.contains("Windows"))
-		{
-			WIN_WORKING_DIR.mkdirs();
-			connString += WIN_WORKING_DIR + "\\";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString += MAC_WORKING_DIR + "/";
-		}
-
-		Class.forName("org.sqlite.JDBC");
-
-		conn = DriverManager.getConnection(connString + DB_NAME);
 	}
 
 	/**

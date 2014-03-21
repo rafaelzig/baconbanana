@@ -108,8 +108,7 @@ public class JSONTest
 
 		try
 		{
-			Operations.writeFile(qOne.getJSON().toJSONString(),
-					Operations.FILENAME);
+			Operations.writeFile(Operations.FILENAME, qOne.getJSON().toJSONString());
 			json = Operations.readFile(Operations.FILENAME);
 			System.out.println(json);
 			
