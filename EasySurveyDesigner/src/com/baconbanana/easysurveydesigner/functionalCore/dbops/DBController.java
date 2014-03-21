@@ -807,4 +807,18 @@ public class DBController
 			System.out.println();
 		}
 	}
+	/**
+	 * Returns a list a values with apostrophies appended
+	 * 
+	 * @param values
+	 * 			values to go into database
+	 * @return
+	 */
+	public static String[] appendApo(String...values){
+		String[] retArray= new String[values.length];
+		for(int i = 0;i < values.length;i++){
+			retArray[i] = "'" + values[i] + "'";
+		}
+		return retArray;
+	}
 }

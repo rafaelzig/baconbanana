@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -16,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
@@ -38,6 +41,7 @@ public class Template extends SQLWindow{
 	private JComboBox<QuestionType> typeComboBox;
 
 	private JList<String> templateList;
+	private SQLList templateModel;
 
 
 	public Template(String tit, int width, int height) {
@@ -50,7 +54,7 @@ public class Template extends SQLWindow{
 
 		JPanel stage = new JPanel(new GridBagLayout());
 		
-		nameOfTemplateTxf = new JTextField("Enter Question Here");
+		nameOfTemplateTxf = new JTextField("Enter Template Name Here");
 
 		createQuestionBtn = new JButton("Create New");
 		addExistingQuestionBtn = new JButton("Add Existing");
@@ -60,9 +64,9 @@ public class Template extends SQLWindow{
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 		
+		templateModel = new SQLList("Question", 1, "QuestionID", "Content", "Type");
+		templateList = new JList<>(templateModel);
 
-		
-		templateList = new JList(new DefaultListModel<>());
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		
 		
@@ -94,10 +98,6 @@ public class Template extends SQLWindow{
 		stage.add(jpButtons, LayoutController.summonCon(1, 3, 1, 1, 80, 10));
 		
 		getWindow().add(stage);
-		
-		SQLList templateModel = new SQLList("Question", 0, "Content");
-
-		populateList(templateList, templateModel);
 		
 	}
 
@@ -140,7 +140,7 @@ public class Template extends SQLWindow{
 			//TODO deleteBtn
 		}
 		else if(e.getSource().equals(saveBtn)){
-			//TODO saveBtn
+			
 		}else if(e.getSource().equals(cancelBtn)){
 			new Menu("Menu", 300, 300);
 			getWindow().dispose();
