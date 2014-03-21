@@ -1,10 +1,8 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
@@ -80,7 +78,7 @@ public class CreateSurvey extends SQLWindow{
 		
 		JPanel stage = new JPanel(new GridBagLayout());
 
-		stage.add(new JLabel(), LayoutController.summonCon(0, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		stage.add(new JLabel(), LayoutController.summonCon(0, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		stage.add(templatesLbl, LayoutController.summonCon(1, 1, 2, 1, 10, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 		stage.add(templateListsp, LayoutController.summonCon(1, 2, 4, 4, 40, 100, GridBagConstraints.WEST, GridBagConstraints.BOTH));
@@ -98,7 +96,7 @@ public class CreateSurvey extends SQLWindow{
 		templateBtnContainer.add(moveBtn);
 		moveBtn.addActionListener(this);
 
-		stage.add(new JLabel(), LayoutController.summonCon(5, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		stage.add(new JLabel(), LayoutController.summonCon(5, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		stage.add(templatePrevLbl, LayoutController.summonCon(6, 1, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 		stage.add(surveyPrevLbl, LayoutController.summonCon(6, 4, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
@@ -121,7 +119,7 @@ public class CreateSurvey extends SQLWindow{
 		previewBtnContainer.add(sendBtn);
 		sendBtn.addActionListener(this);
 		
-		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		getWindow().add(stage);
 		

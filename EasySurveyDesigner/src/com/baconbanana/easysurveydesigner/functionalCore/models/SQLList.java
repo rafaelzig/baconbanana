@@ -11,7 +11,7 @@ import javax.swing.AbstractListModel;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
-public class SQLList extends AbstractListModel<String>{
+public class SQLList extends AbstractListModel{
 	
 	private List<String[]> data;
 	private String table;
