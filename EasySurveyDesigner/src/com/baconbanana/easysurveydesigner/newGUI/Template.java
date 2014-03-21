@@ -29,13 +29,13 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 public class Template extends SQLWindow{
 	
 	private String stage;
-	private JButton createQuestionBtn;
+	protected JButton createQuestionBtn;
 	private JButton addExistingQuestionBtn;
 	private JButton deleteBtn;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private JLabel nameOfTemplateTxf;
-	private JComboBox<QuestionType> typeComboBox;
+	protected JComboBox<QuestionType> typeComboBox;
 
 	private JList<String> templateList;
 	private SQLList templateModel;
@@ -112,19 +112,20 @@ public class Template extends SQLWindow{
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				new NumericQuestion(tit, 800, 500);
+				
+				new NumericQuestion(tit, 800, 500, this);
 				break;
 			case DATE :
-				new DateQuestion(tit, 800, 500);
+				new DateQuestion(tit, 800, 500, this);
 				break;	
 			case TEXTUAL :
-				new TextualQuestion(tit, 800, 500);
+				new TextualQuestion(tit, 800, 500, this);
 				break;	
 			case MULTIPLECHOICE :
-				new MultipleChoiceQuestion(tit, 800, 500);
+				new MultipleChoiceQuestion(tit, 800, 500, this);
 				break;
 			case MULTIPLEANSWER :
-				new MultipleAnswerQuestion(tit, 800, 500);
+				new MultipleAnswerQuestion(tit, 800, 500, this);
 				break;
 			case RATING :
 				new RatingQuestion();
@@ -151,6 +152,12 @@ public class Template extends SQLWindow{
 	@Override
 	public void setList(ListSelectionEvent e) {
 		
+	}
+	public SQLList getList(){
+		return templateModel;
+	}
+	public String getTemplateName(){
+		return templateName;
 	}
 
 }

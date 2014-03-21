@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -15,16 +16,18 @@ import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidState
 
 public class OpenQuestion extends Question{
 
-	JTextArea answerTxa;
+	protected String answerTxa;
 
-	public OpenQuestion(String tit, int width, int height) {
-		super(tit, width, height);
-		initiWidgets();
-		setFrameOptions();
-		initiLayout();
-	}
+	public OpenQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
+		
+    }
+		//initiWidgets();
+		//setFrameOptions();
+		//initiLayout();
+	
 	//TODO Think about a layout for this
-	public void initiWidgetsOq(String answerText) {
+	/*public void initiWidgetsOq(String answerText) {
 
 		JPanel panelSouth = new JPanel(new BorderLayout());
 		answerTxa = new JTextArea(answerText);
@@ -48,7 +51,7 @@ public class OpenQuestion extends Question{
 
 		getWindow().add(panelSouth, BorderLayout.SOUTH);
 
-	}
+	}*/
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){

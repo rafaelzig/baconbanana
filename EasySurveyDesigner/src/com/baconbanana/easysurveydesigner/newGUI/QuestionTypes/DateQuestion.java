@@ -4,13 +4,14 @@ import java.awt.event.ActionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.Template;
 
 public class DateQuestion extends OpenQuestion{
 	
 	String answerText;
 	
-	public DateQuestion(String tit, int width, int height) {
-		super(tit, width, height);
+	public DateQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
 		answerText = "Type date here";
 		initiWidgetsOq(answerText);
 	}

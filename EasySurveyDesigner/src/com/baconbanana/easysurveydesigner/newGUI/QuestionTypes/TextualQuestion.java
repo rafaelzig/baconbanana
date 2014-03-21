@@ -2,17 +2,21 @@ package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
+
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.Template;
 
 public class TextualQuestion extends OpenQuestion{
 	
-	String answerText;
+	private String answerText;
 	
-	public TextualQuestion(String tit, int width, int height) {
-		super(tit, width, height);
+	public TextualQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
 		answerText = "Type your answer here";
-		initiWidgetsOq(answerText);
+		answerTxa = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
+		t.getList().insertElement("Question", "null", answerTxa, QuestionType.TEXTUAL.toString());
 	}
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){

@@ -102,7 +102,7 @@ public class SQLList extends AbstractListModel{
 	public void insertElement(String table, String...values ){
 		try {
 			try {
-				dbCon.insertInto(table, DBController.appendApo(values));
+				dbCon.insertInto(table, values);
 			}catch (InvalidStateException e1) {
 				e1.printStackTrace();
 			}finally{
