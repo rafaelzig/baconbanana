@@ -24,6 +24,7 @@ public class SQLList extends AbstractListModel{
 	
 	//get ID at some point
 	public SQLList(String tableName, int sortCol, String... col){
+		super();
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -38,6 +39,7 @@ public class SQLList extends AbstractListModel{
 	}
 	
 	public SQLList(String tableName, String condition, int sortCol, String...col){
+		super();
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
@@ -73,9 +75,42 @@ public class SQLList extends AbstractListModel{
 		return data.size();
 	}
 	
-	public void getData(String tableName, String... col){
+	public void getData(String tableName, int sortCol, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
+			try {
+				dbCon = DBController.getInstance();
+				dbCon.loadResources();
+			} catch (ClassNotFoundException | SQLException e) {
+			
+				e.printStackTrace();
+			}
+			List<Object[]> result = dbCon.select(table, sortCol, true, col);
+			
+			for(Object[]  i : result){
+				data.add(i);
+			}
+		} catch (SQLException | InvalidStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			try {
+				dbCon.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public void getData(String tableName, String cond, int sortCol, String... col){
+		try {
+			try {
+				dbCon = DBController.getInstance();
+				dbCon.loadResources();
+			} catch (ClassNotFoundException | SQLException e) {
+			
+				e.printStackTrace();
+			}
+			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
@@ -84,17 +119,13 @@ public class SQLList extends AbstractListModel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public void getData(String tableName, String cond, String... col){
-		try {
-			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
-			
-			for(Object[]  i : result){
-				data.add(i);
+		finally{
+			try {
+				dbCon.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException | InvalidStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 	}
@@ -102,7 +133,7 @@ public class SQLList extends AbstractListModel{
 	public void insertElement(String table, String...values ){
 		try {
 			try {
-				dbCon.insertInto(table, DBController.appendApo(values));
+				dbCon.insertInto(table, values);
 			}catch (InvalidStateException e1) {
 				e1.printStackTrace();
 			}finally{

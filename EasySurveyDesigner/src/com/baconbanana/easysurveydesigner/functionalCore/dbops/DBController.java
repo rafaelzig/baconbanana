@@ -821,4 +821,8 @@ public class DBController
 		}
 		return retArray;
 	}
+	
+	public static String appendApo(String values){
+		return "'" + values + "'";
+	}
 }

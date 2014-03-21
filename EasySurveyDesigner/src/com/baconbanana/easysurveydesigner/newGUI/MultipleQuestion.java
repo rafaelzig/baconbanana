@@ -26,8 +26,8 @@ public class MultipleQuestion extends Question{
 	private JTable choicesTable;
 	private String[] options = new String[9];
 
-	public MultipleQuestion(String tit, int width, int height) {
-		super(tit, width, height);
+	public MultipleQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
 		
 	}
 
