@@ -4,15 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
+import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class CreateSurvey extends SQLWindow{
@@ -53,9 +56,9 @@ public class CreateSurvey extends SQLWindow{
 		cancelBtn = new JButton("Cancel");
 		sendBtn = new JButton("Send");
 		
-		JLabel templatesLbl = new JLabel("List of templates");
-		JLabel templatePrevLbl = new JLabel("Template preview");
-		JLabel surveyPrevLbl = new JLabel("Survey preview");
+		JLabel templatesLbl = new JLabel("List of Templates");
+		JLabel templatePrevLbl = new JLabel("Template Preview");
+		JLabel surveyPrevLbl = new JLabel("Survey Preview");
 		
 		//This really needs to be fixed = tommy
 		SQLList templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
@@ -65,55 +68,62 @@ public class CreateSurvey extends SQLWindow{
 		templatePrevList = new JList<String>(templateModel);
 		surveyPrevList = new JList<String>();
 		
+		JScrollPane templateListsp = new JScrollPane(templateList);
+		JScrollPane templatePrevListsp = new JScrollPane(	templatePrevList);
+		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
+		
 		populateList(templateList, templateModel);
 		
 		templatelsm = templateList.getSelectionModel();
 		//templatePrevlsm = templatePrevList.getSelectionModel();
+			
 		
-		getWindow().setLayout(new BorderLayout());
-		
-		JPanel jpTemplates = new JPanel(new BorderLayout());
-		getWindow().add(jpTemplates, BorderLayout.WEST);
+		JPanel stage = new JPanel(new GridBagLayout());
 
-		jpTemplates.add(templatesLbl, BorderLayout.NORTH);
-		jpTemplates.add(templateList, BorderLayout.CENTER);
+		stage.add(new JLabel(), LayoutController.summonCon(0, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		
+		stage.add(templatesLbl, LayoutController.summonCon(1, 1, 2, 1, 10, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+		stage.add(templateListsp, LayoutController.summonCon(1, 2, 4, 4, 40, 100, GridBagConstraints.WEST, GridBagConstraints.BOTH));
 		templateList.setBorder(getBorder());
 			
-		JPanel jpTemplatesButtons = new JPanel(new FlowLayout());
-		jpTemplates.add(jpTemplatesButtons, BorderLayout.SOUTH);
-		jpTemplatesButtons.add(addBtn);
+		JPanel templateBtnContainer = new JPanel(new FlowLayout());
+		
+		stage.add(templateBtnContainer, LayoutController.summonCon(1, 6, 4, 1, 4, 5, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+		templateBtnContainer.add(addBtn);
 		addBtn.addActionListener(this);
-		jpTemplatesButtons.add(editBtn);
+		templateBtnContainer.add(editBtn);
 		editBtn.addActionListener(this);
-		jpTemplatesButtons.add(deleteBtn);
+		templateBtnContainer.add(deleteBtn);
 		deleteBtn.addActionListener(this);
-		jpTemplatesButtons.add(moveBtn);
+		templateBtnContainer.add(moveBtn);
 		moveBtn.addActionListener(this);
-		
-		JPanel jpTemplatesPreview = new JPanel(new BorderLayout());
-		getWindow().add(jpTemplatesPreview, BorderLayout.CENTER);
 
-		jpTemplatesPreview.add(templatePrevLbl, BorderLayout.NORTH);
-		jpTemplatesPreview.add(templatePrevList, BorderLayout.CENTER);
+		stage.add(new JLabel(), LayoutController.summonCon(5, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		
+		stage.add(templatePrevLbl, LayoutController.summonCon(6, 1, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+		stage.add(surveyPrevLbl, LayoutController.summonCon(6, 4, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
+		
+		stage.add(surveyPrevListsp, LayoutController.summonCon(6, 5, 3, 1, 40, 40, GridBagConstraints.WEST, GridBagConstraints.BOTH));
+		stage.add(templatePrevListsp, LayoutController.summonCon(6, 2, 3, 1, 40, 40, GridBagConstraints.WEST, GridBagConstraints.BOTH));
+		
 		templatePrevList.setBorder(getBorder());
-		
-		JPanel jpQuestionsPreview = new JPanel(new BorderLayout());
-		getWindow().add(jpQuestionsPreview, BorderLayout.SOUTH);
-
-		jpQuestionsPreview.add(surveyPrevLbl, BorderLayout.NORTH);
-		jpQuestionsPreview.add(surveyPrevList, BorderLayout.CENTER);
 		surveyPrevList.setBorder(getBorder());
 		
-		JPanel jpQuestionsButton = new JPanel(new FlowLayout());
-		jpQuestionsPreview.add(jpQuestionsButton, BorderLayout.SOUTH);
-		jpQuestionsButton.add(saveBtn);
+		
+		JPanel previewBtnContainer = new JPanel(new FlowLayout());
+		
+		stage.add(previewBtnContainer, LayoutController.summonCon(6, 6, 3, 1, 4, 5, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+		
+		previewBtnContainer.add(saveBtn);
 		saveBtn.addActionListener(this);
-		jpQuestionsButton.add(cancelBtn);
+		previewBtnContainer.add(cancelBtn);
 		cancelBtn.addActionListener(this);
-		jpQuestionsButton.add(sendBtn);
+		previewBtnContainer.add(sendBtn);
 		sendBtn.addActionListener(this);
 		
+		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
 		
+		getWindow().add(stage);
 		
 		
 		
@@ -158,8 +168,5 @@ public class CreateSurvey extends SQLWindow{
 		}		
 	}
 	
-	private void setBagCon(){
-		bagCon.
-	}
-
+	
 }
