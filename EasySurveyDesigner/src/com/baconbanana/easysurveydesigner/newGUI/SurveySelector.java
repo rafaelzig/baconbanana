@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
@@ -52,6 +53,12 @@ public class SurveySelector extends SQLWindow {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setList(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
