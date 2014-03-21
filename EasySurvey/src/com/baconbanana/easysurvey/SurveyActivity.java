@@ -2,21 +2,15 @@ package com.baconbanana.easysurvey;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +21,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -72,15 +65,6 @@ public class SurveyActivity extends Activity
 	private LayoutInflater inf;
 	private ProgressBar pgrBar;
 	private View lineView;
-
-	final SurveyActivity contex = this;
-	int[] listOfSockets;
-	ListView listIP;
-	Button button;
-	String IP = "10.230.149.130";
-	String deviceIP;
-	String JSON;
-	Socket skt = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -595,16 +579,16 @@ public class SurveyActivity extends Activity
 	 */
 	private void finishSurvey()
 	{
-		
+
 		try
 		{
 			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-			
+
 		}
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
-			
+
 			e.printStackTrace();
 		}
 		catch (IOException e)
@@ -612,13 +596,11 @@ public class SurveyActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		  
-		ConnectionActivity.setBooleanSurveyCompleted(true);//  <-------------new
-		
+
+		ConnectionActivity.setBooleanSurveyCompleted(true);
+
 		Intent intent = new Intent(this, ConnectionActivity.class);
 		startActivity(intent);
-		
 	}
 
 	/**
@@ -636,4 +618,3 @@ public class SurveyActivity extends Activity
 	}
 
 }
-// new: removed all not used ones 
