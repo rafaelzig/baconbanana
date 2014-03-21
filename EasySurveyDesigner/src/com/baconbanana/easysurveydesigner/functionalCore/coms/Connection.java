@@ -5,36 +5,44 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
 
-import com.baconbanana.easysurveydesigner.newGUI.SendSurvey;
+import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
 public class Connection extends Thread {
 	
 	private int[] listOfSockets;
-	private String localIP;
+	
 
+	public Connection(){
+		
+		
+		listOfSockets = new int[100];
+		for (int x = 0; x < 100; x++) {
+			listOfSockets[x] = 2000 + x;
+		}
+		
+	}
 
 	public void run() {
 
-		while (SendSurvey.getServerSocket() == null) {
-			listOfSockets = new int[100];
-			for (int x = 0; x < 100; x++) {
-				listOfSockets[x] = 2000 + x;
-			}
-			// -------------get my ip--------------------------
+		while(SendSurveyGetAnswers.getServerSocket()== null 
+			&& SendSurveyGetAnswers.getPageClosed()==false) {
+			
 			try {
 				InetAddress myself = InetAddress.getLocalHost();
-				SendSurvey.setLocalIP("Local IP Address : "
-						+ (myself.getHostAddress()) + "\n");
+				
+				SendSurveyGetAnswers.setLocalIP(myself.getHostAddress());
 			} catch (UnknownHostException ex) {
-				System.out.println("Failed to find ");
+				System.out.println("Failed to find ip");
 				ex.printStackTrace();
 			}
-			// ------------------------------------------------
+			
 			try {
-				SendSurvey.setServerSocket(createServerSocket(listOfSockets));
-
+				ServerSocket ss = createServerSocket(listOfSockets);
+				
+				SendSurveyGetAnswers.setServerSocket(ss);
 				System.out.println("listening on port: "
-						+ SendSurvey.getServerSocket().getLocalPort() + "\n");
+						+ ss.getLocalPort() + "\n");
+				
 			} catch (IOException ex) {
 				System.err.println("no available ports");
 			}
@@ -45,7 +53,7 @@ public class Connection extends Thread {
 		for (int port : ports) {
 			try {
 				return new ServerSocket(port);
-		
+
 			} catch (IOException ex) {
 				continue; // try next port
 			}

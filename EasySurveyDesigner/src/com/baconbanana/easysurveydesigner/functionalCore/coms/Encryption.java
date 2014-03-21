@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.gui;
+package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -19,8 +19,8 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * 
- * @author Team
- *
+ * @author Almira and Team
+ * 
  */
 public class Encryption {
 
@@ -35,12 +35,12 @@ public class Encryption {
 		} catch (DecoderException e1) {
 			e1.printStackTrace();
 		}
-
 	}
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
 	 * Then converts it bytes string. Then returnes it.
+	 * 
 	 * @param message
 	 * @return encrypted
 	 * @throws NoSuchAlgorithmException
@@ -51,25 +51,33 @@ public class Encryption {
 	 * @throws BadPaddingException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String encryptMsg(String message)
-			throws NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeyException, InvalidParameterSpecException,
-			IllegalBlockSizeException, BadPaddingException,
-			UnsupportedEncodingException {
+	public static String encryptMsg(String message) {
 		setKeys();
 		Cipher cipher = null;
-		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(Cipher.ENCRYPT_MODE, secretKey );
-		
-		byte[] encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
-		String encrypted = DatatypeConverter.printBase64Binary(encryptedText);
-		
+		byte[] encryptedText;
+		String encrypted = null;
+		try {
+
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
+
+			encrypted = DatatypeConverter.printBase64Binary(encryptedText);
+
+		} catch (IllegalBlockSizeException | BadPaddingException
+				| UnsupportedEncodingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return encrypted;
 	}
-	
+
 	/**
-	 *  This method converts string into bytes then using method in Encryption
+	 * This method converts string into bytes then using method in Encryption
 	 * class decrypts data. Then it returns string.
+	 * 
 	 * @param message
 	 * @return decrypted
 	 * @throws NoSuchPaddingException
@@ -81,22 +89,24 @@ public class Encryption {
 	 * @throws IllegalBlockSizeException
 	 * @throws UnsupportedEncodingException
 	 */
-	public static String decryptMsg(String message)
-			throws NoSuchPaddingException, NoSuchAlgorithmException,
-			InvalidParameterSpecException, InvalidAlgorithmParameterException,
-			InvalidKeyException, BadPaddingException,
-			IllegalBlockSizeException, UnsupportedEncodingException {
+	public static String decryptMsg(String message) {
 		setKeys();
 		Cipher cipher = null;
-		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		byte[] data = DatatypeConverter.parseBase64Binary(message);
-		String decrypt = new String(cipher.doFinal(data),"UTF-8");
-
+		String decrypt = null;
+		try {
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+			byte[] data = DatatypeConverter.parseBase64Binary(message);
+			
+			decrypt = new String(cipher.doFinal(data), "UTF-8");
+			
+		} catch (IllegalBlockSizeException | BadPaddingException
+				| UnsupportedEncodingException | InvalidKeyException
+				| NoSuchAlgorithmException | NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return decrypt;
 	}
 
-
-	 
-	
 }
