@@ -3,7 +3,6 @@ package com.baconbanana.easysurveydesigner.functionalCore.dbops;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 /**
@@ -24,17 +22,13 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
  */
 public class DBController
 {
+	public static final String SEPARATOR = System.getProperty("file.separator");
 	public static final String DB_NAME = "easysurvey.db";
-	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
-			+ "/Documents/SQLite");
-	private static final File WIN_WORKING_DIR = new File(
-			System.getenv("USERPROFILE") + "\\Documents\\SQLite");
-
+	public static final File WORKING_DIRECTORY = new File(System.getProperty("user.home") + SEPARATOR + "Documents"
+			+ SEPARATOR + "SQLite");
+	
 	private static DBController instance = null;
-	private Connection conn;
-	private Statement genericStatement;
-	private PreparedStatement selectGeneratedIdStatement, existsStatement;
-	private boolean isReady = false;
+	private String connString;
 
 	/**
 	 * Returns the instance of this singleton class.
@@ -60,76 +54,20 @@ public class DBController
 	private DBController() throws ClassNotFoundException, SQLException
 	{
 		super();
-		openConnection();
-	}
-
-	/**
-	 * Closes the resources associated with this singleton class.
-	 */
-	public void close() throws SQLException
-	{
-		try
-		{
-			if (genericStatement != null)
-				genericStatement.close();
-			if (selectGeneratedIdStatement != null)
-				selectGeneratedIdStatement.close();
-			if (existsStatement != null)
-				existsStatement.close();
-		}
-		finally
-		{
-			if (conn != null)
-				conn.close();
-		}
-
-		isReady = false;
-		instance = null;
-	}
-
-	/**
-	 * Opens the database SQLite connection.
-	 */
-	private void openConnection() throws ClassNotFoundException, SQLException
-	{
-		String osName = System.getProperty("os.name");
-		String connString = "jdbc:sqlite:";
-
-		if (osName.contains("Windows"))
-		{
-			WIN_WORKING_DIR.mkdirs();
-			connString += WIN_WORKING_DIR + "\\";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString += MAC_WORKING_DIR + "/";
-		}
 
 		Class.forName("org.sqlite.JDBC");
 
-		conn = DriverManager.getConnection(connString + DB_NAME);
-	}
+		WORKING_DIRECTORY.mkdirs();
+		
+		connString = "jdbc:sqlite:" + WORKING_DIRECTORY + SEPARATOR + DB_NAME;
 
-	/**
-	 * Loads the required SQLite resources for this Singleton class to function.
-	 */
-	public void loadResources() throws SQLException
-	{
-		if (!isReady)
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement())
 		{
-			genericStatement = conn.createStatement();
-			genericStatement.execute("PRAGMA foreign_keys = ON");
-
-			selectGeneratedIdStatement = conn
-					.prepareStatement("SELECT last_insert_rowid();");
-			existsStatement = conn
-					.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
-
-			isReady = true;
+			st.execute("PRAGMA foreign_keys = ON");
 		}
 	}
-
+	
 	/**
 	 * Creates all Database Tables if they don't already exist, returning the
 	 * row count;
@@ -137,12 +75,8 @@ public class DBController
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
 	 */
-	public int createAllTables() throws SQLException, InvalidStateException
+	public int createAllTables() throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
-		conn.setAutoCommit(false);
 		int count = 0;
 
 		for (Table table : Table.values())
@@ -159,9 +93,6 @@ public class DBController
 		if (isTableEmpty(Table.TYPE.getName()))
 			populateTable(Table.TYPE.getName());
 
-		conn.commit();
-		conn.setAutoCommit(true);
-
 		return count;
 	}
 
@@ -172,8 +103,7 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the database table name.
 	 */
-	private void populateTable(String tableName) throws SQLException,
-			InvalidStateException
+	private void populateTable(String tableName) throws SQLException
 	{
 		for (QuestionType type : QuestionType.values())
 			insertInto(tableName, "'" + type.toString() + "'");
@@ -193,20 +123,19 @@ public class DBController
 	 *         otherwise.
 	 */
 	public boolean createTable(String tableName, Map<String, String> parameters)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "CREATE TABLE " + tableName + " ( ";
 			sql += prepareSql(parameters, " ");
 			sql += " );";
 
-			genericStatement.executeUpdate(sql);
-
-			return true;
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				return st.executeUpdate(sql) >= 0;
+			}
 		}
 
 		return false;
@@ -229,11 +158,8 @@ public class DBController
 	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String[] columns, String... values)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "INSERT INTO " + tableName;
@@ -243,9 +169,17 @@ public class DBController
 
 			sql += " VALUES " + prepareSql(values, true) + ";";
 
-			genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				st.executeUpdate(sql);
 
-			return getLastGeneratedKey();
+				try (ResultSet rs = st
+						.executeQuery("SELECT last_insert_rowid();"))
+				{
+					return rs.getInt(1);
+				}
+			}
 		}
 
 		return 0;
@@ -265,7 +199,7 @@ public class DBController
 	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String... values)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
 		return insertInto(tableName, null, values);
 	}
@@ -286,16 +220,10 @@ public class DBController
 	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public List<Object[]> select(String tableName, String condition,
-			String... columns) throws SQLException, InvalidStateException
+			String... columns) throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "SELECT " + prepareSql(columns, false);
@@ -304,7 +232,12 @@ public class DBController
 			if (condition != null && !condition.isEmpty())
 				sql += " WHERE " + condition + ";";
 
-			return prepareResult(genericStatement.executeQuery(sql));
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement();
+					ResultSet rs = st.executeQuery(sql))
+			{
+				return prepareResult(rs);
+			}
 		}
 
 		return null;
@@ -331,13 +264,10 @@ public class DBController
 	 * @return List of Array objects containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public List<Object[]> select(String tableName, int columnIndex,
-			boolean isAscending, String... columns) throws SQLException,
-			InvalidStateException
+			boolean isAscending, String... columns) throws SQLException
+
 	{
 		return select(tableName, new String(), columnIndex, isAscending,
 				columns);
@@ -366,13 +296,10 @@ public class DBController
 	 * @return List of Array Objects containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public List<Object[]> select(String tableName, String condition,
 			int columnIndex, boolean isAscending, String... columns)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
 		String sql;
 
@@ -386,29 +313,6 @@ public class DBController
 	}
 
 	/**
-	 * Gets the result of the SQL Select statement on the database with the
-	 * specified table name and columns.
-	 * 
-	 * @see Example: SELECT column1, column2 FROM tableName;
-	 * @param tableName
-	 *            String object representing the table name.
-	 * @param columns
-	 *            String objects representing the column names in which the
-	 *            values will be inserted.
-	 * @return List of Object arrays containing the data produced by the given
-	 *         query, or null if invalid parameters have been passed to this
-	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
-	 */
-	public List<Object[]> select(String tableName, String... columns)
-			throws SQLException, InvalidStateException
-	{
-		return select(tableName, null, columns);
-	}
-
-	/**
 	 * Gets the all values from the database table with the specified table
 	 * name.
 	 * 
@@ -418,15 +322,18 @@ public class DBController
 	 * @return List of Object arrays containing the data produced by the given
 	 *         query, or null if invalid parameters have been passed to this
 	 *         method.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public List<Object[]> selectAll(String tableName) throws SQLException,
-			InvalidStateException
+	public List<Object[]> selectAll(String tableName) throws SQLException
+
 	{
 		String sql = "SELECT * FROM " + tableName + ";";
-		return prepareResult(genericStatement.executeQuery(sql));
+
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql))
+		{
+			return prepareResult(rs);
+		}
 	}
 
 	/**
@@ -436,25 +343,18 @@ public class DBController
 	 *            String object representing the table name.
 	 * @return true if the database table with the specified table name exists,
 	 *         false otherwise.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public boolean exists(String tableName) throws SQLException,
-			InvalidStateException
+	public boolean exists(String tableName) throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
+		String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name="
+				+ appendApo(tableName) + ";";
 
-		existsStatement.setString(1, tableName);
-
-		ResultSet rs = existsStatement.executeQuery();
-
-		boolean exists = rs.next();
-
-		rs.close();
-
-		return exists;
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql))
+		{
+			return rs.next();
+		}
 	}
 
 	/**
@@ -468,16 +368,10 @@ public class DBController
 	 * @param condition
 	 *            String object representing the condition to be applied.
 	 * @return true if the row exists in the table, false otherwise.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public boolean exists(String tableName, String condition)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName;
 
 		if (condition != null && !condition.isEmpty())
@@ -485,13 +379,12 @@ public class DBController
 
 		sql += " LIMIT 1);";
 
-		ResultSet rs = genericStatement.executeQuery(sql);
-
-		boolean exists = rs.getInt(1) > 0;
-
-		rs.close();
-
-		return exists;
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql))
+		{
+			return rs.getInt(1) > 0;
+		}
 	}
 
 	/**
@@ -501,12 +394,8 @@ public class DBController
 	 * @param tableName
 	 *            String object representing the table name.
 	 * @return true if the database table is empty, false otherwise.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public boolean isTableEmpty(String tableName) throws SQLException,
-			InvalidStateException
+	public boolean isTableEmpty(String tableName) throws SQLException
 	{
 		return !exists(tableName, null);
 	}
@@ -527,16 +416,10 @@ public class DBController
 	 *            SQL UPDATE statement.
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public int update(String tableName, Map<String, String> parameters,
-			String condition) throws SQLException, InvalidStateException
+			String condition) throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "UPDATE " + tableName;
@@ -547,8 +430,14 @@ public class DBController
 
 			sql += ";";
 
-			return genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+
+			{
+				return st.executeUpdate(sql);
+			}
 		}
+
 		return 0;
 	}
 
@@ -564,12 +453,9 @@ public class DBController
 	 *            parameters of this SQL UPDATE statement.
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
 	public int updateAll(String tableName, Map<String, String> parameters)
-			throws SQLException, InvalidStateException
+			throws SQLException
 	{
 		return update(tableName, parameters, null);
 	}
@@ -587,16 +473,9 @@ public class DBController
 	 * 
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public int delete(String tableName, String condition) throws SQLException,
-			InvalidStateException
+	public int delete(String tableName, String condition) throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "DELETE FROM " + tableName;
@@ -606,8 +485,13 @@ public class DBController
 
 			sql += ";";
 
-			return genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				return st.executeUpdate(sql);
+			}
 		}
+
 		return 0;
 	}
 
@@ -619,12 +503,8 @@ public class DBController
 	 *            String object representing the table name.
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public int deleteAllRows(String tableName) throws SQLException,
-			InvalidStateException
+	public int deleteAllRows(String tableName) throws SQLException
 	{
 		return delete(tableName, null);
 	}
@@ -637,19 +517,17 @@ public class DBController
 	 *            String object representing the table name.
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
-	 * @throws InvalidStateException
-	 *             Signals an error has occurred when the database resources
-	 *             have not been loaded prior to this method call.
 	 */
-	public int deleteTable(String tableName) throws SQLException,
-			InvalidStateException
+	public int deleteTable(String tableName) throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		if (tableName != null && !tableName.isEmpty())
-			return genericStatement.executeUpdate("DROP TABLE " + tableName
-					+ ";");
+		{
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				return st.executeUpdate("DROP TABLE " + tableName + ";");
+			}
+		}
 
 		return 0;
 	}
@@ -661,11 +539,8 @@ public class DBController
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
 	 */
-	public int deleteAllTables() throws SQLException, InvalidStateException
+	public int deleteAllTables() throws SQLException
 	{
-		if (!isReady)
-			throw new InvalidStateException();
-
 		int count = 0;
 
 		for (Table table : Table.values())
@@ -673,23 +548,6 @@ public class DBController
 				count += (deleteTable(table.getName()));
 
 		return count;
-	}
-
-	/**
-	 * Retrieves any auto-generated keys created as a result of the last SQL
-	 * INSERT statement. If this statement did not generate any keys, an empty
-	 * ResultSet object is returned.
-	 * 
-	 * @return Integer containing the auto-generated key generated by the
-	 *         execution of the last SQL INSERT statement.
-	 */
-	public int getLastGeneratedKey() throws SQLException, InvalidStateException
-	{
-		ResultSet rs = selectGeneratedIdStatement.executeQuery();
-		int generatedId = rs.getInt(1);
-		rs.close();
-
-		return generatedId;
 	}
 
 	/**
@@ -725,8 +583,6 @@ public class DBController
 
 			resultTable.add(tuple);
 		}
-
-		rs.close();
 
 		return resultTable;
 	}
@@ -807,18 +663,26 @@ public class DBController
 			System.out.println();
 		}
 	}
+
 	/**
 	 * Returns a list a values with apostrophes appended
 	 * 
 	 * @param values
-	 * 			values to go into database
+	 *            values to go into database
 	 * @return
 	 */
-	public static String[] appendApo(String...values){
-		String[] retArray= new String[values.length];
-		for(int i = 0;i < values.length;i++){
+	public static String[] appendApo(String... values)
+	{
+		String[] retArray = new String[values.length];
+		for (int i = 0; i < values.length; i++)
+		{
 			retArray[i] = "'" + values[i] + "'";
 		}
 		return retArray;
+	}
+
+	public static String appendApo(String values)
+	{
+		return "'" + values + "'";
 	}
 }

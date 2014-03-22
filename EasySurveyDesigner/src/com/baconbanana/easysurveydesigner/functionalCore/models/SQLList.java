@@ -2,14 +2,12 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class SQLList extends AbstractListModel{
 	
@@ -24,39 +22,20 @@ public class SQLList extends AbstractListModel{
 	
 	//get ID at some point
 	public SQLList(String tableName, int sortCol, String... col){
+		super();
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
 		sortColumn = sortCol;
-		try {
-			dbCon = DBController.getInstance();
-			dbCon.loadResources();
-		} catch (ClassNotFoundException | SQLException e) {
-		
-			e.printStackTrace();
-		}
 	}
 	
 	public SQLList(String tableName, String condition, int sortCol, String...col){
+		super();
 		data = new LinkedList<>();
 		table = tableName;
 		columns = col;
 		this.condition = condition;
 		sortColumn = sortCol;
-		try {
-			dbCon = DBController.getInstance();
-			dbCon.loadResources();
-		} catch (ClassNotFoundException | SQLException e) {
-		
-			e.printStackTrace();
-		}finally{
-			try {
-				dbCon.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	@Override
@@ -64,35 +43,41 @@ public class SQLList extends AbstractListModel{
 		return (String) data.get(i)[sortColumn];
 	}
 	
-	public int getId(int i){
-		return (int) data.get(i)[0];
+	public String getId(int i){
+		return  (String) data.get(i)[0];
 	}
 
 	@Override
 	public int getSize() {
 		return data.size();
 	}
-	
-	public void getData(String tableName, String... col){
+	public void getData(){
+		if(condition == null) getData(table, sortColumn, columns) ; else getData(table, condition, sortColumn, columns);
+	}
+	public void getData(String tableName, int sortCol, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, sortColumn, true, col);
+			dbCon = DBController.getInstance();
+			List<Object[]> result = dbCon.select(table, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
 			}
-		} catch (SQLException | InvalidStateException e) {
+			fireContentsChanged(this, 0, data.size());
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	public void getData(String tableName, String cond, String... col){
+	public void getData(String tableName, String cond, int sortCol, String... col){
 		try {
-			List<Object[]> result = dbCon.select(table, cond, sortColumn, true, col);
+			dbCon = DBController.getInstance();
+			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
 			}
-		} catch (SQLException | InvalidStateException e) {
+			fireContentsChanged(this, 0, data.size());
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -101,16 +86,11 @@ public class SQLList extends AbstractListModel{
 	
 	public void insertElement(String table, String...values ){
 		try {
-			try {
-				dbCon.insertInto(table, DBController.appendApo(values));
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
-			}finally{
-				if (dbCon != null)
-					dbCon.close();
-			}
+			dbCon = DBController.getInstance();
+			dbCon.insertInto(table, values);
 			data.add(values);
-		}catch (SQLException e2){
+			fireContentsChanged(this, 0, data.size());
+		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());

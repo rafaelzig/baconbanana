@@ -4,14 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
 
+public class Menu extends Window
+{
 
-public class Menu extends Window{
+	private static final String EXPORT_TEXT = "Export";
+	private static final String IMPORT_TEXT = "Import";
+	private static final String CONNECT_DEVICE_TEXT = "Connect to Device";
+	private static final String PREVIEW_ANSWERS_TEXT = "<html>View Patients Answers</html>";
+	private static final String OPEN_SURVEY_TEXT = "Open Survey";
+	private static final String CREATE_SURVEY_TEXT = "Create new Survey";
 
 	private JButton createSurvey;
 	private JButton openSurvey;
@@ -19,99 +27,99 @@ public class Menu extends Window{
 	private JButton getConnect;
 	private JButton importBtn;
 	private JButton exportBtn;
-	
-	
-	public Menu(String tit, int width, int height) {
+
+	public Menu(String tit, int width, int height)
+	{
 		super(tit, width, height);
 		initiWidgets();
 		setFrameOptions();
 	}
-	
-	private void initiWidgets(){
-		//TODO fix button size
+
+	private void initiWidgets()
+	{
+		// TODO fix button size
 		getWindow().setLayout(new BorderLayout());
 		getWindow().setResizable(false);
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
-		
+
 		GridBagConstraints btnCon = new GridBagConstraints();
 		btnCon.gridx = 0;
-		//subject to change
+		// subject to change
 		btnCon.gridy = 0;
 		btnCon.gridheight = 1;
 		btnCon.gridwidth = 1;
 		btnCon.fill = GridBagConstraints.HORIZONTAL;
 		btnCon.anchor = GridBagConstraints.CENTER;
-		
-		
-		createSurvey = new JButton ("Create new Survey");
+
+		createSurvey = new JButton(CREATE_SURVEY_TEXT);
 		createSurvey.addActionListener(this);
 		buttonPanel.add(createSurvey, btnCon);
 		btnCon.gridy++;
-		
-		openSurvey = new JButton ("Open Survey"); 
+
+		openSurvey = new JButton(OPEN_SURVEY_TEXT);
 		openSurvey.addActionListener(this);
 		buttonPanel.add(openSurvey, btnCon);
 		btnCon.gridy++;
-		
-		previewAnswers = new JButton ("<html>View Patients Answers</html>");
+
+		previewAnswers = new JButton(PREVIEW_ANSWERS_TEXT);
 		previewAnswers.addActionListener(this);
 		buttonPanel.add(previewAnswers, btnCon);
 		btnCon.gridy++;
-		
-		getConnect = new JButton ("Connect to Device");
+
+		getConnect = new JButton(CONNECT_DEVICE_TEXT);
 		getConnect.addActionListener(this);
 		buttonPanel.add(getConnect, btnCon);
 		btnCon.gridy++;
-		
-		importBtn = new JButton ("Import");
+
+		importBtn = new JButton(IMPORT_TEXT);
 		importBtn.addActionListener(this);
 		buttonPanel.add(importBtn, btnCon);
 		btnCon.gridy++;
-		
-		exportBtn = new JButton ("Export");
+
+		exportBtn = new JButton(EXPORT_TEXT);
 		exportBtn.addActionListener(this);
 		buttonPanel.add(exportBtn, btnCon);
-		
+
 		getWindow().add(buttonPanel, BorderLayout.CENTER);
-		
-		
-		
+
 	}
-	
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-		if(e.getSource().equals(createSurvey)){
-			new CreateSurvey("Create New Survey", true);
-			getWindow().dispose();
-		}else if(e.getSource().equals(openSurvey)){
-			new SurveySelector("List of Surveys", true);
-			getWindow().dispose();
-		}
-		else if(e.getSource().equals(previewAnswers)){
-			new PatientSelector("List of Patients", true);
-			getWindow().dispose();
-		}
-		else if(e.getSource().equals(getConnect)){
-			//new SendSurvey("Connection Page", 400, 400);
-			try {
-				new SendSurveyGetAnswers();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+	public void actionPerformed(ActionEvent e)
+	{
+		try
+		{
+			switch (e.getActionCommand())
+			{
+				case CREATE_SURVEY_TEXT:
+					new CreateSurvey("Create New Survey", true);
+					getWindow().dispose();
+					break;
+				case OPEN_SURVEY_TEXT:
+					new SurveySelector("List of Surveys", true);
+					getWindow().dispose();
+					break;
+				case PREVIEW_ANSWERS_TEXT:
+					new PatientSelector("List of Patients", true);
+					getWindow().dispose();
+					break;
+				case CONNECT_DEVICE_TEXT:
+					new SendSurveyGetAnswers();
+					getWindow().dispose();
+					break;
+				case IMPORT_TEXT:
+					ImportExport.startImport();
+					break;
+				case EXPORT_TEXT:
+					ImportExport.startExport();
+					break;
 			}
-			getWindow().dispose();
-		}else if(e.getSource().equals(importBtn)){
-			new ImportExport().startImport();
-		}else if(e.getSource().equals(exportBtn)){
-			new ImportExport().startExport();
 		}
-	
-		
-		
+		catch (InterruptedException | IOException exception)
+		{
+			// TODO Auto-generated catch block
+			exception.printStackTrace();
+		}
 	}
-
 }

@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -17,7 +16,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class Question extends SQLWindow{
@@ -26,12 +24,13 @@ public class Question extends SQLWindow{
 	private JTextPane questionTxa;
 	private JButton saveBtn;
 	private JButton cancelBtn;
-	private JButton boldtextBtn;
+	private Template template;
 
-	public Question(String tit, int width, int height) {
+	public Question(String tit, int width, int height, Template t) {
 		super(tit, width, height);
-		setFrameOptions();
-		initiLayout();
+		template = t;
+//		setFrameOptions();
+//		initiLayout();
 	}
 
 	public void initiWidgets(){
@@ -171,23 +170,15 @@ public class Question extends SQLWindow{
 		values[1] = ("'" + questionTxa.getText() + "'");
 		values[2] = ("'" + qt.toString()+"'");
 		try {
-			try {
 				controller = DBController.getInstance();
-				controller.loadResources();
 				controller.insertInto(tableName, values );
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
-			}finally{
-				if (controller != null)
-					controller.close();
-			}
+			
 		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
 			System.exit(-1);
 		}
-		new AddTemplate("Create New Template", 500, 800);
 		getWindow().dispose();
 	}
 	
@@ -198,7 +189,7 @@ public class Question extends SQLWindow{
 	}
 
 	@Override
-	public void setList(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

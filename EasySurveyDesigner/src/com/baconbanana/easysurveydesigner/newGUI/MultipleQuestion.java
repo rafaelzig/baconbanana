@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -16,7 +15,6 @@ import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class MultipleQuestion extends Question{
 
@@ -27,8 +25,8 @@ public class MultipleQuestion extends Question{
 	private JTable choicesTable;
 	private String[] options = new String[9];
 
-	public MultipleQuestion(String tit, int width, int height) {
-		super(tit, width, height);
+	public MultipleQuestion(String tit, int width, int height, Template t) {
+		super(tit, width, height, t);
 		
 	}
 
@@ -93,18 +91,13 @@ public class MultipleQuestion extends Question{
 	public void saveQuestionMa(String[] choices){
 		DBController controller = null;
 		String tableName = new String("Choices");
-		try{
-			try {
-				controller = DBController.getInstance();
-				controller.loadResources();
-				for(int i = 0;i < choices.length;i++){
-					controller.insertInto(tableName, "null", choices[i]);
-				}
-			}finally{
-				if (controller != null)
-					controller.close();
+		try {
+			controller = DBController.getInstance();
+			for(int i = 0;i < choices.length;i++){
+				controller.insertInto(tableName, "null", choices[i]);
 			}
-		}catch(Exception e){
+		
+		}catch(SQLException | ClassNotFoundException e){
 			e.printStackTrace();
 		}
 	}

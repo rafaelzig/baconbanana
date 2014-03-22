@@ -13,7 +13,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class LoginPage extends Window
 {
@@ -37,24 +36,9 @@ public class LoginPage extends Window
 	private void initialiseConnection()
 	{
 		try
-		{
-			try
-			{
-				controller = DBController.getInstance();
-				controller.loadResources();
-				controller.createAllTables();
-			}
-			catch (InvalidStateException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally
-			{
-				if (controller != null)
-					controller.close();
-			}
-
+		{	
+			controller = DBController.getInstance();
+			controller.createAllTables();
 		}
 		catch (SQLException | ClassNotFoundException e)
 		{
@@ -159,7 +143,6 @@ public class LoginPage extends Window
 			{
 				getWindow().dispose();
 				new LoginPage("Login Page", 300, 300);
-				System.out.println("you have fucked up!!");
 			}
 		}
 		else if (e.getSource().equals(createUserBtn))
@@ -197,28 +180,17 @@ public class LoginPage extends Window
 		columns.add("Password");
 		String condition = new String("Username='" + userNameTxf.getText()
 				+ "' AND Password='" + passwordTxf.getText() + "'");
-		try
-		{
+
 			try
 			{
 				controller = DBController.getInstance();
-				controller.loadResources();
 				if (controller.exists(tableName, condition)){
 					check = true;
 				}
 				else{
 					check = false;
 				}
-			}
-			catch (InvalidStateException e1)
-			{
-				e1.printStackTrace();
-			}
-			finally
-			{
-				if (controller != null)
-					controller.close();
-			}
+			
 		}
 		catch (SQLException | ClassNotFoundException e2)
 		{

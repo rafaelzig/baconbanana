@@ -12,7 +12,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
@@ -29,13 +28,13 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 public class Template extends SQLWindow{
 	
 	private String stage;
-	private JButton createQuestionBtn;
+	protected JButton createQuestionBtn;
 	private JButton addExistingQuestionBtn;
 	private JButton deleteBtn;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private JLabel nameOfTemplateTxf;
-	private JComboBox<QuestionType> typeComboBox;
+	protected JComboBox<QuestionType> typeComboBox;
 
 	private JList<String> templateList;
 	private SQLList templateModel;
@@ -62,7 +61,7 @@ public class Template extends SQLWindow{
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 		
-		templateModel = new SQLList("Question", 1, "QuestionID", "Content", "Type");
+		templateModel = new SQLList("Question", 0, "QuestionID", "Content", "Type");
 		templateList = new JList<>(templateModel);
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
@@ -112,19 +111,20 @@ public class Template extends SQLWindow{
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				new NumericQuestion(tit, 800, 500);
+				
+				new NumericQuestion(tit, 800, 500, this);
 				break;
 			case DATE :
-				new DateQuestion(tit, 800, 500);
+				new DateQuestion(tit, 800, 500, this);
 				break;	
 			case TEXTUAL :
-				new TextualQuestion(tit, 800, 500);
+				new TextualQuestion(tit, 800, 500, this);
 				break;	
 			case MULTIPLECHOICE :
-				new MultipleChoiceQuestion(tit, 800, 500);
+				new MultipleChoiceQuestion(tit, 800, 500, this);
 				break;
 			case MULTIPLEANSWER :
-				new MultipleAnswerQuestion(tit, 800, 500);
+				new MultipleAnswerQuestion(tit, 800, 500, this);
 				break;
 			case RATING :
 				new RatingQuestion();
@@ -144,13 +144,22 @@ public class Template extends SQLWindow{
 		else if(e.getSource().equals(saveBtn)){
 			
 		}else if(e.getSource().equals(cancelBtn)){
-			new Menu("Menu", 300, 300);
 			getWindow().dispose();
 		}
 		
 	}
+	public SQLList getListModel(){
+		return templateModel;
+	}
+	public String getTemplateName(){
+		return templateName;
+	}
+	public JList<String> getTemplateList(){
+		return templateList;
+	}
 	@Override
-	public void setList(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
