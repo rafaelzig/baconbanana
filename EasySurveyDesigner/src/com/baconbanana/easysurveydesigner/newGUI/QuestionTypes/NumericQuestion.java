@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.Template;
 
@@ -29,7 +30,10 @@ public class NumericQuestion extends OpenQuestion{
 			e.printStackTrace();
 		}
 		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
-		t.getListModel().getData("Template","Template=" + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
+//		t.getListModel().getData("Template","Template = " + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
+		new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(t.getListModel().getId()), 0, "Content");
+		populateList(t.getTemplateList(), t.getListModel());
+		t.getListModel().getData();
 		getWindow().dispose();
 	}
 	

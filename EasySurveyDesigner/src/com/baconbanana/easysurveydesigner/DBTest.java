@@ -18,8 +18,8 @@ public class DBTest
 		{
 			controller = DBController.getInstance();
 
-			// System.out.println(controller.createAllTables());
-			// System.out.println(controller.deleteAllTables());
+			 System.out.println(controller.createAllTables());
+//			 System.out.println(controller.deleteAllTables());
 
 			if (controller.exists(TABLE_NAME))
 				controller.deleteTable(TABLE_NAME);
