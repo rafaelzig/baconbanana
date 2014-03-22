@@ -111,16 +111,8 @@ public class CreateUser extends Window{
 				new CreateUser("Create new user", 300, 300);
 			}else{
 			try {
-				try {
-					controller = DBController.getInstance();
-					controller.loadResources();
-					controller.insertInto(tableName, values);
-				}catch (InvalidStateException e1) {
-					e1.printStackTrace();
-				}finally{
-					if (controller != null)
-						controller.close();
-				}
+				controller = DBController.getInstance();
+				controller.insertInto(tableName, values);
 			}catch (SQLException | ClassNotFoundException e2){
 			
 				e2.printStackTrace();
