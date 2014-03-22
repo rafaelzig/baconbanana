@@ -10,6 +10,7 @@ public class InputWaiter extends Thread {
 	
 	InputStream inS;
 	Socket clientSocket;
+	volatile boolean done=false;
 	
 	public InputWaiter( Socket s){
 		this.clientSocket=s;
@@ -17,39 +18,46 @@ public class InputWaiter extends Thread {
 			inS=clientSocket.getInputStream();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("null in clientsocket");
 		}
 		
 	}
-	public void run() {
+	 @Override public synchronized void run() {
 
 		System.out.println("loop in wait for input");
 		int i;
 		try {
 			
-			while (SendSurveyGetAnswers.getPageClosed()==false
-					&& (i = inS.available()) == 0) {
+			while (done==false && (i = inS.available()) == 0) {
 				
 				try {
 					Thread.sleep(1000);
 					inS = clientSocket.getInputStream();
-					
-					
 					//TODO set ins in main
-					System.out.println("waiting for send");
+					System.out.println("waiting for input");
 					
 				} catch (IOException | InterruptedException e) {
+					boolean b=SendSurveyGetAnswers.getPageClosed();
+					if(b==true){
+						System.out.println("found out that page is closed");
+						finish();
+					}
+					
 					continue;
+					
 				}
 
 			}
-			SendSurveyGetAnswers.enableGet();
+			SendSurveyGetAnswers.changeGet(true);
 			SendSurveyGetAnswers.setInS(inS);
 		} catch (IOException e) {
-			System.out.println("waiting for send");
+			System.out.println("waiting for input");
 			e.printStackTrace();
 		}
 
 	}
+	 public void finish(){
+		 System.out.println("done was set to true");
+			done=true;
+		}
 }

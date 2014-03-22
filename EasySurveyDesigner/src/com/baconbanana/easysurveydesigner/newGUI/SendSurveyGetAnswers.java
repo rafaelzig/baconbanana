@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,43 +24,66 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.NewImportExport;
 
 
-public class SendSurveyGetAnswers {
+public class SendSurveyGetAnswers implements ActionListener {
 	
 	private static String localIP;
 	private static ServerSocket serverSocket;
 	private static Socket clientSocket;
 	private static JButton send;
-	private JButton accept;
-	private JButton cancel;
+	private static JButton accept;
+	private JButton close;
 	private static JButton get;
 	private JLabel status;
+	
+	
+	private static final String GET_S = "GET";
+	private static final String SEND_S = "SEND";
+	private static final String ACCEPT_S = "ACCEPT";
+	private static final String CLOSE_S = "CLOSE";
 	
 
 	protected static String receivedData;
 	protected Boolean notReceived;
 	protected JFrame frame, frameIp;
 	
-	protected Thread connection = new Connection();
-	protected Thread setIP = new setIP();
-	protected Thread IPwindow = new Thread();
+	Thread connection = new Connection();
+	Thread setIP = new setIP();
+	Thread IPwindow = new Thread();
+	
 	
 	protected volatile boolean noDevice = true;
 	protected static InputStream inS = null;
 	protected volatile static boolean connectionPageClosed = false;
-	protected volatile boolean notFinished = true;
 
-	
-		public SendSurveyGetAnswers() throws InterruptedException {
+	public SendSurveyGetAnswers() throws InterruptedException {
 
+				setEverything();
+			    connection.start();
+				connection.join();
+				setIP.start();
+				setIP.join();
+				
+			}
+
+			private void setEverything() {
 				frame = new JFrame("Connection");
 				frame.setLayout(new FlowLayout());
 				
-				accept = new JButton("ACCEPT");
-				send = new JButton("SEND");
-				get = new JButton("get");
-				cancel = new JButton("CANCEL");
+				accept = new JButton( ACCEPT_S );
+				accept.addActionListener(this);
+				
+				send = new JButton(SEND_S);
+				send.addActionListener(this);
+				
+				get = new JButton(GET_S);
+				get.addActionListener(this);
+				
+				close = new JButton(CLOSE_S);
+				close.addActionListener(this);
+				
 				status = new JLabel("");
 				status.setSize(new Dimension(100, 20));
 
@@ -70,93 +94,29 @@ public class SendSurveyGetAnswers {
 				frame.add(accept);
 				frame.add(send);
 				frame.add(get);
-				frame.add(cancel);
+				frame.add(close);
 				frame.add(status);
 
 				frame.pack();
 				frame.setSize(500, 100);
 				frame.setVisible(true);
 				frame.setLocationRelativeTo(null);
-				setListeners();
-
-				connection.start();
-				connection.join();
-				setIP.start();
-				setIP.join();
-
-			}
+				frame.setDefaultCloseOperation(0);
+				
+	}
 
 			public class setIP extends Thread {
 
 				public void run() {
 					if (serverSocket == null) {
 						status.setText("Could not connect");
+						changeAccept(false);
 
 					} else {
 						status.setText("Waiting for a device to connect. " + localIP);
 
 					}
 				}
-			}
-
-			private void setListeners() {
-				frame.addWindowListener(new java.awt.event.WindowAdapter() {
-					public void windowClosing(java.awt.event.WindowEvent e) {
-
-						//new Menu();
-						frame.dispose();
-
-						try {
-							serverSocket.close();
-							connectionPageClosed = true;
-						} catch (IOException e1) {
-							System.out.println("soocket wasnt even open");
-							e1.printStackTrace();
-						}
-					}
-
-				});
-
-				get.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Thread t3 = new DataGetter(inS);
-						t3.start();
-					}
-
-				});
-
-				send.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						TempsendPage();
-					}
-
-				});
-
-				cancel.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//new Menu();
-						frame.dispose();
-						// serverSocket.close();
-
-					}
-				});
-
-				accept.addActionListener(new ActionListener (){
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						Thread waitForDevice = new DeviceWaiter(serverSocket, clientSocket, inS);
-						waitForDevice.start();
-					
-					}
-				});
-
 			}
 
 			private void TempsendPage() {
@@ -224,6 +184,7 @@ public class SendSurveyGetAnswers {
 						t5.start();
 
 						frame2.dispose();
+						changeSend(false);
 					}
 
 				});
@@ -236,9 +197,7 @@ public class SendSurveyGetAnswers {
 
 			}
 
-
-
-	public static synchronized void setServerSocket(ServerSocket s){
+public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
 	public static synchronized ServerSocket getServerSocket(){
@@ -263,15 +222,54 @@ public class SendSurveyGetAnswers {
 		return connectionPageClosed;
 	}
 	
-	public static synchronized void enableSend(){
-		send.setEnabled(true);
+	public static synchronized void changeSend(boolean b){
+		send.setEnabled(b);
 	}
-	public static synchronized void enableGet(){
-		get.setEnabled(true);
+	public static synchronized void changeGet(boolean b){
+		get.setEnabled(b);
 	}
+	public static synchronized void changeAccept(boolean b){
+		accept.setEnabled(b);
+	}
+
+	
 	public static synchronized void setInS(InputStream s){
 		inS=s;
 	}
 	
+@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		
+			switch (e.getActionCommand())
+			{
+				case GET_S:
+					Thread t3 = new DataGetter(inS);
+					t3.start();
+					changeGet(false);
+					break;
+				case SEND_S:
+							TempsendPage();
+					break;
+				case CLOSE_S:
+					frame.dispose();
+					new Menu("Menu", 250, 300);
+					try {
+						serverSocket.close();
+						System.out.println(" socket status closed?"+serverSocket.isClosed());
+						
+					} catch (IOException e1) {
+					// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					connectionPageClosed=true;
+					break;	
+				case  ACCEPT_S:
+					Thread waitForDevice = new DeviceWaiter(serverSocket, clientSocket, inS);
+					waitForDevice.start();
+					accept.setEnabled(false);
+					break;
+		}
+	}
+	
 }
-
