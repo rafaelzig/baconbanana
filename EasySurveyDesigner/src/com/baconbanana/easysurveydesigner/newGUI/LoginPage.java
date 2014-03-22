@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 
@@ -31,6 +32,7 @@ public class LoginPage extends Window
 		initiWidgets();
 		initialiseConnection();
 		setFrameOptions();
+		
 	}
 
 	private void initialiseConnection()
@@ -53,6 +55,7 @@ public class LoginPage extends Window
 		// DBCreator.checkAndCreateTables();
 		// create panel for widgets and layout
 		getWindow().setResizable(false);
+		getWindow().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		panel = new JPanel(new GridBagLayout());
 
 		GridBagConstraints bagCon = new GridBagConstraints();
