@@ -94,16 +94,9 @@ public class Question extends SQLWindow{
 		values[1] = ("'" + questionTxa.getText() + "'");
 		values[2] = ("'" + qt.toString()+"'");
 		try {
-			try {
 				controller = DBController.getInstance();
-				controller.loadResources();
 				controller.insertInto(tableName, values );
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
-			}finally{
-				if (controller != null)
-					controller.close();
-			}
+			
 		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
@@ -120,7 +113,7 @@ public class Question extends SQLWindow{
 	}
 
 	@Override
-	public void setList(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}

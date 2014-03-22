@@ -29,13 +29,6 @@ public class SQLList extends AbstractListModel{
 		table = tableName;
 		columns = col;
 		sortColumn = sortCol;
-		try {
-			dbCon = DBController.getInstance();
-			dbCon.loadResources();
-		} catch (ClassNotFoundException | SQLException e) {
-		
-			e.printStackTrace();
-		}
 	}
 	
 	public SQLList(String tableName, String condition, int sortCol, String...col){
@@ -45,20 +38,6 @@ public class SQLList extends AbstractListModel{
 		columns = col;
 		this.condition = condition;
 		sortColumn = sortCol;
-		try {
-			dbCon = DBController.getInstance();
-			dbCon.loadResources();
-		} catch (ClassNotFoundException | SQLException e) {
-		
-			e.printStackTrace();
-		}finally{
-			try {
-				dbCon.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	@Override
@@ -79,71 +58,37 @@ public class SQLList extends AbstractListModel{
 	}
 	public void getData(String tableName, int sortCol, String... col){
 		try {
-			try {
-				dbCon = DBController.getInstance();
-				dbCon.loadResources();
-			} catch (ClassNotFoundException | SQLException e) {
-			
-				e.printStackTrace();
-			}
+			dbCon = DBController.getInstance();
 			List<Object[]> result = dbCon.select(table, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
 			}
 			fireContentsChanged(this, 0, data.size());
-		} catch (SQLException | InvalidStateException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally{
-			try {
-				dbCon.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 	}
 	public void getData(String tableName, String cond, int sortCol, String... col){
 		try {
-			try {
-				dbCon = DBController.getInstance();
-				dbCon.loadResources();
-			} catch (ClassNotFoundException | SQLException e) {
-			
-				e.printStackTrace();
-			}
+			dbCon = DBController.getInstance();
 			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
 			}
 			fireContentsChanged(this, 0, data.size());
-		} catch (SQLException | InvalidStateException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally{
-			try {
-				dbCon.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		
 	}
 	
 	public void insertElement(String table, String...values ){
 		try {
-			try {
-				dbCon.insertInto(table, values);
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
-			}finally{
-				if (dbCon != null)
-					dbCon.close();
-			}
+			dbCon.insertInto(table, values);
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
 		}catch (SQLException e2){

@@ -58,7 +58,7 @@ public class SurveySelector extends SQLWindow {
 	}
 
 	@Override
-	public void setList(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
