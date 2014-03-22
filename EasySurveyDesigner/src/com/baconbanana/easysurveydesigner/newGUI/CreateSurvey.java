@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -16,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class CreateSurvey extends SQLWindow{
@@ -64,11 +66,12 @@ public class CreateSurvey extends SQLWindow{
 		
 		//This really needs to be fixed = tommy
 		templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
+		templatePrevModel = new SQLList("Template NATURAL JOIN Question", 0, "Question");
 		surveyPrevModel = new SQLList("Survey_Template", 1, "Survey", "Template");
 
 		
 		templateList = new JList<String>(templateModel);
-		templatePrevList = new JList<String>(templateModel);
+		templatePrevList = new JList<String>(templatePrevModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 		
 		JScrollPane templateListsp = new JScrollPane(templateList);
@@ -76,8 +79,10 @@ public class CreateSurvey extends SQLWindow{
 		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
 		
 		populateList(templateList, templateModel);
+		templateModel.getData();
 		
 		templatelsm = templateList.getSelectionModel();
+		templatelsm.addListSelectionListener(this);
 		//templatePrevlsm = templatePrevList.getSelectionModel();
 		
 			
@@ -166,11 +171,13 @@ public class CreateSurvey extends SQLWindow{
 	}
 
 	@Override
-	public void setList(ListSelectionEvent e) {
+	public void valueChanged(ListSelectionEvent e) {
+		System.out.println("Click me harder");
 		if(e.getSource().equals(templatelsm)){
 			//could change to templatelist.getselecteditem
-			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "QuestionID=" + templateModel.getId(e.getFirstIndex()), 0, "Question");
+			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModel.getId(e.getFirstIndex())), 0, "Content");
 			populateList(templatePrevList, templatePrevModel);
+			templatePrevModel.getData();
 			
 		}		
 	}

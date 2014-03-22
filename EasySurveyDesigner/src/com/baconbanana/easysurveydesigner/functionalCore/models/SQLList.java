@@ -66,15 +66,17 @@ public class SQLList extends AbstractListModel{
 		return (String) data.get(i)[sortColumn];
 	}
 	
-	public int getId(int i){
-		return (int) data.get(i)[0];
+	public String getId(int i){
+		return  (String) data.get(i)[0];
 	}
 
 	@Override
 	public int getSize() {
 		return data.size();
 	}
-	
+	public void getData(){
+		if(condition == null) getData(table, sortColumn, columns) ; else getData(table, condition, sortColumn, columns);
+	}
 	public void getData(String tableName, int sortCol, String... col){
 		try {
 			try {
@@ -89,6 +91,7 @@ public class SQLList extends AbstractListModel{
 			for(Object[]  i : result){
 				data.add(i);
 			}
+			fireContentsChanged(this, 0, data.size());
 		} catch (SQLException | InvalidStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -115,6 +118,7 @@ public class SQLList extends AbstractListModel{
 			for(Object[]  i : result){
 				data.add(i);
 			}
+			fireContentsChanged(this, 0, data.size());
 		} catch (SQLException | InvalidStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -141,6 +145,7 @@ public class SQLList extends AbstractListModel{
 					dbCon.close();
 			}
 			data.add(values);
+			fireContentsChanged(this, 0, data.size());
 		}catch (SQLException e2){
 		
 			e2.printStackTrace();
