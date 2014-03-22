@@ -84,25 +84,6 @@ public class Question extends SQLWindow{
 		this.saveBtn = saveBtn;
 	}
 
-	public void saveQuestionOq(QuestionType qt){
-		DBController controller = null;
-		String tableName = new String(Table.QUESTION.getName());
-		String[] values = new String[3];
-		values[0] =  "null";
-		values[1] = ("'" + questionTxa.getText() + "'");
-		values[2] = ("'" + qt.toString()+"'");
-		try {
-				controller = DBController.getInstance();
-				controller.insertInto(tableName, values );
-			
-		}catch (SQLException | ClassNotFoundException e2){
-		
-			e2.printStackTrace();
-			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
-			System.exit(-1);
-		}
-		getWindow().dispose();
-	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

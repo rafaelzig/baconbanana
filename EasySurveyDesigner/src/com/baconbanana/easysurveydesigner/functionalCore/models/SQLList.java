@@ -88,6 +88,7 @@ public class SQLList extends AbstractListModel{
 		try {
 			dbCon = DBController.getInstance();
 			dbCon.insertInto(table, values);
+			data.clear();
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
 		}catch (SQLException | ClassNotFoundException e2){

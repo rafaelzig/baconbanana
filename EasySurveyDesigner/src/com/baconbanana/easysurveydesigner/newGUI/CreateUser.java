@@ -19,7 +19,7 @@ public class CreateUser extends Window{
 	private JLabel createUserLbl;
 	private JLabel createPasswordLbl;
 	private JTextField createUserTxt;
-	private JPasswordField createPasswordPf;
+	private JTextField createPasswordPf;
 	private JButton okBtn;
 	private JButton cancelBtn;
 

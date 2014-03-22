@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
@@ -61,7 +62,7 @@ public class Template extends SQLWindow{
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 		
-		templateModel = new SQLList("Question", 0, "QuestionID", "Content", "Type");
+		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + templateName, 0, "Content");
 		templateList = new JList<>(templateModel);
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
