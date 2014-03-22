@@ -37,24 +37,9 @@ public class LoginPage extends Window
 	private void initialiseConnection()
 	{
 		try
-		{
-			try
-			{
-				controller = DBController.getInstance();
-				controller.loadResources();
-				controller.createAllTables();
-			}
-			catch (InvalidStateException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally
-			{
-				if (controller != null)
-					controller.close();
-			}
-
+		{	
+			controller = DBController.getInstance();
+			controller.createAllTables();
 		}
 		catch (SQLException | ClassNotFoundException e)
 		{
@@ -196,28 +181,17 @@ public class LoginPage extends Window
 		columns.add("Password");
 		String condition = new String("Username='" + userNameTxf.getText()
 				+ "' AND Password='" + passwordTxf.getText() + "'");
-		try
-		{
+
 			try
 			{
 				controller = DBController.getInstance();
-				controller.loadResources();
 				if (controller.exists(tableName, condition)){
 					check = true;
 				}
 				else{
 					check = false;
 				}
-			}
-			catch (InvalidStateException e1)
-			{
-				e1.printStackTrace();
-			}
-			finally
-			{
-				if (controller != null)
-					controller.close();
-			}
+			
 		}
 		catch (SQLException | ClassNotFoundException e2)
 		{
