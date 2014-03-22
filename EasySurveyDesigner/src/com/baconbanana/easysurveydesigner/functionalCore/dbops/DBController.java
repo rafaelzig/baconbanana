@@ -59,32 +59,47 @@ public class DBController
 	private DBController() throws ClassNotFoundException, SQLException
 	{
 		super();
-		prepareConnectionString();
+		Class.forName("org.sqlite.JDBC");
+		connString = getConnectionString();
 	}
 
 	/**
-	 * Opens the database SQLite connection.
+	 * Gets the connection String to be used in future connections to the SQLite
+	 * database.
 	 */
-	private void prepareConnectionString() throws ClassNotFoundException,
+	private String getConnectionString() throws ClassNotFoundException,
 			SQLException
 	{
+		String connString = new String();
 		String osName = System.getProperty("os.name");
-		connString = "jdbc:sqlite:";
 
 		if (osName.contains("Windows"))
 		{
 			WIN_WORKING_DIR.mkdirs();
-			connString += WIN_WORKING_DIR + "\\";
+			connString = WIN_WORKING_DIR + "\\";
 		}
 		else if (osName.contains("Mac"))
 		{
 			MAC_WORKING_DIR.mkdirs();
-			connString += MAC_WORKING_DIR + "/";
+			connString = MAC_WORKING_DIR + "/";
+		}
+		else if (osName.contains("Mac"))
+		{
+			MAC_WORKING_DIR.mkdirs();
+			connString = MAC_WORKING_DIR + "/";
+		}
+		else if (osName.contains("Mac"))
+		{
+			MAC_WORKING_DIR.mkdirs();
+			connString = MAC_WORKING_DIR + "/";
+		}
+		else if (osName.contains("Mac"))
+		{
+			MAC_WORKING_DIR.mkdirs();
+			connString = MAC_WORKING_DIR + "/";
 		}
 
-		Class.forName("org.sqlite.JDBC");
-
-		connString += DB_NAME;
+		return "jdbc:sqlite:" + connString + DB_NAME;
 	}
 
 	/**
@@ -97,7 +112,6 @@ public class DBController
 		if (existsStatement != null)
 			existsStatement.close();
 
-		isReady = false;
 		instance = null;
 	}
 
@@ -106,19 +120,14 @@ public class DBController
 	 */
 	public void loadResources() throws SQLException
 	{
-		if (!isReady)
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement())
 		{
-			try (Connection conn = DriverManager.getConnection(connString
-					+ DB_NAME);
-					Statement st = conn.createStatement())
-			{
-				st.execute("PRAGMA foreign_keys = ON");
-				selectGeneratedIdStatement = conn
-						.prepareStatement("SELECT last_insert_rowid();");
-				existsStatement = conn
-						.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
-				isReady = true;
-			}
+			st.execute("PRAGMA foreign_keys = ON");
+			selectGeneratedIdStatement = conn
+					.prepareStatement("SELECT last_insert_rowid();");
+			existsStatement = conn
+					.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
 		}
 	}
 
@@ -133,8 +142,6 @@ public class DBController
 	{
 		if (!isReady)
 			throw new InvalidStateException();
-
-		// conn.setAutoCommit(false);
 
 		int count = 0;
 
@@ -151,9 +158,6 @@ public class DBController
 
 		if (isTableEmpty(Table.TYPE.getName()))
 			populateTable(Table.TYPE.getName());
-
-		// conn.commit();
-		// conn.setAutoCommit(true);
 
 		return count;
 	}
@@ -187,23 +191,22 @@ public class DBController
 	 * @throws SQLException
 	 */
 	public boolean createTable(String tableName, Map<String, String> parameters)
-			throws InvalidStateException
+			throws InvalidStateException, SQLException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
-		
+
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "CREATE TABLE " + tableName + " ( ";
 			sql += prepareSql(parameters, " ");
 			sql += " );";
 
-			try(Connection conn =  st = conn.createStatement())
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
 			{
-				st.executeUpdate(sql);
+				return st.executeUpdate(sql) >= 0;
 			}
-
-			return true;
 		}
 
 		return false;
@@ -240,7 +243,11 @@ public class DBController
 
 			sql += " VALUES " + prepareSql(values, true) + ";";
 
-			genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				st.executeUpdate(sql);
+			}
 
 			return getLastGeneratedKey();
 		}
@@ -301,7 +308,12 @@ public class DBController
 			if (condition != null && !condition.isEmpty())
 				sql += " WHERE " + condition + ";";
 
-			return prepareResult(genericStatement.executeQuery(sql));
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement();
+					ResultSet rs = st.executeQuery(sql))
+			{
+				return prepareResult(rs);
+			}
 		}
 
 		return null;
@@ -423,7 +435,13 @@ public class DBController
 			InvalidStateException
 	{
 		String sql = "SELECT * FROM " + tableName + ";";
-		return prepareResult(genericStatement.executeQuery(sql));
+
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql))
+		{
+			return prepareResult(rs);
+		}
 	}
 
 	/**
@@ -445,13 +463,10 @@ public class DBController
 
 		existsStatement.setString(1, tableName);
 
-		ResultSet rs = existsStatement.executeQuery();
-
-		boolean exists = rs.next();
-
-		rs.close();
-
-		return exists;
+		try (ResultSet rs = existsStatement.executeQuery())
+		{
+			return rs.next();
+		}
 	}
 
 	/**
@@ -482,13 +497,12 @@ public class DBController
 
 		sql += " LIMIT 1);";
 
-		ResultSet rs = genericStatement.executeQuery(sql);
-
-		boolean exists = rs.getInt(1) > 0;
-
-		rs.close();
-
-		return exists;
+		try (Connection conn = DriverManager.getConnection(connString);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql))
+		{
+			return rs.getInt(1) > 0;
+		}
 	}
 
 	/**
@@ -544,8 +558,14 @@ public class DBController
 
 			sql += ";";
 
-			return genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+
+			{
+				return st.executeUpdate(sql);
+			}
 		}
+
 		return 0;
 	}
 
@@ -603,8 +623,13 @@ public class DBController
 
 			sql += ";";
 
-			return genericStatement.executeUpdate(sql);
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				return st.executeUpdate(sql);
+			}
 		}
+
 		return 0;
 	}
 
@@ -645,8 +670,13 @@ public class DBController
 			throw new InvalidStateException();
 
 		if (tableName != null && !tableName.isEmpty())
-			return genericStatement.executeUpdate("DROP TABLE " + tableName
-					+ ";");
+		{
+			try (Connection conn = DriverManager.getConnection(connString);
+					Statement st = conn.createStatement())
+			{
+				return st.executeUpdate("DROP TABLE " + tableName + ";");
+			}
+		}
 
 		return 0;
 	}
@@ -682,11 +712,10 @@ public class DBController
 	 */
 	public int getLastGeneratedKey() throws SQLException, InvalidStateException
 	{
-		ResultSet rs = selectGeneratedIdStatement.executeQuery();
-		int generatedId = rs.getInt(1);
-		rs.close();
-
-		return generatedId;
+		try (ResultSet rs = selectGeneratedIdStatement.executeQuery())
+		{
+			return rs.getInt(1);
+		}
 	}
 
 	/**
@@ -722,8 +751,6 @@ public class DBController
 
 			resultTable.add(tuple);
 		}
-
-		rs.close();
 
 		return resultTable;
 	}
