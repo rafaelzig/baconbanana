@@ -27,11 +27,8 @@ public abstract class SQLWindow extends Window implements ListSelectionListener{
 	public void populateList(JList<String> list, SQLList listModel){
 		list.setModel(listModel);
 	}
-	 public void valueChanged(ListSelectionEvent e) {
-		 ListSelectionModel lsm = (ListSelectionModel)e.getSource();		 
-	}	
-	 
-	public abstract void setList(ListSelectionEvent e);
+	public abstract void valueChanged(ListSelectionEvent e);
+
 	 
 	public void createContext(String tableName, String...values){
 		try {
