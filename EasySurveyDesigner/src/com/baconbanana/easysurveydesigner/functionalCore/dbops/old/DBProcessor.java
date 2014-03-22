@@ -1,8 +1,5 @@
 package com.baconbanana.easysurveydesigner.functionalCore.dbops.old;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 

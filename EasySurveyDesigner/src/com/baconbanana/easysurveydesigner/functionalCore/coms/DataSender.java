@@ -5,16 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidParameterSpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
 
 

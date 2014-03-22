@@ -1,23 +1,15 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.event.ListSelectionEvent;
-
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.*;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
+import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 
 
 
