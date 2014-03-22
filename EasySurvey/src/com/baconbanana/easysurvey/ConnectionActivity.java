@@ -44,7 +44,7 @@ public class ConnectionActivity extends Activity {
 	private Matcher matcher;
 	private Pattern pattern;
 	private String IP = null;
-	private Socket skt = null;
+	private static Socket skt = null;
 	private CheckBox cb;
 	private EditText input;
 	private static boolean isSurveyCompleted = false;
@@ -92,6 +92,7 @@ public class ConnectionActivity extends Activity {
 		if (isOnline()) {
 			if (notFirstTime) {
 				new ConnectToServer(inputS, skt, context, IP).execute("");
+				
 			} else {
 
 				IP = input.getText().toString();
@@ -140,7 +141,7 @@ public class ConnectionActivity extends Activity {
 	}
 
 	public void get(View v) {
-		new Get(inputS, context).execute("");
+		new Get(skt, context).execute("");
 	}
 
 	public boolean isOnline() {
@@ -188,5 +189,9 @@ public class ConnectionActivity extends Activity {
 	}
 	public static synchronized void setNameAndDate(String s) {
 		nameAndDate=s;
+	}
+	
+	public static synchronized void setSocket(Socket s) {
+		skt=s;
 	}
 }

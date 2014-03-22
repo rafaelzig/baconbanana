@@ -19,8 +19,13 @@ import android.util.Base64;
 
 /**
  * 
+<<<<<<< HEAD
+ * @author Team 
+ *
+=======
  * @author Almira & Team
  * 
+>>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
  */
 public class EncryptionJ
 {
@@ -28,17 +33,24 @@ public class EncryptionJ
 	public static byte[] secret = null;
 	public static SecretKeySpec secretKey = null;
 
-	public static void setKeys() throws DecoderException
-	{
-		secret = Hex
-				.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
-		secretKey = new SecretKeySpec(secret, "AES");
+	public static void setKeys() {
+		try {
+			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
+			secretKey = new SecretKeySpec(secret, "AES");
+		} catch (DecoderException e1) {
+			e1.printStackTrace();
+		}
+
 	}
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
+<<<<<<< HEAD
+	 * Then converts it bytes string. Then returns it.
+=======
 	 * Then converts it bytes string. Then returnes it.
 	 * 
+>>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
 	 * @param message
 	 * @return encrypted
 	 * @throws NoSuchAlgorithmException
@@ -58,17 +70,42 @@ public class EncryptionJ
 		byte[] encryptedText;
 		setKeys();
 		Cipher cipher = null;
-		String encrypted = "";
-
-		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-
-		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-
-		encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
-
-		encrypted = Base64.encodeToString(encryptedText, Base64.DEFAULT);
-
-		return encrypted;
+		String encoded="";
+		
+		try {
+			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey );
+		
+			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
+		
+			//String test = new String(encryptedText);
+			//System.out.println("encrypted"+ test);
+			
+			encoded = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			
+			//System.out.println("decoded"+encoded );
+			
+			}catch (IllegalBlockSizeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (BadPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchPaddingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}catch (InvalidKeyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		return encoded;
 	}
 
 	/**
@@ -98,11 +135,10 @@ public class EncryptionJ
 
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		byte[] data = Base64.decode(message, Base64.DEFAULT);
-		;
-
-		decrypt = new String(cipher.doFinal(data), "UTF-8");
-
+		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
+		
+		decrypt = new String(cipher.doFinal(decode),"UTF-8");
+		
 		return decrypt;
 	}
 

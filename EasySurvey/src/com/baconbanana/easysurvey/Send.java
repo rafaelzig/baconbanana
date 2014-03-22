@@ -3,14 +3,6 @@ package com.baconbanana.easysurvey;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import org.apache.commons.codec.DecoderException;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -50,42 +42,21 @@ public class Send extends AsyncTask<String, Void, String> {
 
 			String s = Storage.readFromInternal(context,
 					Operations.FILENAME);
-			Log.d("storge read", s);
-			String encrypted = EncryptionJ.encryptMsg(s);
+			
+			Log.d("what it got from storage", s);
+			//Log.d("storge read", "proto liniya");
+			//String encrypted = EncryptionJ.encryptMsg(s);
 
-			Log.d("storge read", encrypted);
+			//Log.d("storge arteer enc", encrypted);
 
-			output.print(encrypted);
+			//output.print(encrypted);
+			output.print(s);
 			message = "successfully sent";
 
 		} catch (IOException e) {
 			System.out.println(e);
 			message = "could not send it";
 		}
-		catch (InvalidKeyException e)
-		{
-			message = "could not send it";
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			message = "could not send it";
-		}
-		catch (NoSuchPaddingException e)
-		{
-			message = "could not send it";
-		}
-		catch (IllegalBlockSizeException e)
-		{
-			message = "could not send it";
-		}
-		catch (BadPaddingException e)
-		{
-			message = "could not send it";
-		}
-		catch (DecoderException e)
-		{
-			message = "could not send it";
-		} 
 		return null;
 	}
 
