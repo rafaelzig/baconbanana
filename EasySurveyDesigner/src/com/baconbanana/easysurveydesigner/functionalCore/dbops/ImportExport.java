@@ -19,7 +19,7 @@ public class ImportExport  {
 	String sqlFilePath = System.getenv("USERPROFILE")+"\\Documents"+"\\SQLite\\"+"CSF.txt";
 	File sqlFile = new File(sqlFilePath);
 	File batFile = new File(batFilePath);
-	JFileChooser fileCHooCHoo = new JFileChooser("c://");
+	JFileChooser fileCHooCHoo = new JFileChooser(System.getenv("USERPROFILE")+"\\Documents"+"\\SQLite\\");
 	File renamedFile;
   public ImportExport()
   {
