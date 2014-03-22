@@ -62,7 +62,7 @@ public class Template extends SQLWindow{
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 		
-		templateModel = new SQLList("Question", 1, "QuestionID", "Content", "Type");
+		templateModel = new SQLList("Question", 0, "QuestionID", "Content", "Type");
 		templateList = new JList<>(templateModel);
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
@@ -149,15 +149,16 @@ public class Template extends SQLWindow{
 		}
 		
 	}
-	@Override
-	public void setList(ListSelectionEvent e) {
-		
-	}
 	public SQLList getListModel(){
 		return templateModel;
 	}
 	public String getTemplateName(){
 		return templateName;
+	}
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
