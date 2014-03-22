@@ -172,7 +172,6 @@ public class CreateSurvey extends SQLWindow{
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		System.out.println("Click me harder");
 		if(e.getSource().equals(templatelsm)){
 			//could change to templatelist.getselecteditem
 			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModel.getId(e.getFirstIndex())), 0, "Content");

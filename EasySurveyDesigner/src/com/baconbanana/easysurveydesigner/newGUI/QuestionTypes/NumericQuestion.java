@@ -22,18 +22,10 @@ public class NumericQuestion extends OpenQuestion{
 		int questId = 0;
 		try {
 			dbCon = DBController.getInstance();
-			dbCon.loadResources();
 			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerText), DBController.appendApo(QuestionType.NUMERICAL.toString()));
-		} catch (SQLException | InvalidStateException | ClassNotFoundException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
-			try {
-				dbCon.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 		}
 		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
 		t.getListModel().getData("Template","Template=" + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
