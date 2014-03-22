@@ -87,7 +87,7 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	private static String readFile(InputStream is) throws IOException
+	public static String readFile(InputStream is) throws IOException
 	{
 		byte[] output = new byte[is.available()];
 
@@ -163,7 +163,7 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	private static void writeFile(FileOutputStream fos, String input) throws IOException
+	public static void writeFile(FileOutputStream fos, String input) throws IOException
 	{
 		outputStream = new BufferedOutputStream(fos);
 

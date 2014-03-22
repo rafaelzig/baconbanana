@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <ImageButton
+        android:id="@+id/btnSpeech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="txtAnswer"
+        android:contentDescription="Activate to speak your answer"
+        android:onClick="onClick"
+        android:src="@android:drawable/ic_btn_speak_now" />
+
+    <EditText
+        android:id="@+id/txtAnswer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="btnSpeech"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:inputType="text"
+        android:onClick="onClick" />
+
+</RelativeLayout>

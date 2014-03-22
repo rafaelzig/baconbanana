@@ -4,6 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
+import org.apache.commons.codec.DecoderException;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -11,6 +19,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 /**
 * This class tries to receive survey from inputStream that it gets from constructor. 
@@ -70,7 +79,7 @@ public class Get extends AsyncTask<String, Void, String> {
 			Log.d("sb", toStorage);
 			Storage.writeToInternal(context, toStorage);
 
-			String storage = Storage.readFromInternal(context, "Survey.json");
+			String storage = Storage.readFromInternal(context, Operations.FILENAME);
 			Log.d("storage", storage);
 
 			message = "Saved";
@@ -78,10 +87,35 @@ public class Get extends AsyncTask<String, Void, String> {
 		} catch (IOException e) {
 			message = "could not read from in";
 		}
+		catch (InvalidKeyException e)
+		{
+			message = "could not read from in";
+		}
+		catch (NoSuchAlgorithmException e)
+		{
+			message = "could not read from in";
+		}
+		catch (NoSuchPaddingException e)
+		{
+			message = "could not read from in";
+		}
+		catch (IllegalBlockSizeException e)
+		{
+			message = "could not read from in";
+		}
+		catch (BadPaddingException e)
+		{
+			message = "could not read from in";
+		}
+		catch (DecoderException e)
+		{
+			message = "could not read from in";
+		}
 
 		return null;
 	}
 
+	@Override
 	protected void onPostExecute(String result) {
 
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(context);
