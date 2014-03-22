@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.NewImportExport;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
 
 public class Menu extends Window
 {
@@ -109,10 +109,10 @@ public class Menu extends Window
 					getWindow().dispose();
 					break;
 				case IMPORT_TEXT:
-					NewImportExport.startImport();
+					ImportExport.startImport();
 					break;
 				case EXPORT_TEXT:
-					NewImportExport.startExport();
+					ImportExport.startExport();
 					break;
 			}
 		}
