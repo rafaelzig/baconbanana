@@ -12,17 +12,18 @@ import com.baconbanana.easysurveydesigner.newGUI.Template;
 
 public class NumericQuestion extends OpenQuestion{
 	
-	String answerText;
-	DBController dbCon;
+	private String answerTxt;
+	private DBController dbCon;
 	
 	public NumericQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
-		initiWidgetsOq();
-		answerText = JOptionPane.showInputDialog(null, "Enter Numeric Question : ", "Name Template", 1);
+		
+		answerTxt = JOptionPane.showInputDialog(null, "Enter Numeric Question : ", "New Numeric Question", 1);
+		
 		int questId = 0;
 		try {
 			dbCon = DBController.getInstance();
-			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerText), DBController.appendApo(QuestionType.NUMERICAL.toString()));
+			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.NUMERICAL.toString()));
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -33,10 +34,5 @@ public class NumericQuestion extends OpenQuestion{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(getSaveBtn())){
-			saveQuestionOq(QuestionType.NUMERICAL);
-		}else if(e.getSource().equals(getCancelBtn())){
-			cancelQuestion();
-		}
 	}
 }

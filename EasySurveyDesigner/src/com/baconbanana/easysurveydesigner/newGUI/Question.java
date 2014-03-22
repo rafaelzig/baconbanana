@@ -24,8 +24,8 @@ public class Question extends SQLWindow{
 	public Question(String tit, int width, int height, Template t) {
 		super(tit, width, height);
 		template = t;
-		setFrameOptions();
-		initiLayout();
+//		setFrameOptions();
+//		initiLayout();
 	}
 
 	public void initiWidgets(){
