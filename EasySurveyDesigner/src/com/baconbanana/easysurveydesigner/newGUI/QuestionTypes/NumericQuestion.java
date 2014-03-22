@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.Template;

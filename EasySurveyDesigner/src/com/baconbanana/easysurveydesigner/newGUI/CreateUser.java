@@ -4,9 +4,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -15,7 +12,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class CreateUser extends Window{
 

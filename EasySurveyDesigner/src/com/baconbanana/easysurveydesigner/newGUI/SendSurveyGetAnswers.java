@@ -23,7 +23,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
-import com.baconbanana.easysurveydesigner.functionalCore.coms.InputWaiter;
 
 
 public class SendSurveyGetAnswers {

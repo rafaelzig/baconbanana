@@ -5,14 +5,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
-
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
-import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class SurveySelector extends SQLWindow {
 	private  JList<String> surveyList = new JList<String>();
