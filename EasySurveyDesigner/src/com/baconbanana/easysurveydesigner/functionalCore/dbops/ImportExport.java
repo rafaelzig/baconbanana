@@ -62,7 +62,7 @@ public class ImportExport  {
 	  
   }
   
-  public synchronized void startExport()
+  public synchronized static void startExport()
   {
 	 
 	  chooseFile("Export");
