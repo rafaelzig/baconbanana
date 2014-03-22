@@ -9,7 +9,6 @@ import java.util.List;
 import javax.swing.AbstractListModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 
 public class SQLList extends AbstractListModel{
 	
