@@ -18,6 +18,7 @@ public class NumericQuestion extends OpenQuestion{
 	
 	public NumericQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
+		initiWidgetsOq();
 		answerText = JOptionPane.showInputDialog(null, "Enter Numeric Question : ", "Name Template", 1);
 		int questId = 0;
 		try {
@@ -35,6 +36,8 @@ public class NumericQuestion extends OpenQuestion{
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
 			saveQuestionOq(QuestionType.NUMERICAL);
+		}else if(e.getSource().equals(getCancelBtn())){
+			cancelQuestion();
 		}
 	}
 }
