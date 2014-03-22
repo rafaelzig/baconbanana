@@ -88,10 +88,11 @@ public class SQLList extends AbstractListModel{
 	
 	public void insertElement(String table, String...values ){
 		try {
+			dbCon = DBController.getInstance();
 			dbCon.insertInto(table, values);
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
-		}catch (SQLException e2){
+		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
