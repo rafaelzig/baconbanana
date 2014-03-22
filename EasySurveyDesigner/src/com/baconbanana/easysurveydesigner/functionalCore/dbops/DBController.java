@@ -23,11 +23,8 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 public class DBController
 {
 	public static final String DB_NAME = "easysurvey.db";
-	public static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
-			+ "/Documents/SQLite/");
-	public static final File WIN_WORKING_DIR = new File(
-			System.getenv("USERPROFILE") + "\\Documents\\SQLite\\");
-
+	
+	private final File workingDirectory;
 	private static DBController instance = null;
 	private String connString;
 
@@ -55,54 +52,30 @@ public class DBController
 	private DBController() throws ClassNotFoundException, SQLException
 	{
 		super();
-		
+
 		Class.forName("org.sqlite.JDBC");
-		connString = getConnectionString();
+
+		String SEPARATOR = System.getProperty("file.separator");
+		workingDirectory = new File(System.getProperty("user.dir") + SEPARATOR + "Documents"
+						+ SEPARATOR + "SQLite");
+		workingDirectory.mkdirs();
 		
+		connString = "jdbc:sqlite:" + workingDirectory + DB_NAME;
+
 		try (Connection conn = DriverManager.getConnection(connString);
 				Statement st = conn.createStatement())
 		{
 			st.execute("PRAGMA foreign_keys = ON");
 		}
 	}
-
+	
 	/**
-	 * Gets the connection String to be used in future connections to the SQLite
-	 * database.
+	 * Gets the current working directory used.
+	 * @return String object representing the working directory.
 	 */
-	private String getConnectionString() throws ClassNotFoundException,
-			SQLException
+	public String getWorkingDirectory()
 	{
-		String connString = new String();
-		String osName = System.getProperty("os.name");
-
-		if (osName.contains("Windows"))
-		{
-			WIN_WORKING_DIR.mkdirs();
-			connString = WIN_WORKING_DIR + "\\";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString = MAC_WORKING_DIR + "/";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString = MAC_WORKING_DIR + "/";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString = MAC_WORKING_DIR + "/";
-		}
-		else if (osName.contains("Mac"))
-		{
-			MAC_WORKING_DIR.mkdirs();
-			connString = MAC_WORKING_DIR + "/";
-		}
-
-		return "jdbc:sqlite:" + connString + DB_NAME;
+		return workingDirectory.getAbsolutePath();
 	}
 
 	/**
@@ -195,7 +168,7 @@ public class DBController
 	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String[] columns, String... values)
-			throws SQLException 
+			throws SQLException
 	{
 		if (tableName != null && !tableName.isEmpty())
 		{
@@ -236,7 +209,7 @@ public class DBController
 	 *         for SQL statements that return nothing.
 	 */
 	public int insertInto(String tableName, String... values)
-			throws SQLException 
+			throws SQLException
 	{
 		return insertInto(tableName, null, values);
 	}
@@ -259,7 +232,7 @@ public class DBController
 	 *         method.
 	 */
 	public List<Object[]> select(String tableName, String condition,
-			String... columns) throws SQLException 
+			String... columns) throws SQLException
 	{
 		if (tableName != null && !tableName.isEmpty())
 		{
@@ -304,7 +277,7 @@ public class DBController
 	 */
 	public List<Object[]> select(String tableName, int columnIndex,
 			boolean isAscending, String... columns) throws SQLException
-			
+
 	{
 		return select(tableName, new String(), columnIndex, isAscending,
 				columns);
@@ -336,7 +309,7 @@ public class DBController
 	 */
 	public List<Object[]> select(String tableName, String condition,
 			int columnIndex, boolean isAscending, String... columns)
-			throws SQLException 
+			throws SQLException
 	{
 		String sql;
 
@@ -361,7 +334,7 @@ public class DBController
 	 *         method.
 	 */
 	public List<Object[]> selectAll(String tableName) throws SQLException
-			
+
 	{
 		String sql = "SELECT * FROM " + tableName + ";";
 
@@ -407,7 +380,7 @@ public class DBController
 	 * @return true if the row exists in the table, false otherwise.
 	 */
 	public boolean exists(String tableName, String condition)
-			throws SQLException 
+			throws SQLException
 	{
 		String sql = "SELECT EXISTS(SELECT 1 FROM " + tableName;
 
@@ -455,7 +428,7 @@ public class DBController
 	 *         statements that return nothing.
 	 */
 	public int update(String tableName, Map<String, String> parameters,
-			String condition) throws SQLException 
+			String condition) throws SQLException
 	{
 		if (tableName != null && !tableName.isEmpty())
 		{
@@ -492,7 +465,7 @@ public class DBController
 	 *         statements that return nothing.
 	 */
 	public int updateAll(String tableName, Map<String, String> parameters)
-			throws SQLException 
+			throws SQLException
 	{
 		return update(tableName, parameters, null);
 	}
@@ -576,7 +549,7 @@ public class DBController
 	 * @return Either (1) the row count for SQL statements or (2) 0 for SQL
 	 *         statements that return nothing.
 	 */
-	public int deleteAllTables() throws SQLException 
+	public int deleteAllTables() throws SQLException
 	{
 		int count = 0;
 
