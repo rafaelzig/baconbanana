@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
@@ -31,7 +32,7 @@ public class MultipleQuestion extends Question{
 
 	public void initiWidgetsMq(){
 		// --------------center of window---------------------
-		setQuestionTxa(new JTextArea("Type your question here"));
+		setQuestionTxa(new JTextPane());
 		getQuestionTxa().setPreferredSize(new Dimension(800, 280));
 		getQuestionTxa().setBorder(getBorder());
 		getWindow().add(getQuestionTxa(), BorderLayout.CENTER);

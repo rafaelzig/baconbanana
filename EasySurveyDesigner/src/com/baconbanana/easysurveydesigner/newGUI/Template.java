@@ -154,6 +154,9 @@ public class Template extends SQLWindow{
 	public String getTemplateName(){
 		return templateName;
 	}
+	public JList<String> getTemplateList(){
+		return templateList;
+	}
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub

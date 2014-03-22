@@ -19,18 +19,23 @@ import android.util.Base64;
 
 /**
  * 
- * @author Almira & Team
+<<<<<<< HEAD
+ * @author Team 
  *
+=======
+ * @author Almira & Team
+ * 
+>>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
  */
-public class EncryptionJ {
+public class EncryptionJ
+{
 
 	public static byte[] secret = null;
 	public static SecretKeySpec secretKey = null;
 
 	public static void setKeys() {
 		try {
-			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff"
-					.toCharArray());
+			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
 			secretKey = new SecretKeySpec(secret, "AES");
 		} catch (DecoderException e1) {
 			e1.printStackTrace();
@@ -40,7 +45,12 @@ public class EncryptionJ {
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
+<<<<<<< HEAD
+	 * Then converts it bytes string. Then returns it.
+=======
 	 * Then converts it bytes string. Then returnes it.
+	 * 
+>>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
 	 * @param message
 	 * @return encrypted
 	 * @throws NoSuchAlgorithmException
@@ -50,12 +60,17 @@ public class EncryptionJ {
 	 * @throws IllegalBlockSizeException
 	 * @throws BadPaddingException
 	 * @throws UnsupportedEncodingException
+	 * @throws DecoderException
 	 */
-	public static String encryptMsg(String message) {
+	public static String encryptMsg(String message) throws InvalidKeyException,
+			NoSuchAlgorithmException, NoSuchPaddingException,
+			IllegalBlockSizeException, BadPaddingException,
+			UnsupportedEncodingException, DecoderException
+	{
 		byte[] encryptedText;
 		setKeys();
 		Cipher cipher = null;
-		String encrypted="";
+		String encoded="";
 		
 		try {
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -64,7 +79,12 @@ public class EncryptionJ {
 		
 			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
 		
-			encrypted = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			//String test = new String(encryptedText);
+			//System.out.println("encrypted"+ test);
+			
+			encoded = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			
+			//System.out.println("decoded"+encoded );
 			
 			}catch (IllegalBlockSizeException e) {
 				// TODO Auto-generated catch block
@@ -85,12 +105,13 @@ public class EncryptionJ {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return encrypted;
+		return encoded;
 	}
-	
+
 	/**
-	 *  This method converts string into bytes then using method in Encryption
+	 * This method converts string into bytes then using method in Encryption
 	 * class decrypts data. Then it returns string.
+	 * 
 	 * @param message
 	 * @return decrypted
 	 * @throws NoSuchPaddingException
@@ -101,43 +122,24 @@ public class EncryptionJ {
 	 * @throws BadPaddingException
 	 * @throws IllegalBlockSizeException
 	 * @throws UnsupportedEncodingException
+	 * @throws DecoderException
 	 */
-	public static String decryptMsg(String message) {
+	public static String decryptMsg(String message)
+			throws NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidKeyException, UnsupportedEncodingException,
+			IllegalBlockSizeException, BadPaddingException, DecoderException
+	{
 		setKeys();
 		Cipher cipher = null;
-		String decrypt="";
-		
-		try {
+		String decrypt = "";
+
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		byte[] data = Base64.decode(message, Base64.DEFAULT);;
+		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
 		
-		decrypt = new String(cipher.doFinal(data),"UTF-8");
+		decrypt = new String(cipher.doFinal(decode),"UTF-8");
 		
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		return decrypt;
 	}
 
-
-	 
-	
 }

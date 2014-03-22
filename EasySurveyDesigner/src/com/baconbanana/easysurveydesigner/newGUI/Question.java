@@ -2,11 +2,16 @@ package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
@@ -16,7 +21,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 public class Question extends SQLWindow{
 
 	private QuestionType questionType;
-	private JTextArea questionTxa;
+	private JTextPane questionTxa;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private Template template;
@@ -24,8 +29,8 @@ public class Question extends SQLWindow{
 	public Question(String tit, int width, int height, Template t) {
 		super(tit, width, height);
 		template = t;
-		setFrameOptions();
-		initiLayout();
+//		setFrameOptions();
+//		initiLayout();
 	}
 
 	public void initiWidgets(){
@@ -33,10 +38,82 @@ public class Question extends SQLWindow{
 		
 		//Question name and data
 		// --------------center of window---------------------
-		setQuestionTxa(new JTextArea("Type your question here"));
+		setQuestionTxa(new JTextPane());
+		questionTxa.setText("TYpe Question here");
 		getQuestionTxa().setPreferredSize(new Dimension(800, 280));
 		getQuestionTxa().setBorder(getBorder());
 		getWindow().add(getQuestionTxa(), BorderLayout.CENTER);
+		
+		JButton strong = new JButton("Bold");
+		JButton italic = new JButton("Italic");
+		JButton colour = new JButton("Red");
+		JButton size = new JButton("Size");
+		
+		JPanel jpButtons = new JPanel(new FlowLayout());
+		jpButtons.add(strong);
+		jpButtons.add(italic);
+		jpButtons.add(colour);
+		jpButtons.add(size);
+		
+		getWindow().add(jpButtons, BorderLayout.NORTH);
+		
+		strong.addActionListener(new ActionListener() {
+			 
+	            public void actionPerformed(ActionEvent e)
+	            {
+	            	String whole = questionTxa.getText();
+	            	String msg = questionTxa.getSelectedText();
+	            	String newMsg = "<strong>" + msg + "</strong>";
+	            	msg = whole.replace(msg, newMsg);
+	            	questionTxa.setContentType("text/html");
+	            	questionTxa.setText(msg);
+	            	
+	            }
+	        }); 
+		
+		italic.addActionListener(new ActionListener() {
+			 
+            public void actionPerformed(ActionEvent e)
+            {
+            	String whole = questionTxa.getText();
+            	String msg = questionTxa.getSelectedText();
+            	String newMsg = "<i>" + msg + "</i>";
+            	msg = whole.replace(msg, newMsg);
+            	questionTxa.setContentType("text/html");
+            	questionTxa.setText(msg);
+            	
+            }
+        }); 
+		
+		
+		colour.addActionListener(new ActionListener() {
+			 
+            public void actionPerformed(ActionEvent e)
+            {
+            	String whole = questionTxa.getText();
+            	String msg = questionTxa.getSelectedText();
+            	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
+            	msg = whole.replace(msg, newMsg);
+            	questionTxa.setContentType("text/html");
+            	questionTxa.setText(msg);
+            }
+        }); 
+		
+		size.addActionListener(new ActionListener() {
+			 
+            public void actionPerformed(ActionEvent e)
+            {
+            	String whole = questionTxa.getText();
+            	String msg = questionTxa.getSelectedText();
+            	String newMsg ="<big>" + msg + "</big>";
+            	msg = whole.replace(msg, newMsg);
+            	questionTxa.setContentType("text/html");
+            	questionTxa.setText(msg);
+            	
+            	
+            	
+            }
+        }); 
 		// ---------------------------------------------------
 		
 
@@ -51,12 +128,13 @@ public class Question extends SQLWindow{
 		new AddTemplate("Create New Template", 800, 500);
 		getWindow().dispose();
 	}
-
-	public JTextArea getQuestionTxa() {
+	
+   
+	public JTextPane getQuestionTxa() {
 		return questionTxa;
 	}
 
-	public void setQuestionTxa(JTextArea questionTxa) {
+	public void setQuestionTxa(JTextPane questionTxa) {
 		this.questionTxa = questionTxa;
 	}
 

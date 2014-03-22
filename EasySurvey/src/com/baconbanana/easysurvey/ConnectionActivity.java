@@ -39,15 +39,15 @@ public class ConnectionActivity extends Activity {
 
 	private SharedPreferences IPPreferences;
 	private SharedPreferences.Editor IPPrefsEditor;
+	private static String nameAndDate;
 	private Boolean saveIP;
 	private Matcher matcher;
 	private Pattern pattern;
 	private String IP = null;
-	private Socket skt = null;
-	private static String nameAndDate;
+	private static Socket skt = null;
 	private CheckBox cb;
 	private EditText input;
-	private static boolean surveyCompleted = true;// <----temp
+	private static boolean isSurveyCompleted = false;
 	private volatile static boolean notFirstTime = false;
 	private static Button send;
 	private static Button get;
@@ -92,6 +92,7 @@ public class ConnectionActivity extends Activity {
 		if (isOnline()) {
 			if (notFirstTime) {
 				new ConnectToServer(inputS, skt, context, IP).execute("");
+				
 			} else {
 
 				IP = input.getText().toString();
@@ -140,7 +141,7 @@ public class ConnectionActivity extends Activity {
 	}
 
 	public void get(View v) {
-		new Get(inputS, context).execute("");
+		new Get(skt, context).execute("");
 	}
 
 	public boolean isOnline() {
@@ -161,15 +162,15 @@ public class ConnectionActivity extends Activity {
 		Log.d("storage", storage);
 	}
 
-	public static synchronized void setBooleanSurveyCompleted(Boolean b) {
-		surveyCompleted = b;
+	public static synchronized void setSurveyCompleted() {
+		isSurveyCompleted = true;
 	}
-	public static synchronized boolean getBooleanSurveyCompleted() {
-		return surveyCompleted;
+	public static synchronized boolean isSurveyCompleted() {
+		return isSurveyCompleted;
 	}
 
-	public static synchronized void setBooleanNotFirstTime(Boolean b) {
-		notFirstTime = b;
+	public static synchronized void setNotFirstTime() {
+		notFirstTime = true;
 	}
 
 	public static synchronized void enableGetButton() {
@@ -188,5 +189,9 @@ public class ConnectionActivity extends Activity {
 	}
 	public static synchronized void setNameAndDate(String s) {
 		nameAndDate=s;
+	}
+	
+	public static synchronized void setSocket(Socket s) {
+		skt=s;
 	}
 }
