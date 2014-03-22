@@ -13,7 +13,7 @@ public class DateQuestion extends OpenQuestion{
 	public DateQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
 		answerText = "Type date here";
-		initiWidgetsOq(answerText);
+		
 	}
 	
 	public void actionPerformed(ActionEvent e) {

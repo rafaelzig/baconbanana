@@ -33,22 +33,12 @@ public abstract class SQLWindow extends Window implements ListSelectionListener{
 	public void createContext(String tableName, String...values){
 		try {
 			dbCon = DBController.getInstance();
-			dbCon.loadResources();
 			//may have an issue with ambiguity
 			dbCon.insertInto(tableName, DBController.appendApo(values));
 			context = values[0];
-		} catch (ClassNotFoundException | SQLException | InvalidStateException e) {
+		} catch (ClassNotFoundException | SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
-			if (dbCon != null){
-				try {
-					dbCon.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 	public String getContext(){

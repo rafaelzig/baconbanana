@@ -92,18 +92,13 @@ public class MultipleQuestion extends Question{
 	public void saveQuestionMa(String[] choices){
 		DBController controller = null;
 		String tableName = new String("Choices");
-		try{
-			try {
-				controller = DBController.getInstance();
-				controller.loadResources();
-				for(int i = 0;i < choices.length;i++){
-					controller.insertInto(tableName, "null", choices[i]);
-				}
-			}finally{
-				if (controller != null)
-					controller.close();
+		try {
+			controller = DBController.getInstance();
+			for(int i = 0;i < choices.length;i++){
+				controller.insertInto(tableName, "null", choices[i]);
 			}
-		}catch(Exception e){
+		
+		}catch(SQLException | ClassNotFoundException e){
 			e.printStackTrace();
 		}
 	}

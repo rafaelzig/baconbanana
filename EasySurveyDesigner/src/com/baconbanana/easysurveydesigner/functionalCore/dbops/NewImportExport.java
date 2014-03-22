@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileView;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
@@ -18,16 +19,17 @@ public class NewImportExport
 
 	public static void startExport() throws IOException
 	{
-		Runtime.getRuntime().exec("cmd /c start " + getBatFilepath(exportSql()));
+		File sqlFile = exportSql(getFile("Export").getName());
+		Runtime.getRuntime().exec("cmd /c start " + getBatFilepath(sqlFile));
 	}
 
-	private static File exportSql() throws IOException
+	private static File exportSql(String fileName) throws IOException
 	{
-		File sqlFile = new File(DBController.WIN_WORKING_DIR + "\\sql.txt");
+		File sqlFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "sql.txt");
 		String[] commands = new String[3];
 
 		commands[0] = ".open easysurvey.db";
-		commands[1] = ".output " + "me.sql"; // This file should be chosen by the user via the filechooser
+		commands[1] = ".output " + fileName; // This file should be chosen by the user via the filechooser
 		commands[2] = ".dump";
 
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
@@ -42,7 +44,7 @@ public class NewImportExport
 		String[] commands = new String[2];
 		commands[0] = ".open " + DBController.DB_NAME;
 		commands[1] = ".read " + sqlFile.getAbsolutePath();
-		commands[1] = commands[1].replace("\\", "/");
+		commands[1] = commands[1].replace(DBController.SEPARATOR, "/");
 
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
 
@@ -51,9 +53,9 @@ public class NewImportExport
 
 	private static String getBatFilepath(File sqlFile) throws IOException
 	{
-		File batFile = new File(DBController.WIN_WORKING_DIR + "\\export.bat");
+		File batFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "export.bat");
 		String[] commands = new String[3];
-		commands[0] = "cd " + DBController.WIN_WORKING_DIR;
+		commands[0] = "cd " + DBController.WORKING_DIRECTORY;
 		commands[1] = "sqlite3.exe " + DBController.DB_NAME + " < "
 				+ sqlFile.getName();
 		commands[2] = "exit";
@@ -71,12 +73,22 @@ public class NewImportExport
 	private static File getFile(String title)
 	{
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-				"sql filter", "sql");
-		JFileChooser fc = new JFileChooser();
-		fc.setFileFilter(filter);
-		fc.showDialog(fc, title);
+				"Sql", "sql");
+		
+		JFileChooser fileCHooCHoo = new JFileChooser(DBController.WORKING_DIRECTORY);
+		fileCHooCHoo.setFileFilter(filter);
 
-		String newName = fc.getSelectedFile().getAbsolutePath();
+		if (title.equals("Export")){
+		fileCHooCHoo.setFileView(new FileView() {
+		    @Override
+		    public Boolean isTraversable(File f) {
+		         return DBController.WORKING_DIRECTORY.equals(f);
+		    }
+		});
+		}
+		fileCHooCHoo.showDialog(fileCHooCHoo, title);
+
+		String newName = fileCHooCHoo.getSelectedFile().getAbsolutePath();
 		System.out.println(newName);
 		if (newName.contains("."))
 		{
@@ -89,7 +101,9 @@ public class NewImportExport
 
 		return new File(newName);
 	}
+	
 
+	
 	/*
 	 * private String filterExtention(File myFile) { String choosenFile;
 	 * choosenFile = myFile.getName(); if (!choosenFile.contains(".")) return

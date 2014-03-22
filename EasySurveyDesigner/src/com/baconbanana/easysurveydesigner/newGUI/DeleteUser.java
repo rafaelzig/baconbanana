@@ -81,9 +81,7 @@ public class DeleteUser extends Window {
 	public void populateList(){
 		DBController controller = null;
 		try {
-			try {
 				controller = DBController.getInstance();
-				controller.loadResources();
 				for (Object[] row : controller.selectAll("Login"))
 				{
 					for (int i = 0; i < row.length - 1; i += 2)
@@ -92,12 +90,6 @@ public class DeleteUser extends Window {
 					}
 
 				}
-			}catch (InvalidStateException e1) {
-				e1.printStackTrace();
-			}finally{
-				if (controller != null)
-					controller.close();
-			}
 		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
@@ -110,17 +102,10 @@ public class DeleteUser extends Window {
 			String condition = new String("Username='" + listOfUsers.getSelectedValue() + "'");
 			String tableName = new String("Login");
 			DBController controller = null;
+
 			try {
-				try {
-					controller = DBController.getInstance();
-					controller.loadResources();
-					controller.delete(tableName, condition);
-				}catch (InvalidStateException e1) {
-					e1.printStackTrace();
-				}finally{
-					if (controller != null)
-						controller.close();
-				}
+				controller = DBController.getInstance();
+				controller.delete(tableName, condition);
 			}catch (SQLException | ClassNotFoundException e2){
 			
 				e2.printStackTrace();
