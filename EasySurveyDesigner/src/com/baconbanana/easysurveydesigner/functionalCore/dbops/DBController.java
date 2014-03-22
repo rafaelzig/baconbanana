@@ -22,9 +22,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
  */
 public class DBController
 {
+	public static final String SEPARATOR = System.getProperty("file.separator");
 	public static final String DB_NAME = "easysurvey.db";
+	public static final File WORKING_DIRECTORY = new File(System.getProperty("user.home") + SEPARATOR + "Documents"
+			+ SEPARATOR + "SQLite");
 	
-	private final File workingDirectory;
 	private static DBController instance = null;
 	private String connString;
 
@@ -55,12 +57,9 @@ public class DBController
 
 		Class.forName("org.sqlite.JDBC");
 
-		String SEPARATOR = System.getProperty("file.separator");
-		workingDirectory = new File(System.getProperty("user.dir") + SEPARATOR + "Documents"
-						+ SEPARATOR + "SQLite");
-		workingDirectory.mkdirs();
+		WORKING_DIRECTORY.mkdirs();
 		
-		connString = "jdbc:sqlite:" + workingDirectory + DB_NAME;
+		connString = "jdbc:sqlite:" + WORKING_DIRECTORY + SEPARATOR + DB_NAME;
 
 		try (Connection conn = DriverManager.getConnection(connString);
 				Statement st = conn.createStatement())
@@ -69,15 +68,6 @@ public class DBController
 		}
 	}
 	
-	/**
-	 * Gets the current working directory used.
-	 * @return String object representing the working directory.
-	 */
-	public String getWorkingDirectory()
-	{
-		return workingDirectory.getAbsolutePath();
-	}
-
 	/**
 	 * Creates all Database Tables if they don't already exist, returning the
 	 * row count;
