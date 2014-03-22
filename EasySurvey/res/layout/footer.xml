@@ -5,6 +5,7 @@
 
     <Button
         android:id="@+id/btnNext"
+        android:background = "@drawable/roundedbuttonfornext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnPrevious"
@@ -12,17 +13,20 @@
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@+id/txtPage"
         android:onClick="onClick"
-        android:text="Next" />
+        android:text="Next"
+        android:textSize="25dp" />
 
     <Button
         android:id="@+id/btnPrevious"
+       android:background = "@drawable/roundedbuttonforprevious"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@+id/txtPage"
         android:onClick="onClick"
-        android:text="Previous" />
+        android:text="Previous"
+        android:textSize="25dp"  />
 
     <TextView
         android:id="@+id/txtPage"
@@ -34,12 +38,14 @@
 
     <Button
         android:id="@+id/btnFinish"
+        android:background = "@drawable/roundedbuttonfornext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnNext"
         android:layout_alignParentRight="true"
         android:onClick="onClick"
         android:text="Finish Survey"
+        android:textSize="20dp" 
         android:visibility="gone" />
 
 </RelativeLayout>
