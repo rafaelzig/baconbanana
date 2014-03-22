@@ -51,6 +51,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 			skt = createSocket(listOfSockets, IP);
 			// after it got connection set notfirstime to true
 			ConnectionActivity.setBooleanNotFirstTime(true);
+			ConnectionActivity.setSocket(skt);
 		} catch (IOException e) {
 			System.out.println(e);
 

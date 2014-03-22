@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.Socket;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,15 +25,16 @@ public class Get extends AsyncTask<String, Void, String> {
 	String message = "";
 	InputStream inputS;
 	Context context;
+	Socket skt;
 
 	/**
 	 * 
-	 * @param is InputStream 
+	 * 
 	 * @param c Context
 	 */
-	public Get(InputStream is, Context c) {
+	public Get( Socket s, Context c) {
 		this.context = c;
-		this.inputS = is;
+		this.skt = s;
 	}
 
 	protected StringBuilder sb = new StringBuilder();
@@ -41,7 +43,8 @@ public class Get extends AsyncTask<String, Void, String> {
 	protected String doInBackground(String... arg0) {
 
 		try {
-
+			inputS=skt.getInputStream();
+			
 			String strLine;
 
 			BufferedReader in = new BufferedReader(
@@ -51,27 +54,23 @@ public class Get extends AsyncTask<String, Void, String> {
 			for (int x = 0; x < 2; x++) {
 				if (nameDat) {
 					strLine = in.readLine();
-					Log.d("before decrypted", strLine);
-
 					String nAd = EncryptionJ.decryptMsg(strLine);
 					ConnectionActivity.setNameAndDate(nAd);
-					Log.d("decrypted", nAd);
+					
 				} else {
 					strLine = in.readLine();
 					String decryptedString = EncryptionJ.decryptMsg(strLine);
-					Log.d("before decrypted", strLine);
-					Log.d("decrypted", decryptedString);
+					
 					sb.append(decryptedString);
 				}
 				nameDat = false;
 			}
 
 			String toStorage = sb.toString();
-			Log.d("sb", toStorage);
 			Storage.writeToInternal(context, toStorage);
 
 			String storage = Storage.readFromInternal(context, "Survey.json");
-			Log.d("storage", storage);
+			Log.d("what was saved in storage -", storage);
 
 			message = "Saved";
 

@@ -19,7 +19,7 @@ import android.util.Base64;
 
 /**
  * 
- * @author Almira & Team
+ * @author Team 
  *
  */
 public class EncryptionJ {
@@ -29,8 +29,7 @@ public class EncryptionJ {
 
 	public static void setKeys() {
 		try {
-			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff"
-					.toCharArray());
+			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
 			secretKey = new SecretKeySpec(secret, "AES");
 		} catch (DecoderException e1) {
 			e1.printStackTrace();
@@ -40,7 +39,7 @@ public class EncryptionJ {
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
-	 * Then converts it bytes string. Then returnes it.
+	 * Then converts it bytes string. Then returns it.
 	 * @param message
 	 * @return encrypted
 	 * @throws NoSuchAlgorithmException
@@ -55,7 +54,7 @@ public class EncryptionJ {
 		byte[] encryptedText;
 		setKeys();
 		Cipher cipher = null;
-		String encrypted="";
+		String encoded="";
 		
 		try {
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -64,7 +63,12 @@ public class EncryptionJ {
 		
 			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
 		
-			encrypted = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			//String test = new String(encryptedText);
+			//System.out.println("encrypted"+ test);
+			
+			encoded = Base64.encodeToString(encryptedText, Base64.DEFAULT);
+			
+			//System.out.println("decoded"+encoded );
 			
 			}catch (IllegalBlockSizeException e) {
 				// TODO Auto-generated catch block
@@ -85,11 +89,11 @@ public class EncryptionJ {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		return encrypted;
+		return encoded;
 	}
 	
 	/**
-	 *  This method converts string into bytes then using method in Encryption
+	 * This method converts string into bytes then using method in Encryption
 	 * class decrypts data. Then it returns string.
 	 * @param message
 	 * @return decrypted
@@ -110,9 +114,9 @@ public class EncryptionJ {
 		try {
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		byte[] data = Base64.decode(message, Base64.DEFAULT);;
+		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
 		
-		decrypt = new String(cipher.doFinal(data),"UTF-8");
+		decrypt = new String(cipher.doFinal(decode),"UTF-8");
 		
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
