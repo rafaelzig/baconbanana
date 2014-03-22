@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -12,7 +11,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidStateException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 
 public class Question extends SQLWindow{
