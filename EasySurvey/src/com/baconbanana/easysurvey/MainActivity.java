@@ -35,7 +35,6 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
-		Intent intent= getIntent();
 		setContentView(R.layout.activity_main);
 		findViewById(R.id.mainLayout).setSystemUiVisibility(FULL_SCREEN);
 

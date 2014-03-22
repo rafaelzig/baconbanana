@@ -25,14 +25,13 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 public class DBController
 {
 	public static final String DB_NAME = "easysurvey.db";
-	private static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
-			+ "/Documents/SQLite");
-	private static final File WIN_WORKING_DIR = new File(
-			System.getenv("USERPROFILE") + "\\Documents\\SQLite");
+	public static final File MAC_WORKING_DIR = new File(System.getenv("HOME")
+			+ "/Documents/SQLite/");
+	public static final File WIN_WORKING_DIR = new File(
+			System.getenv("USERPROFILE") + "\\Documents\\SQLite\\");
 
 	private static DBController instance = null;
-	private Connection conn;
-	private Statement genericStatement;
+	private String connString;
 	private PreparedStatement selectGeneratedIdStatement, existsStatement;
 	private boolean isReady = false;
 
@@ -60,40 +59,17 @@ public class DBController
 	private DBController() throws ClassNotFoundException, SQLException
 	{
 		super();
-		openConnection();
-	}
-
-	/**
-	 * Closes the resources associated with this singleton class.
-	 */
-	public void close() throws SQLException
-	{
-		try
-		{
-			if (genericStatement != null)
-				genericStatement.close();
-			if (selectGeneratedIdStatement != null)
-				selectGeneratedIdStatement.close();
-			if (existsStatement != null)
-				existsStatement.close();
-		}
-		finally
-		{
-			if (conn != null)
-				conn.close();
-		}
-
-		isReady = false;
-		instance = null;
+		prepareConnectionString();
 	}
 
 	/**
 	 * Opens the database SQLite connection.
 	 */
-	private void openConnection() throws ClassNotFoundException, SQLException
+	private void prepareConnectionString() throws ClassNotFoundException,
+			SQLException
 	{
 		String osName = System.getProperty("os.name");
-		String connString = "jdbc:sqlite:";
+		connString = "jdbc:sqlite:";
 
 		if (osName.contains("Windows"))
 		{
@@ -108,7 +84,21 @@ public class DBController
 
 		Class.forName("org.sqlite.JDBC");
 
-		conn = DriverManager.getConnection(connString + DB_NAME);
+		connString += DB_NAME;
+	}
+
+	/**
+	 * Closes the resources associated with this singleton class.
+	 */
+	public void close() throws SQLException
+	{
+		if (selectGeneratedIdStatement != null)
+			selectGeneratedIdStatement.close();
+		if (existsStatement != null)
+			existsStatement.close();
+
+		isReady = false;
+		instance = null;
 	}
 
 	/**
@@ -118,15 +108,17 @@ public class DBController
 	{
 		if (!isReady)
 		{
-			genericStatement = conn.createStatement();
-			genericStatement.execute("PRAGMA foreign_keys = ON");
-
-			selectGeneratedIdStatement = conn
-					.prepareStatement("SELECT last_insert_rowid();");
-			existsStatement = conn
-					.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
-
-			isReady = true;
+			try (Connection conn = DriverManager.getConnection(connString
+					+ DB_NAME);
+					Statement st = conn.createStatement())
+			{
+				st.execute("PRAGMA foreign_keys = ON");
+				selectGeneratedIdStatement = conn
+						.prepareStatement("SELECT last_insert_rowid();");
+				existsStatement = conn
+						.prepareStatement("SELECT name FROM sqlite_master WHERE type='table' AND name=?;");
+				isReady = true;
+			}
 		}
 	}
 
@@ -142,7 +134,8 @@ public class DBController
 		if (!isReady)
 			throw new InvalidStateException();
 
-		conn.setAutoCommit(false);
+		// conn.setAutoCommit(false);
+
 		int count = 0;
 
 		for (Table table : Table.values())
@@ -159,8 +152,8 @@ public class DBController
 		if (isTableEmpty(Table.TYPE.getName()))
 			populateTable(Table.TYPE.getName());
 
-		conn.commit();
-		conn.setAutoCommit(true);
+		// conn.commit();
+		// conn.setAutoCommit(true);
 
 		return count;
 	}
@@ -191,20 +184,24 @@ public class DBController
 	 *            parameters.
 	 * @return True if the database table has been created successfully, false
 	 *         otherwise.
+	 * @throws SQLException
 	 */
 	public boolean createTable(String tableName, Map<String, String> parameters)
-			throws SQLException, InvalidStateException
+			throws InvalidStateException
 	{
 		if (!isReady)
 			throw new InvalidStateException();
-
+		
 		if (tableName != null && !tableName.isEmpty())
 		{
 			String sql = "CREATE TABLE " + tableName + " ( ";
 			sql += prepareSql(parameters, " ");
 			sql += " );";
 
-			genericStatement.executeUpdate(sql);
+			try(Connection conn =  st = conn.createStatement())
+			{
+				st.executeUpdate(sql);
+			}
 
 			return true;
 		}
@@ -807,22 +804,26 @@ public class DBController
 			System.out.println();
 		}
 	}
+
 	/**
 	 * Returns a list a values with apostrophes appended
 	 * 
 	 * @param values
-	 * 			values to go into database
+	 *            values to go into database
 	 * @return
 	 */
-	public static String[] appendApo(String...values){
-		String[] retArray= new String[values.length];
-		for(int i = 0;i < values.length;i++){
+	public static String[] appendApo(String... values)
+	{
+		String[] retArray = new String[values.length];
+		for (int i = 0; i < values.length; i++)
+		{
 			retArray[i] = "'" + values[i] + "'";
 		}
 		return retArray;
 	}
-	
-	public static String appendApo(String values){
+
+	public static String appendApo(String values)
+	{
 		return "'" + values + "'";
 	}
 }
