@@ -311,7 +311,19 @@ public class DBController
 
 		return select(tableName, condition, columns);
 	}
+	public List<Object[]>selectNoDupe(String tableName, String condition,
+			int columnIndex, boolean isAscending, String... columns)
+			throws SQLException{
+		String sql;
 
+		sql = (isAscending) ? "GROUP BY " + columns[columnIndex] + "ORDER BY " + columns[columnIndex] + " DESC"
+				: " ORDER BY " + columns[columnIndex] + " ASC";
+		
+		if (condition == null || condition.isEmpty())
+			return select(tableName + sql, null, columns);
+
+		return select(tableName, condition, columns);
+	}
 	/**
 	 * Gets the all values from the database table with the specified table
 	 * name.

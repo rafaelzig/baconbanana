@@ -2,7 +2,6 @@ package com.baconbanana.easysurveydesigner.functionalCore.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -58,6 +57,7 @@ public class SQLList extends AbstractListModel{
 	public void getData(String tableName, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
+			data.clear();
 			List<Object[]> result = dbCon.select(table, sortCol, true, col);
 			
 			for(Object[]  i : result){
@@ -68,10 +68,11 @@ public class SQLList extends AbstractListModel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+ 	}
 	public void getData(String tableName, String cond, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
+			data.clear();
 			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
@@ -87,10 +88,12 @@ public class SQLList extends AbstractListModel{
 	
 	public void insertElement(String table, String...values ){
 		try {
+			dbCon = DBController.getInstance();
 			dbCon.insertInto(table, values);
+			data.clear();
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
-		}catch (SQLException e2){
+		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());

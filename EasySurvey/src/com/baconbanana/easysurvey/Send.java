@@ -42,18 +42,20 @@ public class Send extends AsyncTask<String, Void, String> {
 
 			String s = Storage.readFromInternal(context,
 					Operations.FILENAME);
-			Log.d("storge read", s);
-			String encrypted = EncryptionJ.encryptMsg(s);
-
-			Log.d("storge read", encrypted);
+			
+			Log.d("what it got from storage", s);
+			String encrypted=EncryptionJ.encryptMsg(s);
+		
+			Log.d("encrypted", encrypted);
 
 			output.print(encrypted);
+			
 			message = "successfully sent";
 
 		} catch (IOException e) {
 			System.out.println(e);
 			message = "could not send it";
-		} 
+		}
 		return null;
 	}
 

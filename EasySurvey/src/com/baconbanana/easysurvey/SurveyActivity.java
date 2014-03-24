@@ -2,15 +2,20 @@ package com.baconbanana.easysurvey;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.Date;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.text.InputType;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +27,13 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
+import com.baconbanana.easysurvey.functionalCore.listeners.SeekBarListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
 import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
 import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
@@ -49,6 +57,7 @@ public class SurveyActivity extends Activity
 	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
 	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
 	private static final String CURSOR_KEY = "cursor";
+	private static final int REQUEST_OK = 1;
 
 	private final Calendar calendar = Calendar.getInstance();
 	private int cursor = 0, subsequentCursor = -1;
@@ -58,12 +67,14 @@ public class SurveyActivity extends Activity
 	private Question currentQuestion;
 	private List<Question> questionList;
 	private LinearLayout placeholder, questions;
-	private OnTouchListener touchListener;
+	private SeekBarListener seekBarListener;
+	private OnTouchListener swipeListener;
 	private OnKeyListener keyListener;
-	private TextView txtContent, txtHelpMessage, txtPage;
+	private TextView txtContent, txtHelpMessage, txtFontSize, txtPage;
 	private InputMethodManager keyboard;
 	private LayoutInflater inf;
-	private ProgressBar pgrBar;
+	private ProgressBar pgbSurveyProgress;
+	private SeekBar skbFontSize;
 	private View lineView;
 
 	@Override
@@ -88,8 +99,8 @@ public class SurveyActivity extends Activity
 		else
 			restoreInstanceState(savedInstanceState);
 
-		placeholder = (LinearLayout) findViewById(R.id.placeholderLayout);
-		placeholder.setOnTouchListener(touchListener);
+		placeholder = (LinearLayout) findViewById(R.id.placeholder);
+		placeholder.setOnTouchListener(swipeListener);
 		placeholder.setSystemUiVisibility(FULL_SCREEN);
 
 		buildStaticViews();
@@ -165,7 +176,17 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildListeners()
 	{
-		touchListener = new TouchListener(this, new GestureListener()
+		seekBarListener = new SeekBarListener()
+		{
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser)
+			{
+				updateFontSize(progress);
+			}
+		};
+
+		swipeListener = new TouchListener(this, new GestureListener()
 		{
 			@Override
 			public boolean onRightToLeftSwipe()
@@ -212,6 +233,9 @@ public class SurveyActivity extends Activity
 						&& (keyCode == KeyEvent.KEYCODE_ENTER))
 				{
 					skipQuestion(true);
+					keyboard.hideSoftInputFromWindow(
+							placeholder.getWindowToken(), 0);
+
 					return true;
 				}
 				return false;
@@ -224,21 +248,32 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildStaticViews()
 	{
-		lineView = inf.inflate(R.layout.header, placeholder, false);
-		placeholder.addView(lineView);
+		placeholder.addView(inf.inflate(R.layout.header, placeholder, false));
 
 		questions = (LinearLayout) inf.inflate(R.layout.placeholder,
 				placeholder, false);
 		placeholder.addView(questions);
 
-		lineView = inf.inflate(R.layout.footer, placeholder, false);
-		placeholder.addView(lineView);
+		List<ResolveInfo> activities = getPackageManager()
+				.queryIntentActivities(
+						new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+
+		if (activities.size() == 0)
+			findViewById(R.id.btnSpeech).setEnabled(false);
+
+		placeholder.addView(inf.inflate(R.layout.footer, placeholder, false));
 
 		txtContent = (TextView) findViewById(R.id.txtContent);
 		txtHelpMessage = (TextView) findViewById(R.id.txtHelpMessage);
 
-		pgrBar = (ProgressBar) findViewById(R.id.pgrBar);
-		pgrBar.setMax(survey.size());
+		pgbSurveyProgress = (ProgressBar) findViewById(R.id.pgrSurveyProgress);
+		pgbSurveyProgress.setMax(survey.size());
+
+		skbFontSize = (SeekBar) findViewById(R.id.skbFontSize);
+		skbFontSize.setOnSeekBarChangeListener(seekBarListener);
+
+		txtFontSize = (TextView) findViewById(R.id.txtFontSize);
+		txtFontSize.setText(String.valueOf(skbFontSize.getProgress()) + "%");
 
 		txtPage = (TextView) findViewById(R.id.txtPage);
 	}
@@ -248,7 +283,7 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildQuestionViews()
 	{
-		pgrBar.setProgress(survey.getAnswerCount());
+		pgbSurveyProgress.setProgress(survey.getAnswerCount());
 		txtContent.setText(currentQuestion.getContent());
 		txtHelpMessage.setText(currentQuestion.getHelpMessage());
 		txtPage.setText(getPageNumber());
@@ -273,6 +308,8 @@ public class SurveyActivity extends Activity
 				buildCloseEndedQuestion(R.layout.checkbox);
 				break;
 		}
+
+		updateFontSize(skbFontSize.getProgress());
 	}
 
 	/**
@@ -300,17 +337,16 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildOpenEndedQuestion(int inputType)
 	{
-		lineView = inf.inflate(R.layout.textbox, questions, false);
+		lineView = inf.inflate(R.layout.editbox, questions, false);
+
 		((TextView) lineView).setInputType(inputType);
 
 		if (currentQuestion.isAnswered())
 			((TextView) lineView).setText(currentQuestion.getAnswer());
 
 		lineView.setOnKeyListener(keyListener);
-		lineView.setId(0);
-		questions.addView(lineView);
 
-		keyboard.showSoftInput(lineView, 0);
+		questions.addView(lineView);
 	}
 
 	/**
@@ -336,10 +372,7 @@ public class SurveyActivity extends Activity
 		}
 
 		((DatePicker) lineView).init(year, month, day, null);
-		lineView.setId(0);
 		questions.addView(lineView);
-
-		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
 	}
 
 	/**
@@ -374,30 +407,107 @@ public class SurveyActivity extends Activity
 			lineView.setId(i);
 			questions.addView(lineView);
 		}
-
-		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
 	}
 
 	/**
-	 * Method fired when the user presses buttons in the application.
+	 * Method fired when the user presses the speech to text button, it sets the
+	 * answer to the current question using the Speech To Text Android
+	 * functionality.
+	 */
+	public void setAnswerFromSpeech(View v)
+	{
+		Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+		i.putExtra(RecognizerIntent.EXTRA_PROMPT,
+				"Please speak your answer now.");
+		startActivityForResult(i, REQUEST_OK);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_OK && resultCode == RESULT_OK)
+		{
+			ArrayList<String> voiceInput = data
+					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+			boolean found = false;
+
+			switch (currentQuestion.getType())
+			{
+				case TEXTUAL:
+					((TextView) lineView).setText(voiceInput.get(0));
+					found = true;
+					break;
+				case NUMERICAL:
+					try
+					{
+						int number = Integer.valueOf(voiceInput.get(0));
+						((TextView) lineView).setText(String.valueOf(number));
+						found = true;
+					}
+					catch (NumberFormatException e)
+					{
+					}
+					break;
+
+				case DATE:
+					try
+					{
+						Date dt = Operations.parseDate(voiceInput.get(0));
+						((DatePicker) lineView).init(dt.getYear(),
+								dt.getMonth(), dt.getDay(), null);
+						found = true;
+					}
+					catch (ParseException e)
+					{
+					}
+					break;
+				case MULTIPLEANSWER:
+				case MULTIPLECHOICE:
+				case CONTINGENCY:
+				case RATING:
+					int size = questions.getChildCount();
+
+					for (int i = 0; i < size && !found; i++)
+					{
+						for (int j = 0; j < voiceInput.size() && !found; j++)
+						{
+							String choice = ((TextView) questions.getChildAt(i))
+									.getText().toString();
+
+							if (voiceInput.get(j).equalsIgnoreCase(choice))
+							{
+								((CompoundButton) questions.getChildAt(i))
+										.setChecked(true);
+								checkRadioButtons(questions.getChildAt(i));
+								found = true;
+							}
+						}
+					}
+
+					break;
+			}
+
+			if (!found)
+				Toast.makeText(this, "Unable to recognise voice",
+						Toast.LENGTH_LONG).show();
+
+		}
+	}
+
+	/**
+	 * Method fired when the user presses the previous & next buttons, skipping
+	 * questions accordingly.
 	 * 
 	 * @param v
 	 *            View object which the event originates.
 	 */
-	public void onClick(View v)
+	public void skipQuestion(View v)
 	{
-		switch (v.getId())
-		{
-			case R.id.btnFinish:
-				finishSurvey();
-				break;
-			case R.id.btnPrevious:
-				skipQuestion(false);
-				break;
-			case R.id.btnNext:
-				skipQuestion(true);
-				break;
-		}
+		skipQuestion(v.getId() == R.id.btnNext);
 	}
 
 	/**
@@ -417,7 +527,7 @@ public class SurveyActivity extends Activity
 		loadNextQuestion(next);
 		buildQuestionViews();
 
-		if (pgrBar.getProgress() == pgrBar.getMax())
+		if (pgbSurveyProgress.getProgress() == pgbSurveyProgress.getMax())
 			findViewById(R.id.btnFinish).setVisibility(Button.VISIBLE);
 	}
 
@@ -543,7 +653,7 @@ public class SurveyActivity extends Activity
 	 *            True if the cursor should be incremented, false if it should
 	 *            be decremented.
 	 */
-	public void loadNextQuestion(boolean next)
+	private void loadNextQuestion(boolean next)
 	{
 		if (!isSubsequent)
 		{
@@ -577,13 +687,11 @@ public class SurveyActivity extends Activity
 	/**
 	 * Finishes the survey, writing the user's answers back to the json file.
 	 */
-	private void finishSurvey()
+	public void finishSurvey(View v)
 	{
-
 		try
 		{
 			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-
 		}
 		catch (FileNotFoundException e)
 		{
@@ -597,7 +705,7 @@ public class SurveyActivity extends Activity
 			e.printStackTrace();
 		}
 
-		ConnectionActivity.setBooleanSurveyCompleted(true);
+		ConnectionActivity.setSurveyCompleted();
 
 		Intent intent = new Intent(this, ConnectionActivity.class);
 		startActivity(intent);
@@ -612,9 +720,46 @@ public class SurveyActivity extends Activity
 	 */
 	public void checkRadioButtons(View v)
 	{
-		for (int i = 0; i < questions.getChildCount(); i++)
+		int size = questions.getChildCount();
+
+		for (int i = 0; i < size; i++)
 			if (questions.getChildAt(i) != v)
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
 
+	/**
+	 * Increases or decreases the font size of the views.
+	 * 
+	 * @param progress
+	 *            Value which represents the progress of the slider view.
+	 */
+	private void updateFontSize(int progress)
+	{
+		int ratio = progress + (skbFontSize.getMax() / 2);
+		float baseFontSize = getResources().getDimensionPixelSize(
+				R.dimen.base_header_footer_font_size);
+		float newFontSize = baseFontSize * (Float.valueOf(ratio) / 100);
+
+		txtFontSize.setText(String.valueOf(ratio) + "%");
+		txtContent.setTextSize(newFontSize);
+
+		baseFontSize = getResources().getDimensionPixelSize(
+				R.dimen.base_questions_font_size);
+		newFontSize = baseFontSize * (Float.valueOf(ratio) / 100);
+
+		txtFontSize.setTextSize(TypedValue.COMPLEX_UNIT_SP, newFontSize);
+		txtPage.setTextSize(TypedValue.COMPLEX_UNIT_SP, newFontSize);
+		txtHelpMessage.setTextSize(TypedValue.COMPLEX_UNIT_SP, newFontSize);
+
+		int childCount = questions.getChildCount();
+
+		if (currentQuestion.getType() != QuestionType.DATE)
+		{
+			for (int i = 0; i < childCount; i++)
+			{
+				TextView child = ((TextView) questions.getChildAt(i));
+				child.setTextSize(TypedValue.COMPLEX_UNIT_SP, newFontSize);
+			}
+		}
+	}
 }

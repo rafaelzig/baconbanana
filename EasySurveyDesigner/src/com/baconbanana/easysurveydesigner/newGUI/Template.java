@@ -12,10 +12,10 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
@@ -58,12 +58,14 @@ public class Template extends SQLWindow{
 		addExistingQuestionBtn = new JButton("Add Existing");
 		deleteBtn = new JButton("Delete");
 		saveBtn = new JButton("Save");
-		cancelBtn = new JButton("Cancel");
+		setCancelBtn(new JButton("Cancel"));
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
+
 		
-		templateModel = new SQLList("Question", 0, "QuestionID", "Content", "Type");
-		templateList = new JList<>(templateModel);
+	//	templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + templateName, 0, "Content");
+
+		templateList = new JList<>();
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		
@@ -87,8 +89,8 @@ public class Template extends SQLWindow{
 		deleteBtn.addActionListener(this);
 		jpButtons.add(saveBtn);
 		saveBtn.addActionListener(this);
-		jpButtons.add(cancelBtn);
-		cancelBtn.addActionListener(this);
+		jpButtons.add(getCancelBtn());
+		getCancelBtn().addActionListener(this);
 		
 		stage.add(jpButtons, LayoutController.summonCon(1, 3, 1, 1, 80, 10));
 		
@@ -97,6 +99,10 @@ public class Template extends SQLWindow{
 		
 		templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 		nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+		
+		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+
+		templateList.setModel(templateModel);
 		
 		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
@@ -144,7 +150,7 @@ public class Template extends SQLWindow{
 		}
 		else if(e.getSource().equals(saveBtn)){
 			
-		}else if(e.getSource().equals(cancelBtn)){
+		}else if(e.getSource().equals(getCancelBtn())){
 			getWindow().dispose();
 		}
 		
@@ -155,10 +161,19 @@ public class Template extends SQLWindow{
 	public String getTemplateName(){
 		return templateName;
 	}
+	public JList<String> getTemplateList(){
+		return templateList;
+	}
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public JButton getCancelBtn() {
+		return cancelBtn;
+	}
+	public void setCancelBtn(JButton cancelBtn) {
+		this.cancelBtn = cancelBtn;
 	}
 
 }

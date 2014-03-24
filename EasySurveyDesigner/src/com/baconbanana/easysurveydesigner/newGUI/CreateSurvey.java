@@ -4,9 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.sql.Date;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -155,7 +153,8 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
-			surveyPrevModel.insertElement("Survey_Template", getContext(),templateModel.getElementAt(templateList.getSelectedIndex()));
+			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
+			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 		}
 		else if(e.getSource().equals(saveBtn)){
 			//TODO save

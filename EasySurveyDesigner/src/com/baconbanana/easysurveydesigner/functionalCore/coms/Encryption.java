@@ -10,7 +10,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
@@ -19,7 +18,7 @@ import org.apache.commons.codec.binary.Hex;
 
 /**
  * 
- * @author Almira and Team
+ * @author  Team
  * 
  */
 public class Encryption {
@@ -29,8 +28,7 @@ public class Encryption {
 
 	public static void setKeys() {
 		try {
-			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff"
-					.toCharArray());
+			secret = Hex.decodeHex("25d6c7fe35b9979a161f2136cd13b0ff".toCharArray());
 			secretKey = new SecretKeySpec(secret, "AES");
 		} catch (DecoderException e1) {
 			e1.printStackTrace();
@@ -96,9 +94,9 @@ public class Encryption {
 		try {
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
-			byte[] data = DatatypeConverter.parseBase64Binary(message);
+			byte[] decode = DatatypeConverter.parseBase64Binary(message);
 			
-			decrypt = new String(cipher.doFinal(data), "UTF-8");
+			decrypt = new String(cipher.doFinal(decode), "UTF-8");
 			
 		} catch (IllegalBlockSizeException | BadPaddingException
 				| UnsupportedEncodingException | InvalidKeyException

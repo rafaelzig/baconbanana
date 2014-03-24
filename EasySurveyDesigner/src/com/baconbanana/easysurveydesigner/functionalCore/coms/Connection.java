@@ -7,19 +7,23 @@ import java.net.UnknownHostException;
 
 import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
+/**
+ * This class tries to gets your local IP address and create a serverSocket 
+ * while the following two conditions hold: 1- serverSucket is null and 
+ * 2- the connection page is not closed. So if the page will be closed
+ * or the serverSocket will be created the thread will stop
+ * @author beka, team 
+ *
+ */
 public class Connection extends Thread {
 	
 	private int[] listOfSockets;
 	
-
 	public Connection(){
-		
-		
 		listOfSockets = new int[100];
 		for (int x = 0; x < 100; x++) {
 			listOfSockets[x] = 2000 + x;
 		}
-		
 	}
 
 	public void run() {
@@ -29,26 +33,33 @@ public class Connection extends Thread {
 			
 			try {
 				InetAddress myself = InetAddress.getLocalHost();
-				
 				SendSurveyGetAnswers.setLocalIP(myself.getHostAddress());
+				//Save it related activity so that it can be used later
 			} catch (UnknownHostException ex) {
-				System.out.println("Failed to find ip");
+				System.out.println("Failed to Find ip");
 				ex.printStackTrace();
 			}
 			
 			try {
 				ServerSocket ss = createServerSocket(listOfSockets);
-				
-				SendSurveyGetAnswers.setServerSocket(ss);
-				System.out.println("listening on port: "
+				System.out.println("will try to create new socket" );
+				System.out.println("got port"
 						+ ss.getLocalPort() + "\n");
-				
+				SendSurveyGetAnswers.setServerSocket(ss);
 			} catch (IOException ex) {
 				System.err.println("no available ports");
 			}
 
 		}
 	}
+	
+	/**
+	 * This has a loop that loops until it can return serverSocked using
+	 * the list of ports that will be passed. 
+	 * @param ports
+	 * @return ServerSocket 
+	 * @throws IOException
+	 */
 	public ServerSocket createServerSocket(int[] ports) throws IOException {
 		for (int port : ports) {
 			try {
