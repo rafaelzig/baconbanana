@@ -1,18 +1,19 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
-<<<<<<< HEAD
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-=======
->>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
+
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
 public class SurveySelector extends SQLWindow implements ActionListener {
 	private  JList<String> surveyList;
