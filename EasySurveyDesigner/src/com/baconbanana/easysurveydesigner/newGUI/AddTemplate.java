@@ -84,8 +84,8 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 				JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
 			}else {
 				dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
-				createSurvey.getSurveyPrevModel().getData("Survey_Template", "Template = " + DBController.appendApo(this.getTemplateName()), 1, "Survey", "Template");
-				createSurvey.getSurveyPrevModel().getData();
+				createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
+				createSurvey.getSurveyTemplateListModel().getData();
 			}
 			
 			} catch (SQLException | ClassNotFoundException e1) {
