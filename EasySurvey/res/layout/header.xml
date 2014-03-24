@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <ProgressBar
-        android:id="@+id/pgrBar"
+        android:id="@+id/pgrSurveyProgress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -14,14 +14,16 @@
         android:id="@+id/txtContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_margin="10sp"
+        android:textColor="#FFFFFF"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txtHelpMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_margin="10sp"
+        android:textColor="#FFFFFF"
         android:textStyle="italic" />
 
 </LinearLayout>
