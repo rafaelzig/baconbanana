@@ -2,6 +2,7 @@ package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.event.ActionEvent;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
@@ -51,6 +52,16 @@ public class AddTemplate extends Template{
 				break;
 			
 			}
+//		}else if(e.getSource().equals(addExistingQuestionBtn)){
+//			//TODO addExistingQuestionBtn
+//		}
+//		else if(e.getSource().equals(deleteBtn)){
+//			//TODO deleteBtn
+//		}
+//		else if(e.getSource().equals(saveBtn)){
+//			
+		}else if(e.getSource().equals(getCancelBtn())){
+			getWindow().dispose();
 		}
 	}
 
