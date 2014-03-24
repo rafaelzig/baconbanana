@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class WaitForInput extends AsyncTask<String, Void, String> {
 	InputStream inputS;
 	Context context;
-	String msg;
+	
 	public WaitForInput(InputStream i, Context c){
 		this.inputS=i;
 	}
@@ -40,7 +40,7 @@ public class WaitForInput extends AsyncTask<String, Void, String> {
 
 			}
 		} catch (IOException e) {
-			msg="no connection or data was already sent";
+			//TODO
 		}
 
 		return null;
@@ -48,9 +48,7 @@ public class WaitForInput extends AsyncTask<String, Void, String> {
 
 	protected void onPostExecute(String result) {
 		ConnectionActivity.enableGetButton();
-		Log.d("in thread", "finished");
-		Toast.makeText(context, msg,
-				Toast.LENGTH_LONG).show();
+		
 	}
 
 }

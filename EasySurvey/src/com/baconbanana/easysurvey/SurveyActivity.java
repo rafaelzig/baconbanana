@@ -3,13 +3,16 @@ package com.baconbanana.easysurvey;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
@@ -49,6 +53,8 @@ public class SurveyActivity extends Activity
 	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
 	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
 	private static final String CURSOR_KEY = "cursor";
+	private static final int REQUEST_OK = 1;
+
 
 	private final Calendar calendar = Calendar.getInstance();
 	private int cursor = 0, subsequentCursor = -1;
@@ -224,15 +230,13 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildStaticViews()
 	{
-		lineView = inf.inflate(R.layout.header, placeholder, false);
-		placeholder.addView(lineView);
+		placeholder.addView(inf.inflate(R.layout.header, placeholder, false));
 
 		questions = (LinearLayout) inf.inflate(R.layout.placeholder,
 				placeholder, false);
 		placeholder.addView(questions);
 
-		lineView = inf.inflate(R.layout.footer, placeholder, false);
-		placeholder.addView(lineView);
+		placeholder.addView(inf.inflate(R.layout.footer, placeholder, false));
 
 		txtContent = (TextView) findViewById(R.id.txtContent);
 		txtHelpMessage = (TextView) findViewById(R.id.txtHelpMessage);
@@ -300,7 +304,10 @@ public class SurveyActivity extends Activity
 	 */
 	private void buildOpenEndedQuestion(int inputType)
 	{
-		lineView = inf.inflate(R.layout.textbox, questions, false);
+		questions.addView(inf.inflate(R.layout.textboxline, questions, false));
+
+		lineView = findViewById(R.id.txtAnswer);
+
 		((TextView) lineView).setInputType(inputType);
 
 		if (currentQuestion.isAnswered())
@@ -308,8 +315,6 @@ public class SurveyActivity extends Activity
 
 		lineView.setOnKeyListener(keyListener);
 		lineView.setId(0);
-		questions.addView(lineView);
-
 		keyboard.showSoftInput(lineView, 0);
 	}
 
@@ -388,8 +393,8 @@ public class SurveyActivity extends Activity
 	{
 		switch (v.getId())
 		{
-			case R.id.btnFinish:
-				finishSurvey();
+			case R.id.btnSpeech:
+				setAnswerFromSpeech();
 				break;
 			case R.id.btnPrevious:
 				skipQuestion(false);
@@ -397,6 +402,38 @@ public class SurveyActivity extends Activity
 			case R.id.btnNext:
 				skipQuestion(true);
 				break;
+			case R.id.btnFinish:
+				finishSurvey();
+				break;
+		}
+	}
+
+	/**
+	 * Sets the answer to the current question using the Speech To Text Android functionality.
+	 */
+	private void setAnswerFromSpeech()
+	{
+		Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-GB");
+		try
+		{
+			startActivityForResult(i, REQUEST_OK);
+		}
+		catch (ActivityNotFoundException e)
+		{
+			Toast.makeText(this, "Error initializing speech to text engine.",
+					Toast.LENGTH_LONG).show();
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_OK && resultCode == RESULT_OK)
+		{
+			ArrayList<String> voiceInput = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+			((TextView) lineView).setText(voiceInput.get(0));
 		}
 	}
 
@@ -579,11 +616,9 @@ public class SurveyActivity extends Activity
 	 */
 	private void finishSurvey()
 	{
-
 		try
 		{
 			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-
 		}
 		catch (FileNotFoundException e)
 		{
@@ -597,7 +632,7 @@ public class SurveyActivity extends Activity
 			e.printStackTrace();
 		}
 
-		ConnectionActivity.setBooleanSurveyCompleted(true);
+		ConnectionActivity.setSurveyCompleted();
 
 		Intent intent = new Intent(this, ConnectionActivity.class);
 		startActivity(intent);
@@ -616,5 +651,4 @@ public class SurveyActivity extends Activity
 			if (questions.getChildAt(i) != v)
 				((CompoundButton) questions.getChildAt(i)).setChecked(false);
 	}
-
 }

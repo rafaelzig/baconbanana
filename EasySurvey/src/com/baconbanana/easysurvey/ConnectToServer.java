@@ -50,7 +50,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 			System.out.println("started do in background in connecttoserver");
 			skt = createSocket(listOfSockets, IP);
 			// after it got connection set notfirstime to true
-			ConnectionActivity.setBooleanNotFirstTime(true);
+			ConnectionActivity.setNotFirstTime();
 		} catch (IOException e) {
 			System.out.println(e);
 
@@ -82,7 +82,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 										e.printStackTrace();
 									}
 									ConnectionActivity.disableConnectButton();
-									boolean b=ConnectionActivity.getBooleanSurveyCompleted();
+									boolean b=ConnectionActivity.isSurveyCompleted();
 									 if(b){
 										 ConnectionActivity.enableSendButton();
 										 new WaitForInput(inputS, context).execute("");

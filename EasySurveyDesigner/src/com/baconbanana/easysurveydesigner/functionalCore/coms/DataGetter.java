@@ -25,13 +25,11 @@ public class DataGetter extends Thread {
 			//TODO set id there 
 			System.out.println(receivedData);
 			String decrypted;
-			
-				decrypted = Encryption.decryptMsg(receivedData);
-
-				System.out.println("Android sent this:" + decrypted + "\n");
+			decrypted = Encryption.decryptMsg(receivedData);
+			System.out.println("Android sent this:" + decrypted + "\n");
 				// Database TODO save
 				// in.close();
-		
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

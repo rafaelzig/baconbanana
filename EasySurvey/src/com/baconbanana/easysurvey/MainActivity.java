@@ -70,34 +70,17 @@ public class MainActivity extends Activity
 
 		try
 		{
-			jsonString = Operations.readFile(getAssets().open(
-					Operations.FILENAME));
-
-			rawData = Operations.parseJSON(jsonString);
-			survey = new Survey(rawData);
-			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (java.text.ParseException e)
-		{
-			e.printStackTrace();
-		}
-	catch (ParseException e)
-		{
-			e.printStackTrace();
-		}
-
-//		return true;
-
-		try
-		{
+//			jsonString = Operations.readFile(getAssets().open(
+//					Operations.FILENAME));
+//			rawData = Operations.parseJSON(jsonString);
+//			survey = new Survey(rawData);
+//			Storage.writeToInternal(this, survey.getJSON().toJSONString());
+			
 			jsonString = Storage.readFromInternal(this, Operations.FILENAME);
 			rawData = Operations.parseJSON(jsonString);
 			survey = new Survey(rawData);
 		}
+		
 		catch (FileNotFoundException e)
 		{
 			// TODO Auto-generated catch block
@@ -119,7 +102,7 @@ public class MainActivity extends Activity
 			e.printStackTrace();
 		}
 
-		if (survey.getAnswerCount() == survey.getQuestionList().size())
+		if (ConnectionActivity.isSurveyCompleted())
 			return false;
 
 		return true;
