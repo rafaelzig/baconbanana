@@ -2,6 +2,7 @@ package com.baconbanana.easysurvey;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Socket;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -18,16 +19,19 @@ import android.widget.Toast;
 public class WaitForInput extends AsyncTask<String, Void, String> {
 	InputStream inputS;
 	Context context;
+	Socket skt;
 	
-	public WaitForInput(InputStream i, Context c){
-		this.inputS=i;
+	public WaitForInput(){
+
 	}
 
 	@Override
 	protected String doInBackground(String... arg0) {
 
 		try {
-
+		
+			skt= ConnectionActivity.getSocket();
+			inputS=skt.getInputStream();
 			int i;
 			while ((i = inputS.available()) == 0) {
 				try {
@@ -47,7 +51,7 @@ public class WaitForInput extends AsyncTask<String, Void, String> {
 	}
 
 	protected void onPostExecute(String result) {
-		ConnectionActivity.enableGetButton();
+		ConnectionActivity.changeGetButton(true);
 		
 	}
 

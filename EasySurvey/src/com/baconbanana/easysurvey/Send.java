@@ -44,11 +44,11 @@ public class Send extends AsyncTask<String, Void, String> {
 					Operations.FILENAME);
 			
 			Log.d("what it got from storage", s);
+			
 			String encrypted=EncryptionJ.encryptMsg(s);
 		
-			Log.d("encrypted", encrypted);
-
 			output.print(encrypted);
+			output.println("ENDIT!");
 			
 			message = "successfully sent";
 
@@ -67,7 +67,7 @@ public class Send extends AsyncTask<String, Void, String> {
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.create().show();
 		Log.d("postexecute", "connect toServer");
-
+		ConnectionActivity.changeSendButton(false);
 	}
 
 }
