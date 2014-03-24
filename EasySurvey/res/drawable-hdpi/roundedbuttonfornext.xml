@@ -9,5 +9,3 @@ android:shape="rectangle">
         android:topRightRadius="100dp"
         android:topLeftRadius="0dp"/>
 </shape>
-
-
