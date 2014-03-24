@@ -6,5 +6,9 @@
     <string name="questHinty">Please Type Your Answer Here</string>
     <string name="next">Next</string>
     <string name="title_activity_test">Test</string>
+    <string name="go_to_next_question">Go to next question</string>
+    <string name="go_to_previous_question">Go to previous question</string>
+    <string name="activate_to_speak_your_answer">Activate to speak your answer</string>
+    <string name="finish_the_survey">Finish the survey</string>
 
 </resources>

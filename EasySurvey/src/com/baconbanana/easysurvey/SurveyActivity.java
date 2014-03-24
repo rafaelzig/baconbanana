@@ -2,9 +2,7 @@ package com.baconbanana.easysurvey;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.Date;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,6 +29,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baconbanana.easysurvey.functionalCore.Functions;
 import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.SeekBarListener;
@@ -52,13 +51,12 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class SurveyActivity extends Activity
 {
+	private static final int REQUEST_OK = 1;
 	private static final int FULL_SCREEN = 8;
 	private static final String SURVEY_KEY = "survey";
 	private static final String IS_SUBSEQUENT_KEY = "isSubsequent";
 	private static final String SUBSEQUENT_CURSOR_KEY = "subsequentCursor";
 	private static final String CURSOR_KEY = "cursor";
-	private static final int REQUEST_OK = 1;
-
 	private final Calendar calendar = Calendar.getInstance();
 	private int cursor = 0, subsequentCursor = -1;
 	private boolean isSubsequent = false;
@@ -233,8 +231,6 @@ public class SurveyActivity extends Activity
 						&& (keyCode == KeyEvent.KEYCODE_ENTER))
 				{
 					skipQuestion(true);
-					keyboard.hideSoftInputFromWindow(
-							placeholder.getWindowToken(), 0);
 
 					return true;
 				}
@@ -430,71 +426,14 @@ public class SurveyActivity extends Activity
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_OK && resultCode == RESULT_OK)
 		{
-			ArrayList<String> voiceInput = data
-					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-			boolean found = false;
-
-			switch (currentQuestion.getType())
-			{
-				case TEXTUAL:
-					((TextView) lineView).setText(voiceInput.get(0));
-					found = true;
-					break;
-				case NUMERICAL:
-					try
-					{
-						int number = Integer.valueOf(voiceInput.get(0));
-						((TextView) lineView).setText(String.valueOf(number));
-						found = true;
-					}
-					catch (NumberFormatException e)
-					{
-					}
-					break;
-
-				case DATE:
-					try
-					{
-						Date dt = Operations.parseDate(voiceInput.get(0));
-						((DatePicker) lineView).init(dt.getYear(),
-								dt.getMonth(), dt.getDay(), null);
-						found = true;
-					}
-					catch (ParseException e)
-					{
-					}
-					break;
-				case MULTIPLEANSWER:
-				case MULTIPLECHOICE:
-				case CONTINGENCY:
-				case RATING:
-					int size = questions.getChildCount();
-
-					for (int i = 0; i < size && !found; i++)
-					{
-						for (int j = 0; j < voiceInput.size() && !found; j++)
-						{
-							String choice = ((TextView) questions.getChildAt(i))
-									.getText().toString();
-
-							if (voiceInput.get(j).equalsIgnoreCase(choice))
-							{
-								((CompoundButton) questions.getChildAt(i))
-										.setChecked(true);
-								checkRadioButtons(questions.getChildAt(i));
-								found = true;
-							}
-						}
-					}
-
-					break;
-			}
-
-			if (!found)
+			boolean sucess = (Functions.setAnswerFromSpeech(currentQuestion
+					.getType(), data
+					.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS),
+					questions));
+			
+			if (!sucess)
 				Toast.makeText(this, "Unable to recognise voice",
 						Toast.LENGTH_LONG).show();
-
 		}
 	}
 
@@ -520,47 +459,11 @@ public class SurveyActivity extends Activity
 	 */
 	private void skipQuestion(boolean next)
 	{
-		saveAnswer();
-		questions.removeAllViews();
-
-		checkAnswer(next);
-		loadNextQuestion(next);
-		buildQuestionViews();
-
-		if (pgbSurveyProgress.getProgress() == pgbSurveyProgress.getMax())
-			findViewById(R.id.btnFinish).setVisibility(Button.VISIBLE);
-	}
-
-	/**
-	 * Saves the answer of the current question.
-	 */
-	private void saveAnswer()
-	{
-		String answer = new String();
-
-		switch (currentQuestion.getType())
-		{
-			case TEXTUAL:
-			case NUMERICAL:
-				answer = ((TextView) lineView).getText().toString();
-				break;
-			case DATE:
-				answer = getDateQuestionAnswer();
-				break;
-			case MULTIPLECHOICE:
-			case CONTINGENCY:
-			case RATING:
-				answer = getCloseEndedQuestionAnswer(false);
-				break;
-			case MULTIPLEANSWER:
-				answer = getCloseEndedQuestionAnswer(true);
-				break;
-		}
+		keyboard.hideSoftInputFromWindow(placeholder.getWindowToken(), 0);
 
 		try
 		{
-			if (!answer.isEmpty())
-				currentQuestion.setAnswer(answer);
+			Functions.setAnswer(currentQuestion, questions);
 		}
 		catch (InvalidAnswerException e)
 		{
@@ -572,46 +475,15 @@ public class SurveyActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
-	/**
-	 * Gets the answer of the Date Question.
-	 * 
-	 * @return String object representing the answer to this question.
-	 */
-	private String getDateQuestionAnswer()
-	{
-		DatePicker dp = (DatePicker) lineView;
-		return dp.getYear() + "-" + (dp.getMonth() + 1) + "-"
-				+ dp.getDayOfMonth();
-	}
+		questions.removeAllViews();
 
-	/**
-	 * Gets the answer of the Close Ended Question.
-	 * 
-	 * @param isMultipleAnswer
-	 *            True if the current question has multiple answers, false
-	 *            otherwise.
-	 * @return String object representing the answer to this question.
-	 */
-	private String getCloseEndedQuestionAnswer(boolean isMultipleAnswer)
-	{
-		String answer = new String();
+		checkAnswer(next);
+		loadNextQuestion(next);
+		buildQuestionViews();
 
-		for (int i = 0; i < questions.getChildCount(); i++)
-		{
-			if (((CompoundButton) questions.getChildAt(i)).isChecked())
-			{
-				answer += ((CompoundButton) questions.getChildAt(i)).getText()
-						.toString();
-				if (isMultipleAnswer)
-					answer += Operations.SEPARATOR;
-				else
-					return answer;
-			}
-		}
-
-		return answer;
+		if (pgbSurveyProgress.getProgress() == pgbSurveyProgress.getMax())
+			findViewById(R.id.btnFinish).setVisibility(Button.VISIBLE);
 	}
 
 	/**
@@ -712,19 +584,14 @@ public class SurveyActivity extends Activity
 	}
 
 	/**
-	 * Selects the radio button which the user has pressed, deselecting the
-	 * radio button which was already selected.
+	 * Fired when the user presses the radio buttons.
 	 * 
 	 * @param v
-	 *            The Radio Button object which receives the event.
+	 *            Radio button clicked.
 	 */
-	public void checkRadioButtons(View v)
+	public void onRadioButtonClick(View v)
 	{
-		int size = questions.getChildCount();
-
-		for (int i = 0; i < size; i++)
-			if (questions.getChildAt(i) != v)
-				((CompoundButton) questions.getChildAt(i)).setChecked(false);
+		Functions.setCheckedRadioButtons(v, questions);
 	}
 
 	/**

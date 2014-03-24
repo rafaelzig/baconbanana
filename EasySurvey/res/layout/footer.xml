@@ -11,7 +11,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10sp"
         android:layout_toRightOf="@+id/txtPage"
-        android:contentDescription="Go to next question"
+        android:contentDescription="@string/go_to_next_question"
         android:onClick="skipQuestion"
         android:src="@android:drawable/ic_media_next" />
 
@@ -23,7 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="10sp"
         android:layout_toLeftOf="@+id/txtPage"
-        android:contentDescription="Go to previous question"
+        android:contentDescription="@string/go_to_previous_question"
         android:onClick="skipQuestion"
         android:src="@android:drawable/ic_media_previous" />
 
@@ -36,33 +36,20 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="10sp"
         android:gravity="center_vertical"
-        android:text="1/1"
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
-
-    <ImageButton
-        android:id="@+id/btnSpeech"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnFinish"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/btnFinish"
-        android:contentDescription="Activate to speak your answer"
-        android:onClick="setAnswerFromSpeech"
-        android:src="@android:drawable/ic_btn_speak_now" />
 
     <ImageButton
         android:id="@+id/btnFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@+id/btnSpeech"
+        android:layout_alignRight="@+id/btnSpeech"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="400sp"
-        android:layout_marginRight="400sp"
-        android:contentDescription="Finish the survey"
+        android:contentDescription="@string/finish_the_survey"
         android:onClick="finishSurvey"
-        android:src="@drawable/ic_menu_agenda" />
+        android:src="@drawable/ic_menu_agenda"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/imgZoom"
@@ -90,9 +77,21 @@
         android:id="@+id/txtFontSize"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="100%"
         android:layout_above="@+id/skbFontSize"
         android:layout_centerHorizontal="true"
         android:textColor="#FFFFFF"/>
+
+    <ImageButton
+        android:id="@+id/btnSpeech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+                android:layout_marginLeft="100sp"
+        android:layout_marginRight="100sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/activate_to_speak_your_answer"
+        android:onClick="setAnswerFromSpeech"
+        android:src="@android:drawable/ic_btn_speak_now" />
 
 </RelativeLayout>

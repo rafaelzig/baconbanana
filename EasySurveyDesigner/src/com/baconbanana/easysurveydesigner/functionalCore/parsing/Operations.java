@@ -56,8 +56,11 @@ public class Operations
 	public static final String FILENAME = "Survey.json";
 
 	private final static String DATE_FORMAT = "yyyy-MM-dd";
+	private final static String DATE_HUMAN_READABLE_FORMAT = "dd MMM yyyy";
 	private final static SimpleDateFormat format = new SimpleDateFormat(
 			DATE_FORMAT);
+	private final static SimpleDateFormat humanReadableFormat = new SimpleDateFormat(
+			DATE_HUMAN_READABLE_FORMAT);
 	private final static Pattern p = Pattern.compile(SEPARATOR);
 	private final static JSONParser parser = new JSONParser();
 	private static BufferedWriter writer;
@@ -130,9 +133,9 @@ public class Operations
 	public static void writeFile(String filename, String input)
 			throws IOException
 	{
-			writeFile(new FileOutputStream(new File(filename)), input);
+		writeFile(new FileOutputStream(new File(filename)), input);
 	}
-	
+
 	/**
 	 * Attempts to write the specified String object to a file with the
 	 * specified filename.
@@ -148,7 +151,7 @@ public class Operations
 	public static void writeFile(String filename, String[] input)
 			throws IOException
 	{
-			writeFile(new FileOutputStream(new File(filename)), input);
+		writeFile(new FileOutputStream(new File(filename)), input);
 	}
 
 	/**
@@ -163,7 +166,8 @@ public class Operations
 	 * @throws IOException
 	 *             Signals that an I/O exception of some sort has occurred.
 	 */
-	public static void writeFile(FileOutputStream fos, String input) throws IOException
+	public static void writeFile(FileOutputStream fos, String input)
+			throws IOException
 	{
 		outputStream = new BufferedOutputStream(fos);
 
@@ -291,6 +295,25 @@ public class Operations
 		format.setLenient(false);
 
 		return new Date(format.parse(date).getTime());
+	}
+
+	/**
+	 * Parses the specified human readable string into a java.sql.Date object.
+	 * 
+	 * @param date
+	 *            String Object in the format dd MMM yyyy representing a date.
+	 * @return Date object representing the date.
+	 * @throws java.text.ParseException
+	 *             Signals that an error has been reached unexpectedly while
+	 *             parsing the date.
+	 */
+	public static Date parseHumanReadableDate(String date)
+			throws java.text.ParseException
+	{
+		format.setLenient(true);
+
+		String tmp = date.replaceAll("(?<=\\d)((rd)|(st)|(nd)|(th))\\s(of)\\b", "");
+		return new Date(humanReadableFormat.parse(tmp).getTime());
 	}
 
 	/**
