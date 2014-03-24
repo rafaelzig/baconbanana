@@ -30,10 +30,8 @@ public class NumericQuestion extends OpenQuestion{
 			e.printStackTrace();
 		}
 		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
+// This lane does not work :/ and it shows only temple names in template window :(		
 //		t.getListModel().getData("Template","Template = " + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
-		new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(t.getListModel().getId()), 0, "Content");
-		populateList(t.getTemplateList(), t.getListModel());
-		t.getListModel().getData();
 		getWindow().dispose();
 	}
 	

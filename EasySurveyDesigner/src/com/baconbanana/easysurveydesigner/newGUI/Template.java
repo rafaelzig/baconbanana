@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
@@ -57,10 +58,10 @@ public class Template extends SQLWindow{
 		addExistingQuestionBtn = new JButton("Add Existing");
 		deleteBtn = new JButton("Delete");
 		saveBtn = new JButton("Save");
-		cancelBtn = new JButton("Cancel");
+		setCancelBtn(new JButton("Cancel"));
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
-		
+
 		templateModel = new SQLList("Question", 0, "QuestionID", "Content", "Type");
 		templateList = new JList<>(templateModel);
 
@@ -86,8 +87,8 @@ public class Template extends SQLWindow{
 		deleteBtn.addActionListener(this);
 		jpButtons.add(saveBtn);
 		saveBtn.addActionListener(this);
-		jpButtons.add(cancelBtn);
-		cancelBtn.addActionListener(this);
+		jpButtons.add(getCancelBtn());
+		getCancelBtn().addActionListener(this);
 		
 		stage.add(jpButtons, LayoutController.summonCon(1, 3, 1, 1, 80, 10));
 		
@@ -143,7 +144,7 @@ public class Template extends SQLWindow{
 		}
 		else if(e.getSource().equals(saveBtn)){
 			
-		}else if(e.getSource().equals(cancelBtn)){
+		}else if(e.getSource().equals(getCancelBtn())){
 			getWindow().dispose();
 		}
 		
@@ -161,6 +162,12 @@ public class Template extends SQLWindow{
 	public void valueChanged(ListSelectionEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public JButton getCancelBtn() {
+		return cancelBtn;
+	}
+	public void setCancelBtn(JButton cancelBtn) {
+		this.cancelBtn = cancelBtn;
 	}
 
 }

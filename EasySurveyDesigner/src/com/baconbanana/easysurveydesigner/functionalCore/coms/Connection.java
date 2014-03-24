@@ -38,10 +38,13 @@ public class Connection extends Thread {
 			
 			try {
 				ServerSocket ss = createServerSocket(listOfSockets);
-				
-				SendSurveyGetAnswers.setServerSocket(ss);
-				System.out.println("listening on port: "
+				System.out.println("will try to create new socket" );
+				System.out.println("got port"
 						+ ss.getLocalPort() + "\n");
+			
+					SendSurveyGetAnswers.setServerSocket(ss);
+				
+				
 				
 			} catch (IOException ex) {
 				System.err.println("no available ports");

@@ -3,49 +3,96 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content" >
 
-    <Button
+    <ImageButton
         android:id="@+id/btnNext"
-        android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnPrevious"
-        android:layout_alignBottom="@+id/btnPrevious"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_margin="10sp"
         android:layout_toRightOf="@+id/txtPage"
-        android:onClick="onClick"
-        android:text="Next"
-        android:textSize="25dp" />
+        android:contentDescription="Go to next question"
+        android:onClick="skipQuestion"
+        android:src="@android:drawable/ic_media_next" />
 
-    <Button
+    <ImageButton
         android:id="@+id/btnPrevious"
-        android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_margin="10sp"
         android:layout_toLeftOf="@+id/txtPage"
-        android:onClick="onClick"
-        android:text="Previous"
-        android:textSize="25dp"  />
+        android:contentDescription="Go to previous question"
+        android:onClick="skipQuestion"
+        android:src="@android:drawable/ic_media_previous" />
 
     <TextView
         android:id="@+id/txtPage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignTop="@+id/btnNext"
         android:layout_centerHorizontal="true"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_margin="10sp"
+        android:gravity="center_vertical"
+        android:text="1/1"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnFinish"
-        android:background="@drawable/button"
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/btnSpeech"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnNext"
+        android:layout_alignLeft="@+id/btnFinish"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/btnFinish"
+        android:contentDescription="Activate to speak your answer"
+        android:onClick="setAnswerFromSpeech"
+        android:src="@android:drawable/ic_btn_speak_now" />
+
+    <ImageButton
+        android:id="@+id/btnFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:onClick="onClick"
-        android:text="Finish Survey"
-        android:textSize="20dp" 
-        android:visibility="gone" />
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="400sp"
+        android:layout_marginRight="400sp"
+        android:contentDescription="Finish the survey"
+        android:onClick="finishSurvey"
+        android:src="@drawable/ic_menu_agenda" />
+
+    <ImageView
+        android:id="@+id/imgZoom"
+        android:focusable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtFontSize"
+        android:layout_centerHorizontal="true"
+        android:src="@android:drawable/ic_menu_zoom" />
+
+    <SeekBar
+        android:id="@+id/skbFontSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtPage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="20sp"
+        android:max="100"
+        android:progress="50" />
+
+    <TextView
+        android:id="@+id/txtFontSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100%"
+        android:layout_above="@+id/skbFontSize"
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF"/>
 
 </RelativeLayout>
