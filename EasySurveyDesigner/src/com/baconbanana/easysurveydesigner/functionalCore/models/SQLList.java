@@ -57,6 +57,7 @@ public class SQLList extends AbstractListModel{
 	public void getData(String tableName, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
+			data.clear();
 			List<Object[]> result = dbCon.select(table, sortCol, true, col);
 			
 			for(Object[]  i : result){
@@ -67,10 +68,11 @@ public class SQLList extends AbstractListModel{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+ 	}
 	public void getData(String tableName, String cond, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
+			data.clear();
 			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){

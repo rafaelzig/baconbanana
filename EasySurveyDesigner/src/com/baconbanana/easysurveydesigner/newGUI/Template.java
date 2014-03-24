@@ -63,9 +63,9 @@ public class Template extends SQLWindow{
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 
 		
-		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + templateName, 0, "Content");
+	//	templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + templateName, 0, "Content");
 
-		templateList = new JList<>(templateModel);
+		templateList = new JList<>();
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		
@@ -99,6 +99,10 @@ public class Template extends SQLWindow{
 		
 		templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 		nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+		
+		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+
+		templateList.setModel(templateModel);
 		
 		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
