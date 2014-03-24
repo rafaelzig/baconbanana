@@ -51,6 +51,7 @@ public class CreateSurvey extends SQLWindow{
 		super(tit, fullScreen);
 		initiWidgets();
 	}
+	
 	/**
 	 * method for gui creation
 	 */
