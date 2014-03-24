@@ -20,15 +20,19 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
 
 public class ValidationActivity extends Activity {
 
 	TextView t;
-	
+	DatePicker d;
+	String datePicked="01-01-1994";
+	Button b;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -37,10 +41,41 @@ public class ValidationActivity extends Activity {
 		setContentView(R.layout.activity_validation);
 		
 		t= (TextView)findViewById(R.id.txtName);
+		d=(DatePicker)findViewById(R.id.datePicker);
+		b=(Button)findViewById(R.id.confirm);
 		String nameanddate= ConnectionActivity.getNameAndDate();
+		System.out.println(nameanddate);
 		String name=nameanddate.substring(0,nameanddate.indexOf("*") );
-		String date=nameanddate.substring(nameanddate.indexOf("*")+1, nameanddate.length() );
-		
+		final String date=nameanddate.substring(nameanddate.indexOf("*")+1, nameanddate.length() );
+		System.out.println(date);
 		t.setText("Hello "+name+"!");
+		
+		b.setOnClickListener(new View.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(datePicked.equals(date)){
+					moveToVideo();
+				}
+				else{
+					
+					Context context = getApplicationContext();
+					CharSequence text = "DOB not validated";
+					int duration = Toast.LENGTH_SHORT;
+
+					Toast toast = Toast.makeText(context, text, duration);
+					toast.show();
+				}
+			}
+			
+		});
+		
+		
+		
+		
+	}
+	public void moveToVideo(){
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
 	}
 }

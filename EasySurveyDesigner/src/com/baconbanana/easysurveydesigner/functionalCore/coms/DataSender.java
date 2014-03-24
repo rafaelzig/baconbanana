@@ -34,7 +34,7 @@ public class DataSender extends Thread {
 
 		PrintStream output = null;
 		try {
-			System.out.println(name + "     " + date);
+			System.out.println(name + "*" + date);
 
 			output = new PrintStream(clientSocket.getOutputStream());
 			Operations.readFile("Survey.json");
@@ -43,7 +43,7 @@ public class DataSender extends Thread {
 					"Survey.json"))) {
 
 				String sCurrentLine = null;
-				String s = (name + "     " + date);
+				String s = (name + "*" + date);
 				String encypted = Encryption.encryptMsg(s);
 				System.out.println(encypted);// <--------
 
