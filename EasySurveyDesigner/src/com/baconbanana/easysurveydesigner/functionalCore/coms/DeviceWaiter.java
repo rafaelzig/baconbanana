@@ -11,6 +11,7 @@ public class DeviceWaiter extends Thread {
 	Socket clientSocket=null;
 	ServerSocket serverSocket=null;
 	InputStream inS;
+	volatile boolean done=false;
 	
 	
 	public DeviceWaiter(ServerSocket server, Socket client, InputStream i){
@@ -21,28 +22,30 @@ public class DeviceWaiter extends Thread {
 		
 	}
 	
-	public void run() {
-        //SendSurveyGetAnswers.getPageClosed() == false &&
-		while (  clientSocket==null) {
+	 @Override public synchronized void run() {
+       
+		while (done==false && clientSocket==null) {
 			try {
-				Thread.sleep(1000);
+				
 				System.out.println("loop in wait for device");
+				
 				clientSocket= serverSocket.accept();
+				
 				SendSurveyGetAnswers.setClientSocket(clientSocket);
-				SendSurveyGetAnswers.enableSend();
-			
-		
-			
-
-			} catch (IOException | InterruptedException e) {
-			
-				continue;
+				SendSurveyGetAnswers.changeSend(true);
+				
+			} catch (IOException e) {
+				finish();
 			}
 
 		}
+		if(!done){
 		Thread waitForInput = new InputWaiter(clientSocket);
 		waitForInput.start();
-		
+		}
 
+	}
+	public void finish(){
+		done=true;
 	}
 }
