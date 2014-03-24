@@ -85,30 +85,7 @@ public class Get extends AsyncTask<String, Void, String> {
 		} catch (IOException e) {
 			message = "could not read from in";
 		}
-		catch (InvalidKeyException e)
-		{
-			message = "could not read from in";
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			message = "could not read from in";
-		}
-		catch (NoSuchPaddingException e)
-		{
-			message = "could not read from in";
-		}
-		catch (IllegalBlockSizeException e)
-		{
-			message = "could not read from in";
-		}
-		catch (BadPaddingException e)
-		{
-			message = "could not read from in";
-		}
-		catch (DecoderException e)
-		{
-			message = "could not read from in";
-		}
+		
 
 		return null;
 	}
