@@ -35,7 +35,7 @@ public class DateQuestion extends OpenQuestion{
 		}
 
 		t.getListModel().getData();
-
+		
 		getWindow().dispose();
 	}
 	
