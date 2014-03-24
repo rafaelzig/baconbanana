@@ -398,7 +398,7 @@ public class DBController
 			return rs.getInt(1) > 0;
 		}
 	}
-
+	
 	/**
 	 * Checks if the specified Database table is empty.
 	 * 

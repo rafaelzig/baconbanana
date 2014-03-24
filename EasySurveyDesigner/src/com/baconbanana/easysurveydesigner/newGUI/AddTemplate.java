@@ -1,8 +1,8 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
@@ -16,8 +16,8 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 
 public class AddTemplate extends Template{
 
-	public AddTemplate(String tit, int width, int height) {
-		super(tit, width, height);
+	public AddTemplate(String tit, int width, int height, List<Object[]> tempList) {
+		super(tit, width, height, tempList);
 		
 	}
 	

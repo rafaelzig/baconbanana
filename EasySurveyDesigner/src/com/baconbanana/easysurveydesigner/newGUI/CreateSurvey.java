@@ -141,7 +141,7 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate("Create New Template", 800, 500);
+			new AddTemplate("Create New Template", 800, 500, templateModel.getAllItems());
 			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
 			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
 			//getWindow().setEnabled(false);
@@ -153,7 +153,7 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
-			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
+			surveyPrevModel.insertElement("Survey_Template", 1, DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
 			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 		}
 		else if(e.getSource().equals(saveBtn)){

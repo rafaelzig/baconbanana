@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 
@@ -86,19 +87,23 @@ public class SQLList extends AbstractListModel{
 		
 	}
 	
-	public void insertElement(String table, String...values ){
+	public void insertElement(String table, int sortCol, String...values ){
 		try {
 			dbCon = DBController.getInstance();
 			dbCon.insertInto(table, values);
 			data.clear();
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
+			
 		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
 			System.exit(-1);
 		}
+	}
+	public List<Object[]> getAllItems(){
+		return data;
 	}
 	
 	

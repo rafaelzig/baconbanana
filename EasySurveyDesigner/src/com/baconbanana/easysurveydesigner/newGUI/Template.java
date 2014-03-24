@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -36,6 +37,7 @@ public class Template extends SQLWindow{
 	private JButton cancelBtn;
 	private JLabel nameOfTemplateTxf;
 	protected JComboBox<QuestionType> typeComboBox;
+	private List<Object[]> templateListUtil;
 
 	private JList<String> templateList;
 	private SQLList templateModel;
@@ -43,7 +45,7 @@ public class Template extends SQLWindow{
 	private String templateName;
 
 
-	public Template(String tit, int width, int height) {
+	public Template(String tit, int width, int height, List<Object[]> tempList) {
 		super(tit, width, height);
 		initiWidgets();
 		initiLayout();
@@ -98,12 +100,11 @@ public class Template extends SQLWindow{
 		setFrameOptions();
 		
 		templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
-		nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
-		
-		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
-
-		templateList.setModel(templateModel);
-		
+		if(templateListUtil.contains(templateName)){
+			nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+			templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+			templateList.setModel(templateModel);
+		}
 		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 	}
