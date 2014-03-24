@@ -24,6 +24,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
+import com.baconbanana.easysurveydesigner.functionalCore.coms.InputWaiter;
 
 
 public class SendSurveyGetAnswers implements ActionListener {
@@ -254,14 +255,20 @@ public static synchronized void setServerSocket(ServerSocket s){
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
+					setPageClosed(true);
 					try {
+						if(serverSocket!=null)
 						serverSocket.close();
-						
+						if(clientSocket!=null)
+						clientSocket.close();
 						System.out.println(" socket status closed?"+serverSocket.isClosed());
 						setServerSocket(null);
+						setClientSocket(null);
+						DeviceWaiter.unFinish();
+						InputWaiter.unFinish();
+						
 					} catch (IOException e1) {
-					// TODO Auto-generated catch block
-						e1.printStackTrace();
+						System.out.println(" line 269 in SendDurveys..");
 					}
 					connectionPageClosed=true;
 					break;	
