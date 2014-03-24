@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
+import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 
@@ -58,7 +59,7 @@ public class SQLList extends AbstractListModel{
 		try {
 			dbCon = DBController.getInstance();
 			data.clear();
-			List<Object[]> result = dbCon.select(table, sortCol, true, col);
+			List<Object[]> result = dbCon.selectNoDupe(table, null, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
@@ -73,7 +74,7 @@ public class SQLList extends AbstractListModel{
 		try {
 			dbCon = DBController.getInstance();
 			data.clear();
-			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
+			List<Object[]> result = dbCon.selectNoDupe(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
@@ -93,12 +94,16 @@ public class SQLList extends AbstractListModel{
 			data.clear();
 			data.add(values);
 			fireContentsChanged(this, 0, data.size());
+			
 		}catch (SQLException | ClassNotFoundException e2){
 		
 			e2.printStackTrace();
 			System.err.println(e2.getClass().getName() + " : " + e2.getMessage());
 			System.exit(-1);
 		}
+	}
+	public List<Object[]> getAllItems(){
+		return data;
 	}
 	
 	

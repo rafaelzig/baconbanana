@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,7 +18,11 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * class for creating new survey
+ * @author ZimS
+ *
+ */
 public class CreateSurvey extends SQLWindow{
 
 	private String surveyName;
@@ -47,7 +52,9 @@ public class CreateSurvey extends SQLWindow{
 		super(tit, fullScreen);
 		initiWidgets();
 	}
-	
+	/**
+	 * method for gui creation
+	 */
 	public void initiWidgets(){
 
 		addBtn = new JButton("Add");
@@ -130,12 +137,28 @@ public class CreateSurvey extends SQLWindow{
 		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		getWindow().add(stage);
-		
-		surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
-		createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+		while(surveyName == null){
+			surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
+			DBController dbCon;
+			try{
+				dbCon = DBController.getInstance();
+				if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
+					createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+				}else{
+					surveyName = null;
+					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}catch(SQLException | ClassNotFoundException e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
+	/**
+	 * actionlistener for buttons in gui
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -152,7 +175,9 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
+
 			if (!(templateList.getSelectedValue() == null)){
+
 			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
 			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
@@ -173,6 +198,9 @@ public class CreateSurvey extends SQLWindow{
 		return templateModelFromSurvey;
 	}
 
+	/**
+	 * questions assigned to template when template is clicked on
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){

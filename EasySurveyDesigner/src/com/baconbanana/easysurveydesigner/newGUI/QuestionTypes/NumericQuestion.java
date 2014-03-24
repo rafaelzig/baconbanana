@@ -1,5 +1,7 @@
 package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
-
+/**
+ * model for Numeric Questions
+ */
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 

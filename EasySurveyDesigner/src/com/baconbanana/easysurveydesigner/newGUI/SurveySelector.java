@@ -5,13 +5,18 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
+
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
+import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
+//github.com/rafaelzig/baconbanana.git
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
@@ -21,6 +26,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
     private JList<String>questionList;
     private SQLList questionModel;
 	private  JTextField nameOfSurveyTxf;
+	private ListSelectionModel surveySelectionModel;
 	JButton onlyOneDuckingButtonNoOneEverGoingToLookAt = new JButton("onlyOneDuckingButtonNoOneEverGoingToLookAt");
 	public SurveySelector(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
@@ -30,10 +36,13 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 
 	public void initLayout()
 	{
-		surveyModel = new SQLList("Survey", 0,"Survey","Date_Created", "Date_Modified");
+		surveyModel = new SQLList("Survey", 0,"Survey");
 		surveyList =new JList<String>(surveyModel);
-		questionModel = new SQLList("Question", 1, "Content");
+		questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question",0,"Content");
+		questionList = new JList<String>(questionModel);
 		surveyModel.getData();
+		surveySelectionModel=surveyList.getSelectionModel();
+		surveySelectionModel.addListSelectionListener(this);
 		getWindow().setLayout(new BorderLayout());
 		nameOfSurveyTxf = new JTextField("Type name for this survey here");
 		JPanel centralPanel = new JPanel(new GridLayout(1, 2));
@@ -44,7 +53,9 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		getWindow().add(nameOfSurveyTxf,BorderLayout.NORTH);
 		getSurveyList().setBorder(getBorder());
 		System.out.println(surveyModel.getSize());
+		
 		surveyList.addListSelectionListener(this);
+		
 		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
 	//	populateList(surveyList, surveyModel);
 		setFrameOptions();
@@ -70,7 +81,13 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
+		if(e.getSource().equals(surveySelectionModel) && surveySelectionModel.getValueIsAdjusting() == false){
+			//could change to templatelist.getselecteditem
+			questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question NATURAL JOIN Survey ", "Survey=" + DBController.appendApo
+					(surveyModel.getId(e.getFirstIndex())), 0, "Content");
+			questionModel.getData();
+			System.out.println(e.getFirstIndex());
+		}
 		
 	}
 

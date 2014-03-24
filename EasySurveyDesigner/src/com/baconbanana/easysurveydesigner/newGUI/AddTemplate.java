@@ -2,8 +2,8 @@ package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-
 import javax.swing.JOptionPane;
+import java.util.List;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
@@ -18,14 +18,23 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
 
 
+/**
+ * class for Adding Templates
+ * @author ZimS
+ *
+ */
+
+
 public class AddTemplate extends Template{
+
 		DBController dbCon;
-	public AddTemplate(String tit, int width, int height) {
+public AddTemplate(String tit, int width, int height) {
 		super(tit, width, height);
 		
-
-	}
-
+}
+	/**
+	 * action listener for different types of questions
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(createQuestionBtn)){

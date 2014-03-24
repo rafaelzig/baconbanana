@@ -9,7 +9,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
+/**
+ * creating open-ended question
+ * @author ZimS
+ *
+ */
 public class OpenQuestion extends Question{
 
 	protected String answerTxa;

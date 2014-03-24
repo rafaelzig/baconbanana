@@ -11,7 +11,11 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * deleting user from database
+ * @author ZimS
+ *
+ */
 public class DeleteUser extends Window {
 
 	private JPanel panel;

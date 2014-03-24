@@ -316,7 +316,7 @@ public class DBController
 			throws SQLException{
 		String sql;
 
-		sql = (isAscending) ? "GROUP BY " + columns[columnIndex] + "ORDER BY " + columns[columnIndex] + " DESC"
+		sql = (isAscending) ? " GROUP BY " + columns[columnIndex] + " ORDER BY " + columns[columnIndex] + " DESC"
 				: " ORDER BY " + columns[columnIndex] + " ASC";
 		
 		if (condition == null || condition.isEmpty())
@@ -398,7 +398,7 @@ public class DBController
 			return rs.getInt(1) > 0;
 		}
 	}
-
+	
 	/**
 	 * Checks if the specified Database table is empty.
 	 * 
