@@ -114,9 +114,9 @@ public class EncryptionJ
 try{
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		
-		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
+	byte[] decode = Base64.decode(message, Base64.DEFAULT);;
 		decrypt = new String(cipher.doFinal(decode),"UTF-8");
+
 		
 }
 	catch (IllegalBlockSizeException e) {

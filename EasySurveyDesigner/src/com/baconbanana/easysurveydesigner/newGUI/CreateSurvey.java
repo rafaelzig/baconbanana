@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,7 +18,11 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * class for creating new survey
+ * @author ZimS
+ *
+ */
 public class CreateSurvey extends SQLWindow{
 
 	private String surveyName;
@@ -29,7 +34,7 @@ public class CreateSurvey extends SQLWindow{
 	private ListSelectionModel templatelsm;
 	//private ListSelectionModel templatePrevlsm;
 	
-	private SQLList templateModel;
+	private SQLList templateModelFromSurvey;
 	private SQLList templatePrevModel;
 	private SQLList surveyPrevModel;
 
@@ -48,6 +53,9 @@ public class CreateSurvey extends SQLWindow{
 		initiWidgets();
 	}
 	
+	/**
+	 * method for gui creation
+	 */
 	public void initiWidgets(){
 
 		addBtn = new JButton("Add");
@@ -62,13 +70,12 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template Preview");
 		JLabel surveyPrevLbl = new JLabel("Survey Preview");
 		
-		//This really needs to be fixed = tommy
-		templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
+		templateModelFromSurvey = new SQLList("Template", 0 , "Template", "QuestionID");
 		templatePrevModel = new SQLList("Template NATURAL JOIN Question", 0, "Question");
 		surveyPrevModel = new SQLList("Survey_Template", 1, "Survey", "Template");
 
 		
-		templateList = new JList<String>(templateModel);
+		templateList = new JList<String>(templateModelFromSurvey);
 		templatePrevList = new JList<String>(templatePrevModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 		
@@ -76,8 +83,8 @@ public class CreateSurvey extends SQLWindow{
 		JScrollPane templatePrevListsp = new JScrollPane(templatePrevList);
 		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
 		
-		populateList(templateList, templateModel);
-		templateModel.getData();
+		populateList(templateList, templateModelFromSurvey);
+		templateModelFromSurvey.getData();
 		
 		templatelsm = templateList.getSelectionModel();
 		templatelsm.addListSelectionListener(this);
@@ -131,12 +138,28 @@ public class CreateSurvey extends SQLWindow{
 		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		getWindow().add(stage);
-		
-		surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
-		createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+		while(surveyName == null){
+			surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
+			DBController dbCon;
+			try{
+				dbCon = DBController.getInstance();
+				if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
+					createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+				}else{
+					surveyName = null;
+					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}catch(SQLException | ClassNotFoundException e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
+	/**
+	 * actionlistener for buttons in gui
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -153,7 +176,12 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
-			surveyPrevModel.insertElement("Survey_Template", getContext(),templateModel.getElementAt(templateList.getSelectedIndex()));
+
+			if (!(templateList.getSelectedValue() == null)){
+
+			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
+			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
+			}
 		}
 		else if(e.getSource().equals(saveBtn)){
 			//TODO save
@@ -167,12 +195,18 @@ public class CreateSurvey extends SQLWindow{
 		}
 		
 	}
+	public SQLList getSurveyTemplateListModel(){
+		return templateModelFromSurvey;
+	}
 
+	/**
+	 * questions assigned to template when template is clicked on
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
-			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModel.getId(e.getFirstIndex())), 0, "Content");
+			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(e.getFirstIndex())), 0, "Content");
 			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
 			

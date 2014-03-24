@@ -25,7 +25,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.InputWaiter;
-
+/**
+ * Communicating with the device
+ * @author ZimS
+ *
+ */
 
 public class SendSurveyGetAnswers implements ActionListener {
 	
@@ -57,7 +61,11 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected volatile boolean noDevice = true;
 	protected static InputStream inS = null;
 	protected volatile static boolean connectionPageClosed = false;
-
+/**
+ * tries to send the survey to the device
+ * and receive  survey from device
+ * @throws InterruptedException
+ */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
 				setPageClosed(false);

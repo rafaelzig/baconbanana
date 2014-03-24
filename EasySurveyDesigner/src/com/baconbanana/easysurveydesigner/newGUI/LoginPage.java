@@ -14,7 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * The first window of the program which checks if user is allowed to use it
+ * @author ZimS
+ *
+ */
 public class LoginPage extends Window
 {
 

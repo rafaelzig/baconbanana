@@ -72,8 +72,8 @@ public class ConnectionActivity extends Activity {
 		get = (Button) findViewById(R.id.get);
 		start = (Button) findViewById(R.id.start);
 		connect = (Button) findViewById(R.id.connect);
-		send.setEnabled(false);
-		get.setEnabled(false);
+	//	send.setEnabled(false);
+	//	get.setEnabled(false);
 		start.setEnabled(false);
 		IPPreferences = getSharedPreferences("IPPref", MODE_PRIVATE);
 		IPPrefsEditor = IPPreferences.edit();

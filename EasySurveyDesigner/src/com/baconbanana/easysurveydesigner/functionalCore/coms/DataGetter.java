@@ -32,6 +32,7 @@ public class DataGetter extends Thread {
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					inS));
+
 			String s;
 			while((s=in.readLine())!=null){
 				if (s.equals("ENDIT!"))
@@ -39,6 +40,7 @@ public class DataGetter extends Thread {
 				receivedData += s;
 				System.out.println(s);
 			}
+
 			System.out.println(receivedData);
 			String decrypted;
 			decrypted = Encryption.decryptMsg(receivedData);

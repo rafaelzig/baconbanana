@@ -1,5 +1,7 @@
 package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
-
+/**
+ * model for Numeric Questions
+ */
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
@@ -25,13 +27,14 @@ public class NumericQuestion extends OpenQuestion{
 		try {
 			dbCon = DBController.getInstance();
 			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.NUMERICAL.toString()));
+			dbCon.insertInto("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
-// This lane does not work :/ and it shows only temple names in template window :(		
-//		t.getListModel().getData("Template","Template = " + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
+
+		t.getListModel().getData();
+
 		getWindow().dispose();
 	}
 	

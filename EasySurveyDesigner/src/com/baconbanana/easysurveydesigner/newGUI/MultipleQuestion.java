@@ -15,7 +15,11 @@ import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * class for creating different multiple answer questions
+ * @author ZimS
+ *
+ */
 public class MultipleQuestion extends Question{
 
 	private JButton addBtn;
@@ -87,7 +91,10 @@ public class MultipleQuestion extends Question{
 
 		getWindow().add(panelSouth, BorderLayout.SOUTH);
 	}
-	
+	/**
+	 * adds question choices into database
+	 * @param choices
+	 */
 	public void saveQuestionMa(String[] choices){
 		DBController controller = null;
 		String tableName = new String("Choices");
@@ -101,7 +108,9 @@ public class MultipleQuestion extends Question{
 			e.printStackTrace();
 		}
 	}
-
+/**
+ * button listener
+ */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(getSaveBtn())){
 			saveQuestion();
@@ -126,7 +135,10 @@ public class MultipleQuestion extends Question{
 			}
 		}
 	}
-	
+	/**
+	 * 
+	 * @return array of choices
+	 */
 	public String[] getChoicesTable(){
 		String[] cho = new String[choicesTableModel.getRowCount()];
 		for(int i = 0; i < choicesTableModel.getRowCount();i++){
