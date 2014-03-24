@@ -5,7 +5,7 @@
 
     <Button
         android:id="@+id/btnNext"
-        android:background = "@drawable/roundedbuttonfornext"
+        android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/btnPrevious"
@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/btnPrevious"
-       android:background = "@drawable/roundedbuttonforprevious"
+        android:background="@drawable/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -38,7 +38,7 @@
 
     <Button
         android:id="@+id/btnFinish"
-        android:background = "@drawable/roundedbuttonfornext"
+        android:background="@drawable/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnNext"

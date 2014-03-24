@@ -45,12 +45,7 @@ public class EncryptionJ
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
-<<<<<<< HEAD
 	 * Then converts it bytes string. Then returns it.
-=======
-	 * Then converts it bytes string. Then returnes it.
-	 * 
->>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
 	 * @param message
 	 * @return encrypted
 	 * @throws NoSuchAlgorithmException
