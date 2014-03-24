@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -47,6 +48,7 @@ public class Template extends SQLWindow{
 
 	public Template(String tit, int width, int height, List<Object[]> tempList) {
 		super(tit, width, height);
+		templateListUtil = tempList;
 		initiWidgets();
 		initiLayout();
 	}
@@ -98,16 +100,27 @@ public class Template extends SQLWindow{
 		
 		getWindow().add(stage);
 		setFrameOptions();
-		
-		templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
-		if(templateListUtil.contains(templateName)){
-			nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
-			templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
-			templateList.setModel(templateModel);
+		DBController dbCon;
+		try{
+			dbCon = DBController.getInstance();
+			while(templateName == null){
+				templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
+					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(templateName))){
+						nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+						templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+						templateList.setModel(templateModel);
+					}else{
+						templateName = null;
+						JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+			}
+		}catch(SQLException | ClassNotFoundException e){
+			e.printStackTrace();
 		}
 		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

@@ -87,7 +87,7 @@ public class SQLList extends AbstractListModel{
 		
 	}
 	
-	public void insertElement(String table, int sortCol, String...values ){
+	public void insertElement(String table, String...values ){
 		try {
 			dbCon = DBController.getInstance();
 			dbCon.insertInto(table, values);

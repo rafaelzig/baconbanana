@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -131,9 +132,22 @@ public class CreateSurvey extends SQLWindow{
 		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 		getWindow().add(stage);
-		
-		surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
-		createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+		while(surveyName == null){
+			surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
+			DBController dbCon;
+			try{
+				dbCon = DBController.getInstance();
+				if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
+					createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+				}else{
+					surveyName = null;
+					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+			}catch(SQLException | ClassNotFoundException e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 
@@ -153,8 +167,11 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
-			surveyPrevModel.insertElement("Survey_Template", 1, DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
+
+			if (!(templateList.getSelectedValue() == null)){
+			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
 			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
+			}
 		}
 		else if(e.getSource().equals(saveBtn)){
 			//TODO save
