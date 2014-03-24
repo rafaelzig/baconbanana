@@ -316,7 +316,7 @@ public class DBController
 			throws SQLException{
 		String sql;
 
-		sql = (isAscending) ? "GROUP BY " + columns[columnIndex] + "ORDER BY " + columns[columnIndex] + " DESC"
+		sql = (isAscending) ? " GROUP BY " + columns[columnIndex] + " ORDER BY " + columns[columnIndex] + " DESC"
 				: " ORDER BY " + columns[columnIndex] + " ASC";
 		
 		if (condition == null || condition.isEmpty())

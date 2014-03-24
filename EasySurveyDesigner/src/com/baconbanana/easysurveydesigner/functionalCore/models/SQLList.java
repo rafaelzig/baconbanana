@@ -58,7 +58,7 @@ public class SQLList extends AbstractListModel{
 		try {
 			dbCon = DBController.getInstance();
 			data.clear();
-			List<Object[]> result = dbCon.select(table, sortCol, true, col);
+			List<Object[]> result = dbCon.selectNoDupe(table, null, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
@@ -73,7 +73,7 @@ public class SQLList extends AbstractListModel{
 		try {
 			dbCon = DBController.getInstance();
 			data.clear();
-			List<Object[]> result = dbCon.select(table, cond, sortCol, true, col);
+			List<Object[]> result = dbCon.selectNoDupe(table, cond, sortCol, true, col);
 			
 			for(Object[]  i : result){
 				data.add(i);
