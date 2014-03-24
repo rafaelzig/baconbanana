@@ -8,21 +8,41 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileView;
 
 import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-
+/**
+ * 
+ * Importing and exporting database in .sql files
+ *
+ */
 public class ImportExport
 {
+	/**
+	 * Starts import by executing .bat file and prompts FileChooser window
+	 * @throws IOException
+	 */
 	public static void startImport() throws IOException
 	{
-		File sqlFile = importSql(getFile("Import"));
+		File dbFile = new File(DBController.WORKING_DIRECTORY+DBController.DB_NAME);
+		dbFile.delete();
+		File sqlFile = importSql(getFile("Import").getName());
 		Runtime.getRuntime().exec("cmd /c start " + getBatFilepath(sqlFile));
 	}
 
+	/**
+	 * Starts export into choosen file by executing .bat
+	 * @throws IOException
+	 */
 	public static void startExport() throws IOException
 	{
 		File sqlFile = exportSql(getFile("Export").getName());
 		Runtime.getRuntime().exec("cmd /c start " + getBatFilepath(sqlFile));
 	}
 
+	/**
+	 * Creates .txt file for sqlite3 to execute export
+	 * @param fileName name of the file database would be stored in
+	 * @return .txt file for sqlite3 to execute export
+	 * @throws IOException
+	 */
 	private static File exportSql(String fileName) throws IOException
 	{
 		File sqlFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "sql.txt");
@@ -35,22 +55,37 @@ public class ImportExport
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
 		System.out.println(commands[0] + "\n" + commands[1] + "\n"
 				+ commands[2]);
+		sqlFile.deleteOnExit();
 
 		return sqlFile;
 	}
 
-	private static File importSql(File sqlFile) throws IOException
+	/**
+	 * Creates .txt file for sqlite3 to execute import
+	 * @param fileName  name of the file database would be recovered from 
+	 * @return .txt file for sqlite3 to execute import
+	 * @throws IOException
+	 */
+	private static File importSql(String fileName) throws IOException
 	{
+		File sqlFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "sql.txt");
 		String[] commands = new String[2];
 		commands[0] = ".open " + DBController.DB_NAME;
-		commands[1] = ".read " + sqlFile.getAbsolutePath();
+		commands[1] = ".read " + fileName;
 		commands[1] = commands[1].replace(DBController.SEPARATOR, "/");
 
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
 
+		sqlFile.deleteOnExit();
 		return sqlFile;
 	}
 
+	/**
+	 * 
+	 * @param sqlFile .txt file for sqlite3 connacted to bat file
+	 * @return windows path for executable bat file
+	 * @throws IOException
+	 */
 	private static String getBatFilepath(File sqlFile) throws IOException
 	{
 		File batFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "export.bat");
@@ -61,15 +96,17 @@ public class ImportExport
 		commands[2] = "exit";
 
 		Operations.writeFile(batFile.getAbsolutePath(), commands);
+		batFile.deleteOnExit();
 		return batFile.getAbsolutePath();
 	}
 
-	// private void delete()
-	// {
-	// batFile.delete();
-	// sqlFile.delete();
-	// }
+	
 
+	/**
+	 * Ensuring right extention of file database is stored in and launching fileChooser
+	 * @param title main button to be named "Export" or "Import"
+	 * @return file with right name
+	 */
 	private static File getFile(String title)
 	{
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
@@ -104,56 +141,4 @@ public class ImportExport
 	
 
 	
-	/*
-	 * private String filterExtention(File myFile) { String choosenFile;
-	 * choosenFile = myFile.getName(); if (!choosenFile.contains(".")) return
-	 * choosenFile+".sql"; else if (choosenFile.contains(".")) { int cut =
-	 * choosenFile.indexOf('.'); choosenFile = choosenFile.substring(0, cut);
-	 * return choosenFile+".sql"; } else if (choosenFile.endsWith(".sql"))return
-	 * choosenFile; } else return "";
-	 */
-
-	// private synchronized void moveFile()
-	// {
-	// File annoyingFile = new File(System.getenv("USERPROFILE")
-	// + "\\Documents\\SQLite\\" + getRenamedFile().getName());
-	// try
-	// {
-	// Files.copy(Paths.get(annoyingFile.getAbsolutePath()),
-	// Paths.get(getRenamedFile().getAbsolutePath()),
-	// StandardCopyOption.REPLACE_EXISTING);
-	// }
-	// catch (IOException e)
-	// {
-	// TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-
-	/*
-	 * public static void main(String[] args) { final ImportExport my =new
-	 * ImportExport(); my.startExport(); Thread first = new Thread(new
-	 * Runnable() {
-	 * 
-	 * @Override public void run() { my.startExport();
-	 * 
-	 * } });
-	 * 
-	 * Thread second = new Thread(new Runnable() {
-	 * 
-	 * @Override public void run() { my.moveFile(); } }); try { first.run();
-	 * first.join(); while(first.isAlive())second.wait();
-	 * 
-	 * second.start();
-	 * 
-	 * } catch (InterruptedException e) { TODO Auto-generated catch block
-	 * e.printStackTrace(); } String print = my.getRenamedFile().getName();
-	 * System.out.println(print+"name!!!!");
-	 * 
-	 * System.out.println(my.getRenamedFile());
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 }
