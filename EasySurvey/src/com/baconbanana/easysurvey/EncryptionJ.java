@@ -16,6 +16,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 import android.util.Base64;
+import android.util.Log;
 
 /**
  * 
@@ -63,16 +64,10 @@ public class EncryptionJ
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		
 			cipher.init(Cipher.ENCRYPT_MODE, secretKey );
-		
+			
 			encryptedText = cipher.doFinal(message.getBytes("UTF-8"));
-		
-			//String test = new String(encryptedText);
-			//System.out.println("encrypted"+ test);
-			
 			encoded = Base64.encodeToString(encryptedText, Base64.DEFAULT);
-			
-			//System.out.println("decoded"+encoded );
-			
+		
 			}catch (IllegalBlockSizeException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -91,7 +86,7 @@ public class EncryptionJ
 			}catch (InvalidKeyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 		return encoded;
 	}
 
@@ -119,10 +114,10 @@ public class EncryptionJ
 try{
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
-		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
-		System.out.print("this what was decoded"+ decode);
-		
+	byte[] decode = Base64.decode(message, Base64.DEFAULT);;
 		decrypt = new String(cipher.doFinal(decode),"UTF-8");
+
+		
 }
 	catch (IllegalBlockSizeException e) {
 		// TODO Auto-generated catch block
@@ -142,7 +137,7 @@ try{
 	}catch (InvalidKeyException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	}
+	} 
 return decrypt;
 
 	

@@ -57,7 +57,7 @@ public class ConnectionActivity extends Activity {
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-	private InputStream inputS = null;
+	private static InputStream inputS = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -79,6 +79,7 @@ public class ConnectionActivity extends Activity {
 		IPPrefsEditor = IPPreferences.edit();
 		pattern = Pattern.compile(IPADDRESS_PATTERN);
 		saveIP = IPPreferences.getBoolean("saveIP", false);
+		
 		if (saveIP == true) {// <----------set remembered IP
 			input.setText(IPPreferences.getString("IP", ""));
 			cb.setChecked(true);
@@ -173,12 +174,12 @@ public class ConnectionActivity extends Activity {
 		notFirstTime = true;
 	}
 
-	public static synchronized void enableGetButton() {
-		get.setEnabled(true);
+	public static synchronized void changeGetButton(boolean b) {
+		get.setEnabled(b);
 	}
 
-	public static synchronized void enableSendButton() {
-		send.setEnabled(true);
+	public static synchronized void  changeSendButton(boolean b) {
+		send.setEnabled(b);
 	}
 	public static synchronized void enableStartButton() {
 		start.setEnabled(true);
@@ -187,11 +188,27 @@ public class ConnectionActivity extends Activity {
 	public static synchronized void disableConnectButton() {
 		connect.setEnabled(false);
 	}
+	
+	
+	
+	
 	public static synchronized void setNameAndDate(String s) {
 		nameAndDate=s;
+	}
+	public static synchronized String getNameAndDate() {
+		return nameAndDate;
 	}
 	
 	public static synchronized void setSocket(Socket s) {
 		skt=s;
 	}
+	public static synchronized Socket getSocket() {
+		return skt;
+	}
+	
+	
+	public static synchronized void setInputS(InputStream x) {
+		inputS=x;
+	}
+	
 }

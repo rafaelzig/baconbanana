@@ -44,10 +44,9 @@ public class InputWaiter extends Thread {
 			while (done == false && (i = inS.available()) == 0) {
 
 				try {
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					inS = clientSocket.getInputStream();
-
-					System.out.println("got input");
+					System.out.println("waiting for input");
 
 					if (SendSurveyGetAnswers.getPageClosed()) {
 						System.out.println("found out that page is closed");

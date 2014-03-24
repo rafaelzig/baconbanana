@@ -16,7 +16,7 @@ import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 public class DataGetter extends Thread {
 	
 	InputStream inS;
-	static String receivedData;
+	static String receivedData="";
 	
 	/**
 	 * 
@@ -32,18 +32,23 @@ public class DataGetter extends Thread {
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					inS));
-			
-			receivedData = in.readLine();
-			
-			SendSurveyGetAnswers.setReceivedData(receivedData);
-			//TODO set id there 
+
+			String s;
+			while((s=in.readLine())!=null){
+				if (s.equals("ENDIT!"))
+		            break;
+				receivedData += s;
+				System.out.println(s);
+			}
+
 			System.out.println(receivedData);
 			String decrypted;
 			decrypted = Encryption.decryptMsg(receivedData);
 			System.out.println("Android sent this:" + decrypted + "\n");
 				// Database TODO save
 				// in.close();
-			
+			SendSurveyGetAnswers.setReceivedData(decrypted);
+			//TODO set id there 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
