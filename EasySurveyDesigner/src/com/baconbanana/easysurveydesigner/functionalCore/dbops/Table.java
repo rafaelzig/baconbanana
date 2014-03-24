@@ -67,7 +67,7 @@ public enum Table
 	SURVEY_TEMPLATE(
 			"Survey_Template",
 			new SimpleEntry("Survey", "VARCHAR NOT NULL"),
-			new SimpleEntry("Template", "INT NOT NULL"),
+			new SimpleEntry("Template", "VARCHAR NOT NULL"),
 			new SimpleEntry("PRIMARY KEY", "(Survey, Template)"),
 			new SimpleEntry("FOREIGN KEY", "(Survey) REFERENCES Survey(Survey)"),
 			new SimpleEntry("FOREIGN KEY",

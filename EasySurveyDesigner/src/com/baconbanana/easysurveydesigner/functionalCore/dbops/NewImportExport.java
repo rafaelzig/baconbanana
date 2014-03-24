@@ -13,7 +13,9 @@ public class NewImportExport
 {
 	public static void startImport() throws IOException
 	{
-		File sqlFile = importSql(getFile("Import"));
+		File dbFile = new File(DBController.WORKING_DIRECTORY+DBController.DB_NAME);
+		dbFile.delete();
+		File sqlFile = importSql(getFile("Import").getName());
 		Runtime.getRuntime().exec("cmd /c start " + getBatFilepath(sqlFile));
 	}
 
@@ -35,19 +37,22 @@ public class NewImportExport
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
 		System.out.println(commands[0] + "\n" + commands[1] + "\n"
 				+ commands[2]);
+		sqlFile.deleteOnExit();
 
 		return sqlFile;
 	}
 
-	private static File importSql(File sqlFile) throws IOException
+	private static File importSql(String fileName) throws IOException
 	{
+		File sqlFile = new File(DBController.WORKING_DIRECTORY + DBController.SEPARATOR + "sql.txt");
 		String[] commands = new String[2];
 		commands[0] = ".open " + DBController.DB_NAME;
-		commands[1] = ".read " + sqlFile.getAbsolutePath();
+		commands[1] = ".read " + fileName;
 		commands[1] = commands[1].replace(DBController.SEPARATOR, "/");
 
 		Operations.writeFile(sqlFile.getAbsolutePath(), commands);
 
+		sqlFile.deleteOnExit();
 		return sqlFile;
 	}
 
@@ -61,6 +66,7 @@ public class NewImportExport
 		commands[2] = "exit";
 
 		Operations.writeFile(batFile.getAbsolutePath(), commands);
+		batFile.deleteOnExit();
 		return batFile.getAbsolutePath();
 	}
 
