@@ -30,7 +30,7 @@ public class NumericQuestion extends OpenQuestion{
 			e.printStackTrace();
 		}
 		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
-// This lane does not work :/ and it shows only temple names in template window :(		
+// This line does not work :/ and it shows only temple names in template window :(		
 //		t.getListModel().getData("Template","Template = " + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
 		getWindow().dispose();
 	}
