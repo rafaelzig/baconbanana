@@ -23,15 +23,18 @@ public class TextualQuestion extends OpenQuestion{
 		int questId = 0;
 		try {
 			dbCon = DBController.getInstance();
-			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.NUMERICAL.toString()));
+			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.TEXTUAL.toString()));
+			dbCon.insertInto("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		t.getListModel().insertElement("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
-		t.getListModel().getData("Template","Template=" + DBController.appendApo(t.getTemplateName()), 0, "Template", "QuestionID");
+
+		t.getListModel().getData();
+
 		getWindow().dispose();
 	}
+	
 	public void actionPerformed(ActionEvent e) {
 	}
 }

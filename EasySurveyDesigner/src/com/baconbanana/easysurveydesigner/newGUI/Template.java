@@ -41,12 +41,14 @@ public class Template extends SQLWindow{
 	private SQLList templateModel;
 	
 	private String templateName;
-
+ 
 
 	public Template(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
 		initiLayout();
+		
+		
 	}
 	private void initiWidgets(){
 
@@ -57,7 +59,7 @@ public class Template extends SQLWindow{
 		createQuestionBtn = new JButton("Create New");
 		addExistingQuestionBtn = new JButton("Add Existing");
 		deleteBtn = new JButton("Delete");
-		saveBtn = new JButton("Save");
+		setSaveBtn(new JButton("Save"));
 		setCancelBtn(new JButton("Cancel"));
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
@@ -87,8 +89,8 @@ public class Template extends SQLWindow{
 		addExistingQuestionBtn.addActionListener(this);
 		jpButtons.add(deleteBtn);
 		deleteBtn.addActionListener(this);
-		jpButtons.add(saveBtn);
-		saveBtn.addActionListener(this);
+		jpButtons.add(getSaveBtn());
+		getSaveBtn().addActionListener(this);
 		jpButtons.add(getCancelBtn());
 		getCancelBtn().addActionListener(this);
 		
@@ -148,7 +150,7 @@ public class Template extends SQLWindow{
 		else if(e.getSource().equals(deleteBtn)){
 			//TODO deleteBtn
 		}
-		else if(e.getSource().equals(saveBtn)){
+		else if(e.getSource().equals(getSaveBtn())){
 			
 		}else if(e.getSource().equals(getCancelBtn())){
 			getWindow().dispose();
@@ -174,6 +176,12 @@ public class Template extends SQLWindow{
 	}
 	public void setCancelBtn(JButton cancelBtn) {
 		this.cancelBtn = cancelBtn;
+	}
+	public JButton getSaveBtn() {
+		return saveBtn;
+	}
+	public void setSaveBtn(JButton saveBtn) {
+		this.saveBtn = saveBtn;
 	}
 
 }

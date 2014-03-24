@@ -29,7 +29,7 @@ public class CreateSurvey extends SQLWindow{
 	private ListSelectionModel templatelsm;
 	//private ListSelectionModel templatePrevlsm;
 	
-	private SQLList templateModel;
+	private SQLList templateModelFromSurvey;
 	private SQLList templatePrevModel;
 	private SQLList surveyPrevModel;
 
@@ -62,13 +62,12 @@ public class CreateSurvey extends SQLWindow{
 		JLabel templatePrevLbl = new JLabel("Template Preview");
 		JLabel surveyPrevLbl = new JLabel("Survey Preview");
 		
-		//This really needs to be fixed = tommy
-		templateModel = new SQLList("Template", 0 , "Template", "QuestionID");
+		templateModelFromSurvey = new SQLList("Template", 0 , "Template", "QuestionID");
 		templatePrevModel = new SQLList("Template NATURAL JOIN Question", 0, "Question");
 		surveyPrevModel = new SQLList("Survey_Template", 1, "Survey", "Template");
 
 		
-		templateList = new JList<String>(templateModel);
+		templateList = new JList<String>(templateModelFromSurvey);
 		templatePrevList = new JList<String>(templatePrevModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 		
@@ -76,8 +75,8 @@ public class CreateSurvey extends SQLWindow{
 		JScrollPane templatePrevListsp = new JScrollPane(templatePrevList);
 		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
 		
-		populateList(templateList, templateModel);
-		templateModel.getData();
+		populateList(templateList, templateModelFromSurvey);
+		templateModelFromSurvey.getData();
 		
 		templatelsm = templateList.getSelectionModel();
 		templatelsm.addListSelectionListener(this);
@@ -154,7 +153,7 @@ public class CreateSurvey extends SQLWindow{
 		}
 		else if(e.getSource().equals(moveBtn)){
 			if (!(templateList.getSelectedValue() == null)){
-			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
+			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
 			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
 		}
@@ -170,12 +169,15 @@ public class CreateSurvey extends SQLWindow{
 		}
 		
 	}
+	public SQLList getSurveyTemplateListModel(){
+		return templateModelFromSurvey;
+	}
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
-			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModel.getId(e.getFirstIndex())), 0, "Content");
+			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(e.getFirstIndex())), 0, "Content");
 			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
 			

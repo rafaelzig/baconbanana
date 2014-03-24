@@ -48,7 +48,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
 	//	populateList(surveyList, surveyModel);
 		setFrameOptions();
-		// TODO FIX PACK!!!!!!!1111
+		// TODO FIX PACK!!!!!!!
 		getWindow().pack();
 	}
 	public  SQLList getSurveyListModel() {
