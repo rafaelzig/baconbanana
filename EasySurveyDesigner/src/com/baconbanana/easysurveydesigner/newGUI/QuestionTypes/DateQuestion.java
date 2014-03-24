@@ -22,7 +22,7 @@ public class DateQuestion extends OpenQuestion{
 	public DateQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
 		
-		answerTxa = JOptionPane.showInputDialog(null, "Enter Date Question:", "Add Date Question", 1);
+		answerTxt = JOptionPane.showInputDialog(null, "Enter Date Question:", "Add Date Question", 1);
 		
 		int questId = 0;
 		try {
@@ -35,8 +35,10 @@ public class DateQuestion extends OpenQuestion{
 		}
 
 		t.getListModel().getData();
+		
 		getWindow().dispose();
 	}
+	
 	
 	public void actionPerformed(ActionEvent e) {
 	}

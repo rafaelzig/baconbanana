@@ -35,8 +35,10 @@ public class TextualQuestion extends OpenQuestion{
 		}
 
 		t.getListModel().getData();
+
 		getWindow().dispose();
 	}
+	
 	public void actionPerformed(ActionEvent e) {
 	}
 }
