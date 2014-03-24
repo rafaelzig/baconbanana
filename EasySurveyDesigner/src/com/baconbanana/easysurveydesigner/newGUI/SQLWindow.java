@@ -8,7 +8,11 @@ import javax.swing.event.ListSelectionListener;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * parsing queries for database
+ * @author ZimS
+ *
+ */
 public abstract class SQLWindow extends Window implements ListSelectionListener{
 	
 	private DBController dbCon;

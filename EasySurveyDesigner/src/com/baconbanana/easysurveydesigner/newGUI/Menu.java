@@ -10,7 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
-
+/**
+ * menu window with multiple functionality
+ * @author ZimS
+ *
+ */
 public class Menu extends Window
 {
 

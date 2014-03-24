@@ -25,7 +25,11 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQue
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
-
+/**
+ * template window
+ * @author ZimS
+ *
+ */
 public class Template extends SQLWindow{
 	
 	private String stage;
@@ -107,7 +111,9 @@ public class Template extends SQLWindow{
 		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
 	}
-
+/**
+ * listener for different question types
+ */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub

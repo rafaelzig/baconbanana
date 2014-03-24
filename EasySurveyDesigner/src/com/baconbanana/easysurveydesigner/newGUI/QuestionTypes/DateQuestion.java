@@ -9,7 +9,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.Template;
-
+/**
+ * model for question Types
+ * @author ZimS
+ *
+ */
 public class DateQuestion extends OpenQuestion{
 	
 	private String answerTxt;

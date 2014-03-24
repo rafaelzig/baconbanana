@@ -12,7 +12,11 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 
-
+/**
+ * class for Adding Templates
+ * @author ZimS
+ *
+ */
 
 public class AddTemplate extends Template{
 
@@ -20,7 +24,9 @@ public class AddTemplate extends Template{
 		super(tit, width, height);
 		
 	}
-	
+	/**
+	 * action listener for different types of questions
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(createQuestionBtn)){

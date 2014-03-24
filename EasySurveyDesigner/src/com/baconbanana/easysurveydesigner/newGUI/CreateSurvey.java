@@ -17,7 +17,11 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * class for creating new survey
+ * @author ZimS
+ *
+ */
 public class CreateSurvey extends SQLWindow{
 
 	private String surveyName;
@@ -47,7 +51,9 @@ public class CreateSurvey extends SQLWindow{
 		super(tit, fullScreen);
 		initiWidgets();
 	}
-	
+	/**
+	 * method for gui creation
+	 */
 	public void initiWidgets(){
 
 		addBtn = new JButton("Add");
@@ -137,6 +143,9 @@ public class CreateSurvey extends SQLWindow{
 		
 	}
 
+	/**
+	 * actionlistener for buttons in gui
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -153,7 +162,8 @@ public class CreateSurvey extends SQLWindow{
 			//TODO delete
 		}
 		else if(e.getSource().equals(moveBtn)){
-			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
+			surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName),
+					DBController.appendApo(templateModel.getElementAt(templateList.getSelectedIndex())));
 			surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 		}
 		else if(e.getSource().equals(saveBtn)){
@@ -169,6 +179,9 @@ public class CreateSurvey extends SQLWindow{
 		
 	}
 
+	/**
+	 * questions assigned to template when template is clicked on
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
