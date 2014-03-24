@@ -84,7 +84,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		if(e.getSource().equals(surveySelectionModel) && surveySelectionModel.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
 			questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question", "Survey=" + DBController.appendApo
-					(surveyModel.getId(e.getFirstIndex())), 0, "Content");
+					(surveyModel.getId(surveyList.getSelectedIndex())), 0, "Content");
 			populateList(questionList, questionModel);
 			questionModel.getData();
 			System.out.println(surveyList.getSelectedIndex());
