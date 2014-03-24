@@ -84,6 +84,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 										e.printStackTrace();
 									}
 									ConnectionActivity.disableConnectButton();
+									
 									boolean b=ConnectionActivity.isSurveyCompleted();
 									 if(b){
 										 ConnectionActivity.changeSendButton(true);
