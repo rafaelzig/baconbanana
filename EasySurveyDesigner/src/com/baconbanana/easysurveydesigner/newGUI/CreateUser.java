@@ -12,7 +12,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * adding entry into database to hild new user and gui for it
+ * @author ZimS
+ *
+ */
 public class CreateUser extends Window{
 
 	private JPanel panel;

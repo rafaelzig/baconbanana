@@ -18,7 +18,11 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * class for creating new survey
+ * @author ZimS
+ *
+ */
 public class CreateSurvey extends SQLWindow{
 
 	private String surveyName;
@@ -48,7 +52,9 @@ public class CreateSurvey extends SQLWindow{
 		super(tit, fullScreen);
 		initiWidgets();
 	}
-	
+	/**
+	 * method for gui creation
+	 */
 	public void initiWidgets(){
 
 		addBtn = new JButton("Add");
@@ -151,6 +157,9 @@ public class CreateSurvey extends SQLWindow{
 		
 	}
 
+	/**
+	 * actionlistener for buttons in gui
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -186,6 +195,9 @@ public class CreateSurvey extends SQLWindow{
 		
 	}
 
+	/**
+	 * questions assigned to template when template is clicked on
+	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){

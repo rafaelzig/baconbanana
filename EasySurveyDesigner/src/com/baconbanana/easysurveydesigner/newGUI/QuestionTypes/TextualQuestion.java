@@ -9,7 +9,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.Template;
-
+/**
+ * model for Textual Questions
+ * @author ZimS
+ *
+ */
 public class TextualQuestion extends OpenQuestion{
 	
 	private String answerTxt;

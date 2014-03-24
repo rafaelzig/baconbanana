@@ -17,7 +17,11 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-
+/**
+ * encapsulated class for new qustion classes
+ * @author ZimS
+ *
+ */
 public class Question extends SQLWindow{
 
 	private QuestionType questionType;
@@ -118,11 +122,15 @@ public class Question extends SQLWindow{
 		
 
 	}
-	//This method controls general functionality to each cancel button in every type of the question.
+	/**
+	 * This method controls general functionality to each cancel button in every type of the question.
+	 */
 	public void cancelQuestion(){
 		getWindow().dispose();
 	}
-	//This method controls general functionality to each select button in every type of the question.
+	/**
+	 * This method controls general functionality to each select button in every type of the question.
+	 */
 	public void saveQuestion(){
 		
 		new AddTemplate("Create New Template", 800, 500);

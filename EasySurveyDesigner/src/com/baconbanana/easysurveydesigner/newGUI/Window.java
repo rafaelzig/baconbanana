@@ -9,7 +9,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 
-
+/**
+ * abstract class to create windows
+ * @author ZimS
+ *
+ */
 public abstract class Window implements ActionListener{
 	
 	private String title;
