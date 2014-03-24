@@ -18,6 +18,8 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
 //github.com/rafaelzig/baconbanana.git
 
+import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
+
 public class SurveySelector extends SQLWindow implements ActionListener {
 	private  JList<String> surveyList;
     private SQLList surveyModel;

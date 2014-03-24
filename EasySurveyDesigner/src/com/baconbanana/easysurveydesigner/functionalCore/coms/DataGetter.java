@@ -32,12 +32,8 @@ public class DataGetter extends Thread {
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					inS));
-			String s;
-			StringBuilder sb= new StringBuilder();
-			while((s= in.readLine())!=null){
-				sb.append(s);
-			}
-			receivedData = sb.toString();
+			
+			receivedData = in.readLine();
 			
 			SendSurveyGetAnswers.setReceivedData(receivedData);
 			//TODO set id there 
