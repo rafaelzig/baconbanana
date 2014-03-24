@@ -16,7 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
-//github.com/rafaelzig/baconbanana.git
+
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 

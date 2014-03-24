@@ -2,7 +2,9 @@ package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
+
 import java.util.List;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
@@ -27,10 +29,12 @@ import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
 
 public class AddTemplate extends Template{
 
-		DBController dbCon;
-public AddTemplate(String tit, int width, int height) {
-		super(tit, width, height);
+		private DBController dbCon;
+		private CreateSurvey createSurvey;
 		
+public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
+		super(tit, width, height);
+		createSurvey = cs;
 }
 	/**
 	 * action listener for different types of questions
@@ -78,6 +82,10 @@ public AddTemplate(String tit, int width, int height) {
 			dbCon = DBController.getInstance();
 			if (!(dbCon.exists("Template", "Template = " + DBController.appendApo(this.getTemplateName())))){
 				JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
+			}else {
+				dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
+				createSurvey.getSurveyPrevModel().getData("Survey_Template", "Template = " + DBController.appendApo(this.getTemplateName()), 1, "Survey", "Template");
+				createSurvey.getSurveyPrevModel().getData();
 			}
 			
 			} catch (SQLException | ClassNotFoundException e1) {
