@@ -19,13 +19,8 @@ import android.util.Base64;
 
 /**
  * 
-<<<<<<< HEAD
  * @author Team 
  *
-=======
- * @author Almira & Team
- * 
->>>>>>> branch 'master' of https://github.com/rafaelzig/baconbanana.git
  */
 public class EncryptionJ
 {
@@ -57,10 +52,7 @@ public class EncryptionJ
 	 * @throws UnsupportedEncodingException
 	 * @throws DecoderException
 	 */
-	public static String encryptMsg(String message) throws InvalidKeyException,
-			NoSuchAlgorithmException, NoSuchPaddingException,
-			IllegalBlockSizeException, BadPaddingException,
-			UnsupportedEncodingException, DecoderException
+	public static String encryptMsg(String message) 
 	{
 		byte[] encryptedText;
 		setKeys();
@@ -120,21 +112,40 @@ public class EncryptionJ
 	 * @throws DecoderException
 	 */
 	public static String decryptMsg(String message)
-			throws NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidKeyException, UnsupportedEncodingException,
-			IllegalBlockSizeException, BadPaddingException, DecoderException
 	{
 		setKeys();
 		Cipher cipher = null;
 		String decrypt = "";
-
+try{
 		cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 		cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		byte[] decode = Base64.decode(message, Base64.DEFAULT);;
+		System.out.print("this what was decoded"+ decode);
 		
 		decrypt = new String(cipher.doFinal(decode),"UTF-8");
-		
-		return decrypt;
+}
+	catch (IllegalBlockSizeException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (BadPaddingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (UnsupportedEncodingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}catch (NoSuchAlgorithmException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (NoSuchPaddingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}catch (InvalidKeyException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+return decrypt;
+
+	
 	}
 
 }

@@ -32,6 +32,7 @@ public class NumericQuestion extends OpenQuestion{
 		}
 
 		t.getListModel().getData();
+
 		getWindow().dispose();
 	}
 	
