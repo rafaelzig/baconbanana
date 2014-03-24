@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
+ package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
 
 import java.awt.event.ActionEvent;
 
