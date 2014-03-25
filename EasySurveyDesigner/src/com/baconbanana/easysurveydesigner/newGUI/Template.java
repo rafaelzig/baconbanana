@@ -65,7 +65,7 @@ public class Template extends SQLWindow{
 
 		createQuestionBtn = new JButton("Create New");
 		addExistingQuestionBtn = new JButton("Add Existing");
-		deleteBtn = new JButton("Delete");
+		setDeleteBtn(new JButton("Delete"));
 		setSaveBtn(new JButton("Save"));
 		setCancelBtn(new JButton("Cancel"));
 		
@@ -94,8 +94,8 @@ public class Template extends SQLWindow{
 		createQuestionBtn.addActionListener(this);
 		jpButtons.add(addExistingQuestionBtn);
 		addExistingQuestionBtn.addActionListener(this);
-		jpButtons.add(deleteBtn);
-		deleteBtn.addActionListener(this);
+		jpButtons.add(getDeleteBtn());
+		getDeleteBtn().addActionListener(this);
 		jpButtons.add(getSaveBtn());
 		getSaveBtn().addActionListener(this);
 		jpButtons.add(getCancelBtn());
@@ -120,6 +120,7 @@ public class Template extends SQLWindow{
 						templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
 						templateList.setModel(templateModel);
 					}else{
+						
 						templateName = null;
 						JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -172,7 +173,7 @@ public class Template extends SQLWindow{
 		else if(e.getSource().equals(addExistingQuestionBtn)){
 			//TODO addExistingQuestionBtn
 		}
-		else if(e.getSource().equals(deleteBtn)){
+		else if(e.getSource().equals(getDeleteBtn())){
 			//TODO deleteBtn
 		}
 		else if(e.getSource().equals(getSaveBtn())){
@@ -207,6 +208,12 @@ public class Template extends SQLWindow{
 	}
 	public void setSaveBtn(JButton saveBtn) {
 		this.saveBtn = saveBtn;
+	}
+	public JButton getDeleteBtn() {
+		return deleteBtn;
+	}
+	public void setDeleteBtn(JButton deleteBtn) {
+		this.deleteBtn = deleteBtn;
 	}
 
 }
