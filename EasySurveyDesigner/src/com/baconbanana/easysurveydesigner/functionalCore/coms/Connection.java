@@ -2,8 +2,12 @@ package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Collections;
+import java.util.Enumeration;
 
 import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
@@ -12,8 +16,7 @@ import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
  * while the following two conditions hold: 1- serverSucket is null and 
  * 2- the connection page is not closed. So if the page will be closed
  * or the serverSocket will be created the thread will stop
- * @author beka, team 
- *
+ * @author beka, team
  */
 public class Connection extends Thread {
 	
@@ -25,14 +28,14 @@ public class Connection extends Thread {
 			listOfSockets[x] = 2000 + x;
 		}
 	}
-
+	
 	public void run() {
 
 		while(SendSurveyGetAnswers.getServerSocket()== null 
 			&& SendSurveyGetAnswers.getPageClosed()==false) {
 			
 			try {
-						
+			
 				String IP;
 				
 				Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
@@ -42,7 +45,6 @@ public class Connection extends Thread {
 				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
 				System.out.println(IP);
 				SendSurveyGetAnswers.setLocalIP(IP);
-				dSurveyGetAnswers.setLocalIP(IP);
 				
 			} catch (UnknownHostException ex) {
 				System.out.println("Failed to Find ip");
