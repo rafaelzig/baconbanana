@@ -101,7 +101,7 @@ public class Menu extends Window
 					getWindow().dispose();
 					break;
 				case OPEN_SURVEY_TEXT:
-					new SurveySelector("List of Surveys", true);
+					new SurveySelector("List of Surveys", 800, 800);
 					getWindow().dispose();
 					break;
 				case PREVIEW_ANSWERS_TEXT:

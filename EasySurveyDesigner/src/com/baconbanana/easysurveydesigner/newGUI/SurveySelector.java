@@ -27,8 +27,9 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	private JButton deleteBtn = new JButton("Delete");
 	private JButton openBtn = new JButton("Open");
 	private JButton cancelBtn = new JButton("Cancel");
-	public SurveySelector(String tit, boolean fullScreen) {
-		super(tit, fullScreen);
+	
+	public SurveySelector(String tit,  int width, int height) {
+		super(tit, width, height);
 		initLayout();
  
 			}
