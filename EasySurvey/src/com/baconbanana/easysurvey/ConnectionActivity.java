@@ -72,8 +72,8 @@ public class ConnectionActivity extends Activity {
 		get = (Button) findViewById(R.id.get);
 		start = (Button) findViewById(R.id.start);
 		connect = (Button) findViewById(R.id.connect);
-	//	send.setEnabled(false);
-	//	get.setEnabled(false);
+	    send.setEnabled(false);
+	    get.setEnabled(false);
 		start.setEnabled(false);
 		IPPreferences = getSharedPreferences("IPPref", MODE_PRIVATE);
 		IPPrefsEditor = IPPreferences.edit();
@@ -157,12 +157,10 @@ public class ConnectionActivity extends Activity {
 	public void moveToSurveyActivity(View v) throws FileNotFoundException,
 			IOException {
 
-		Intent intent = new Intent(this, MainActivity.class);
+		Intent intent = new Intent(this, ValidationActivity.class);
 		startActivity(intent);
-		String storage = Storage.readFromInternal(context, "Survey.json");
-		Log.d("storage", storage);
+		
 	}
-
 	public static synchronized void setSurveyCompleted() {
 		isSurveyCompleted = true;
 	}
