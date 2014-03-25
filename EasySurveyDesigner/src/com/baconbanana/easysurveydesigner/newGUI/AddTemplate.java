@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
@@ -14,7 +13,7 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQue
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 
 /**

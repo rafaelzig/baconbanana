@@ -1,6 +1,6 @@
-package com.baconbanana.easysurveydesigner.functionalCore.exceptions;
+package com.baconbanana.easysurveyfunctions.exceptions;
 
-import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
+import com.baconbanana.easysurveyfunctions.models.Question;
 
 /**
  * Class representing the exceptions thrown whenever a subsequent list of
@@ -15,7 +15,8 @@ public class InvalidSubsequentListException extends Exception
 {
 	public InvalidSubsequentListException(Question question)
 	{
-		super("The list of subsequent questions provided contains another contingency question: "
+		super(
+				"The list of subsequent questions provided contains another contingency question: "
 						+ question.getContent());
 	}
 }

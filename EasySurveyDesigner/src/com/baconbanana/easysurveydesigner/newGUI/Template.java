@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,7 +17,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
@@ -27,6 +25,7 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQue
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * template window
  * @author ZimS

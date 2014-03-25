@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.functionalCore.exceptions;
+package com.baconbanana.easysurveyfunctions.exceptions;
 
 /**
  * Class representing the exceptions thrown whenever a choice list for a
@@ -26,7 +26,7 @@ public class InvalidChoiceListException extends Exception
 	private static String prepareMessage(int choiceListSize)
 	{
 		String message = "The list provided contain ";
-		message += (choiceListSize < 2) ? "less than two " : "more than ten ";
+		message += choiceListSize < 2 ? "less than two " : "more than ten ";
 		message += "alternatives. \n";
 		message += "Size = " + choiceListSize;
 		return message;

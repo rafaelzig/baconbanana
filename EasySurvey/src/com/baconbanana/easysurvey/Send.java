@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 
 /**
@@ -41,7 +40,7 @@ public class Send extends AsyncTask<String, Void, String> {
 			output = new PrintStream(skt.getOutputStream());
 
 			String s = Storage.readFromInternal(context,
-					Operations.FILENAME);
+					Storage.FILENAME);
 			
 			Log.d("what it got from storage", s);
 			

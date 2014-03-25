@@ -1,5 +1,4 @@
-
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 /**
  * An Enumeration representing the different types of questions.
@@ -23,7 +22,7 @@ public enum QuestionType
 	{
 		this.type = type;
 	}
-	
+
 	@Override
 	public String toString()
 	{

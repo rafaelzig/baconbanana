@@ -1,16 +1,17 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidSubsequentListException;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidSubsequentListException;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -27,7 +28,7 @@ public class ContingencyQuestion extends CloseEndedQuestion
 	 * String object containing the question's help message to be displayed.
 	 */
 	private static final String HELP_MESSAGE = "Please select one of the below alternatives:";
-	
+
 	private List<Question> subsequentList;
 	private String contingencyAnswer;
 
@@ -66,7 +67,8 @@ public class ContingencyQuestion extends CloseEndedQuestion
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public ContingencyQuestion(JSONObject rawData)
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ContingencyQuestion(Map rawData)
 	{
 		super(rawData);
 		JSONArray subsequentListRaw = (JSONArray) rawData.get("subsequentList");
@@ -124,11 +126,11 @@ public class ContingencyQuestion extends CloseEndedQuestion
 	 * 
 	 * @return A JSONObject containing the survey.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public JSONObject getJSON()
+	public Map getJSON()
 	{
-		JSONObject rawData = super.getJSON();
+		JSONObject rawData = (JSONObject) super.getJSON();
 
 		JSONArray subsequentListRaw = new JSONArray();
 
@@ -141,14 +143,13 @@ public class ContingencyQuestion extends CloseEndedQuestion
 		return rawData;
 	}
 
+	@Override
 	public boolean isAnswered()
 	{
 		if (answer.equals(contingencyAnswer))
-		{
 			for (Question question : subsequentList)
 				if (!question.isAnswered())
 					return false;
-		}
 
 		return super.isAnswered();
 	}

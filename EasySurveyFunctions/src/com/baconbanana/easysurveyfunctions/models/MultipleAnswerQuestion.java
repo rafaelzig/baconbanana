@@ -1,15 +1,14 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.util.List;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -51,11 +50,13 @@ public class MultipleAnswerQuestion extends CloseEndedQuestion
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public MultipleAnswerQuestion(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public MultipleAnswerQuestion(Map rawData)
 	{
 		super(rawData);
 	}
 
+	@Override
 	public void setAnswer(String answer) throws InvalidAnswerException
 	{
 		String[] answers = Operations.parseAnswers(answer);

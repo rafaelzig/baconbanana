@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.parsing;
+package com.baconbanana.easysurveyfunctions.parsing;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,25 +14,25 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.NumericQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.RatingQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
+import com.baconbanana.easysurveyfunctions.models.ContingencyQuestion;
+import com.baconbanana.easysurveyfunctions.models.DateQuestion;
+import com.baconbanana.easysurveyfunctions.models.MultipleAnswerQuestion;
+import com.baconbanana.easysurveyfunctions.models.MultipleChoiceQuestion;
+import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
+import com.baconbanana.easysurveyfunctions.models.Question;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
+import com.baconbanana.easysurveyfunctions.models.TextualQuestion;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -50,10 +50,7 @@ public class Operations
 	 */
 	public static final String SEPARATOR = ";";
 
-	/**
-	 * String object representing the filename used to save the json files.
-	 */
-	public static final String FILENAME = "Survey.json";
+	
 
 	private final static String DATE_FORMAT = "yyyy-MM-dd";
 	private final static String DATE_HUMAN_READABLE_FORMAT = "dd MMM yyyy";
@@ -223,12 +220,21 @@ public class Operations
 	 * @param jsonString
 	 *            A String object containing the a json structure.
 	 * @return A JSONObject representing the json structure.
+	 * @throws org.json.simple.parser.ParseException 
 	 * @throws ParseException
 	 *             Signals that a parsing exception of some sort has occurred.
 	 */
-	public static JSONObject parseJSON(String jsonString) throws ParseException
+	@SuppressWarnings("rawtypes")
+	public static Map parseJSON(String jsonString) throws ParseException
 	{
-		return (JSONObject) parser.parse(jsonString);
+		try
+		{
+			return (Map) parser.parse(jsonString);
+		}
+		catch (org.json.simple.parser.ParseException e)
+		{
+			throw new ParseException(e.getMessage(), e.getPosition());
+		}
 	}
 
 	/**
@@ -238,9 +244,9 @@ public class Operations
 	 *            A JSON Array containing the raw question list.
 	 * @return A List of Question objects.
 	 */
-	public static List<Question> parseQuestionList(JSONArray questionListRaw)
+	public static List<Question> parseQuestionList(List<Object> questionListRaw)
 	{
-		List<Question> questionList = new ArrayList<>();
+		List<Question> questionList = new ArrayList<Question>();
 
 		QuestionType type;
 		JSONObject questionRaw;
@@ -312,7 +318,8 @@ public class Operations
 	{
 		format.setLenient(true);
 
-		String tmp = date.replaceAll("(?<=\\d)((rd)|(st)|(nd)|(th))\\s(of)\\b", "");
+		String tmp = date.replaceAll("(?<=\\d)((rd)|(st)|(nd)|(th))\\s(of)\\b",
+				"");
 		return new Date(humanReadableFormat.parse(tmp).getTime());
 	}
 
@@ -326,7 +333,7 @@ public class Operations
 	 */
 	public static String[] parseAnswers(String answer)
 	{
-		return (answer.isEmpty()) ? new String[0] : p.split(answer);
+		return answer.isEmpty() ? new String[0] : p.split(answer);
 	}
 
 	/**

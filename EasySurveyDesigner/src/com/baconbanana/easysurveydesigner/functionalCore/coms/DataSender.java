@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * It sends name and date of birth of patient together with survey.

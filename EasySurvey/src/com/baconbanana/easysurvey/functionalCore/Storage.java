@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import android.content.Context;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 
 
@@ -21,6 +21,11 @@ import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
  */
 public class Storage
 {
+	/**
+	 * String object representing the filename used to save the json files.
+	 */
+	public static final String FILENAME = "Survey.json";
+	
 	/**
 	 * Writes the specified string to the device's internal storage.
 	 * 
@@ -36,7 +41,7 @@ public class Storage
 	public static void writeToInternal(Context context, String input)
 			throws FileNotFoundException, IOException
 	{
-		Operations.writeFile(context.openFileOutput(Operations.FILENAME,
+		Operations.writeFile(context.openFileOutput(FILENAME,
 				Context.MODE_PRIVATE), input);
 	}
 
@@ -56,6 +61,6 @@ public class Storage
 	public static String readFromInternal(Context context, String filename)
 			throws FileNotFoundException, IOException
 	{
-		return Operations.readFile(context.openFileInput(Operations.FILENAME));
+		return Operations.readFile(context.openFileInput(FILENAME));
 	}
 }

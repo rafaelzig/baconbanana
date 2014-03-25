@@ -17,8 +17,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * class for creating different multiple answer questions
  * @author ZimS

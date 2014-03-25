@@ -2,11 +2,9 @@
 /**
  * model for Multiple Answer Question
  */
-import java.awt.event.ActionEvent;
-
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.MultipleQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.Template;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 public class MultipleAnswerQuestion extends MultipleQuestion{
 
