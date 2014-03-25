@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.Enumeration;
 
-import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
+import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
 
 /**
  * This class tries to gets your local IP address and create a serverSocket 

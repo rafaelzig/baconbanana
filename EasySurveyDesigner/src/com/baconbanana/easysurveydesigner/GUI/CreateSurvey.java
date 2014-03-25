@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;

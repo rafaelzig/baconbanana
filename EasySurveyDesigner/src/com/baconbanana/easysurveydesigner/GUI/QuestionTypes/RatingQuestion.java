@@ -1,7 +1,7 @@
-package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
+package com.baconbanana.easysurveydesigner.GUI.QuestionTypes;
 
-import com.baconbanana.easysurveydesigner.newGUI.MultipleQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.Template;
+import com.baconbanana.easysurveydesigner.GUI.MultipleQuestion;
+import com.baconbanana.easysurveydesigner.GUI.Template;
 
 /**
  * model for Rating Questions
