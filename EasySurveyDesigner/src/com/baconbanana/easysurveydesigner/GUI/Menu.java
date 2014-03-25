@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -105,7 +105,7 @@ public class Menu extends Window
 					getWindow().dispose();
 					break;
 				case PREVIEW_ANSWERS_TEXT:
-					new PatientSelector("List of Patients", true);
+					new PatientSelector("List of Patients", 800, 800);
 					getWindow().dispose();
 					break;
 				case CONNECT_DEVICE_TEXT:

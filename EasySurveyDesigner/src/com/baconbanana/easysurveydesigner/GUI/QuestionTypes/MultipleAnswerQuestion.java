@@ -1,9 +1,9 @@
- package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
+ package com.baconbanana.easysurveydesigner.GUI.QuestionTypes;
 /**
  * model for Multiple Answer Question
  */
-import com.baconbanana.easysurveydesigner.newGUI.MultipleQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.Template;
+import com.baconbanana.easysurveydesigner.GUI.MultipleQuestion;
+import com.baconbanana.easysurveydesigner.GUI.Template;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 public class MultipleAnswerQuestion extends MultipleQuestion{

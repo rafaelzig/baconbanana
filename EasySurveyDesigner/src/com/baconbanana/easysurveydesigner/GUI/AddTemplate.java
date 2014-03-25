@@ -1,18 +1,18 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.ContingencyQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.DateQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.MultipleAnswerQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.MultipleChoiceQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.NumericQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.RatingQuestion;
+import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.TextualQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 
