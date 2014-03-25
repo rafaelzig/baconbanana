@@ -64,7 +64,7 @@ public class Template extends SQLWindow{
 		nameOfTemplateTxf = new JLabel();
 
 		createQuestionBtn = new JButton("Create New");
-		addExistingQuestionBtn = new JButton("Add Existing");
+		setAddExistingQuestionBtn(new JButton("Add Existing"));
 		setDeleteBtn(new JButton("Delete"));
 		setSaveBtn(new JButton("Save"));
 		setCancelBtn(new JButton("Cancel"));
@@ -92,8 +92,8 @@ public class Template extends SQLWindow{
 		
 		jpButtons.add(createQuestionBtn);
 		createQuestionBtn.addActionListener(this);
-		jpButtons.add(addExistingQuestionBtn);
-		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(getAddExistingQuestionBtn());
+		getAddExistingQuestionBtn().addActionListener(this);
 		jpButtons.add(getDeleteBtn());
 		getDeleteBtn().addActionListener(this);
 		jpButtons.add(getSaveBtn());
@@ -173,7 +173,7 @@ public class Template extends SQLWindow{
 			
 			}
 		}
-		else if(e.getSource().equals(addExistingQuestionBtn)){
+		else if(e.getSource().equals(getAddExistingQuestionBtn())){
 			//TODO addExistingQuestionBtn
 		}
 		else if(e.getSource().equals(getDeleteBtn())){
@@ -216,6 +216,12 @@ public class Template extends SQLWindow{
 	}
 	public void setDeleteBtn(JButton deleteBtn) {
 		this.deleteBtn = deleteBtn;
+	}
+	public JButton getAddExistingQuestionBtn() {
+		return addExistingQuestionBtn;
+	}
+	public void setAddExistingQuestionBtn(JButton addExistingQuestionBtn) {
+		this.addExistingQuestionBtn = addExistingQuestionBtn;
 	}
 
 }

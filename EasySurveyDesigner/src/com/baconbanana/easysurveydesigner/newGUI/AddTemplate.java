@@ -69,9 +69,7 @@ public class AddTemplate extends Template{
 
 			}
 		}
-		//				}else if(e.getSource().equals(addExistingQuestionBtn)){
-		//					//TODO addExistingQuestionBtn
-		//				}
+						
 		else if(e.getSource().equals(getDeleteBtn())){
 			try {System.out.print(DBController.getInstance().select("Question","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
@@ -88,6 +86,9 @@ public class AddTemplate extends Template{
 							}
 				}
 
+		else if(e.getSource().equals(getAddExistingQuestionBtn())){
+			new ExistingQuestions("Questions", 500, 500);
+		}
 		else if(e.getSource().equals(getSaveBtn())){
 			try {
 				dbCon = DBController.getInstance();
