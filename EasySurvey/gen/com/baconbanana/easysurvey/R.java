@@ -64,10 +64,10 @@ containing a value of this type.
         public static final int action_settings=0x7f09001e;
         public static final int answTextBox=0x7f09000b;
         public static final int btnBegin=0x7f090007;
-        public static final int btnFinish=0x7f090016;
+        public static final int btnFinish=0x7f090015;
         public static final int btnNext=0x7f090012;
         public static final int btnPrevious=0x7f090014;
-        public static final int btnSpeech=0x7f090015;
+        public static final int btnSpeech=0x7f090016;
         public static final int confirm=0x7f09000f;
         public static final int connect=0x7f090001;
         public static final int datePicker=0x7f09000e;
@@ -115,7 +115,11 @@ containing a value of this type.
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
+        public static final int activate_to_speak_your_answer=0x7f060007;
         public static final int app_name=0x7f060000;
+        public static final int finish_the_survey=0x7f060008;
+        public static final int go_to_next_question=0x7f060005;
+        public static final int go_to_previous_question=0x7f060006;
         public static final int next=0x7f060003;
         public static final int questHinty=0x7f060002;
         public static final int title_activity_test=0x7f060004;

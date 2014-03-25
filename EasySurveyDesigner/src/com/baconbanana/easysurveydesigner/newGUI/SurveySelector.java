@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -23,6 +24,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
     private SQLList questionModel;
 	private  JTextField nameOfSurveyTxf;
 	private ListSelectionModel surveySelectionModel;
+	private JButton deleteButton = new JButton("Delete");
 	JButton onlyOneDuckingButtonNoOneEverGoingToLookAt = new JButton("onlyOneDuckingButtonNoOneEverGoingToLookAt");
 	public SurveySelector(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
@@ -38,24 +40,27 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		questionList = new JList<String>(questionModel);
 		surveyModel.getData();
 		surveySelectionModel=surveyList.getSelectionModel();
-		surveySelectionModel.addListSelectionListener(this);
-		onlyOneDuckingButtonNoOneEverGoingToLookAt.addActionListener(this);
 		
 		getWindow().setLayout(new BorderLayout());
 		nameOfSurveyTxf = new JTextField("Type name for this survey here");
 		JPanel centralPanel = new JPanel(new GridLayout(1, 2));
+		JPanel bottomPanel = new JPanel(new GridLayout(1,2));
 		
 		centralPanel.add(new JScrollPane(surveyList));
 		centralPanel.add(new JScrollPane(questionList));
 		getWindow().add(centralPanel,BorderLayout.CENTER);
+		getWindow().add(bottomPanel,BorderLayout.SOUTH);
 		
-		getWindow().add(onlyOneDuckingButtonNoOneEverGoingToLookAt,BorderLayout.SOUTH);
+		bottomPanel.add(onlyOneDuckingButtonNoOneEverGoingToLookAt);
+		bottomPanel.add(deleteButton);
 		getWindow().add(nameOfSurveyTxf,BorderLayout.NORTH);
 		getSurveyList().setBorder(getBorder());
 		
 		System.out.println(surveyModel.getSize());
 		
-		surveyList.addListSelectionListener(this);
+		surveySelectionModel.addListSelectionListener(this);
+		onlyOneDuckingButtonNoOneEverGoingToLookAt.addActionListener(this);
+		deleteButton.addActionListener(this);
 		
 		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
 	//	populateList(surveyList, surveyModel);
@@ -75,13 +80,29 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(onlyOneDuckingButtonNoOneEverGoingToLookAt)){
-		CreateSurvey newOne =  new CreateSurvey(surveyList.getSelectedValue(), true);
-	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
-				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
-	    surveyCreateModel.getData();
+		CreateSurvey editSurvey =  new CreateSurvey(surveyList.getSelectedValue(), true);
+		editSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(surveyList.getSelectedValue()), 1, "Survey", "Template");
+		}
+		else if (e.getSource().equals(deleteButton))
+		{
+			try {
+				DBController.getInstance().delete("Survey","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				DBController.getInstance().delete("Survey_Template","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				DBController.getInstance().delete("Patient_Survey","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				DBController.getInstance().delete("Survey_Stage","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				
+				surveyModel.getData();
+			} catch (ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+//	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
+//				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
+//	    surveyCreateModel.getData();
 		
 		}
-	}
+	
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {

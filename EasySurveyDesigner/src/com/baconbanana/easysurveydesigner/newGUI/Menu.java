@@ -97,7 +97,7 @@ public class Menu extends Window
 			switch (e.getActionCommand())
 			{
 				case CREATE_SURVEY_TEXT:
-					new CreateSurvey("Create New Survey", true);
+					new CreateSurvey(null, true);
 					getWindow().dispose();
 					break;
 				case OPEN_SURVEY_TEXT:
