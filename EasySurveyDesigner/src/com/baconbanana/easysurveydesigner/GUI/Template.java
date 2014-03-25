@@ -31,21 +31,25 @@ import com.baconbanana.easysurveyfunctions.models.QuestionType;
  * @author ZimS
  *
  */
-public class Template extends SQLWindow{
+public abstract class Template extends SQLWindow{
 	
-	private String stage;
+	protected String stage;
 	protected JButton createQuestionBtn;
-	private JButton addExistingQuestionBtn;
-	private JButton deleteBtn;
-	private JButton saveBtn;
-	private JButton cancelBtn;
-	private JLabel nameOfTemplateTxf;
+	protected JButton addExistingQuestionBtn;
+	protected JButton deleteBtn;
+	protected JButton saveBtn;
+	protected JButton cancelBtn;
+	protected JLabel nameOfTemplateTxf;
 	protected JComboBox<QuestionType> typeComboBox;
 
 	private JList<String> templateList;
 	private SQLList templateModel;
 	
 	private String templateName;
+	
+	protected Survey createSurvey;
+	
+	protected DBController dbCon;
  
 
 	public Template(String tit, int width, int height) {
@@ -57,24 +61,21 @@ public class Template extends SQLWindow{
 		
 		
 	}
-	private void initiWidgets(){
+	protected void initiWidgets(){
 
 		JPanel stage = new JPanel(new GridBagLayout());
 		
 		nameOfTemplateTxf = new JLabel();
 
 		createQuestionBtn = new JButton("Create New");
-		setAddExistingQuestionBtn(new JButton("Add Existing"));
-		setDeleteBtn(new JButton("Delete"));
-		setSaveBtn(new JButton("Save"));
-		setCancelBtn(new JButton("Cancel"));
+		addExistingQuestionBtn = new JButton("Add Existing");
+		deleteBtn = new JButton("Delete");
+		saveBtn = new JButton("Save");
+		cancelBtn = new JButton("Cancel");
 		
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 
-		
-//		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
-
-		templateList = new JList<>();
+		templateList = new JList<String>();
 
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		
@@ -92,21 +93,44 @@ public class Template extends SQLWindow{
 		
 		jpButtons.add(createQuestionBtn);
 		createQuestionBtn.addActionListener(this);
-		jpButtons.add(getAddExistingQuestionBtn());
-		getAddExistingQuestionBtn().addActionListener(this);
-		jpButtons.add(getDeleteBtn());
-		getDeleteBtn().addActionListener(this);
-		jpButtons.add(getSaveBtn());
-		getSaveBtn().addActionListener(this);
-		jpButtons.add(getCancelBtn());
-		getCancelBtn().addActionListener(this);
+		jpButtons.add(addExistingQuestionBtn);
+		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(deleteBtn);
+		deleteBtn.addActionListener(this);
+		jpButtons.add(saveBtn);
+		saveBtn.addActionListener(this);
+		jpButtons.add(cancelBtn);
+		cancelBtn.addActionListener(this);
 		
 		stage.add(jpButtons, LayoutController.summonCon(1, 3, 1, 1, 80, 10));
 		
+		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		
 		getWindow().add(stage);
 		setFrameOptions();
-		DBController dbCon;
-		boolean valid = false;
+	}
+
+/**
+ * listener for different question types
+ */
+
+		
+	
+	public SQLList getListModel(){
+		return templateModel;
+	}
+	public String getTemplateName(){
+		return templateName;
+	}
+	public JList<String> getTemplateList(){
+		return templateList;
+	}
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	protected void enableTemplateNameRequester(boolean valid){
 		while(valid == false){
 			templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 				if(templateName != null){
@@ -130,26 +154,17 @@ public class Template extends SQLWindow{
 					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
 				}
 		}
-		
-		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		getWindow().setTitle(templateName);
 	}
-
-/**
- * listener for different question types
- */
-
-	@Override
+	
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		//TODO sort out dispose and visibles to retain template name
 		if(e.getSource().equals(createQuestionBtn)){
 			QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
 			String tit = new String("New " + type.toString());
 			System.out.println(type);
 			switch(type){
 			case NUMERICAL :
-				
+
 				new NumericQuestion(tit, 800, 500, this);
 				break;
 			case DATE :
@@ -170,58 +185,52 @@ public class Template extends SQLWindow{
 			case CONTINGENCY :
 				new ContingencyQuestion();
 				break;
-			
+
 			}
 		}
-		else if(e.getSource().equals(getAddExistingQuestionBtn())){
-			//TODO addExistingQuestionBtn
+						
+		else if(e.getSource().equals(deleteBtn)){
+			try {System.out.print(DBController.getInstance().select("Question","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
+			int id =(int) DBController.getInstance().select("Question natural join template","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue())+" and template="+
+							DBController.appendApo(getTemplateName()),"QuestionID").get(0)[0];
+
+
+							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
+							getListModel().getData();
+							} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							}
+				}
+
+		else if(e.getSource().equals(addExistingQuestionBtn)){
+			new ExistingQuestions("Questions", 500, 500);
 		}
-		else if(e.getSource().equals(getDeleteBtn())){
-			//TODO deleteBtn
+		else if(e.getSource().equals(saveBtn)){
+			try {
+				dbCon = DBController.getInstance();
+				if (!(dbCon.exists("Template", "Template = " + DBController.appendApo(this.getTemplateName())))){
+					JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
+					createSurvey.getSurveyTemplateListModel().getData();
+				}else {
+					dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
+					createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
+					createSurvey.getSurveyTemplateListModel().getData();
+				}
+
+			} catch (SQLException | ClassNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			getWindow().dispose();
+		}else if(e.getSource().equals(cancelBtn)){
+			onCancel();
+
 		}
-		else if(e.getSource().equals(getSaveBtn())){
-			
-		}else if(e.getSource().equals(getCancelBtn())){
-		}
-		
 	}
-	public SQLList getListModel(){
-		return templateModel;
-	}
-	public String getTemplateName(){
-		return templateName;
-	}
-	public JList<String> getTemplateList(){
-		return templateList;
-	}
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	public JButton getCancelBtn() {
-		return cancelBtn;
-	}
-	public void setCancelBtn(JButton cancelBtn) {
-		this.cancelBtn = cancelBtn;
-	}
-	public JButton getSaveBtn() {
-		return saveBtn;
-	}
-	public void setSaveBtn(JButton saveBtn) {
-		this.saveBtn = saveBtn;
-	}
-	public JButton getDeleteBtn() {
-		return deleteBtn;
-	}
-	public void setDeleteBtn(JButton deleteBtn) {
-		this.deleteBtn = deleteBtn;
-	}
-	public JButton getAddExistingQuestionBtn() {
-		return addExistingQuestionBtn;
-	}
-	public void setAddExistingQuestionBtn(JButton addExistingQuestionBtn) {
-		this.addExistingQuestionBtn = addExistingQuestionBtn;
-	}
+	
+	public abstract void onCancel();
 
 }

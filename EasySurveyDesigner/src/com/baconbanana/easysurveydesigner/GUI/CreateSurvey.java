@@ -41,13 +41,13 @@ public class CreateSurvey extends Survey{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate(null, 800, 500, this, true);
+			new AddTemplate(null, 800, 500, this);
 			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
 			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
 			//getWindow().setEnabled(false);
 
 		}else if(e.getSource().equals(editBtn)){
-			AddTemplate editTemplate = new AddTemplate(templateList.getSelectedValue(),800,500,this, false);
+			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(), 800, 500, this);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			//			editTemplate.getListModel().getData();
 		}
