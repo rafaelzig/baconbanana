@@ -51,6 +51,7 @@ public class Template extends SQLWindow{
 
 	public Template(String tit, int width, int height) {
 		super(tit, width, height);
+		templateName = tit;
 		initiWidgets();
 		initiLayout();
 		
@@ -71,7 +72,7 @@ public class Template extends SQLWindow{
 		typeComboBox = new JComboBox<QuestionType>(QuestionType.values());
 
 		
-	//	templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + templateName, 0, "Content");
+//		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
 
 		templateList = new JList<>();
 
@@ -107,6 +108,11 @@ public class Template extends SQLWindow{
 		DBController dbCon;
 		try{
 			dbCon = DBController.getInstance();
+			if (templateName != null){
+				templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + 
+						DBController.appendApo(templateName), 0, "Content");
+				templateList.setModel(templateModel);
+			}
 			while(templateName == null){
 				templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(templateName))){
