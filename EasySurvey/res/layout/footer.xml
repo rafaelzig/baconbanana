@@ -10,6 +10,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10sp"
         android:layout_toRightOf="@+id/txtPage"
+        android:background="@drawable/button"
         android:contentDescription="@string/go_to_next_question"
         android:onClick="skipQuestion"
         android:src="@android:drawable/ic_media_next" />
@@ -22,6 +23,7 @@
         android:layout_alignParentLeft="true"
         android:layout_margin="10sp"
         android:layout_toLeftOf="@+id/txtPage"
+        android:background="@drawable/button"
         android:contentDescription="@string/go_to_previous_question"
         android:onClick="skipQuestion"
         android:src="@android:drawable/ic_media_previous" />
@@ -45,6 +47,7 @@
         android:layout_alignLeft="@+id/btnSpeech"
         android:layout_alignRight="@+id/btnSpeech"
         android:layout_centerVertical="true"
+        android:background="@drawable/button"
         android:contentDescription="@string/finish_the_survey"
         android:onClick="finishSurvey"
         android:src="@drawable/ic_menu_agenda"
@@ -89,6 +92,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="100sp"
         android:layout_marginRight="100sp"
+        android:background="@drawable/button"
         android:contentDescription="@string/activate_to_speak_your_answer"
         android:onClick="setAnswerFromSpeech"
         android:src="@android:drawable/ic_btn_speak_now" />
