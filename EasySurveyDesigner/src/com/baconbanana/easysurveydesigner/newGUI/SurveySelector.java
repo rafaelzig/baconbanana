@@ -88,6 +88,9 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 			try {
 				DBController.getInstance().delete("Survey","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
 				DBController.getInstance().delete("Survey_Template","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				DBController.getInstance().delete("Patient_Survey","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				DBController.getInstance().delete("Survey_Stage","Survey="+ DBController.appendApo(surveyList.getSelectedValue()));
+				
 				surveyModel.getData();
 			} catch (ClassNotFoundException | SQLException e1) {
 				// TODO Auto-generated catch block
