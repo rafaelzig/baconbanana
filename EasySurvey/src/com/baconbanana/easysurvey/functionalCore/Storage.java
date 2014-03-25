@@ -10,7 +10,6 @@ import android.content.Context;
 
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 
 

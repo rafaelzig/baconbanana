@@ -26,10 +26,10 @@ import com.baconbanana.easysurveyfunctions.models.QuestionType;
 public class AddTemplate extends Template{
 
 	private DBController dbCon;
-	private CreateSurvey createSurvey;
+	private Survey createSurvey;
 	private boolean isNewTemplate;
 
-	public AddTemplate(String tit, int width, int height, CreateSurvey cs, boolean isNew) {
+	public AddTemplate(String tit, int width, int height, Survey cs, boolean isNew) {
 		super(tit, width, height);
 		isNewTemplate = isNew;
 		createSurvey = cs;
