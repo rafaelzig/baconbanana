@@ -228,12 +228,12 @@ public class CreateSurvey extends SQLWindow{
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
-
 			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" +
-					DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
+			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
+			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
 
-		}		
+			} 
 	}
 
 
