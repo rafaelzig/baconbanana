@@ -29,13 +29,15 @@ import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
 
 public class AddTemplate extends Template{
 
-		private DBController dbCon;
-		private CreateSurvey createSurvey;
-		
-public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
+	private DBController dbCon;
+	private CreateSurvey createSurvey;
+	private boolean isNewTemplate;
+
+	public AddTemplate(String tit, int width, int height, CreateSurvey cs, boolean isNew) {
 		super(tit, width, height);
+		isNewTemplate = isNew;
 		createSurvey = cs;
-}
+	}
 	/**
 	 * action listener for different types of questions
 	 */
@@ -71,41 +73,54 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 
 			}
 		}
-//				}else if(e.getSource().equals(addExistingQuestionBtn)){
-//					//TODO addExistingQuestionBtn
-//				}
-				else if(e.getSource().equals(getDeleteBtn())){
-					try {System.out.print(DBController.getInstance().select("Question","Content="+
-							DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
-							int id =(int) DBController.getInstance().select("Question","Content="+
-							DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
+		//				}else if(e.getSource().equals(addExistingQuestionBtn)){
+		//					//TODO addExistingQuestionBtn
+		//				}
+		else if(e.getSource().equals(getDeleteBtn())){
+			try {System.out.print(DBController.getInstance().select("Question","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
+			int id =(int) DBController.getInstance().select("Question","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
 
-							DBController.getInstance().delete("Template", "QuestionID="+id);
-							getListModel().getData();
-							} catch (ClassNotFoundException | SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-							}
-				}
+			DBController.getInstance().delete("Template", "QuestionID="+id);
+			getListModel().getData();
+			} catch (ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 		else if(e.getSource().equals(getSaveBtn())){
 			try {
-			dbCon = DBController.getInstance();
-			if (!(dbCon.exists("Template", "Template = " + DBController.appendApo(this.getTemplateName())))){
-				JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
-				createSurvey.getSurveyTemplateListModel().getData();
-			}else {
-				dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
-				createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
-				createSurvey.getSurveyTemplateListModel().getData();
-			}
-			
+				dbCon = DBController.getInstance();
+				if (!(dbCon.exists("Template", "Template = " + DBController.appendApo(this.getTemplateName())))){
+					JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
+					createSurvey.getSurveyTemplateListModel().getData();
+				}else {
+					dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
+					createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
+					createSurvey.getSurveyTemplateListModel().getData();
+				}
+
 			} catch (SQLException | ClassNotFoundException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			getWindow().dispose();
 		}else if(e.getSource().equals(getCancelBtn())){
-
+			if (isNewTemplate == true){
+				try {
+					DBController.getInstance().delete("Template","Template="+ DBController.appendApo(this.getTemplateName()));
+					DBController.getInstance().delete("Survey_Template","Template="+ DBController.appendApo(this.getTemplateName()));
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				createSurvey.getSurveyTemplateListModel().getData();
+				
+			}
 			getWindow().dispose();
 
 		}

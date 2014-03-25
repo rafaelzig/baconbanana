@@ -180,7 +180,6 @@ public class Template extends SQLWindow{
 		else if(e.getSource().equals(getSaveBtn())){
 			
 		}else if(e.getSource().equals(getCancelBtn())){
-			getWindow().dispose();
 		}
 		
 	}

@@ -48,9 +48,11 @@ public class CreateSurvey extends SQLWindow{
 	private JButton sendBtn;
 	private GridBagConstraints bagCon;
 
+	private boolean isNewSurvey;
 
-	public CreateSurvey(String tit, boolean fullScreen) {
+	public CreateSurvey(String tit, boolean fullScreen, boolean isNew) {
 		super(tit, fullScreen);
+		isNewSurvey = isNew;
 		surveyName = tit;
 		initiWidgets();
 	}
@@ -167,13 +169,13 @@ public class CreateSurvey extends SQLWindow{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
-			new AddTemplate(null, 800, 500, this);
+			new AddTemplate(null, 800, 500, this, true);
 			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
 			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
 			//getWindow().setEnabled(false);
 
 		}else if(e.getSource().equals(editBtn)){
-			AddTemplate editTemplate = new AddTemplate(templateList.getSelectedValue(),800,500,this);
+			AddTemplate editTemplate = new AddTemplate(templateList.getSelectedValue(),800,500,this, false);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			//			editTemplate.getListModel().getData();
 		}
@@ -204,11 +206,13 @@ public class CreateSurvey extends SQLWindow{
 			
 		}else if(e.getSource().equals(cancelBtn)){
 			try {
+				
+				if (isNewSurvey){
 				DBController.getInstance().delete("Survey","Survey="+ DBController.appendApo(surveyName));
 				DBController.getInstance().delete("Survey_Template","Survey="+ DBController.appendApo(surveyName));
 				DBController.getInstance().delete("Patient_Survey","Survey="+ DBController.appendApo(surveyName));
 				DBController.getInstance().delete("Survey_Stage","Survey="+ DBController.appendApo(surveyName));
-				
+				}
 				
 			} catch (ClassNotFoundException | SQLException e1) {
 				// TODO Auto-generated catch block
