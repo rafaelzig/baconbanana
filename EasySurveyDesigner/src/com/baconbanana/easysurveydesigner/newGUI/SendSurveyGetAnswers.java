@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -24,7 +23,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.NewImportExport;
 
 
 public class SendSurveyGetAnswers implements ActionListener {
