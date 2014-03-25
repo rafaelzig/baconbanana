@@ -27,7 +27,6 @@ public abstract class Window implements ActionListener{
 		this.width = width;
 		this.height = height;
 		window = new JFrame(title);
-		initiLayout();
 	}
 	public Window(String tit, boolean fullScreen){
 		title = tit;
@@ -37,17 +36,16 @@ public abstract class Window implements ActionListener{
 			window.setMinimumSize(new Dimension(400,400));	
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
-		initiLayout();
+
 	}
 	public void setFrameOptions(){
 		window.setMinimumSize(new Dimension(width, height));
 		window.pack();
 		window.setSize(width, height);
 		window.setLocationRelativeTo(null);
-	}
-	public void initiLayout(){
 		window.setVisible(true);
 	}
+	
 	
 	public JFrame getWindow(){
 		return window;

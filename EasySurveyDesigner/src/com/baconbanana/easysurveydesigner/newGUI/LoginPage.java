@@ -128,7 +128,7 @@ public class LoginPage extends Window
 		loginBtn = new JButton("Log in");
 		loginBtn.addActionListener(this);
 		panel.add(loginBtn, bagCon);
-
+		
 		getWindow().add(panel);
 	}
 
