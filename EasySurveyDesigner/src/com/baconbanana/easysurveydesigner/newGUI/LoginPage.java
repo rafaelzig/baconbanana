@@ -135,13 +135,10 @@ public class LoginPage extends Window
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-      /* // TODO Auto-generated method stub
+      
 		if (e.getSource().equals(loginBtn))
 		{
-			// TODO it appears that check password always give me true. It is
-			// getting late and my brain is starting
-			// to sleep so I will figure it out tomorrow or maybe some1 can help
-			// me with it :P
+			
 			if (checkPassword())
 			{
 				new Menu("Menu", 250, 300);
@@ -161,25 +158,9 @@ public class LoginPage extends Window
 		{
 			new DeleteUser("Delete user", 300, 300);
 			getWindow().dispose();
-		}*/
-		
-		new Menu("Menu", 250, 300);
+		}
 
 	}
-
-	// WHENEVER YOU click login you will you lucky thing
-	// public void checkPassword(){
-	//
-	// if (check = true) {
-	// new Menu("Menu", 250, 300);
-	// getWindow().dispose();
-	// }
-	// else {
-	// getWindow().dispose();
-	// new LoginPage("Login Page");
-	// System.out.println("you have fucked up!!");
-	// }
-	// }
 	public boolean checkPassword()
 	{
 		DBController controller = null;

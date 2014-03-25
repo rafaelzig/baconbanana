@@ -92,6 +92,7 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 			dbCon = DBController.getInstance();
 			if (!(dbCon.exists("Template", "Template = " + DBController.appendApo(this.getTemplateName())))){
 				JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
+				createSurvey.getSurveyTemplateListModel().getData();
 			}else {
 				dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
 				createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");

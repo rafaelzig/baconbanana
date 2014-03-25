@@ -199,11 +199,23 @@ public class CreateSurvey extends SQLWindow{
 			}
 		}
 		else if(e.getSource().equals(saveBtn)){ 
-			//TODO save
-		}else if(e.getSource().equals(cancelBtn)){
-			//TODO this will delete the record to you create in the database
-			new Menu("Menu", 400, 400);
 			getWindow().dispose();
+			new Menu("Menu", 250, 300);
+			
+		}else if(e.getSource().equals(cancelBtn)){
+			try {
+				DBController.getInstance().delete("Survey","Survey="+ DBController.appendApo(surveyName));
+				DBController.getInstance().delete("Survey_Template","Survey="+ DBController.appendApo(surveyName));
+				DBController.getInstance().delete("Patient_Survey","Survey="+ DBController.appendApo(surveyName));
+				DBController.getInstance().delete("Survey_Stage","Survey="+ DBController.appendApo(surveyName));
+				
+				
+			} catch (ClassNotFoundException | SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			getWindow().dispose();
+			new Menu("Menu", 400, 400);
 		}
 		else if(e.getSource().equals(sendBtn)){
 			//TODO send
