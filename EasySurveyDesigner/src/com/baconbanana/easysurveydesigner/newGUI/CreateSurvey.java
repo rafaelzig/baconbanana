@@ -228,7 +228,6 @@ public class CreateSurvey extends SQLWindow{
 			//could change to templatelist.getselecteditem
 			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + 
 			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
-			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
 			
 		}		
