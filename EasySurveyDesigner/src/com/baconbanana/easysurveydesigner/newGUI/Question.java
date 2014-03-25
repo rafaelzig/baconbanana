@@ -133,7 +133,6 @@ public class Question extends SQLWindow{
 	 */
 	public void saveQuestion(){
 		
-		new AddTemplate("Create New Template", 800, 500);
 		getWindow().dispose();
 	}
 	
