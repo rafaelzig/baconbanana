@@ -17,6 +17,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOldv2;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * class for creating new survey
@@ -175,7 +176,17 @@ public class CreateSurvey extends SQLWindow{
 			//TODO edit
 		}
 		else if(e.getSource().equals(deleteBtn)){
-			//TODO delete
+			if (!(templateList.getSelectedValue() == null)){
+				try {
+					DBController.getInstance().delete("Template","Template="+ DBController.appendApo(templateList.getSelectedValue()));
+					DBController.getInstance().delete("Survey_Template","Template="+ DBController.appendApo(templateList.getSelectedValue()));
+					templateModelFromSurvey.getData();
+				} catch (ClassNotFoundException | SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
 		}
 		else if(e.getSource().equals(moveBtn)){
 
@@ -215,7 +226,8 @@ public class CreateSurvey extends SQLWindow{
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
-			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(e.getFirstIndex())), 0, "Content");
+			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" + 
+			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
 			
