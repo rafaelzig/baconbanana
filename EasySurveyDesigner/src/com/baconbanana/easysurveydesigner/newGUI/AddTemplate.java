@@ -5,11 +5,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import java.util.List;
-
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
