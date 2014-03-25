@@ -80,7 +80,7 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 							int id =(int) DBController.getInstance().select("Question","Content="+
 							DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
 
-							DBController.getInstance().delete("Template", "QuestionID="+id);
+							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
 							getListModel().getData();
 							} catch (ClassNotFoundException | SQLException e1) {
 							// TODO Auto-generated catch block
