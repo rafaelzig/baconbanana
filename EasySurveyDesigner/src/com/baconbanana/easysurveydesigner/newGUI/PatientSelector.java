@@ -1,11 +1,15 @@
 package com.baconbanana.easysurveydesigner.newGUI;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * class to select a patient
@@ -24,6 +28,8 @@ public class PatientSelector extends Window{
 	private JButton selectBtn;
 	private JButton cancelBtn;
 	
+	private ListSelectionModel patientSelectionModel;
+	
 	public PatientSelector(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
@@ -31,12 +37,18 @@ public class PatientSelector extends Window{
 	
 	private void initiWidgets() {
 		
-		surveyModel = new SQLList("Survey", 0,"Survey");
-		surveyList =new JList<String>(surveyModel);
-		questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question",0,"Content");
-		questionList = new JList<String>(questionModel);
-		surveyModel.getData();
-		surveySelectionModel=surveyList.getSelectionModel();
+		patientListModel = new SQLList("Patient", 0, "Patient");
+		patientList =new JList<String>(patientListModel);
+		patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Patient =" + DBController.appendApo(patientList.getSelectedValue()), 0,"PatientID", "Patient", "Survey");
+		patientSurveyList = new JList<String>(patientSurveyListModel);
+		patientListModel.getData();
+		patientSelectionModel=patientList.getSelectionModel();
+		
+		getWindow().setLayout(new BorderLayout());
+		patientLbl = new JLabel("List of Patients");
+		getWindow().add(patientLbl, BorderLayout.NORTH);
+		JPanel centerPanel = new JPanel();
+		
 		
 	}
 
