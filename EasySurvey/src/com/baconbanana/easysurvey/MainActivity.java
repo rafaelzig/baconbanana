@@ -3,9 +3,6 @@ package com.baconbanana.easysurvey;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.ParseException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,8 +13,8 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.baconbanana.easysurvey.functionalCore.Storage;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 public class MainActivity extends Activity
 {
@@ -65,7 +62,6 @@ public class MainActivity extends Activity
 	 */
 	private boolean loadSurvey()
 	{
-		JSONObject rawData = null;
 		String jsonString;
 
 		try
@@ -76,9 +72,8 @@ public class MainActivity extends Activity
 //			survey = new Survey(rawData);
 //			Storage.writeToInternal(this, survey.getJSON().toJSONString());
 			
-			jsonString = Storage.readFromInternal(this, Operations.FILENAME);
-			rawData = Operations.parseJSON(jsonString);
-			survey = new Survey(rawData);
+			jsonString = Storage.readFromInternal(this, Storage.FILENAME);
+			survey = new Survey(Operations.parseJSON(jsonString));
 		}
 		
 		catch (FileNotFoundException e)
@@ -96,11 +91,6 @@ public class MainActivity extends Activity
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		catch (ParseException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		if (ConnectionActivity.isSurveyCompleted())
 			return false;
@@ -113,7 +103,7 @@ public class MainActivity extends Activity
 		if (loadSurvey())
 		{
 			Intent intent = new Intent(this, SurveyActivity.class);
-			intent.putExtra(EXTRA_MESSAGE, survey.getJSON().toJSONString());
+			intent.putExtra(EXTRA_MESSAGE, survey.getJSON().toString());
 			startActivity(intent);
 		}
 		else

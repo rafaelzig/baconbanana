@@ -16,12 +16,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.baconbanana.easysurvey.R;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.models.CloseEndedQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.models.CloseEndedQuestion;
+import com.baconbanana.easysurveyfunctions.models.DateQuestion;
+import com.baconbanana.easysurveyfunctions.models.Question;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * Class which contains auxiliary static methods used in the survey activity.

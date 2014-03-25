@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.text.ParseException;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * This class extend the OpenEndedQuestion class, it represents a question which
@@ -29,7 +28,8 @@ public class DateQuestion extends OpenEndedQuestion
 		super(content, HELP_MESSAGE, QuestionType.DATE);
 	}
 
-	public DateQuestion(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public DateQuestion(Map rawData)
 	{
 		super(rawData);
 	}
@@ -39,35 +39,39 @@ public class DateQuestion extends OpenEndedQuestion
 	 * format: "yyyy-MM-dd.
 	 */
 	@Override
-	public void setAnswer(String answer) throws ParseException, InvalidAnswerException
+	public void setAnswer(String answer) throws ParseException,
+			InvalidAnswerException
 	{
 		super.setAnswer(Operations.parseDate(answer).toString());
 	}
-	
+
 	/**
 	 * Gets the year of the answer to this question.
+	 * 
 	 * @return Integer representing the year of the answer to this question.
 	 */
 	public int getYear()
 	{
-		return (isAnswered()) ? Integer.valueOf(answer.substring(0,4)) : -1;
+		return isAnswered() ? Integer.valueOf(answer.substring(0, 4)) : -1;
 	}
-	
+
 	/**
 	 * Gets the month of the answer to this question.
+	 * 
 	 * @return Integer representing the month of the answer to this question.
 	 */
 	public int getMonth()
 	{
-		return (isAnswered()) ? Integer.valueOf(answer.substring(5,7)) : -1;
+		return isAnswered() ? Integer.valueOf(answer.substring(5, 7)) : -1;
 	}
-	
+
 	/**
 	 * Gets the day of the answer to this question.
+	 * 
 	 * @return Integer representing the day of the answer to this question.
 	 */
 	public int getDay()
 	{
-		return (isAnswered()) ? Integer.valueOf(answer.substring(8,10)) : -1;
+		return isAnswered() ? Integer.valueOf(answer.substring(8, 10)) : -1;
 	}
 }

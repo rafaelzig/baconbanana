@@ -1,10 +1,9 @@
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.text.ParseException;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
 
 /**
  * This class extends the OpenEndedQuestion class, it represents a question
@@ -25,7 +24,8 @@ public class NumericQuestion extends OpenEndedQuestion
 		super(content, HELP_MESSAGE, QuestionType.NUMERICAL);
 	}
 
-	public NumericQuestion(JSONObject questionRaw)
+	@SuppressWarnings("rawtypes")
+	public NumericQuestion(Map questionRaw)
 	{
 		super(questionRaw);
 	}

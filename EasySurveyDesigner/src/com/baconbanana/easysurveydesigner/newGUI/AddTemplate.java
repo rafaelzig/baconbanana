@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
@@ -14,7 +13,7 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQue
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 
 /**
@@ -70,14 +69,13 @@ public class AddTemplate extends Template{
 
 			}
 		}
-		//				}else if(e.getSource().equals(addExistingQuestionBtn)){
-		//					//TODO addExistingQuestionBtn
-		//				}
+						
 		else if(e.getSource().equals(getDeleteBtn())){
 			try {System.out.print(DBController.getInstance().select("Question","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
-			int id =(int) DBController.getInstance().select("Question","Content="+
-					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
+			int id =(int) DBController.getInstance().select("Question natural join template","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue())+" and template="+
+							DBController.appendApo(getTemplateName()),"QuestionID").get(0)[0];
 
 
 							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
@@ -88,6 +86,9 @@ public class AddTemplate extends Template{
 							}
 				}
 
+		else if(e.getSource().equals(getAddExistingQuestionBtn())){
+			new ExistingQuestions("Questions", 500, 500);
+		}
 		else if(e.getSource().equals(getSaveBtn())){
 			try {
 				dbCon = DBController.getInstance();

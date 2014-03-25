@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -72,7 +71,8 @@ public class RatingQuestion extends CloseEndedQuestion
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public RatingQuestion(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public RatingQuestion(Map rawData)
 	{
 		super(rawData);
 	}
@@ -87,7 +87,7 @@ public class RatingQuestion extends CloseEndedQuestion
 	 */
 	private static List<String> prepareChoiceList(String keyword)
 	{
-		List<String> choiceList = new ArrayList<>(5);
+		List<String> choiceList = new ArrayList<String>(5);
 
 		if (keyword.equals(LIKERT_SCALE))
 		{

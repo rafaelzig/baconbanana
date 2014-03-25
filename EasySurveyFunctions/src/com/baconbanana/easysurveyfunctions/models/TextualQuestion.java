@@ -1,7 +1,6 @@
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
-import org.json.simple.JSONObject;
-
+import java.util.Map;
 
 /**
  * This class extends the OpenEndedQuestion class and represents a question
@@ -22,7 +21,8 @@ public class TextualQuestion extends OpenEndedQuestion
 		super(content, HELP_MESSAGE, QuestionType.TEXTUAL);
 	}
 
-	public TextualQuestion(JSONObject questionRaw)
+	@SuppressWarnings("rawtypes")
+	public TextualQuestion(Map questionRaw)
 	{
 		super(questionRaw);
 	}

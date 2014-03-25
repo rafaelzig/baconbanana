@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 /**
  * Singleton Class used to perform Database operations.

@@ -247,8 +247,7 @@ public static synchronized void setServerSocket(ServerSocket s){
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{
-		
+	{	
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -286,5 +285,4 @@ public static synchronized void setServerSocket(ServerSocket s){
 					break;
 		}
 	}
-	
 }

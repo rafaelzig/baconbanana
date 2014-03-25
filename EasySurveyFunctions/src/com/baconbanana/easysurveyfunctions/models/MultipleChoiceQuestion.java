@@ -1,13 +1,12 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.util.List;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -48,7 +47,8 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public MultipleChoiceQuestion(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public MultipleChoiceQuestion(Map rawData)
 	{
 		super(rawData);
 	}

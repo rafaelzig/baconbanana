@@ -3,20 +3,14 @@ package com.baconbanana.easysurveydesigner.newGUI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * encapsulated class for new qustion classes
  * @author ZimS

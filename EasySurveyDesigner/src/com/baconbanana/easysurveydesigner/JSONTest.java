@@ -1,24 +1,23 @@
 package com.baconbanana.easysurveydesigner;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.parser.ParseException;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidSubsequentListException;
-import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.DateQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.NumericQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Patient;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.models.RatingQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
-import com.baconbanana.easysurveydesigner.functionalCore.models.TextualQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidSubsequentListException;
+import com.baconbanana.easysurveyfunctions.models.ContingencyQuestion;
+import com.baconbanana.easysurveyfunctions.models.DateQuestion;
+import com.baconbanana.easysurveyfunctions.models.MultipleAnswerQuestion;
+import com.baconbanana.easysurveyfunctions.models.MultipleChoiceQuestion;
+import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
+import com.baconbanana.easysurveyfunctions.models.Patient;
+import com.baconbanana.easysurveyfunctions.models.Question;
+import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
+import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.models.TextualQuestion;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 public class JSONTest
 {
@@ -108,17 +107,17 @@ public class JSONTest
 
 		try
 		{
-			Operations.writeFile(Operations.FILENAME, qOne.getJSON().toJSONString());
-			json = Operations.readFile(Operations.FILENAME);
+			Operations.writeFile("Survey.json", qOne.getJSON().toString());
+			json = Operations.readFile("Survey.json");
 			System.out.println(json);
 			
 			qTwo = new Survey(Operations.parseJSON(json));
 		}
-		catch (IOException | java.text.ParseException | ParseException e)
+		catch (IOException | ParseException e)
 		{
 			e.printStackTrace();
 		}
 
-		System.out.println(qTwo.getJSON().toJSONString());
+		System.out.println(qTwo.getJSON().toString());
 	}
 }
