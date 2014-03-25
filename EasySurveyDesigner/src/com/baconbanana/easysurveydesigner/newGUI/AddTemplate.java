@@ -15,6 +15,7 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.CreateSurvey;
+import com.sun.org.apache.bcel.internal.generic.DCONST;
 
 
 /**
@@ -76,8 +77,9 @@ public class AddTemplate extends Template{
 		else if(e.getSource().equals(getDeleteBtn())){
 			try {System.out.print(DBController.getInstance().select("Question","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
-			int id =(int) DBController.getInstance().select("Question","Content="+
-					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
+			int id =(int) DBController.getInstance().select("Question natural join template","Content="+
+					DBController.appendApo(getTemplateList().getSelectedValue())+" and template="+
+							DBController.appendApo(getTemplateName()),"QuestionID").get(0)[0];
 
 
 							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
