@@ -114,6 +114,7 @@ public class Template extends SQLWindow{
 						templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
 						templateList.setModel(templateModel);
 					}else{
+						
 						templateName = null;
 						JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
 					}
