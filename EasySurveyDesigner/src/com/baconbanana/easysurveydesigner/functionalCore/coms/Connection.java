@@ -31,8 +31,8 @@ public class Connection extends Thread {
 	
 	public void run() {
 
-		while(SendSurveyGetAnswers.getServerSocket()== null 
-			&& SendSurveyGetAnswers.getPageClosed()==false) {
+		while(SendSurveyGetAnswers.getServerSocket() == null 
+			&& !SendSurveyGetAnswers.isPageClosed()) {
 			
 			try {
 			
@@ -41,7 +41,7 @@ public class Connection extends Thread {
 				Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
 		       
 				NetworkInterface netint= Collections.list(nets).get(0);
-				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses(); // Variable never used?
 				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
 				System.out.println(IP);
 				SendSurveyGetAnswers.setLocalIP(IP);
@@ -55,11 +55,11 @@ public class Connection extends Thread {
 			}
 			
 			try {
-				ServerSocket ss = createServerSocket(listOfSockets);
+				ServerSocket ss = createServerSocket(listOfSockets); 
 				System.out.println("will try to create new socket" );
 				System.out.println("got port"
 						+ ss.getLocalPort() + "\n");
-				SendSurveyGetAnswers.setServerSocket(ss);
+				SendSurveyGetAnswers.setServerSocket(ss); // Concurrency here
 			} catch (IOException ex) {
 				System.err.println("no available ports");
 			}

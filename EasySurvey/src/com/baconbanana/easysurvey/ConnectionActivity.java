@@ -22,8 +22,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
-import com.baconbanana.easysurvey.functionalCore.Storage;
-
 /**
  * This activity class if a launcher activity that lets the user to connect to 
  * computer by entering its IP and pressing button connect. If there are answers 
