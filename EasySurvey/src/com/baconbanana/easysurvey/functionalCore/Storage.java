@@ -6,9 +6,9 @@ package com.baconbanana.easysurvey.functionalCore;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import com.baconbanana.easysurvey.Operations;
-
 import android.content.Context;
+
+import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
 
 
 
