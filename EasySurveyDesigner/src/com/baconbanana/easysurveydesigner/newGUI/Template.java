@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,7 +17,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
@@ -27,6 +25,7 @@ import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleChoiceQue
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.NumericQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.RatingQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.TextualQuestion;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * template window
  * @author ZimS
@@ -65,7 +64,7 @@ public class Template extends SQLWindow{
 		nameOfTemplateTxf = new JLabel();
 
 		createQuestionBtn = new JButton("Create New");
-		addExistingQuestionBtn = new JButton("Add Existing");
+		setAddExistingQuestionBtn(new JButton("Add Existing"));
 		setDeleteBtn(new JButton("Delete"));
 		setSaveBtn(new JButton("Save"));
 		setCancelBtn(new JButton("Cancel"));
@@ -93,8 +92,8 @@ public class Template extends SQLWindow{
 		
 		jpButtons.add(createQuestionBtn);
 		createQuestionBtn.addActionListener(this);
-		jpButtons.add(addExistingQuestionBtn);
-		addExistingQuestionBtn.addActionListener(this);
+		jpButtons.add(getAddExistingQuestionBtn());
+		getAddExistingQuestionBtn().addActionListener(this);
 		jpButtons.add(getDeleteBtn());
 		getDeleteBtn().addActionListener(this);
 		jpButtons.add(getSaveBtn());
@@ -107,30 +106,33 @@ public class Template extends SQLWindow{
 		getWindow().add(stage);
 		setFrameOptions();
 		DBController dbCon;
-		try{
-			dbCon = DBController.getInstance();
-			if (templateName != null){
-				templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + 
-						DBController.appendApo(templateName), 0, "Content");
-				templateList.setModel(templateModel);
-			}
-			while(templateName == null){
-				templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
-					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(templateName))){
-						nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
-						templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
-						templateList.setModel(templateModel);
-					}else{
-						
-						templateName = null;
-						JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
+		boolean valid = false;
+		while(valid == false){
+			templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
+				if(templateName != null){
+					try{
+						dbCon = DBController.getInstance();
+						if(!dbCon.exists("Template", "Template=" + DBController.appendApo(templateName))){
+							nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+							templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+							templateList.setModel(templateModel);
+							valid = true;
+						}else{
+							JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}catch(SQLException | ClassNotFoundException e){
+						e.printStackTrace();
 					}
-			}
-		}catch(SQLException | ClassNotFoundException e){
-			e.printStackTrace();
+				}else if(templateName == null){
+					getWindow().dispose();
+					valid = true;
+				}else if(templateName.equals("")){
+					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+				}
 		}
-		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
+		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		getWindow().setTitle(templateName);
 	}
 
 /**
@@ -171,7 +173,7 @@ public class Template extends SQLWindow{
 			
 			}
 		}
-		else if(e.getSource().equals(addExistingQuestionBtn)){
+		else if(e.getSource().equals(getAddExistingQuestionBtn())){
 			//TODO addExistingQuestionBtn
 		}
 		else if(e.getSource().equals(getDeleteBtn())){
@@ -214,6 +216,12 @@ public class Template extends SQLWindow{
 	}
 	public void setDeleteBtn(JButton deleteBtn) {
 		this.deleteBtn = deleteBtn;
+	}
+	public JButton getAddExistingQuestionBtn() {
+		return addExistingQuestionBtn;
+	}
+	public void setAddExistingQuestionBtn(JButton addExistingQuestionBtn) {
+		this.addExistingQuestionBtn = addExistingQuestionBtn;
 	}
 
 }

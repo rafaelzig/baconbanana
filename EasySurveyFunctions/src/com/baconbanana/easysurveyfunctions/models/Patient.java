@@ -1,11 +1,12 @@
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.sql.Date;
 import java.text.ParseException;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * This class represents the patient taking the survey.
@@ -34,8 +35,7 @@ public class Patient
 	 *             Signals that an error has been reached unexpectedly while
 	 *             parsing the date.
 	 */
-	public Patient(long id, String name, String dob)
-			throws ParseException
+	public Patient(long id, String name, String dob) throws ParseException
 	{
 		this.id = id;
 		this.name = name;
@@ -51,11 +51,13 @@ public class Patient
 	 *             Signals that an error has been reached unexpectedly while
 	 *             parsing the date.
 	 */
-	public Patient(JSONObject rawData) throws ParseException
+	@SuppressWarnings("rawtypes")
+	public Patient(Map rawData) throws ParseException
 	{
-		this.id = (long) rawData.get("id");
-		this.name = (String) rawData.get("name");
-		setDob((String) rawData.get("dob"));
+		JSONObject jsonObject = (JSONObject) rawData;
+		this.id = (Long) jsonObject.get("id");
+		this.name = (String) jsonObject.get("name");
+		setDob((String) jsonObject.get("dob"));
 	}
 
 	/**
@@ -120,8 +122,8 @@ public class Patient
 	 * 
 	 * @return A JSONObject containing the Patient object.
 	 */
-	@SuppressWarnings("unchecked")
-	public JSONObject getJSON()
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map getJSON()
 	{
 		JSONObject rawData = new JSONObject();
 

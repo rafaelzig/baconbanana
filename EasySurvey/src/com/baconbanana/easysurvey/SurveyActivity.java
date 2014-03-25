@@ -31,12 +31,12 @@ import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.listeners.GestureListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.SeekBarListener;
 import com.baconbanana.easysurvey.functionalCore.listeners.TouchListener;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.models.ContingencyQuestion;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Question;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.Survey;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.models.ContingencyQuestion;
+import com.baconbanana.easysurveyfunctions.models.Question;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * This class builds the activity which displays the survey to the user.
@@ -107,7 +107,7 @@ public class SurveyActivity extends Activity
 		savedInstanceState.putInt(SUBSEQUENT_CURSOR_KEY, subsequentCursor);
 		savedInstanceState.putBoolean(IS_SUBSEQUENT_KEY, isSubsequent);
 		savedInstanceState.putString(SURVEY_KEY, survey.getJSON()
-				.toJSONString());
+				.toString());
 	}
 
 	/**
@@ -151,11 +151,6 @@ public class SurveyActivity extends Activity
 			survey = new Survey(Operations.parseJSON(jsonString));
 		}
 		catch (ParseException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (org.json.simple.parser.ParseException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -462,7 +457,7 @@ public class SurveyActivity extends Activity
 	{
 		try
 		{
-			Storage.writeToInternal(this, survey.getJSON().toJSONString());
+			Storage.writeToInternal(this, survey.getJSON().toString());
 		}
 		catch (FileNotFoundException e)
 		{

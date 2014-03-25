@@ -17,8 +17,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
+import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * class for creating different multiple answer questions
  * @author ZimS
@@ -33,7 +33,6 @@ public class MultipleQuestion extends Question{
 	private JTextPane questionTxta;
 	private JList<String> choicesList;
 	private SQLList choiceModel;
-	private String[] options = new String[9];
 	private Template template;
 	private int questionId = 0;
 	private DBController dbCon;
@@ -49,47 +48,21 @@ public class MultipleQuestion extends Question{
 		setQuestionType(qt);
 		JPanel panel = new JPanel(new GridBagLayout());
 		getWindow().add(panel);
+		
+		panel.add(new JPanel(), LayoutController.summonCon(0, 0, 1, 4, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		panel.add(new JPanel(), LayoutController.summonCon(3, 0, 1, 4, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		
 		questionTxta = new JTextPane();
+		questionTxta.setBorder(getBorder());
+		
 		panel.add(questionTxta, LayoutController.summonCon(1, 1, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
+		
 		choiceModel = new SQLList("Choice NATURAL JOIN Question_Choice", "QuestionID=" + questionId, 0, "Choice");
 		choicesList = new JList<String>(choiceModel);
 		JScrollPane choicesListsp = new JScrollPane(choicesList);
-		panel.add(choicesListsp, LayoutController.summonCon(1, 2));
-//		// --------------center of window---------------------
-//		setQuestionTxa(new JTextPane());
-//		getQuestionTxa().setPreferredSize(new Dimension(800, 280));
-//		getQuestionTxa().setBorder(getBorder());
-//		getWindow().add(getQuestionTxa(), BorderLayout.CENTER);
-//		// ---------------------------------------------------
-//
-//		//not sure why we need checkboxes
-//		// --------------South of window----------------------
-//		String[] columnNames = { "Answer", "Select" };
-//		choicesTableModel = new DefaultTableModel(new String[1][9], columnNames);
-//		choicesTable = new JTable(choicesTableModel) {
-//			private static final long serialVersionUID = 1L;
-//			//think this is only needed for sorting
-//			@Override
-//			public Class getColumnClass(int column) {
-//				switch (column) {
-//				case 0:
-//					return String.class;
-//				default:
-//					return Boolean.class;
-//				}
-//			}
-//		};
-//		//instatiate checkboxes
-//		options[answerLimit++] = "Type Option Here";
-//		options[answerLimit++] = "Type Option Here";
-//		//I have broken reDraw thing :( but I only renamed the model :(
-//		//getWindow().reDraw(choicesTableModel, options);
-//		JScrollPane scrollPane = new JScrollPane(choicesTable);
-//		scrollPane.setPreferredSize(new Dimension(200, 400));
-//
-//		JPanel panelSouth = new JPanel(new BorderLayout());
-//		panelSouth.add(scrollPane, BorderLayout.NORTH);
-//
+		
+		panel.add(choicesListsp, LayoutController.summonCon(1, 2, 1, 1, 8, 4, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+
 		JPanel jpButtons = new JPanel(new FlowLayout());
 		jpButtons.setPreferredSize(new Dimension(800, 50));
 
@@ -144,10 +117,9 @@ public class MultipleQuestion extends Question{
 				}
 				String choice = null;
 				//loop until choice has been filled out
-				while(choice == null){
 					//get choice
-				choice = JOptionPane.showInputDialog(null, "Enter Numeric Question : ", "New Numeric Question", 1);
-					if(choice != null){
+				choice = JOptionPane.showInputDialog(null, "Enter New " + getQuestionType().toString() + " Choice : ", "New Choice ", 1);
+					if(choice != null && !choice.equals("")){
 						//create new model for choice window
 						choiceModel = new SQLList("Choice NATURAL JOIN Question_Choice", "QuestionID=" + questionId, 0, "Choice");
 						populateList(choicesList, choiceModel);
@@ -160,10 +132,12 @@ public class MultipleQuestion extends Question{
 						}catch(SQLException | ClassNotFoundException ee){
 							ee.printStackTrace();
 						}
+					}else if(choice.equals("")){
+						JOptionPane.showMessageDialog(null, "Please Type A Valid Answer", "Invalid Input", JOptionPane.INFORMATION_MESSAGE);
 					}
 					//reload choices
 					choiceModel.getData();
-				}
+				
 			}else{
 				JOptionPane.showMessageDialog(null, "Please Fill Out The Question First", "Fill Out Question", JOptionPane.INFORMATION_MESSAGE);
 			}

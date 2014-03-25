@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.exceptions;
+package com.baconbanana.easysurveyfunctions.exceptions;
 
 import java.util.List;
 

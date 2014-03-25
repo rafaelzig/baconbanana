@@ -1,15 +1,16 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * This class represents a questionnaire, an investigation of the opinions or
@@ -55,14 +56,15 @@ public class Survey
 	 *             Signals that an error has been reached unexpectedly while
 	 *             parsing the rawData.
 	 */
-	public Survey(JSONObject rawData) throws ParseException
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Survey(Map rawData) throws ParseException
 	{
 		super();
 
 		this.name = (String) rawData.get("name");
-		this.patient = new Patient((JSONObject) rawData.get("patient"));
+		this.patient = new Patient((Map) rawData.get("patient"));
 		this.stage = (String) rawData.get("stage");
-		this.questionList = Operations.parseQuestionList((JSONArray) rawData
+		this.questionList = Operations.parseQuestionList((List<Object>) rawData
 				.get("questionList"));
 	}
 
@@ -162,7 +164,6 @@ public class Survey
 		int count = 0;
 
 		for (Question question : questionList)
-		{
 			if (question.isAnswered())
 			{
 				count++;
@@ -171,7 +172,6 @@ public class Survey
 					count += ((ContingencyQuestion) question)
 							.getSubsequentList().size();
 			}
-		}
 
 		return count;
 	}
@@ -198,8 +198,8 @@ public class Survey
 	 * 
 	 * @return A JSONObject containing the survey.
 	 */
-	@SuppressWarnings("unchecked")
-	public JSONObject getJSON()
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map getJSON()
 	{
 		JSONObject surveyRaw = new JSONObject();
 

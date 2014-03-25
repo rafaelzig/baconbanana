@@ -1,14 +1,15 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.text.ParseException;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -57,15 +58,18 @@ public abstract class Question
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public Question(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public Question(Map rawData)
 	{
 		super();
 
-		this.type = Operations.getQuestionType((String) rawData.get("type"));
-		this.showName = (Boolean) rawData.get("showName");
-		this.content = (String) rawData.get("content");
-		this.helpMessage = (String) rawData.get("helpMessage");
-		this.answer = (String) rawData.get("answer");
+		JSONObject jsonObject = (JSONObject) rawData;
+		
+		this.type = Operations.getQuestionType((String) jsonObject.get("type"));
+		this.showName = (Boolean) jsonObject.get("showName");
+		this.content = (String) jsonObject.get("content");
+		this.helpMessage = (String) jsonObject.get("helpMessage");
+		this.answer = (String) jsonObject.get("answer");
 	}
 
 	/**
@@ -130,8 +134,8 @@ public abstract class Question
 	 * 
 	 * @return A JSONObject containing the survey.
 	 */
-	@SuppressWarnings("unchecked")
-	public JSONObject getJSON()
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public Map getJSON()
 	{
 		JSONObject rawData = new JSONObject();
 
@@ -151,7 +155,7 @@ public abstract class Question
 	 */
 	public boolean isAnswered()
 	{
-		return (!answer.isEmpty());
+		return !answer.isEmpty();
 	}
 
 	/**

@@ -1,13 +1,12 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.text.ParseException;
+import java.util.Map;
 
-import org.json.simple.JSONObject;
-
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -36,13 +35,15 @@ public abstract class OpenEndedQuestion extends Question
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	public OpenEndedQuestion(JSONObject rawData)
+	@SuppressWarnings("rawtypes")
+	public OpenEndedQuestion(Map rawData)
 	{
 		super(rawData);
 	}
 
 	@Override
-	public void setAnswer(String answer) throws InvalidAnswerException, ParseException
+	public void setAnswer(String answer) throws InvalidAnswerException,
+			ParseException
 	{
 		if (answer == null || answer.isEmpty())
 			throw new InvalidAnswerException("Answer is empty");

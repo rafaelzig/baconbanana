@@ -1,14 +1,15 @@
 /**
  * 
  */
-package com.baconbanana.easysurveydesigner.functionalCore.models;
+package com.baconbanana.easysurveyfunctions.models;
 
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidAnswerException;
-import com.baconbanana.easysurveydesigner.functionalCore.exceptions.InvalidChoiceListException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidAnswerException;
+import com.baconbanana.easysurveyfunctions.exceptions.InvalidChoiceListException;
 
 /**
  * @author Rafael da Silva Costa & Team
@@ -45,8 +46,9 @@ public abstract class CloseEndedQuestion extends Question
 	 * @see QuestionType#CONTINGENCY
 	 * @see QuestionType#RATING
 	 */
-	public CloseEndedQuestion(String content, String helpMessage, QuestionType type,
-			List<String> choiceList) throws InvalidChoiceListException
+	public CloseEndedQuestion(String content, String helpMessage,
+			QuestionType type, List<String> choiceList)
+			throws InvalidChoiceListException
 	{
 		super(content, helpMessage, type);
 
@@ -62,8 +64,8 @@ public abstract class CloseEndedQuestion extends Question
 	 * @param rawData
 	 *            A JSONObject containing the question.
 	 */
-	@SuppressWarnings("unchecked")
-	public CloseEndedQuestion(JSONObject rawData)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public CloseEndedQuestion(Map rawData)
 	{
 		super(rawData);
 		choiceList = (List<String>) rawData.get("choiceList");
@@ -96,16 +98,17 @@ public abstract class CloseEndedQuestion extends Question
 	 * 
 	 * @return A JSONObject containing the survey.
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public JSONObject getJSON()
+	public Map getJSON()
 	{
-		JSONObject rawData = super.getJSON();
+		JSONObject rawData = (JSONObject) super.getJSON();
 		rawData.put("choiceList", choiceList);
 
 		return rawData;
 	}
 
+	@Override
 	public void setAnswer(String answer) throws InvalidAnswerException
 	{
 		int index = choiceList.indexOf(answer);
