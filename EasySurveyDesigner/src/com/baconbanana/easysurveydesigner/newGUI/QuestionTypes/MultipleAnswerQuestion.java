@@ -1,5 +1,7 @@
  package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
-
+/**
+ * model for Multiple Answer Question
+ */
 import java.awt.event.ActionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;

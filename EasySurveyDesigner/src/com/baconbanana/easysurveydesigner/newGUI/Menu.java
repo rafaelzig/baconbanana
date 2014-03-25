@@ -10,7 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
-
+/**
+ * menu window with multiple functionality
+ * @author ZimS
+ *
+ */
 public class Menu extends Window
 {
 
@@ -93,7 +97,7 @@ public class Menu extends Window
 			switch (e.getActionCommand())
 			{
 				case CREATE_SURVEY_TEXT:
-					new CreateSurvey("Create New Survey", true);
+					new CreateSurvey(null, true);
 					getWindow().dispose();
 					break;
 				case OPEN_SURVEY_TEXT:

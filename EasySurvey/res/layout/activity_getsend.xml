@@ -26,7 +26,7 @@
          android:layout_alignLeft="@+id/remember"
          android:layout_alignRight="@+id/remember"
          android:layout_below="@+id/remember"
-         android:layout_marginTop="102dp"
+         android:layout_marginTop="152dp"
          android:onClick="get"
          android:text="get" />
 

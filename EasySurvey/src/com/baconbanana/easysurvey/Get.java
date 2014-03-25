@@ -79,36 +79,16 @@ public class Get extends AsyncTask<String, Void, String> {
 
 			String storage = Storage.readFromInternal(context, "Survey.json");
 			Log.d("what was saved in storage -", storage);
-
+			
+			
+			
 			message = "Saved";
+			
 
 		} catch (IOException e) {
 			message = "could not read from in";
 		}
-		catch (InvalidKeyException e)
-		{
-			message = "could not read from in";
-		}
-		catch (NoSuchAlgorithmException e)
-		{
-			message = "could not read from in";
-		}
-		catch (NoSuchPaddingException e)
-		{
-			message = "could not read from in";
-		}
-		catch (IllegalBlockSizeException e)
-		{
-			message = "could not read from in";
-		}
-		catch (BadPaddingException e)
-		{
-			message = "could not read from in";
-		}
-		catch (DecoderException e)
-		{
-			message = "could not read from in";
-		}
+		
 
 		return null;
 	}
@@ -121,7 +101,10 @@ public class Get extends AsyncTask<String, Void, String> {
 		dlgAlert.setMessage(message);
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.create().show();
-
+		
+		
+		ConnectionActivity.changeSendButton(true);//<-----=---temp TODO
+		ConnectionActivity.changeGetButton(false);
 		ConnectionActivity.enableStartButton();
 	}
 

@@ -51,6 +51,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 			skt = createSocket(listOfSockets, IP);
 			// after it got connection set notfirstime to true
 			ConnectionActivity.setNotFirstTime();
+			ConnectionActivity.setSocket(skt);
 		} catch (IOException e) {
 			System.out.println(e);
 
@@ -77,16 +78,18 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 									try {
 										inputS =skt.getInputStream();
 										
+										
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 									ConnectionActivity.disableConnectButton();
+									
 									boolean b=ConnectionActivity.isSurveyCompleted();
 									 if(b){
-										 ConnectionActivity.enableSendButton();
-										 new WaitForInput(inputS, context).execute("");
+										 ConnectionActivity.changeSendButton(true);
 									}
+									 new WaitForInput().execute("");
 								}
 							})
 							

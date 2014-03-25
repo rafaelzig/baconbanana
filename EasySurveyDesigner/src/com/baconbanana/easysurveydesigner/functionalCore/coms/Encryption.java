@@ -94,10 +94,16 @@ public class Encryption {
 		try {
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+			
+			System.out.println("thing to bem decoded"+message);
+			
 			byte[] decode = DatatypeConverter.parseBase64Binary(message);
 			
-			decrypt = new String(cipher.doFinal(decode), "UTF-8");
+			System.out.println("thing to be decrypted"+ decode);
 			
+			decrypt = new String(cipher.doFinal(decode), "UTF-8");
+		
+			System.out.println("decrypted"+message);
 		} catch (IllegalBlockSizeException | BadPaddingException
 				| UnsupportedEncodingException | InvalidKeyException
 				| NoSuchAlgorithmException | NoSuchPaddingException e) {

@@ -44,13 +44,12 @@ public class Send extends AsyncTask<String, Void, String> {
 					Operations.FILENAME);
 			
 			Log.d("what it got from storage", s);
-			//Log.d("storge read", "proto liniya");
-			//String encrypted = EncryptionJ.encryptMsg(s);
-
-			//Log.d("storge arteer enc", encrypted);
-
-			//output.print(encrypted);
-			output.print(s);
+			
+			String encrypted=EncryptionJ.encryptMsg(s);
+		
+			output.print(encrypted);
+			output.println("ENDIT!");
+			
 			message = "successfully sent";
 
 		} catch (IOException e) {
@@ -68,7 +67,7 @@ public class Send extends AsyncTask<String, Void, String> {
 		dlgAlert.setPositiveButton("OK", null);
 		dlgAlert.create().show();
 		Log.d("postexecute", "connect toServer");
-
+		ConnectionActivity.changeSendButton(false);
 	}
 
 }

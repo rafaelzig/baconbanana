@@ -14,7 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * The first window of the program which checks if user is allowed to use it
+ * @author ZimS
+ *
+ */
 public class LoginPage extends Window
 {
 
@@ -131,7 +135,7 @@ public class LoginPage extends Window
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-        // TODO Auto-generated method stub
+      /* // TODO Auto-generated method stub
 		if (e.getSource().equals(loginBtn))
 		{
 			// TODO it appears that check password always give me true. It is
@@ -157,7 +161,10 @@ public class LoginPage extends Window
 		{
 			new DeleteUser("Delete user", 300, 300);
 			getWindow().dispose();
-		}
+		}*/
+		
+		new Menu("Menu", 250, 300);
+
 	}
 
 	// WHENEVER YOU click login you will you lucky thing
