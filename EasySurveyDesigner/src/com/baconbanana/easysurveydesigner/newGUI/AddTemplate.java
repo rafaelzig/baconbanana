@@ -71,12 +71,17 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 
 			}
 		}
-		//		}else if(e.getSource().equals(addExistingQuestionBtn)){
-		//			//TODO addExistingQuestionBtn
-		//		}
-		//		else if(e.getSource().equals(deleteBtn)){
-		//			//TODO deleteBtn
-		//		}
+//				}else if(e.getSource().equals(addExistingQuestionBtn)){
+//					//TODO addExistingQuestionBtn
+//				}
+				else if(e.getSource().equals(getDeleteBtn())){
+					try {
+						System.out.println((String)DBController.getInstance().select("Question", "Content="+DBController.appendApo(getTemplateList().getSelectedValue()), "QuestionID").toString());
+					} catch (ClassNotFoundException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 		else if(e.getSource().equals(getSaveBtn())){
 			try {
 			dbCon = DBController.getInstance();
