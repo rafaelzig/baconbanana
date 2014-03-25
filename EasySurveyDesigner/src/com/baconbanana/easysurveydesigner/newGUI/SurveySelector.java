@@ -76,9 +76,11 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(onlyOneDuckingButtonNoOneEverGoingToLookAt)){
 		CreateSurvey newOne =  new CreateSurvey(surveyList.getSelectedValue(), true);
-	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
-				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
-	    surveyCreateModel.getData();
+		newOne.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(surveyList.getSelectedValue()), 1, "Survey", "Template");
+
+//	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
+//				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
+//	    surveyCreateModel.getData();
 		
 		}
 	}

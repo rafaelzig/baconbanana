@@ -50,6 +50,7 @@ public class CreateSurvey extends SQLWindow{
 		
 	public CreateSurvey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
+		surveyName = tit;
 		initiWidgets();
 	}
 	
@@ -145,6 +146,7 @@ public class CreateSurvey extends SQLWindow{
 				dbCon = DBController.getInstance();
 				if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
 					createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+					getWindow().setTitle(surveyName);
 				}else{
 					surveyName = null;
 					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
