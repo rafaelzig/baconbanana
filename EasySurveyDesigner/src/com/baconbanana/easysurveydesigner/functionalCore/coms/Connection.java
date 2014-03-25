@@ -32,12 +32,24 @@ public class Connection extends Thread {
 			&& SendSurveyGetAnswers.getPageClosed()==false) {
 			
 			try {
-				InetAddress myself = InetAddress.getLocalHost();
-				SendSurveyGetAnswers.setLocalIP(myself.getHostAddress());
-				//Save it related activity so that it can be used later
+						
+				String IP;
+				
+				Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
+		       
+				NetworkInterface netint= Collections.list(nets).get(0);
+				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
+				System.out.println(IP);
+				SendSurveyGetAnswers.setLocalIP(IP);
+				dSurveyGetAnswers.setLocalIP(IP);
+				
 			} catch (UnknownHostException ex) {
 				System.out.println("Failed to Find ip");
 				ex.printStackTrace();
+			} catch (SocketException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			
 			try {
