@@ -53,7 +53,8 @@ public class Template extends SQLWindow{
 		super(tit, width, height);
 		templateName = tit;
 		initiWidgets();
-		initiLayout();
+
+
 		
 		
 	}
@@ -162,7 +163,7 @@ public class Template extends SQLWindow{
 				new MultipleAnswerQuestion(tit, 800, 500, this);
 				break;
 			case RATING :
-				new RatingQuestion();
+				new RatingQuestion(tit, 800, 500, this);
 				break;
 			case CONTINGENCY :
 				new ContingencyQuestion();

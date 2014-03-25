@@ -12,15 +12,10 @@ public class MultipleChoiceQuestion extends MultipleQuestion{
 
 	public MultipleChoiceQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
-		initiWidgets();
-		initiWidgetsMq();
+		initiWidgetsQt(QuestionType.MULTIPLECHOICE);
 		setFrameOptions();
-		initiLayout();
+
 	}
 
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(getSaveBtn())){
-			saveQuestionOq(QuestionType.MULTIPLECHOICE);
-		}
-	}
+	
 }

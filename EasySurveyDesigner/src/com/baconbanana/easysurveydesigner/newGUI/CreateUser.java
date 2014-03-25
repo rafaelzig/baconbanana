@@ -30,7 +30,6 @@ public class CreateUser extends Window{
 	public CreateUser(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
-		initiLayout();
 		setFrameOptions();
 	}
 

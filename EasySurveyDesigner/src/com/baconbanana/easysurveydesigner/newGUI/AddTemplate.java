@@ -63,7 +63,7 @@ public AddTemplate(String tit, int width, int height, CreateSurvey cs) {
 				new MultipleAnswerQuestion(tit, 800, 500, this);
 				break;
 			case RATING :
-				new RatingQuestion();
+				new RatingQuestion(tit, 800, 500, this);
 				break;
 			case CONTINGENCY :
 				new ContingencyQuestion();

@@ -36,6 +36,7 @@ public abstract class Window implements ActionListener{
 			window.setMinimumSize(new Dimension(400,400));	
 			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
+		window.setVisible(true);
 
 	}
 	public void setFrameOptions(){
