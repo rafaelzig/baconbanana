@@ -37,7 +37,7 @@ public class Encryption {
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
-	 * Then converts it bytes string. Then returnes it.
+	 * Then converts it bytes string. Then returns it.
 	 * 
 	 * @param message
 	 * @return encrypted

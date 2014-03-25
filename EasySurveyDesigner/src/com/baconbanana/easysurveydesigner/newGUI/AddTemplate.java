@@ -5,11 +5,8 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import java.util.List;
-
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.QuestionType;
-import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.ContingencyQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.DateQuestion;
 import com.baconbanana.easysurveydesigner.newGUI.QuestionTypes.MultipleAnswerQuestion;
@@ -82,13 +79,15 @@ public class AddTemplate extends Template{
 			int id =(int) DBController.getInstance().select("Question","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0];
 
-			DBController.getInstance().delete("Template", "QuestionID="+id);
-			getListModel().getData();
-			} catch (ClassNotFoundException | SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+
+							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
+							getListModel().getData();
+							} catch (ClassNotFoundException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							}
+				}
+
 		else if(e.getSource().equals(getSaveBtn())){
 			try {
 				dbCon = DBController.getInstance();
