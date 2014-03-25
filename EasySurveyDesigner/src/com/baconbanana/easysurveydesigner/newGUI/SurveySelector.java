@@ -73,8 +73,8 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(onlyOneDuckingButtonNoOneEverGoingToLookAt)){
-		String index =surveyList.getSelectedValue();
+		if(e.getSource().equals(onlyOneDuckingButtonNoOneEverGoingToLookAt)){	
+		String index = surveyList.getSelectedValue();
 		questionModel.getData("Question",  0, "Content");
 		}
 	}
