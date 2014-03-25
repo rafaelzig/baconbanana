@@ -106,30 +106,33 @@ public class Template extends SQLWindow{
 		getWindow().add(stage);
 		setFrameOptions();
 		DBController dbCon;
-		try{
-			dbCon = DBController.getInstance();
-			if (templateName != null){
-				templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + 
-						DBController.appendApo(templateName), 0, "Content");
-				templateList.setModel(templateModel);
-			}
-			while(templateName == null){
-				templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
-					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(templateName))){
-						nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
-						templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
-						templateList.setModel(templateModel);
-					}else{
-						
-						templateName = null;
-						JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
+		boolean valid = false;
+		while(valid == false){
+			templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
+				if(templateName != null){
+					try{
+						dbCon = DBController.getInstance();
+						if(!dbCon.exists("Template", "Template=" + DBController.appendApo(templateName))){
+							nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
+							templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
+							templateList.setModel(templateModel);
+							valid = true;
+						}else{
+							JOptionPane.showMessageDialog(null, "A Template Already Has This Name", "Template Name Error", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}catch(SQLException | ClassNotFoundException e){
+						e.printStackTrace();
 					}
-			}
-		}catch(SQLException | ClassNotFoundException e){
-			e.printStackTrace();
+				}else if(templateName == null){
+					getWindow().dispose();
+					valid = true;
+				}else if(templateName.equals("")){
+					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+				}
 		}
-		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
+		stage.add(nameOfTemplateTxf, LayoutController.summonCon(1, 1, 1, 1, 80, 20, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		getWindow().setTitle(templateName);
 	}
 
 /**

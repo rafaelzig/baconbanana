@@ -23,8 +23,8 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class Encryption {
 
-	public static byte[] secret = null;
-	public static SecretKeySpec secretKey = null;
+	private static byte[] secret = null;
+	private static SecretKeySpec secretKey = null;
 
 	public static void setKeys() {
 		try {

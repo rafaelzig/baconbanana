@@ -13,6 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 /**
  * The first window of the program which checks if user is allowed to use it
@@ -63,71 +64,45 @@ public class LoginPage extends Window
 		panel = new JPanel(new GridBagLayout());
 
 		GridBagConstraints bagCon = new GridBagConstraints();
-		bagCon.gridx = 0;
-		// subject to change
-		bagCon.gridy = 0;
-		bagCon.gridheight = 1;
-		bagCon.gridwidth = 3;
-		bagCon.fill = GridBagConstraints.NONE;
-		bagCon.anchor = GridBagConstraints.CENTER;
-		bagCon.weightx = 1;
-		bagCon.weighty = 0.3;
+		
+		panel.add(new JPanel(), LayoutController.summonCon(0, 0, 1, 7, 0.3, 1, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		panel.add(new JPanel(), LayoutController.summonCon(4, 0, 1, 7, 0.3, 1, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		
 
 		JLabel welcome = new JLabel(
 				"<html><p style='font-size:x-large;text-align:center;'>Welcome to<br/><strong><i>Easy Survey Designer</i></strong></p></html>");
-		panel.add(welcome, bagCon);
+		panel.add(welcome, LayoutController.summonCon(1, 0, 3, 1, 1, 0.3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 
 		// Creates label and text field to panel
 		// TODO remove barry and xxx
-		bagCon.gridy++;
-		bagCon.gridwidth = 1;
-		bagCon.weightx = 0;
-		bagCon.weighty = 0.1;
-		panel.add(new JLabel("User name"), bagCon);
 
-		bagCon.gridy++;
-		bagCon.gridwidth = 3;
-		bagCon.weightx = 1;
-		bagCon.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(new JLabel("User name"), LayoutController.summonCon(1, 1, 1, 1, 0, 0.1, GridBagConstraints.CENTER, GridBagConstraints.NONE));
+
+
 		userNameTxf = new JTextField("Barry");
-		panel.add(userNameTxf, bagCon);
+		panel.add(userNameTxf, LayoutController.summonCon(1, 2, 3, 1, 1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 
-		bagCon.gridy++;
-		bagCon.gridwidth = 1;
-		bagCon.weightx = 0;
+
 		bagCon.fill = GridBagConstraints.NONE;
-		panel.add(new JLabel("Password"), bagCon);
+		panel.add(new JLabel("Password"), LayoutController.summonCon(1, 3, 1, 1, 1, 0.1, GridBagConstraints.CENTER, bagCon.fill = GridBagConstraints.NONE));
 
-		bagCon.gridy++;
-		bagCon.gridwidth = 3;
-		bagCon.weightx = 1;
-		bagCon.fill = GridBagConstraints.HORIZONTAL;
 		passwordTxf = new JPasswordField("xxx");
-		panel.add(passwordTxf, bagCon);
+		panel.add(passwordTxf, LayoutController.summonCon(1, 4, 3, 1, 1, 0.1, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 
-		bagCon.gridy++;
-		bagCon.fill = GridBagConstraints.NONE;
-		bagCon.weighty = 0.3;
 		// Creates and add create user button
 		createUserBtn = new JButton("Create new user");
 		createUserBtn.addActionListener(this);
-		panel.add(createUserBtn, bagCon);
+		panel.add(createUserBtn, LayoutController.summonCon(1, 5, 3, 1, 1, 0.3, GridBagConstraints.CENTER, bagCon.fill = GridBagConstraints.NONE));
 
-		bagCon.gridy++;
-		bagCon.fill = GridBagConstraints.NONE;
-		bagCon.weighty = 0.3;
 		// Creates and add create user button
 		deleteUserBtn = new JButton("Delete user");
 		deleteUserBtn.addActionListener(this);
-		panel.add(deleteUserBtn, bagCon);
+		panel.add(deleteUserBtn, LayoutController.summonCon(1, 6, 3, 1, 1, 0.3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 
-		bagCon.gridy++;
-		bagCon.fill = GridBagConstraints.NONE;
-		bagCon.weighty = 0.3;
 		// Creates and add login button
 		loginBtn = new JButton("Log in");
 		loginBtn.addActionListener(this);
-		panel.add(loginBtn, bagCon);
+		panel.add(loginBtn, LayoutController.summonCon(1, 7, 3, 1, 1, 0.3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 		
 		getWindow().add(panel);
 	}

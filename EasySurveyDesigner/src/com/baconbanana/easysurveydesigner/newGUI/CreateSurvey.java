@@ -142,21 +142,30 @@ public class CreateSurvey extends SQLWindow{
 		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 
 		getWindow().add(stage);
-		while(surveyName == null){
+		
+		DBController dbCon;
+		boolean valid = false;
+		while(valid == false){
 			surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
-			DBController dbCon;
-			try{
-				dbCon = DBController.getInstance();
-				if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
-					createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
-					getWindow().setTitle(surveyName);
-				}else{
-					surveyName = null;
-					JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+			if(surveyName != null){
+				try{
+					dbCon = DBController.getInstance();
+					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
+						createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
+						getWindow().setTitle(surveyName);
+						valid = true;
+					}else{
+						JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+				}catch(SQLException | ClassNotFoundException e){
+					e.printStackTrace();
 				}
-
-			}catch(SQLException | ClassNotFoundException e){
-				e.printStackTrace();
+			}else if(surveyName == null){
+				new Menu("Menu", 250, 300);
+				getWindow().dispose();
+				valid = true;
+			}else if(surveyName.equals("")){
+				JOptionPane.showMessageDialog(null, "Please Enter A Valid Survey Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 
