@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 
-import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
+import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
 
 /**
  * this thread will get read line from inputStrem, decrypt it, and save it.
