@@ -189,7 +189,7 @@ public abstract class Survey extends SQLWindow{
 			onCancel();		
 		}
 		else if(e.getSource().equals(sendBtn)){
-			new PatientName();
+			new PatientName(getSurveyName());
 		}
 
 	}

@@ -1,7 +1,5 @@
 package com.baconbanana.easysurveydesigner.GUI;
 
-import java.awt.event.ActionEvent;
-
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 

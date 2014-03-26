@@ -48,8 +48,9 @@ public class CreateSurvey extends Survey{
 
 		}else if(e.getSource().equals(editBtn)){
 			if (!(templateList.getSelectedValue() == null)){
-			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(), 800, 500);
-			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
+			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(), 800, 500, this);
+			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + 
+			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			//			editTemplate.getListModel().getData();
 			}
 		}

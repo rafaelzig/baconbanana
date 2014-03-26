@@ -1,23 +1,45 @@
 package com.baconbanana.easysurveydesigner.GUI;
 
+import java.awt.HeadlessException;
+import java.sql.SQLException;
+import java.text.ParseException;
+
 import javax.swing.JOptionPane;
+
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveyfunctions.models.Patient;
 
 public class PatientName {
 	private String patientName;
 	private String patientDOB;
-	PatientName()
+	private long id;
+	public PatientName(String survey) 
 	{
 		try {
 		patientName = JOptionPane.showInputDialog(null, "Enter Patient Name", "Reciever of the Survey", 1);
 		if(!patientName.equals(""))
 		{
-			patientDOB = JOptionPane.showInputDialog(null, "Enter Patient DOB in format dd/mm/yyyy", "Reciever of the Survey", 1);
-			 if(!patientDOB.matches("dd//dd//dddd")){
+			patientDOB = JOptionPane.showInputDialog(null, "Enter Patient DOB in format yyyy/mm/dd", "Reciever of the Survey", 1);
+			 if(!patientDOB.matches("\\d{4}(?:/\\d{1,2}){2}")){
+				 System.out.println(patientDOB.matches("\\d{4}(?:/\\d{1,2}){2}"));
 				JOptionPane.showMessageDialog(null, "Please Enter Patient DOB In Specified Format", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
 			}
 			else if (!patientDOB.equals("")){
+				
+				
+				try {
+					DBController dbCon = DBController.getInstance();				
+					if(!dbCon.exists("Patient", "Name=" + DBController.appendApo(patientName))){
+						id= dbCon.insertInto("Patient","null",DBController.appendApo(patientName),DBController.appendApo(patientDOB));
+}
+					else{
+						JOptionPane.showMessageDialog(null, "Patient Already Exists", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (HeadlessException | SQLException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				new SurveySelector("Select one to upload", 800, 800);
-				System.out.println(patientDOB.matches("dd//dd//dddd"));
 			}
 			else if(patientDOB.equals("")){
 				JOptionPane.showMessageDialog(null, "Please Enter Patient DOB", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
@@ -33,6 +55,20 @@ public class PatientName {
 		catch (NullPointerException e){
 			
 		}
+		
 	}
+	public Patient getPatient()
+	{
+		String replaced = patientDOB.replace('/', '-');
+		
+		try {
+			return new Patient(id,patientName,replaced);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	
 }
