@@ -16,9 +16,9 @@ public class TextualQuestion extends OpenEndedQuestion
 	 */
 	private static final String HELP_MESSAGE = "Please fill the answer using the space below:";
 
-	public TextualQuestion(String content)
+	public TextualQuestion(String content, long id)
 	{
-		super(content, HELP_MESSAGE, QuestionType.TEXTUAL);
+		super(content, id, HELP_MESSAGE, QuestionType.TEXTUAL);
 	}
 
 	@SuppressWarnings("rawtypes")

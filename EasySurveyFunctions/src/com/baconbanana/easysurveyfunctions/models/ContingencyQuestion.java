@@ -52,11 +52,11 @@ public class ContingencyQuestion extends CloseEndedQuestion
 	 *             Signals an error when the subsequent list of questions
 	 *             supplied contains another contingency question.
 	 */
-	public ContingencyQuestion(String content, List<String> choiceList,
+	public ContingencyQuestion(String content, long id, List<String> choiceList,
 			List<Question> subsequentList, String contingencyAnswer)
 			throws InvalidChoiceListException, InvalidSubsequentListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.CONTINGENCY, choiceList);
+		super(content, id, HELP_MESSAGE, QuestionType.CONTINGENCY, choiceList);
 
 		setSubsequentList(subsequentList, contingencyAnswer);
 	}

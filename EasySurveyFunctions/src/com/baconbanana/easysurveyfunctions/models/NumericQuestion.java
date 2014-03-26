@@ -19,9 +19,9 @@ public class NumericQuestion extends OpenEndedQuestion
 	 */
 	private static final String HELP_MESSAGE = "Please fill the answer using the space below:";
 
-	public NumericQuestion(String content)
+	public NumericQuestion(String content, long id)
 	{
-		super(content, HELP_MESSAGE, QuestionType.NUMERICAL);
+		super(content, id, HELP_MESSAGE, QuestionType.NUMERICAL);
 	}
 
 	@SuppressWarnings("rawtypes")

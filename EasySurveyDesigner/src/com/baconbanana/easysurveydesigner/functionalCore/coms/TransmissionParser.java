@@ -21,11 +21,8 @@ public class TransmissionParser {
 	
 	private List<Question> survey;
 	
-	public static void main(String args[]){
-		new TransmissionParser("mySurveyTommy", "Jackson Johnson");
-	}
-	
-	public TransmissionParser(String surveyName, String patientName){
+
+	public TransmissionParser(String surveyName, Patient patient){
 		survey = new ArrayList<>();
 		try{
 			DBController dbCon = DBController.getInstance();
@@ -37,7 +34,7 @@ public class TransmissionParser {
 			e.printStackTrace();
 		}
 		try {
-			Survey qOne = new Survey("Introduction", new Patient(1, "Jackson Johnson", "0000-00-00"),
+			Survey qOne = new Survey(surveyName, patient,
 					"Initial Consultation", survey);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
