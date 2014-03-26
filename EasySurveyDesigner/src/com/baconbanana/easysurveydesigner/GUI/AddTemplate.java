@@ -48,6 +48,7 @@ public class AddTemplate extends Template{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+	
 		createSurvey.getSurveyTemplateListModel().getData();
 		
 	}
