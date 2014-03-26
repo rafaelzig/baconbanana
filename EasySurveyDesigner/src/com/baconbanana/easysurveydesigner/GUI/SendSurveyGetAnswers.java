@@ -140,24 +140,15 @@ public class SendSurveyGetAnswers implements ActionListener {
 				thePanel.setLayout(new GridLayout(1, 2));
 
 				final JTextField name = new JTextField(20);
-
-				final JComboBox day, month, year;
-
-				String months[] = { "01", "02", "03", "04" };
-				String days[] = { "01", "02", "03" };
-				String years[] = { "1994", "1996", "1998" };
-
-				month = new JComboBox(months);
-				day = new JComboBox(days);
-				year = new JComboBox(years);
+				 final JTextField date = new JTextField(20);
+				
 
 				JLabel l = new JLabel();
 				l.setText("Enter Name:");
-
-				thePanel.add(new JLabel("Date of birth:"));
-				thePanel.add(day);
-				thePanel.add(month);
-				thePanel.add(year);
+				
+				thePanel.add(new JLabel("Date of birth(d-m-yyyy):"));
+				thePanel.add(date);
+				
 				theOtherPanel.add(l);
 				theOtherPanel.add(name);
 
@@ -166,31 +157,18 @@ public class SendSurveyGetAnswers implements ActionListener {
 				frame2.add(thePanel);
 				frame2.add(theOtherPanel);
 
-				month.addItemListener(new ItemListener() {
-
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						String s = (String) month.getSelectedItem();
-						
-					}
-				});
-
+				
 				JButton send = new JButton("send");
 				send.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						String n = name.getText().toString();
-						StringBuilder d = new StringBuilder();
-						d.append(day.getSelectedItem().toString());
-						d.append("-");
-						d.append(month.getSelectedItem().toString());
-						d.append("-");
-						d.append(year.getSelectedItem().toString());
+						String m = date.getText().toString();
+						
+						
 
-						String date = d.toString();
-
-						Thread t5 = new DataSender(n, date, clientSocket);
+						Thread t5 = new DataSender(n, m, clientSocket);
 						t5.start();
 
 						frame2.dispose();

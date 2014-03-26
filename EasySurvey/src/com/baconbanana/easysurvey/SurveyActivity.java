@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -67,7 +68,7 @@ public class SurveyActivity extends Activity
 	private LayoutInflater inf;
 	private ProgressBar pgbSurveyProgress;
 	private SeekBar skbFontSize;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -106,8 +107,7 @@ public class SurveyActivity extends Activity
 		savedInstanceState.putInt(CURSOR_KEY, cursor);
 		savedInstanceState.putInt(SUBSEQUENT_CURSOR_KEY, subsequentCursor);
 		savedInstanceState.putBoolean(IS_SUBSEQUENT_KEY, isSubsequent);
-		savedInstanceState.putString(SURVEY_KEY, survey.getJSON()
-				.toString());
+		savedInstanceState.putString(SURVEY_KEY, survey.getJSON().toString());
 	}
 
 	/**
@@ -152,8 +152,9 @@ public class SurveyActivity extends Activity
 		}
 		catch (ParseException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error while parsing json");
 			e.printStackTrace();
+			finish();
 		}
 	}
 
@@ -210,7 +211,7 @@ public class SurveyActivity extends Activity
 				return true;
 			}
 		});
-		
+
 		keyListener = new OnKeyListener()
 		{
 			@Override
@@ -361,13 +362,15 @@ public class SurveyActivity extends Activity
 		}
 		catch (InvalidAnswerException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error while setting the answer.");
 			e.printStackTrace();
+			finish();
 		}
 		catch (ParseException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error while parsing json");
 			e.printStackTrace();
+			finish();
 		}
 
 		questions.removeAllViews();
