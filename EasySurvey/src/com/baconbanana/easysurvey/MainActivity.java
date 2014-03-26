@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -34,6 +35,11 @@ public class MainActivity extends Activity
 		
 		setContentView(R.layout.activity_main);
 		findViewById(R.id.mainLayout).setSystemUiVisibility(FULL_SCREEN);
+		TextView name = (TextView)findViewById(R.id.textView1);
+		String nameanddate= ConnectionActivity.getNameAndDate();
+		
+		String name1=nameanddate.substring(0,nameanddate.indexOf("*") );
+		name.setText("Lets start the survey,"+name1+"!");
 
 		prepareVideo();
 	}

@@ -26,18 +26,21 @@
         <activity
             android:name="com.baconbanana.easysurvey.MainActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            
         </activity>
         <activity
             android:name="com.baconbanana.easysurvey.ConnectionActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
+             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            
+           
         </activity>
         <activity
             android:name="com.baconbanana.easysurvey.SurveyActivity"
@@ -46,6 +49,7 @@
         <activity
             android:name="com.baconbanana.easysurvey.ValidationActivity"
             android:label="@string/app_name" >
+            
         </activity>
         <activity
             android:name="com.baconbanana.easysurvey.SpeechToTextTest"
