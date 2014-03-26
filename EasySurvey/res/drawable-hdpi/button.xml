@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/orange"
+    <item android:drawable="@drawable/orange_bt"
           android:state_pressed="true" />
-    <item android:drawable="@drawable/orange"
+    <item android:drawable="@drawable/orange_bt"
           android:state_focused="true" />
-    <item android:drawable="@drawable/greenbtn" />
+    <item android:drawable="@drawable/green_bt" />
     
 </selector>   
 

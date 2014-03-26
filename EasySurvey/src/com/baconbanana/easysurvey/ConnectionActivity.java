@@ -172,7 +172,7 @@ public class ConnectionActivity extends Activity
 		return false;
 	}
 
-	public void validateUser(View v)
+	public void moveToSurveyActivity(View v) 
 	{
 		Intent intent = new Intent(this, ValidationActivity.class);
 		startActivity(intent);
