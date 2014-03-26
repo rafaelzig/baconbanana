@@ -6,9 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
-import com.baconbanana.easysurveyfunctions.models.Patient;
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
-
 
 /**
  * It sends name and date of birth of patient together with survey.
@@ -25,14 +23,12 @@ public class DataSender extends Thread {
 	 * @param date
 	 * @param s
 	 */
-	public DataSender(Patient patient, Socket s) {
+	public DataSender(String name, String date, Socket s) {
 
-		this.name = patient.getName();
-		this.date = patient.getDob();
+		this.name = name;
+		this.date = date;
 		this.clientSocket = s;
 	}
-
-	
 
 	public void run() {
 

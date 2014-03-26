@@ -2,12 +2,8 @@ package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Enumeration;
 
 import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
 
@@ -36,15 +32,12 @@ public class Connection extends Thread {
 			&& SendSurveyGetAnswers.getPageClosed()==false) {
 			
 			try {
-				String IP;
-				Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-				NetworkInterface netint= Collections.list(nets).get(0);
-				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses(); // Variable never used?
-				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
-				System.out.println(IP);
-				SendSurveyGetAnswers.setLocalIP(IP); // Concurrency here
-				
-			} catch (UnknownHostException | SocketException ex) {
+				InetAddress myself = InetAddress.getLocalHost();
+				SendSurveyGetAnswers.setLocalIP(myself.getHostAddress());
+				//SendSurveyGetAnswers.setLocalIP("192.168.0.22");
+				//Save it related activity so that it can be used later
+				System.out.println("ipthingy "+myself.getHostAddress());
+			} catch (UnknownHostException ex) {
 				System.out.println("Failed to Find ip");
 				ex.printStackTrace();
 			}

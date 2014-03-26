@@ -54,7 +54,6 @@ public class InputWaiter extends Thread {
 					}
 
 				} catch (IOException | InterruptedException e) {
-					finish();
 					continue;
 				}
 

@@ -9,16 +9,16 @@
         android:layout_height="wrap_content" >
     </DatePicker>
 
-<!--     <TextView -->
-<!--         android:id="@+id/txtName" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignParentBottom="true" -->
-<!--         android:layout_centerHorizontal="true" -->
-<!--         android:layout_margin="10sp" -->
-<!--         android:gravity="center_vertical" -->
-<!--         android:textColor="#FFFFFF" -->
-<!--         android:textStyle="bold" /> -->
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10sp"
+        android:gravity="center_vertical"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/confirm"

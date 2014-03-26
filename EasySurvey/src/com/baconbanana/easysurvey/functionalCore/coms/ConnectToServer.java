@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
+import com.baconbanana.easysurvey.ConnectionActivity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.baconbanana.easysurvey.ConnectionActivity;
 
 /**
  * This class tries to create socket using IP and list of ports. If successful, on post
@@ -90,8 +90,11 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 									boolean b=ConnectionActivity.isSurveyCompleted();
 									 if(b){
 										 ConnectionActivity.changeSendButton(true);
+										 
+									}else{
+										 new WaitForInput().execute("");
 									}
-									 new WaitForInput().execute("");
+									
 								}
 							})
 							
@@ -144,19 +147,3 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 
 
 }
-/*
-	private volatile boolean running = true; //<------new
-	
-		if(running){						//<-----new
-		
-		}
-		running=false;//<-----new
-	
-	protected void onCancelled(String result){  		 //<------new 
-		Log.d("connectToServer", "on cancel was called");//<------new 
-		running = false;								 //<------new 
-		Log.d("connectToServer", "running set to fals"); //<------new 
-	}													 //<------new 
-	
-*/
-	

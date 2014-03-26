@@ -42,7 +42,7 @@ public class PatientName {
 					if(!dbCon.exists("Patient", "Name=" + DBController.appendApo(patientName))){
 						id= dbCon.insertInto("Patient","null",DBController.appendApo(patientName),DBController.appendApo(patientDOB));
 						new TransmissionParser(survey, getPatient());
-						new SendSurveyGetAnswers(getPatient());
+						new SendSurveyGetAnswers();
 }
 					else{
 						JOptionPane.showMessageDialog(null, "Patient Already Exists", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);

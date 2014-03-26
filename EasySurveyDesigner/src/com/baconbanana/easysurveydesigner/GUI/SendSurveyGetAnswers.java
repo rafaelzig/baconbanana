@@ -1,21 +1,22 @@
-
 package com.baconbanana.easysurveydesigner.GUI;
+
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
+import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -24,8 +25,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.InputWaiter;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveyfunctions.models.Patient;
 /**
  * Communicating with the device
  * @author ZimS
@@ -43,7 +42,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 	private static JButton get;
 	private JLabel status;
 	
-	private Patient patient;
+	
 	private static final String GET_S = "GET";
 	private static final String SEND_S = "SEND";
 	private static final String ACCEPT_S = "ACCEPT";
@@ -55,6 +54,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected JFrame frame, frameIp;
 	
 	Thread connection = new Connection();
+	Thread setIP = new setIP();
 	Thread IPwindow = new Thread();
 	
 	
@@ -64,31 +64,14 @@ public class SendSurveyGetAnswers implements ActionListener {
 /**
  * tries to send the survey to the device
  * and receive  survey from device
- * @param patient 
  * @throws InterruptedException
  */
-	public SendSurveyGetAnswers(Patient patient) throws InterruptedException {
-				this.patient=patient;
+	public SendSurveyGetAnswers() throws InterruptedException {
+				
 				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
-				
-				Thread setIP=new Thread(new Runnable()
-				{
-					
-					@Override
-					public void run() {
-						if (serverSocket == null) {
-							status.setText("Could not connect");
-							changeAccept(false);
-
-						} else {
-							status.setText("Waiting for a device to connect. " + localIP);
-
-						}
-					}
-				});
 				setIP.start();
 				setIP.join();
 				
@@ -131,118 +114,99 @@ public class SendSurveyGetAnswers implements ActionListener {
 				
 	}
 
-//			private void TempsendPage() {
-//
-//				final JFrame frame2 = new JFrame("send");
-//
-//				JPanel thePanel = new JPanel();
-//				thePanel.setLayout(new FlowLayout());
-//
-//				JPanel theOtherPanel = new JPanel();
-//				thePanel.setLayout(new GridLayout(1, 2));
-//
-//				final JTextField name = new JTextField(20);
-//				 final JTextField date = new JTextField(20);
-//				
-//
-//				JLabel l = new JLabel();
-//				l.setText("Enter Name:");
-//				
-//				thePanel.add(new JLabel("Date of birth(d-m-yyyy):"));
-//				thePanel.add(date); 
-//				
-//				theOtherPanel.add(l);
-//				theOtherPanel.add(name);
-//
-//				// sendPage.add(new JLabe);
-//				frame2.setLayout(new GridLayout(3, 1));
-//				frame2.add(thePanel);
-//				frame2.add(theOtherPanel);
-//
-//				
-//				JButton send = new JButton("send");
-//				send.addActionListener(new ActionListener() {
-//
-//					@Override
-//					public void actionPerformed(ActionEvent e) {
-////						int id;
-////						DBController dbCon;
-////						
-////						String patientName = name.getText().toString();
-////						String patientDOB = date.getText().toString();
-////						String renamedDOB = patientDOB.replace('-', '/');
-////						try {
-////							dbCon = DBController.getInstance();
-////							if(!dbCon.exists("Patient", "Name=" + DBController.appendApo(patientName))){
-////								id= dbCon.insertInto("Patient","null",DBController.appendApo(patientName),DBController.appendApo(patientDOB));
-////							}}
-////						 catch (ClassNotFoundException | SQLException e1) {
-////							// TODO Auto-generated catch block
-////							e1.printStackTrace();
-////						}
-////						
-////
-//						
-//						try {
-//							int id;
-//							patientName = JOptionPane.showInputDialog(null, "Enter Patient Name", "Reciever of the Survey", 1);
-//							if(!patientName.equals(""))
-//							{
-//								patientDOB = JOptionPane.showInputDialog(null, "Enter Patient DOB in format yyyy/mm/dd", "Reciever of the Survey", 1);
-//								 if(!patientDOB.matches("\\d{4}(?:/\\d{1,2}){2}")){
-//									 System.out.println(patientDOB.matches("\\d{4}(?:/\\d{1,2}){2}"));
-//									JOptionPane.showMessageDialog(null, "Please Enter Patient DOB In Specified Format", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
-//								}
-//								else if (!patientDOB.equals("")){
-//									
-//									
-//									try {
-//										DBController dbCon = DBController.getInstance();				
-//										if(!dbCon.exists("Patient", "Name=" + DBController.appendApo(patientName))){
-//											id= dbCon.insertInto("Patient","null",DBController.appendApo(patientName),DBController.appendApo(patientDOB));
-//					}
-//										else{
-//											JOptionPane.showMessageDialog(null, "Patient Already Exists", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
-//										}
-//									} catch (HeadlessException | SQLException | ClassNotFoundException exeption) {
-//										// TODO Auto-generated catch block
-//										exeption.printStackTrace();
-//									}
-//									
-//								}
-//								else if(patientDOB.equals("")){
-//									JOptionPane.showMessageDialog(null, "Please Enter Patient DOB", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
-//								}
-//								 if (patientDOB!=null){
-//								}
-//							}
-//							else if(patientName.equals("")){
-//								JOptionPane.showMessageDialog(null, "Please Enter Patient Name", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
-//								
-//							}
-//							Thread t5 = new DataSender(patientName, patientDOB, clientSocket);
-//							t5.start();
-//
-//							frame2.dispose();
-//							changeSend(false);
-//						}
-//							catch (NullPointerException exp){
-//								
-//							}
-//							
-//						}
-//					
-//
-//					});
-//
-//				frame2.add(send);
-//				frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//				frame2.setSize(400, 200);
-//				frame2.setVisible(true);
-//				frame.setLocationRelativeTo(null);
-//
-//			}
-//
+			public class setIP extends Thread {
+
+				public void run() {
+					if (serverSocket == null) {
+						status.setText("Could not connect");
+						changeAccept(false);
+
+					} else {
+						status.setText("Waiting for a device to connect. " + localIP);
+
+					}
+				}
+			}
+
+			private void TempsendPage() {
+
+				final JFrame frame2 = new JFrame("send");
+
+				JPanel thePanel = new JPanel();
+				thePanel.setLayout(new FlowLayout());
+
+				JPanel theOtherPanel = new JPanel();
+				thePanel.setLayout(new GridLayout(1, 2));
+
+				final JTextField name = new JTextField(20);
+
+				final JComboBox day, month, year;
+				
+				String years[] = { "1994", "1996", "1998" };
+				String months[] = { "01", "02", "03", "04" };
+				String days[] = { "01", "02", "03" };
+			
+
+				month = new JComboBox(months);
+				day = new JComboBox(days);
+				year = new JComboBox(years);
+
+				JLabel l = new JLabel();
+				l.setText("Enter Name:");
+
+				thePanel.add(new JLabel("Date of birth:"));
+				thePanel.add(day);
+				thePanel.add(month);
+				thePanel.add(year);
+				theOtherPanel.add(l);
+				theOtherPanel.add(name);
+
+				// sendPage.add(new JLabe);
+				frame2.setLayout(new GridLayout(3, 1));
+				frame2.add(thePanel);
+				frame2.add(theOtherPanel);
+
+				month.addItemListener(new ItemListener() {
+
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						String s = (String) month.getSelectedItem();
+						
+					}
+				});
+
+				JButton send = new JButton("send");
+				send.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String n = name.getText().toString();
+						StringBuilder d = new StringBuilder();
+						d.append(year.getSelectedItem().toString());
+						d.append("-");
+						d.append(month.getSelectedItem().toString());
+						d.append("-");
+						d.append(day.getSelectedItem().toString());
+
+						String date = d.toString();
+
+						Thread t5 = new DataSender(n, date, clientSocket);
+						t5.start();
+
+						frame2.dispose();
+						changeSend(false);
+					}
+
+				});
+
+				frame2.add(send);
+				frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame2.setSize(400, 200);
+				frame2.setVisible(true);
+				frame.setLocationRelativeTo(null);
+
+			}
+
 public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
@@ -295,9 +259,7 @@ public static synchronized void setServerSocket(ServerSocket s){
 					changeGet(false);
 					break;
 				case SEND_S:
-					Thread t5 = new DataSender(patient, clientSocket);
-					t5.start();
-
+							TempsendPage();
 					break;
 				case CLOSE_S:
 					frame.dispose();
