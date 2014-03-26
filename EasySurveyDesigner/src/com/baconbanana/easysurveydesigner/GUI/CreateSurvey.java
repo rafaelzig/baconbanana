@@ -47,9 +47,11 @@ public class CreateSurvey extends Survey{
 			//getWindow().setEnabled(false);
 
 		}else if(e.getSource().equals(editBtn)){
+			if (!(templateList.getSelectedValue() == null)){
 			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(), 800, 500, this);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			//			editTemplate.getListModel().getData();
+			}
 		}
 		else if(e.getSource().equals(deleteBtn)){
 			if (!(templateList.getSelectedValue() == null)){
@@ -68,7 +70,7 @@ public class CreateSurvey extends Survey{
 
 			if (!(templateList.getSelectedValue() == null)){
 
-				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
+				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo((String)templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
 				surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
 		}
