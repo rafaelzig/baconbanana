@@ -10,6 +10,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
@@ -18,7 +19,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
  * @author ZimS
  *
  */
-public class PatientSelector extends Window{
+public class PatientSelector extends SQLWindow{
 	
 	private JLabel patientLbl;
 	
@@ -39,11 +40,11 @@ public class PatientSelector extends Window{
 	
 	private void initiWidgets() {
 		
-		patientListModel = new SQLList("Patient", 0, "Patient");
+		patientListModel = new SQLList("Patient", 0, "Name");
 		patientList =new JList<String>(patientListModel);
-		patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "N =" + DBController.appendApo(patientList.getSelectedValue()), 0,"PatientID", "Patient", "Survey");
+		patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" + DBController.appendApo(patientList.getSelectedValue()), 0,"PatientID", "Name", "Survey");
 		patientSurveyList = new JList<String>(patientSurveyListModel);
-//		patientListModel.getData();
+		patientListModel.getData();
 		patientSelectionModel=patientList.getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
@@ -64,7 +65,7 @@ public class PatientSelector extends Window{
 		southPanel.add(cancelBtn);
 		getWindow().add(southPanel, BorderLayout.SOUTH);
 		
-//		patientSelectionModel.addListSelectionListener(this);
+		patientSelectionModel.addListSelectionListener(this);
 		selectBtn.addActionListener(this);
 		cancelBtn.addActionListener(this);
 		
@@ -76,8 +77,25 @@ public class PatientSelector extends Window{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource().equals(selectBtn)){
+			if (!(patientSurveyList.getSelectedValue() == null)){
+				
+			}
+		}
+		else if (e.getSource().equals(cancelBtn)){
+		getWindow().dispose();
+		new Menu("Menu", 250, 300);
+		}
+	}
+	public void valueChanged(ListSelectionEvent e) {
+		if(e.getSource().equals(patientSelectionModel) && patientSelectionModel.getValueIsAdjusting() == false){
+			//could change to templatelist.getselecteditem
+			patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" 
+			+ DBController.appendApo(patientList.getSelectedValue()), 2,"PatientID", "Name", "Survey");
+			patientSurveyListModel.getData();
+			populateList(patientSurveyList, patientSurveyListModel);
+			
+		}
 	}
 
 }
