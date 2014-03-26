@@ -1,8 +1,10 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.functionalCore.coms;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+
+import com.baconbanana.easysurvey.ConnectionActivity;
 
 import android.content.Context;
 import android.os.AsyncTask;
