@@ -1,16 +1,16 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.functionalCore.coms;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+
+import com.baconbanana.easysurvey.ConnectionActivity;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
-
-import com.baconbanana.easysurvey.functionalCore.coms.WaitForInput;
 
 /**
  * This class tries to create socket using IP and list of ports. If successful, on post
@@ -25,7 +25,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 	Context context;
 	Socket skt;
 	String IP;
-
+	private volatile boolean running = true; //<------new
 	/**
 	 * 
 	 * @param i InputStream
@@ -42,7 +42,7 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(String... arg0) {
-
+		while(running){						//<-----new
 		listOfSockets = new int[100];
 		for (int x = 0; x < 100; x++) {
 			listOfSockets[x] = 2000 + x;
@@ -60,8 +60,8 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 		}
 
 		Log.d("connect", "new thread");
+		}									//<-----new
 		return "done";
-
 	}
 
 	protected void onPostExecute(String result) {
@@ -123,6 +123,12 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 		
 	}
 	
+	protected void onCancelled(String result){  		 //<------new 
+		Log.d("connectToServer", "on cancel was called");//<------new 
+		running = false;								 //<------new 
+		Log.d("connectToServer", "running set to fals"); //<------new 
+	}													 //<------new 
+	
 
 	public Socket createSocket(int[] ports, String IP) throws IOException {
 
@@ -144,19 +150,3 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 
 
 }
-/*
-	private volatile boolean running = true; //<------new
-	
-		if(running){						//<-----new
-		
-		}
-		running=false;//<-----new
-	
-	protected void onCancelled(String result){  		 //<------new 
-		Log.d("connectToServer", "on cancel was called");//<------new 
-		running = false;								 //<------new 
-		Log.d("connectToServer", "running set to fals"); //<------new 
-	}													 //<------new 
-	
-*/
-	

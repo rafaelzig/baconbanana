@@ -42,7 +42,7 @@ public class Connection extends Thread {
 				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses(); // Variable never used?
 				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
 				System.out.println(IP);
-				SendSurveyGetAnswers.setLocalIP(IP);
+				SendSurveyGetAnswers.setLocalIP(IP); // Concurrency here
 				
 			} catch (UnknownHostException | SocketException ex) {
 				System.out.println("Failed to Find ip");
