@@ -35,6 +35,7 @@ public class AddTemplate extends Template{
 	/**
 	 * action listener for different types of questions
 	 */
+	
 
 	@Override
 	public void onCancel() {
