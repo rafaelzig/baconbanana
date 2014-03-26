@@ -8,11 +8,19 @@ import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveyfunctions.models.Patient;
-
+/**
+ * 
+ * a class that takes name of the patient who is going to take survey
+ *
+ */
 public class PatientName {
 	private String patientName;
 	private String patientDOB;
 	private long id;
+	/**
+	 * handling the input of the name and DOB(in regular expressions)
+	 * @param survey the is to be sent
+	 */
 	public PatientName(String survey) 
 	{
 		try {
@@ -57,6 +65,11 @@ public class PatientName {
 		}
 		
 	}
+	/**
+	 * method to get the patient's DOB in right format for parsing
+	 * and creating Patient class
+	 * @return Patient class
+	 */
 	public Patient getPatient()
 	{
 		String replaced = patientDOB.replace('/', '-');
