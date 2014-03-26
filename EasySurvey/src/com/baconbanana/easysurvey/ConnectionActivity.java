@@ -65,7 +65,7 @@ public class ConnectionActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_getsend);
+		setContentView(R.layout.activity_connection);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		input = (EditText) findViewById(R.id.ip);
