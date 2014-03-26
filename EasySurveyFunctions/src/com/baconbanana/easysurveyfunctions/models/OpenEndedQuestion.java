@@ -23,10 +23,10 @@ public abstract class OpenEndedQuestion extends Question
 	 * @param content
 	 *            A String object containing the content of the question.
 	 */
-	public OpenEndedQuestion(String content, String helpMessage,
+	public OpenEndedQuestion(String content, long id, String helpMessage,
 			QuestionType type)
 	{
-		super(content, helpMessage, type);
+		super(content, id, helpMessage, type);
 	}
 
 	/**

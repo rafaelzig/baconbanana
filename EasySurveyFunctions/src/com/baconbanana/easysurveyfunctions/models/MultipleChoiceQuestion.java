@@ -35,10 +35,10 @@ public class MultipleChoiceQuestion extends CloseEndedQuestion
 	 *             Signals an error when a choice list for a question given by
 	 *             the user has less than two choices.
 	 */
-	public MultipleChoiceQuestion(String content, List<String> choiceList)
+	public MultipleChoiceQuestion(String content, long id,  List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.MULTIPLECHOICE, choiceList);
+		super(content, id, HELP_MESSAGE, QuestionType.MULTIPLECHOICE, choiceList);
 	}
 
 	/**

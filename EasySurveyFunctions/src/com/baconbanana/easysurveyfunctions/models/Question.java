@@ -21,6 +21,7 @@ import com.baconbanana.easysurveyfunctions.parsing.Operations;
 public abstract class Question
 {
 	private QuestionType type;
+	private long id;
 	private boolean showName;
 	private String content, helpMessage;
 	String answer;
@@ -40,11 +41,12 @@ public abstract class Question
 	 * @see QuestionType#NUMERICAL
 	 * @see QuestionType#RATING
 	 */
-	public Question(String content, String helpMessage, QuestionType type)
+	public Question(String content, long id, String helpMessage, QuestionType type)
 	{
 		super();
 
 		this.type = type;
+		this.id =id;
 		this.showName = false;
 		this.content = content;
 		this.helpMessage = helpMessage;
@@ -66,6 +68,7 @@ public abstract class Question
 		JSONObject jsonObject = (JSONObject) rawData;
 		
 		this.type = Operations.getQuestionType((String) jsonObject.get("type"));
+		this.id = (Long) jsonObject.get("id");
 		this.showName = (Boolean) jsonObject.get("showName");
 		this.content = (String) jsonObject.get("content");
 		this.helpMessage = (String) jsonObject.get("helpMessage");
@@ -140,6 +143,7 @@ public abstract class Question
 		JSONObject rawData = new JSONObject();
 
 		rawData.put("type", type.toString());
+		rawData.put("id", id);
 		rawData.put("showName", showName);
 		rawData.put("content", content);
 		rawData.put("helpMessage", helpMessage);
@@ -198,5 +202,13 @@ public abstract class Question
 	void clearAnswer()
 	{
 		this.answer = new String();
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 }

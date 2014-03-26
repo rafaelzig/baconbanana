@@ -14,8 +14,8 @@ import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
 import com.baconbanana.easysurveyfunctions.models.Patient;
 import com.baconbanana.easysurveyfunctions.models.Question;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
-import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
 import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.models.TextualQuestion;
 
 public class TransmissionParser {
 	
@@ -37,7 +37,7 @@ public class TransmissionParser {
 			e.printStackTrace();
 		}
 		try {
-			Survey qOne = new Survey("Introduction", new Patient(1, "Jackson Johnson", "0000-00-00"),
+			Survey qOne = new Survey(surveyName, new Patient(1, "Jackson Johnson", "0000-00-00"),
 					"Initial Consultation", survey);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -60,20 +60,21 @@ public class TransmissionParser {
 	private void parseQuestion(int QuestionId){
 		try{
 			DBController dbCon = DBController.getInstance();
-			List<Object[]> questions = dbCon.select("Question", "QuestionID=" + String.valueOf(QuestionId), "Content", "Type");
+			List<Object[]> questions = dbCon.select("Question", "QuestionID=" + String.valueOf(QuestionId), "QuestionID", "Content", "Type");
 			for(Object[] i : questions){
-				String type = (String) i[1];
-				String content = (String)i[0];
+				int id = (int) i[0];
+				String content = (String)i[1];
+				String type = (String) i[2];
 				if(type.equals(QuestionType.NUMERICAL.toString())){
-					survey.add(new NumericQuestion(content));
+					survey.add(new NumericQuestion(content, id));
 				}else if(type.equals(QuestionType.DATE.toString())){
-					survey.add(new DateQuestion(content));
+					survey.add(new DateQuestion(content, id));
 				}else if(type.equals(QuestionType.TEXTUAL.toString())){
-					survey.add(new DateQuestion(content));
+					survey.add(new TextualQuestion(content, id));
 				}else if(type.equals(QuestionType.MULTIPLEANSWER.toString())){
-					survey.add(new MultipleAnswerQuestion(content, parseMultiQuestion(QuestionId)));
+					survey.add(new MultipleAnswerQuestion(content, id, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.MULTIPLECHOICE.toString())){
-					survey.add(new MultipleChoiceQuestion(content, parseMultiQuestion(QuestionId)));
+					survey.add(new MultipleChoiceQuestion(content, id, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.RATING.toString())){
 					//survey.add(new RatingQuestion(content, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.CONTINGENCY.toString())){
