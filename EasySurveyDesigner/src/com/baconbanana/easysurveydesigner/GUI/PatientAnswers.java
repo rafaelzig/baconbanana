@@ -81,7 +81,10 @@ public class PatientAnswers extends SQLWindow{
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(patientSelectionModel) && patientSelectionModel.getValueIsAdjusting() == false){
 			try {
-				if (DBController.getInstance().select("Question", "Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()) + " AND Type = 'Numerical' OR Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()) + " AND Type = 'Date' OR Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()) + " AND Type = 'Textual'", "Type").size() > 0){
+				if (DBController.getInstance().select("Question", "Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()) 
+						+ " AND Type = 'Numerical' OR Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()) + " AND Type = 'Date' OR Content = " 
+						+ DBController.appendApo(patientQuestionList.getSelectedValue()) + " AND Type = 'Textual'", "Type").size() > 0){
+					
 				patientAnswersListModel.getData("Patient NATURAL JOIN Patient_Survey NATURAL JOIN Answer NATURAL JOIN Patient_Question_Answer NATURAL JOIN question", 
 						"Name = " + DBController.appendApo(patientSurvey.getPatientList().getSelectedValue()) + " AND Survey = " 
 						+ DBController.appendApo(patientSurvey.getPatientSurveyList().getSelectedValue()) + " AND Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()), 0, "Answer");
