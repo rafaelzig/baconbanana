@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -68,6 +69,7 @@ public class SendSurveyGetAnswers implements ActionListener {
  */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
+				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
@@ -223,10 +225,10 @@ public static synchronized void setServerSocket(ServerSocket s){
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(){
-		connectionPageClosed = true;
+	public static synchronized void setPageClosed(Boolean b){
+		connectionPageClosed = b;
 	}
-	public static synchronized boolean isPageClosed(){
+	public static synchronized boolean getPageClosed(){
 		return connectionPageClosed;
 	}
 	
@@ -247,7 +249,8 @@ public static synchronized void setServerSocket(ServerSocket s){
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{	
+	{
+		
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -256,18 +259,18 @@ public static synchronized void setServerSocket(ServerSocket s){
 					changeGet(false);
 					break;
 				case SEND_S:
-					TempsendPage();
+							TempsendPage();
 					break;
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
-					setPageClosed();
+					setPageClosed(true);
 					try {
-						if(serverSocket!=null) // Concurrency issues maybe?
-						serverSocket.close(); // Concurrency issues maybe?
-						if(clientSocket!=null) // Concurrency issues maybe?
-						clientSocket.close(); // Concurrency issues maybe?
-						System.out.println(" socket status closed?"+serverSocket.isClosed()); // Concurrency issues maybe?
+						if(serverSocket!=null)
+						serverSocket.close();
+						if(clientSocket!=null)
+						clientSocket.close();
+						System.out.println(" socket status closed?"+serverSocket.isClosed());
 						setServerSocket(null);
 						setClientSocket(null);
 						DeviceWaiter.unFinish();
@@ -276,8 +279,7 @@ public static synchronized void setServerSocket(ServerSocket s){
 					} catch (IOException e1) {
 						System.out.println(" line 269 in SendDurveys..");
 					}
-					setPageClosed();
-					// Close page???
+					connectionPageClosed=true;
 					break;	
 				case  ACCEPT_S:
 					Thread waitForDevice = new DeviceWaiter(serverSocket, clientSocket, inS);
@@ -286,4 +288,5 @@ public static synchronized void setServerSocket(ServerSocket s){
 					break;
 		}
 	}
+	
 }

@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
+
 /**
  * It sends name and date of birth of patient together with survey.
  * @author beka, team

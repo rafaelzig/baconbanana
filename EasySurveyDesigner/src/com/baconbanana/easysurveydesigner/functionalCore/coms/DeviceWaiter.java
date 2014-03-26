@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
+import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
 /**
  * This thread runs while clientSocket is null and while window is open

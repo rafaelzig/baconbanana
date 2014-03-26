@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
-import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
+import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 
 /**
  * This thread runs while connection window is open and nothing is available
@@ -48,12 +48,13 @@ public class InputWaiter extends Thread {
 					inS = clientSocket.getInputStream();
 					System.out.println("waiting for input");
 
-					if (SendSurveyGetAnswers.isPageClosed()) {
+					if (SendSurveyGetAnswers.getPageClosed()) {
 						System.out.println("found out that page is closed");
 						finish();
 					}
 
 				} catch (IOException | InterruptedException e) {
+					finish();
 					continue;
 				}
 
