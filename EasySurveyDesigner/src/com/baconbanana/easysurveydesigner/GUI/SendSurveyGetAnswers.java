@@ -53,12 +53,11 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected JFrame frame, frameIp;
 	
 	Thread connection = new Connection();
-	Thread setIP = new setIP();
 	Thread IPwindow = new Thread();
 	
 	
-	protected volatile boolean noDevice = true;
 	protected static InputStream inS = null;
+	protected volatile boolean noDevice = true;
 	protected volatile static boolean connectionPageClosed = false;
 /**
  * tries to send the survey to the device
@@ -70,9 +69,23 @@ public class SendSurveyGetAnswers implements ActionListener {
 				setEverything();
 			    connection.start();
 				connection.join();
-				setIP.start();
-				setIP.join();
-				
+				Thread setIp = new Thread(new Runnable()
+				{
+					
+					@Override
+					public void run() {
+						if (serverSocket == null) {
+							status.setText("Could not connect");
+							changeAccept(false);
+
+						} else {
+							status.setText("Waiting for a device to connect. " + localIP);
+
+						}
+					}
+				});
+				setIp.start();
+				setIp.join();
 			}
 
 			private void setEverything() {
@@ -108,23 +121,8 @@ public class SendSurveyGetAnswers implements ActionListener {
 				frame.setSize(500, 100);
 				frame.setVisible(true);
 				frame.setLocationRelativeTo(null);
-				frame.setDefaultCloseOperation(0);
-				
+				frame.setDefaultCloseOperation(0);				
 	}
-
-			public class setIP extends Thread {
-
-				public void run() {
-					if (serverSocket == null) {
-						status.setText("Could not connect");
-						changeAccept(false);
-
-					} else {
-						status.setText("Waiting for a device to connect. " + localIP);
-
-					}
-				}
-			}
 
 			private void TempsendPage() {
 
@@ -222,14 +220,14 @@ public static synchronized void setServerSocket(ServerSocket s){
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(){
+	public static synchronized void setPageClosed(){ // Why synchronised? Boolean already volatile
 		connectionPageClosed = true;
 	}
-	public static synchronized boolean isPageClosed(){
+	public static synchronized boolean isPageClosed(){ // Why synchronised? Boolean already volatile
 		return connectionPageClosed;
 	}
 	
-	public static synchronized void changeSend(boolean b){
+	public static synchronized void changeSend(boolean b){ 
 		send.setEnabled(b);
 	}
 	public static synchronized void changeGet(boolean b){

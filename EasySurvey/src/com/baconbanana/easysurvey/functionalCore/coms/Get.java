@@ -1,4 +1,4 @@
-package com.baconbanana.easysurvey;
+package com.baconbanana.easysurvey.functionalCore.coms;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,8 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.baconbanana.easysurvey.ConnectionActivity;
+import com.baconbanana.easysurvey.functionalCore.EncryptionJ;
 import com.baconbanana.easysurvey.functionalCore.Storage;
 
 /**

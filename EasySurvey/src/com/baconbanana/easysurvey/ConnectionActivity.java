@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.baconbanana.easysurvey.functionalCore.coms.ConnectToServer;
+import com.baconbanana.easysurvey.functionalCore.coms.Get;
+import com.baconbanana.easysurvey.functionalCore.coms.Send;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
