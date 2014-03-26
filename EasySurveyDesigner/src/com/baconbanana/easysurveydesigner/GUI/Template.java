@@ -52,9 +52,10 @@ public abstract class Template extends SQLWindow{
 	protected DBController dbCon;
  
 
-	public Template(String tit, int width, int height) {
+	public Template(String tit, int width, int height, Survey s) {
 		super(tit, width, height);
 		templateName = tit;		
+		createSurvey = s;
 	}
 	protected void initiWidgets(){
 
@@ -210,9 +211,7 @@ public abstract class Template extends SQLWindow{
 					JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
 					createSurvey.getSurveyTemplateListModel().getData();
 				}else {
-					dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
-					createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
-					createSurvey.getSurveyTemplateListModel().getData();
+					onSave();
 				}
 
 			} catch (SQLException | ClassNotFoundException e1) {
@@ -227,5 +226,7 @@ public abstract class Template extends SQLWindow{
 	}
 	
 	public abstract void onCancel();
+	
+	public abstract void onSave();
 
 }

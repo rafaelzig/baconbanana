@@ -100,42 +100,44 @@ public abstract class Question extends SQLWindow{
 	}
 	
 	protected void checkTextEditors(ActionEvent e){
-		if(e.getSource().equals(strong)){
-			
-			String whole = questionTxta.getText();
-        	String msg = questionTxta.getSelectedText();
-        	String newMsg = "<strong>" + msg + "</strong>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxta.setContentType("text/html");
-        	questionTxta.setText(msg);
-        	
-		}else if(e.getSource().equals(italic)){
-			
-			String whole = questionTxta.getText();
-        	String msg = questionTxta.getSelectedText();
-        	String newMsg = "<i>" + msg + "</i>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxta.setContentType("text/html");
-        	questionTxta.setText(msg);
-        	
-		}else if(e.getSource().equals(colour)){
-			
-			String whole = questionTxta.getText();
-        	String msg = questionTxta.getSelectedText();
-        	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxta.setContentType("text/html");
-        	questionTxta.setText(msg);
-        	
-		}else if(e.getSource().equals(size)){
-			
-			String whole = questionTxta.getText();
-        	String msg = questionTxta.getSelectedText();
-        	String newMsg ="<big>" + msg + "</big>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxta.setContentType("text/html");
-        	questionTxta.setText(msg);
-        	
+		if(questionTxta.getSelectedText() != null){
+			if(e.getSource().equals(strong)){
+				
+				String whole = questionTxta.getText();
+	        	String msg = questionTxta.getSelectedText();
+	        	String newMsg = "<strong>" + msg + "</strong>";
+	        	msg = whole.replace(msg, newMsg);
+	        	questionTxta.setContentType("text/html");
+	        	questionTxta.setText(msg);
+	        	
+			}else if(e.getSource().equals(italic)){
+				
+				String whole = questionTxta.getText();
+	        	String msg = questionTxta.getSelectedText();
+	        	String newMsg = "<i>" + msg + "</i>";
+	        	msg = whole.replace(msg, newMsg);
+	        	questionTxta.setContentType("text/html");
+	        	questionTxta.setText(msg);
+	        	
+			}else if(e.getSource().equals(colour)){
+				
+				String whole = questionTxta.getText();
+	        	String msg = questionTxta.getSelectedText();
+	        	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
+	        	msg = whole.replace(msg, newMsg);
+	        	questionTxta.setContentType("text/html");
+	        	questionTxta.setText(msg);
+	        	
+			}else if(e.getSource().equals(size)){
+				
+				String whole = questionTxta.getText();
+	        	String msg = questionTxta.getSelectedText();
+	        	String newMsg ="<big>" + msg + "</big>";
+	        	msg = whole.replace(msg, newMsg);
+	        	questionTxta.setContentType("text/html");
+	        	questionTxta.setText(msg);
+	        	
+			}
 		}
 	}
 
