@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
-import com.baconbanana.easysurveydesigner.GUI.SQLWindow;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
@@ -56,9 +55,9 @@ public class ExistingQuestions extends SQLWindow implements ActionListener {
 	public void actionPerformed(ActionEvent act) {
 		if(act.getSource().equals(deleteBtn)){
 			String print;
-		//	DBController.getInstance().
+			//DBController.getInstance();
 			
-		
+			
 		}
 		
 	}

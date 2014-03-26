@@ -1,13 +1,13 @@
-package com.baconbanana.easysurveydesigner.newGUI.QuestionTypes;
+package com.baconbanana.easysurveydesigner.GUI.QuestionTypes;
 
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import com.baconbanana.easysurveydesigner.GUI.OpenQuestion;
+import com.baconbanana.easysurveydesigner.GUI.Template;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.newGUI.OpenQuestion;
-import com.baconbanana.easysurveydesigner.newGUI.Template;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * model for question Types

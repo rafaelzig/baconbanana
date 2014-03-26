@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -86,7 +86,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(openBtn)){
 			if (!(surveyList.getSelectedValue() == null)){
-				CreateSurvey editSurvey =  new CreateSurvey(surveyList.getSelectedValue(), true, false);
+				EditSurvey editSurvey =  new EditSurvey(surveyList.getSelectedValue(), true);
 				getWindow().dispose();
 				editSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(surveyList.getSelectedValue()), 1, "Survey", "Template");
 			}

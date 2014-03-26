@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.baconbanana.easysurveydesigner.GUI.Menu;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
@@ -256,18 +255,18 @@ public static synchronized void setServerSocket(ServerSocket s){
 					changeGet(false);
 					break;
 				case SEND_S:
-					TempsendPage();
+							TempsendPage();
 					break;
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
 					setPageClosed();
 					try {
-						if(serverSocket!=null) // Concurrency issues maybe?
-						serverSocket.close(); // Concurrency issues maybe?
-						if(clientSocket!=null) // Concurrency issues maybe?
-						clientSocket.close(); // Concurrency issues maybe?
-						System.out.println(" socket status closed?"+serverSocket.isClosed()); // Concurrency issues maybe?
+						if(serverSocket!=null)
+						serverSocket.close();
+						if(clientSocket!=null)
+						clientSocket.close();
+						System.out.println(" socket status closed?"+serverSocket.isClosed());
 						setServerSocket(null);
 						setClientSocket(null);
 						DeviceWaiter.unFinish();
@@ -276,8 +275,7 @@ public static synchronized void setServerSocket(ServerSocket s){
 					} catch (IOException e1) {
 						System.out.println(" line 269 in SendDurveys..");
 					}
-					setPageClosed();
-					// Close page???
+					connectionPageClosed=true;
 					break;	
 				case  ACCEPT_S:
 					Thread waitForDevice = new DeviceWaiter(serverSocket, clientSocket, inS);
