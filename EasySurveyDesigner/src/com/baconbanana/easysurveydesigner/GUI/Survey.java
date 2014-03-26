@@ -17,7 +17,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOldv2;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * An abstract class that encompeses common survey window functions
