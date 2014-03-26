@@ -176,7 +176,7 @@ public class ConnectionActivity extends Activity
 		return false;
 	}
 
-	public void validateUser(View v)
+	public void moveToSurveyActivity(View v) 
 	{
 		String jsonString = null;
 		
@@ -264,11 +264,4 @@ public class ConnectionActivity extends Activity
 
 }
 
-/*
- * @Override protected void onStop(){ //<----new line super.onStop(); //<----new
- * line connection.cancel(true);//<----new line }
- * 
- * @Override protected void onDestroy(){ connection.cancel(true);//<----new line
- * }
- */
 

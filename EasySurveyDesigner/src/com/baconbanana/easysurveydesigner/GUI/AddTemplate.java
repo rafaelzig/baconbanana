@@ -32,9 +32,8 @@ public class AddTemplate extends Template{
 		enableTemplateNameRequester(false);
 	}
 	/**
-	 * action listener for different types of questions
+	 * Controls behavure of cancel button
 	 */
-	
 
 	@Override
 	public void onCancel() {
@@ -52,6 +51,10 @@ public class AddTemplate extends Template{
 		createSurvey.getSurveyTemplateListModel().getData();
 		
 	}
+	
+	/**
+	 * controls behavure for save button
+	 */
 	public void onSave(){
 		try {
 			dbCon = DBController.getInstance();

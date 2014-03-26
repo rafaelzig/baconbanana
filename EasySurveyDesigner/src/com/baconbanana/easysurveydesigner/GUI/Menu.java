@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
 /**
@@ -24,6 +25,8 @@ public class Menu extends Window
 	private static final String PREVIEW_ANSWERS_TEXT = "<html>View Patients Answers</html>";
 	private static final String OPEN_SURVEY_TEXT = "Open Survey";
 	private static final String CREATE_SURVEY_TEXT = "Create new Survey";
+	private static final String CLOSE_WINDOW = "Close";
+
 
 	private JButton createSurvey;
 	private JButton openSurvey;
@@ -31,6 +34,7 @@ public class Menu extends Window
 	private JButton getConnect;
 	private JButton importBtn;
 	private JButton exportBtn;
+	private JButton close;
 
 	public Menu(String tit, int width, int height)
 	{
@@ -44,6 +48,9 @@ public class Menu extends Window
 		// TODO fix button size
 		getWindow().setLayout(new BorderLayout());
 		getWindow().setResizable(false);
+		getWindow().setDefaultCloseOperation(0);
+		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
 
@@ -84,11 +91,18 @@ public class Menu extends Window
 		exportBtn = new JButton(EXPORT_TEXT);
 		exportBtn.addActionListener(this);
 		buttonPanel.add(exportBtn, btnCon);
+		btnCon.gridy++;
+		
+		close = new JButton(CLOSE_WINDOW);
+		close.addActionListener(this);
+		buttonPanel.add(close , btnCon);
 
 		getWindow().add(buttonPanel, BorderLayout.CENTER);
 
 	}
-
+	
+	
+	  
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
@@ -109,7 +123,7 @@ public class Menu extends Window
 					getWindow().dispose();
 					break;
 				case CONNECT_DEVICE_TEXT:
-					new SendSurveyGetAnswers();
+					new SendSurveyGetAnswers(null);
 					getWindow().dispose();
 					break;
 				case IMPORT_TEXT:
@@ -117,6 +131,10 @@ public class Menu extends Window
 					break;
 				case EXPORT_TEXT:
 					ImportExport.startExport();
+					break;
+				case CLOSE_WINDOW:
+					getWindow().setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					new LoginPage("Login Page", 300, 300);
 					break;
 			}
 		}

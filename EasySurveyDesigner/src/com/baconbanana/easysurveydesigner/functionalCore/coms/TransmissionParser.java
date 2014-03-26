@@ -1,5 +1,6 @@
 package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import com.baconbanana.easysurveyfunctions.models.Question;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
 import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 public class TransmissionParser {
 	
 	private List<Question> survey;
 	
-
 	public TransmissionParser(String surveyName, Patient patient){
 		survey = new ArrayList<>();
 		try{
@@ -33,11 +34,11 @@ public class TransmissionParser {
 		}catch(SQLException | ClassNotFoundException e){
 			e.printStackTrace();
 		}
+		Survey surveyObj = new Survey(surveyName, patient,
+				"Initial Consultation", survey);
 		try {
-			Survey qOne = new Survey(surveyName, patient,
-					"Initial Consultation", survey);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			Operations.writeFile("Survey.json",surveyObj.getJSON().toString());
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

@@ -11,9 +11,11 @@ import java.io.OutputStream;
 
 
 public class SQLiteInstaller {
-	public static void main(String[] args){
+	/**
+	 * Get the users directory location for Documents
+	 */
+	public void getLocation(){
 		String osName = System.getProperty("os.name");
-		System.out.println(osName);
 		String workingDir = "";
 		File scrFolder = null;
 		if(osName.contains("Mac")){
@@ -37,11 +39,17 @@ public class SQLiteInstaller {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		SQLiteInstaller sqlLite = new SQLiteInstaller();
-		sqlLite.copyFolder(scrFolder, destFolder);
+		if(!new File(docLoc + "/SQLite").exists()){
+			SQLiteInstaller sqlLite = new SQLiteInstaller();
+			sqlLite.copyFolder(scrFolder, destFolder);
+		}
 		//sqlLite.installSQLLite(docLoc);
 	}
-	
+	/**
+	 * Copys folder to location
+	 * @param scr
+	 * @param dest
+	 */
 	public void copyFolder(File scr, File dest){
 		//Create file directories
 		
@@ -84,6 +92,10 @@ public class SQLiteInstaller {
 			
 		}
 	}
+	/**
+	 * load sqlite in cmd line
+	 * @param loc
+	 */
 	public void installSQLLite(String loc){
 		//Get the command propt
 		Runtime rt = Runtime.getRuntime();

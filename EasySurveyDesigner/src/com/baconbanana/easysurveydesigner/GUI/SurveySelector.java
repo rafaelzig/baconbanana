@@ -16,7 +16,12 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * 
+ * The class which consists of the list of surveys and questions in each particular survey 
+ * stored in database
+ *
+ */
 public class SurveySelector extends SQLWindow implements ActionListener {
 	private  JList<String> surveyList;
     private SQLList surveyModel;
@@ -33,9 +38,13 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		initLayout();
  
 			}
-
-	public void initLayout()
+/**
+ * initialising layout
+ */
+	private void initLayout()
 	{
+		getWindow().setDefaultCloseOperation(0);
+		
 		surveyModel = new SQLList("Survey", 0,"Survey");
 		surveyList =new JList<String>(surveyModel);
 		questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question",0,"Content");
@@ -60,29 +69,39 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		getSurveyList().setBorder(getBorder());
 		questionList.setBorder(getBorder());
 		
-		System.out.println(surveyModel.getSize());
-		
 		surveySelectionModel.addListSelectionListener(this);
 		openBtn.addActionListener(this);
 		deleteBtn.addActionListener(this);
 		cancelBtn.addActionListener(this);
-		
-		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
-	//	populateList(surveyList, surveyModel);
+
 		setFrameOptions();
-		// TODO FIX PACK!!!!!!!
 		getWindow().pack();
 	}
+	/**
+	 * getter for survey model
+	 * @return Model of survey
+	 */
 	public  SQLList getSurveyListModel() {
 		return surveyModel;
 	}
+	/**
+	 * getter for survey list
+	 * @return List of surveys
+	 */
 	public  JList<String> getSurveyList() {
 		return surveyList;
 	}
+	/**
+	 * setter for survey list
+	 * @param surveyList List of surveys
+	 */
 	public  void setSurveyList(JList<String>surveyList) {
 		this.surveyList = surveyList;
 	}
 	@Override
+	/**
+	 * action listener that controls all buttons on layout
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(openBtn)){
 			if (!(surveyList.getSelectedValue() == null)){
@@ -107,14 +126,14 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 			getWindow().dispose();
 			new Menu("Menu", 250, 300);
 		}
-//	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
-//				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
-//	    surveyCreateModel.getData();
 		
-		}
+	}
 	
 
 	@Override
+	/**
+	 * List selection listener that shows question in selected survey
+	 */
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(surveySelectionModel) && surveySelectionModel.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
@@ -122,7 +141,6 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 					(surveyModel.getId(surveyList.getSelectedIndex())), 0, "Content");
 			populateList(questionList, questionModel);
 			questionModel.getData();
-			System.out.println(surveyList.getSelectedIndex());
 		}
 		
 	}

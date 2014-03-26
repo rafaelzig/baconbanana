@@ -17,11 +17,9 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.dbops.old.DBOperationOldv2;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
- * class for creating new survey
- * @author ZimS
+ * An abstract class that encompeses common survey window functions
  *
  */
 public abstract class Survey extends SQLWindow{
@@ -33,7 +31,6 @@ public abstract class Survey extends SQLWindow{
 	protected JList<String> surveyPrevList;
 
 	protected ListSelectionModel templatelsm;
-	//private ListSelectionModel templatePrevlsm;
 
 	protected SQLList templateModelFromSurvey;
 	protected SQLList templatePrevModel;
@@ -54,10 +51,10 @@ public abstract class Survey extends SQLWindow{
 	}
 
 	/**
-	 * method for gui creation
+	 * Methord that creates GUI elements and instalises models
 	 */
 	public void initiWidgets(){
-
+		//inisiles buttons
 		addBtn = new JButton("Add");
 		editBtn = new JButton("Edit");
 		deleteBtn = new JButton("Delete");
@@ -65,42 +62,50 @@ public abstract class Survey extends SQLWindow{
 		saveBtn = new JButton("Save");
 		cancelBtn = new JButton("Cancel");
 		sendBtn = new JButton("Send");
-
+		
+		//inisilises labels
 		JLabel templatesLbl = new JLabel("List of Templates");
 		JLabel templatePrevLbl = new JLabel("Template Preview");
 		JLabel surveyPrevLbl = new JLabel("Survey Preview");
 
+		//inisilises Models
 		templateModelFromSurvey = new SQLList("Template", 0 , "Template", "QuestionID");
 		templatePrevModel = new SQLList("Template NATURAL JOIN Question", 0, "Question");
+		
+		//abstract methord
 		createSurveyPrev();
 
+		//inisilises lists
 		templateList = new JList<String>(templateModelFromSurvey);
 		templatePrevList = new JList<String>(templatePrevModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 
+		//adds lists to scroll pane
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		JScrollPane templatePrevListsp = new JScrollPane(templatePrevList);
 		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
+
 
 		populateList(templateList, templateModelFromSurvey);
 		templateModelFromSurvey.getData();
 
 		templatelsm = templateList.getSelectionModel();
 		templatelsm.addListSelectionListener(this);
-		//templatePrevlsm = templatePrevList.getSelectionModel();
-
-
 
 		JPanel stage = new JPanel(new GridBagLayout());
-
+		
+		//Add borders
 		stage.add(new JLabel(), LayoutController.summonCon(0, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
-
+		stage.add(new JLabel(), LayoutController.summonCon(5, 0));
+		stage.add(new JLabel(), LayoutController.summonCon(9, 0));
+		
 		stage.add(templatesLbl, LayoutController.summonCon(1, 1, 2, 1, 10, 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 		stage.add(templateListsp, LayoutController.summonCon(1, 2, 4, 4, 40, 100, GridBagConstraints.WEST, GridBagConstraints.BOTH));
 		templateList.setBorder(getBorder());
 
 		JPanel templateBtnContainer = new JPanel(new FlowLayout());
 
+		//add buttons to stage
 		stage.add(templateBtnContainer, LayoutController.summonCon(1, 6, 4, 1, 4, 5, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 		templateBtnContainer.add(addBtn);
 		addBtn.addActionListener(this);
@@ -110,8 +115,6 @@ public abstract class Survey extends SQLWindow{
 		deleteBtn.addActionListener(this);
 		templateBtnContainer.add(moveBtn);
 		moveBtn.addActionListener(this);
-
-		stage.add(new JLabel(), LayoutController.summonCon(5, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 
 		stage.add(templatePrevLbl, LayoutController.summonCon(6, 1, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
 		stage.add(surveyPrevLbl, LayoutController.summonCon(6, 4, 1, 1, 10 , 5, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL));
@@ -137,9 +140,7 @@ public abstract class Survey extends SQLWindow{
 		stage.add(new JLabel(), LayoutController.summonCon(9, 0, 1, 7, 5, 0, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 
 		getWindow().add(stage);
-		
-		
-		}
+	}
 
 
 
@@ -151,16 +152,14 @@ public abstract class Survey extends SQLWindow{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
 			new AddTemplate("Template", 800, 500, this);
-			//TODO We need to either get rid of disabling previous windows or change it so it will enable them back again when u close current window or press cancel but...
-			//	I am (Matt) to dumb to figure it out and I dont want to waste too much time on that because it is not that important at the moment :)
-			//getWindow().setEnabled(false);
-
+			
 		}else if(e.getSource().equals(editBtn)){
 			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(),800,500, this);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
-			//			editTemplate.getListModel().getData();
+
 		}
 		else if(e.getSource().equals(deleteBtn)){
+			//remove data from records
 			if (!(templateList.getSelectedValue() == null)){
 				try {
 					DBController.getInstance().delete("Template","Template="+ DBController.appendApo(templateList.getSelectedValue()));
@@ -174,10 +173,19 @@ public abstract class Survey extends SQLWindow{
 			}
 		}
 		else if(e.getSource().equals(moveBtn)){
-
+			//transer template to survey
 			if (!(templateList.getSelectedValue() == null)){
-
-				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo((String)templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
+				try {
+					if(!(DBController.getInstance().exists("Survey_Template", "Survey = " + DBController.appendApo(getSurveyName()) + "AND Template = " + DBController.appendApo(templateList.getSelectedValue()))))
+					{
+					surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateList.getSelectedValue()));}
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
 		}
@@ -189,7 +197,8 @@ public abstract class Survey extends SQLWindow{
 			onCancel();		
 		}
 		else if(e.getSource().equals(sendBtn)){
-			new PatientName();
+			new PatientName(getSurveyName());
+			getWindow().dispose();
 		}
 
 	}
@@ -209,21 +218,23 @@ public abstract class Survey extends SQLWindow{
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
+		//get preview of question in a template
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
-			//could change to templatelist.getselecteditem
 			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" +
 			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			populateList(templatePrevList, templatePrevModel);
 			templatePrevModel.getData();
-
-			} 
+		} 
 	}
 	public abstract void onCancel();
 	
 	public abstract void createSurveyPrev();
-	
+	/**
+	 * Mathord that loops until user enters a valid survey name
+	 * @param valid true to get title, false to skip
+	 */
 	protected void enableSurveyNameRequester(boolean valid){
-		while(valid == false){
+		while(valid == true){
 			surveyName = JOptionPane.showInputDialog(null, "Enter Survey Name : ", "Name Survey", 1);
 			if(surveyName != null){
 				try{
@@ -231,7 +242,7 @@ public abstract class Survey extends SQLWindow{
 					if(!dbCon.exists("Survey", "Survey=" + DBController.appendApo(surveyName))){
 						createContext("Survey", surveyName, "0000/00/00", "0000/00/00");
 						getWindow().setTitle(surveyName);
-						valid = true;
+						valid = false;
 					}else{
 						JOptionPane.showMessageDialog(null, "A Survey Already Has This Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -241,13 +252,14 @@ public abstract class Survey extends SQLWindow{
 			}else if(surveyName == null){
 				new Menu("Menu", 250, 300);
 				getWindow().dispose();
-				valid = true;
+				valid = false;
 			}else if(surveyName.equals("")){
 				JOptionPane.showMessageDialog(null, "Please Enter A Valid Survey Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		
 	}
+	
 	
 }
 
