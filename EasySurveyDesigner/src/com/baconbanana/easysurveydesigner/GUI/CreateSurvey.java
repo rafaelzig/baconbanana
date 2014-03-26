@@ -49,7 +49,7 @@ public class CreateSurvey extends Survey{
 			e1.printStackTrace();
 		}
 		getWindow().dispose();
-		new Menu("Menu", 400, 400);
+		new Menu("Menu", 250, 300);
 	}
 
 	/**

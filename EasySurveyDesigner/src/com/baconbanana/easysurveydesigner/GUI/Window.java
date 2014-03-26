@@ -43,8 +43,9 @@ public abstract class Window implements ActionListener{
 		window = new JFrame(title);
 		if(fullScreen == true){
 			window.setExtendedState(Frame.MAXIMIZED_BOTH); 
-			window.setMinimumSize(new Dimension(400,400));	
-			window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			window.setMinimumSize(new Dimension(400,400));
+			window.setDefaultCloseOperation(0);
+			//window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
 		window.setVisible(true);
 

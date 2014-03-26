@@ -37,6 +37,7 @@ public class PatientSelector extends SQLWindow{
 	}
 	
 	private void initiWidgets() {
+		getWindow().setDefaultCloseOperation(0);
 		
 		patientListModel = new SQLList("Patient", 0, "Name");
 		setPatientList(new JList<String>(patientListModel));

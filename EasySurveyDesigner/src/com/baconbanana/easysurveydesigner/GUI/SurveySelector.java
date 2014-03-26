@@ -40,6 +40,8 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 
 	public void initLayout()
 	{
+		getWindow().setDefaultCloseOperation(0);
+		
 		surveyModel = new SQLList("Survey", 0,"Survey");
 		surveyList =new JList<String>(surveyModel);
 		questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question",0,"Content");
