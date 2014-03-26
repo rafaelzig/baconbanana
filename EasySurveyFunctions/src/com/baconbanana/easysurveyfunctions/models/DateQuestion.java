@@ -23,9 +23,9 @@ public class DateQuestion extends OpenEndedQuestion
 	 */
 	private static final String HELP_MESSAGE = "Please select the date using the space below:";
 
-	public DateQuestion(String content)
+	public DateQuestion(String content, long id)
 	{
-		super(content, HELP_MESSAGE, QuestionType.DATE);
+		super(content, id, HELP_MESSAGE, QuestionType.DATE);
 	}
 
 	@SuppressWarnings("rawtypes")

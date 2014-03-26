@@ -46,11 +46,11 @@ public abstract class CloseEndedQuestion extends Question
 	 * @see QuestionType#CONTINGENCY
 	 * @see QuestionType#RATING
 	 */
-	public CloseEndedQuestion(String content, String helpMessage,
+	public CloseEndedQuestion(String content, long id,String helpMessage,
 			QuestionType type, List<String> choiceList)
 			throws InvalidChoiceListException
 	{
-		super(content, helpMessage, type);
+		super(content, id, helpMessage, type);
 
 		if (choiceList.size() > 1 && choiceList.size() <= 10)
 			this.choiceList = choiceList;

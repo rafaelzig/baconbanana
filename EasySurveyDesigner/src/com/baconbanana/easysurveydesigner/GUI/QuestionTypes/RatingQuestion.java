@@ -13,6 +13,7 @@ import com.baconbanana.easysurveydesigner.GUI.MultipleQuestion;
 import com.baconbanana.easysurveydesigner.GUI.Template;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
+import com.baconbanana.easysurveyfunctions.models.RatingType;
 
 /**
  * model for Rating Questions
@@ -21,7 +22,7 @@ import com.baconbanana.easysurveyfunctions.models.QuestionType;
  */
 public class RatingQuestion extends MultipleQuestion{
 	
-	private JComboBox<QuestionType> scalarType;
+	private JComboBox<RatingType> scalarType;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	
@@ -39,8 +40,7 @@ public class RatingQuestion extends MultipleQuestion{
 		panel.add(getTextEditors(), LayoutController.summonCon(1, 1, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 		
 		panel.add(questionTxta, LayoutController.summonCon(1, 2, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
-		//TODO populate this list
-		scalarType = new JComboBox<>();
+		scalarType = new JComboBox<>(RatingType.values());
 		
 		panel.add(scalarType, LayoutController.summonCon(1, 3, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 		

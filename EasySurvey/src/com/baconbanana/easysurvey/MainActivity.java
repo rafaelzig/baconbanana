@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.MediaController;
 import android.widget.Toast;
@@ -55,41 +56,36 @@ public class MainActivity extends Activity
 	}
 
 	/**
-	 * Parses the json string from the external storage into a Survey object,
+	 * Parses the json string from the internal storage into a Survey object,
 	 * returning false if the survey has already been completed, true otherwise.
 	 * 
 	 * @return false if the survey has already been completed, true otherwise.
 	 */
 	private boolean loadSurvey()
 	{
-		String jsonString;
-
 		try
 		{
-//			jsonString = Operations.readFile(getAssets().open(
-//					Operations.FILENAME));
-//			rawData = Operations.parseJSON(jsonString);
-//			survey = new Survey(rawData);
-//			Storage.writeToInternal(this, survey.getJSON().toJSONString());
-			
-			jsonString = Storage.readFromInternal(this, Storage.FILENAME);
+			String jsonString = Storage.readFromInternal(this, Storage.FILENAME);
 			survey = new Survey(Operations.parseJSON(jsonString));
 		}
 		
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error saving file to storage");
 			e.printStackTrace();
+			finish();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error reading file from storage");
 			e.printStackTrace();
+			finish();
 		}
 		catch (java.text.ParseException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error while parsing the file");
 			e.printStackTrace();
+			finish();
 		}
 
 		if (ConnectionActivity.isSurveyCompleted())

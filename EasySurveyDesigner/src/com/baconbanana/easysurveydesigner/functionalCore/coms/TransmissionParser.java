@@ -2,7 +2,6 @@ package com.baconbanana.easysurveydesigner.functionalCore.coms;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,15 +14,13 @@ import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
 import com.baconbanana.easysurveyfunctions.models.Patient;
 import com.baconbanana.easysurveyfunctions.models.Question;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
-import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
 import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.models.TextualQuestion;
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 public class TransmissionParser {
 	
 	private List<Question> survey;
-	
-	
 	
 	public TransmissionParser(String surveyName, Patient patient){
 		survey = new ArrayList<>();
@@ -60,20 +57,21 @@ public class TransmissionParser {
 	private void parseQuestion(int QuestionId){
 		try{
 			DBController dbCon = DBController.getInstance();
-			List<Object[]> questions = dbCon.select("Question", "QuestionID=" + String.valueOf(QuestionId), "Content", "Type");
+			List<Object[]> questions = dbCon.select("Question", "QuestionID=" + String.valueOf(QuestionId), "QuestionID", "Content", "Type");
 			for(Object[] i : questions){
-				String type = (String) i[1];
-				String content = (String)i[0];
+				int id = (int) i[0];
+				String content = (String)i[1];
+				String type = (String) i[2];
 				if(type.equals(QuestionType.NUMERICAL.toString())){
-					survey.add(new NumericQuestion(content));
+					survey.add(new NumericQuestion(content, id));
 				}else if(type.equals(QuestionType.DATE.toString())){
-					survey.add(new DateQuestion(content));
+					survey.add(new DateQuestion(content, id));
 				}else if(type.equals(QuestionType.TEXTUAL.toString())){
-					survey.add(new DateQuestion(content));
+					survey.add(new TextualQuestion(content, id));
 				}else if(type.equals(QuestionType.MULTIPLEANSWER.toString())){
-					survey.add(new MultipleAnswerQuestion(content, parseMultiQuestion(QuestionId)));
+					survey.add(new MultipleAnswerQuestion(content, id, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.MULTIPLECHOICE.toString())){
-					survey.add(new MultipleChoiceQuestion(content, parseMultiQuestion(QuestionId)));
+					survey.add(new MultipleChoiceQuestion(content, id, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.RATING.toString())){
 					//survey.add(new RatingQuestion(content, parseMultiQuestion(QuestionId)));
 				}else if(type.equals(QuestionType.CONTINGENCY.toString())){

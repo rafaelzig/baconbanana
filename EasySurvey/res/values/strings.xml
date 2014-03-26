@@ -12,5 +12,6 @@
     <string name="finish_the_survey">Finish the survey</string>
     <string name="confirm">Confirm</string>
     <string name="remember">Remember</string>
+    <string name="pass_device_back_string">Survey finished! Please pass the device back to a member of staff.</string>
 
 </resources>

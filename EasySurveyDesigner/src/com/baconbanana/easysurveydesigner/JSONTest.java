@@ -15,6 +15,7 @@ import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
 import com.baconbanana.easysurveyfunctions.models.Patient;
 import com.baconbanana.easysurveyfunctions.models.Question;
 import com.baconbanana.easysurveyfunctions.models.RatingQuestion;
+import com.baconbanana.easysurveyfunctions.models.RatingType;
 import com.baconbanana.easysurveyfunctions.models.Survey;
 import com.baconbanana.easysurveyfunctions.models.TextualQuestion;
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
@@ -23,13 +24,14 @@ public class JSONTest
 {
 	public static void main(String[] args)
 	{
+		long fakeId = 1;
 		// Creating a list of Question objects
 		List<Question> questionList = new ArrayList<>();
 
 		// Adding an OpenEndedQuestion object
-		questionList.add(new TextualQuestion("How are you feeling today?"));
+		questionList.add(new TextualQuestion("How are you feeling today?", fakeId++));
 		questionList.add(new DateQuestion(
-				"What is the date of your first visit?"));
+				"What is the date of your first visit?", fakeId++));
 
 		// Creating a list of choices for the next Question object
 		List<String> choiceList = new ArrayList<>();
@@ -39,14 +41,14 @@ public class JSONTest
 		// Creating subsequent questions for the next Question object
 		List<Question> subsequentList = new ArrayList<>();
 		subsequentList
-				.add(new DateQuestion("When have you started smoking?"));
+				.add(new DateQuestion("When have you started smoking?", fakeId++));
 		subsequentList.add(new NumericQuestion(
-				"How many packs do you smoke a day?"));
+				"How many packs do you smoke a day?", fakeId++));
 
 		// Adding a ContingencyQuestion object with subsequent questions
 		try
 		{
-			questionList.add(new ContingencyQuestion("Are you a smoker?",
+			questionList.add(new ContingencyQuestion("Are you a smoker?", fakeId++,
 					choiceList, subsequentList, "Yes"));
 
 			// Changing the choices for the next Question object
@@ -55,7 +57,7 @@ public class JSONTest
 			choiceList.add("Female");
 
 			// Adding another MultipleChoiceQuestion object
-			questionList.add(new MultipleChoiceQuestion("What is your gender?",
+			questionList.add(new MultipleChoiceQuestion("What is your gender?", fakeId++,
 					choiceList));
 		}
 		catch (InvalidChoiceListException | InvalidSubsequentListException e)
@@ -79,16 +81,16 @@ public class JSONTest
 		{
 			// Adding a MultipleAnswerQuestion object
 			questionList.add(new MultipleAnswerQuestion(
-					"Select your favourite fruits:", choiceList));
+					"Select your favourite fruits:", fakeId++, choiceList));
 			// Adding ScalarQuestion objects
 			questionList.add(new RatingQuestion(
-					"How would you rate Rafael's importance to this project?",
-					RatingQuestion.IMPORTANCE_SCALE));
+					"How would you rate Rafael's importance to this project?", fakeId++,
+					RatingType.IMPORTANCE_SCALE));
 			questionList.add(new RatingQuestion(
-					"How would you rate Rafael's performance on this project?",
-					RatingQuestion.INFLUENCE_SCALE));
-			questionList.add(new RatingQuestion("Rafael is awesome.",
-					RatingQuestion.LIKERT_SCALE));
+					"How would you rate Rafael's performance on this project?", fakeId++,
+					RatingType.INFLUENCE_SCALE));
+			questionList.add(new RatingQuestion("Rafael is awesome.", fakeId++,
+					RatingType.LIKERT_SCALE));
 			
 			// Initialising the Patient object
 			patient = new Patient(1, "John Wayne", "1970-01-01");

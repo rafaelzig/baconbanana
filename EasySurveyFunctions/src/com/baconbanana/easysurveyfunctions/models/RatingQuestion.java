@@ -23,16 +23,6 @@ public class RatingQuestion extends CloseEndedQuestion
 	private static final String HELP_MESSAGE = "Please select one of the below choices:";
 
 	/**
-	 * Static fields representing the type of Rating Question to be constructed.
-	 */
-	public static final String ACCEPTABILITY_SCALE = "acceptable",
-			LIKERT_SCALE = "agree", APPROPRIATENESS_SCALE = "appropriate",
-			AWARENESS_SCALE = "aware", CONCERN_SCALE = "concerned",
-			FAMILIARITY_SCALE = "familiar", FREQUENCY_SCALE = "frequent",
-			IMPORTANCE_SCALE = "important", INFLUENCE_SCALE = "influential",
-			LIKELIHOOD_SCALE = "likely", SATISFACTION_SCALE = "satisfied";
-
-	/**
 	 * Builds a RatingQuestion object with the specified content, keyword and
 	 * list of subsequent questions.
 	 * 
@@ -44,25 +34,12 @@ public class RatingQuestion extends CloseEndedQuestion
 	 * @throws InvalidChoiceListException
 	 *             Signals an error when a choice list for a question given by
 	 *             the user has less than two choices.
-	 * @see RatingQuestion#ACCEPTABILITY_SCALE
-	 * @see RatingQuestion#AGREEMENT_SCALE
-	 * @see RatingQuestion#APPROPRIATENESS_SCALE
-	 * @see RatingQuestion#AWARENESS_SCALE
-	 * @see RatingQuestion#CONCERN_SCALE
-	 * @see RatingQuestion#FAMILIARITY_SCALE
-	 * @see RatingQuestion#FREQUENCY_SCALE
-	 * @see RatingQuestion#IMPORTANCE_SCALE
-	 * @see RatingQuestion#INFLUENCE_SCALE
-	 * @see RatingQuestion#LIKELIHOOD_SCALE
-	 * @see RatingQuestion#PRIORITY_SCALE
-	 * @see RatingQuestion#QUALITY_SCALE
-	 * @see RatingQuestion#SATISFACTION_SCALE
 	 */
-	public RatingQuestion(String content, String keyword)
+	public RatingQuestion(String content, long id, RatingType ratingType)
 			throws InvalidChoiceListException
 	{
-		super(content, HELP_MESSAGE, QuestionType.RATING,
-				prepareChoiceList(keyword));
+		super(content, id, HELP_MESSAGE, QuestionType.RATING,
+				prepareChoiceList(ratingType));
 	}
 
 	/**
@@ -80,16 +57,18 @@ public class RatingQuestion extends CloseEndedQuestion
 	/**
 	 * Prepares the list of choices of this question.
 	 * 
-	 * @param keyword
+	 * @param ratingType
 	 *            One of the constants representing the keyword to be used in
 	 *            this question.
 	 * @return A List containing the choices for this question.
 	 */
-	private static List<String> prepareChoiceList(String keyword)
+	private static List<String> prepareChoiceList(RatingType ratingType)
 	{
 		List<String> choiceList = new ArrayList<String>(5);
 
-		if (keyword.equals(LIKERT_SCALE))
+		String keyword = ratingType.getValue();
+		
+		if (ratingType ==  RatingType.LIKERT_SCALE)
 		{
 			choiceList.add("Strongly dis" + keyword);
 			choiceList.add("Dis" + keyword);

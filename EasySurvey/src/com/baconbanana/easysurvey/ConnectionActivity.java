@@ -1,5 +1,7 @@
 package com.baconbanana.easysurvey;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 import java.util.regex.Matcher;
@@ -20,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.baconbanana.easysurvey.functionalCore.Storage;
 import com.baconbanana.easysurvey.functionalCore.coms.ConnectToServer;
 import com.baconbanana.easysurvey.functionalCore.coms.Get;
 import com.baconbanana.easysurvey.functionalCore.coms.Send;
@@ -36,6 +39,7 @@ import com.baconbanana.easysurvey.functionalCore.coms.Send;
  */
 public class ConnectionActivity extends Activity
 {
+	static final String EXTRA_MESSAGE = "com.baconbanana.easysurvey.json";
 
 	public ConnectionActivity context = this;
 
@@ -174,7 +178,27 @@ public class ConnectionActivity extends Activity
 
 	public void moveToSurveyActivity(View v) 
 	{
+		String jsonString = null;
+		
+		try
+		{
+			jsonString = Storage.readFromInternal(this, Storage.FILENAME);
+		}
+		catch (FileNotFoundException e)
+		{
+			Log.e(getClass().getSimpleName(), "Error saving file to storage");
+			e.printStackTrace();
+			finish();
+		}
+		catch (IOException e)
+		{
+			Log.e(getClass().getSimpleName(), "Error reading file from storage");
+			e.printStackTrace();
+			finish();
+		}
+		
 		Intent intent = new Intent(this, ValidationActivity.class);
+		intent.putExtra(EXTRA_MESSAGE, jsonString);
 		startActivity(intent);
 	}
 
