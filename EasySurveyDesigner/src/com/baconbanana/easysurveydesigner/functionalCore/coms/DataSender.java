@@ -25,16 +25,14 @@ public class DataSender extends Thread {
 	 * @param date
 	 * @param s
 	 */
-	public DataSender(String name, String date, Socket s) {
+	public DataSender(Patient patient, Socket s) {
 
-		this.name = name;
-		this.date = date;
+		this.name = patient.getName();
+		this.date = patient.getDob();
 		this.clientSocket = s;
 	}
 
-	public DataSender(Patient patient, Socket clientSocket2) {
-		// TODO Auto-generated constructor stub
-	}
+	
 
 	public void run() {
 
