@@ -16,9 +16,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.baconbanana.easysurvey.functionalCore.coms.ConnectToServer;
 import com.baconbanana.easysurvey.functionalCore.coms.Get;
@@ -51,10 +51,10 @@ public class ConnectionActivity extends Activity
 	private EditText input;
 	private static boolean isSurveyCompleted = false;
 	private volatile static boolean notFirstTime = false;
-	private static ImageButton send;
-	private static ImageButton get;
-	private static ImageButton start;
-	private static ImageButton connect;
+	private static Button send;
+	private static Button get;
+	private static Button start;
+	private static Button connect;
 	private final String IPADDRESS_PATTERN = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
@@ -65,15 +65,15 @@ public class ConnectionActivity extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_connection);
+		setContentView(R.layout.activity_getsend);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 		input = (EditText) findViewById(R.id.ip);
 		cb = (CheckBox) findViewById(R.id.remember);
-		send = (ImageButton) findViewById(R.id.send);
-		get = (ImageButton) findViewById(R.id.get);
-		start = (ImageButton) findViewById(R.id.start);
-		connect = (ImageButton) findViewById(R.id.connect);
+		send = (Button) findViewById(R.id.send);
+		get = (Button) findViewById(R.id.get);
+		start = (Button) findViewById(R.id.start);
+		connect = (Button) findViewById(R.id.connect);
 		send.setEnabled(false);
 		get.setEnabled(false);
 		start.setEnabled(false);
