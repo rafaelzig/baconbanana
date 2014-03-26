@@ -117,7 +117,7 @@ public class LoginPage extends Window
 			if (checkPassword())
 			{
 				new Menu("Menu", 250, 300);
-				getWindow().dispose();
+				this.getWindow().dispose();
 			}else if (!checkPassword())
 			{
 				getWindow().dispose();

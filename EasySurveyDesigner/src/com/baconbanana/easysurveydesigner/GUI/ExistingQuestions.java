@@ -24,7 +24,7 @@ import javax.swing.event.ListSelectionListener;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
-public class ExistingQuestions extends JFrame  implements ActionListener,ListSelectionListener{
+public class ExistingQuestions extends JFrame  implements ActionListener{
 	private  JList<String> questionList;
     private DefaultListModel<String> questionModel;
     private JButton deleteBtn = new JButton("Delete");
@@ -49,30 +49,22 @@ public class ExistingQuestions extends JFrame  implements ActionListener,ListSel
 			
 		myMap = new HashMap<String, String>();
 		try {
-			List<Object[]> questions= DBController.getInstance().selectAll("Question");
-			for (Object[] objects : questions) {
-				String thisString =  objects[0]+" | "+objects[1]+" | "+objects[2];
-				String id = objects[0]+"";
-				questionModel.addElement(thisString);
-				myMap.put(thisString,id);
-				System.out.println(myMap.get(thisString));
-			}
+			fillData();
 		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		questionList = new JList<String>(questionModel);
 		setLayout(new BorderLayout());
         JPanel bottomPanel = new JPanel(new GridLayout(1,3));
 		
-		add(questionList,BorderLayout.CENTER);
+		add(new JScrollPane(questionList),BorderLayout.CENTER);
 		add(bottomPanel,BorderLayout.SOUTH);
 		
 		bottomPanel.add(addButton);
 		bottomPanel.add(deleteBtn);
 		bottomPanel.add(doneButton);
 		
-		questionListSelectionModel = questionList.getSelectionModel();
-		questionListSelectionModel.addListSelectionListener(this);
 		
 		deleteBtn.addActionListener(this);
 		// TODO FIX PACK!!!!!!!
@@ -115,7 +107,7 @@ public class ExistingQuestions extends JFrame  implements ActionListener,ListSel
 		questionModel.removeAllElements();
 		List<Object[]> questions= DBController.getInstance().selectAll("Question");
 		for (Object[] objects : questions) {
-			String thisString =  objects[0]+" | "+objects[1]+" | "+objects[2];
+			String thisString =  objects[1]+" | "+objects[2];
 			String id = objects[0]+"";
 			questionModel.addElement(thisString);
 			myMap.put(thisString,id);
@@ -123,12 +115,7 @@ public class ExistingQuestions extends JFrame  implements ActionListener,ListSel
 		}
 	}
 
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-		
-		
-		
-	}
+	
 	public static void main(String args[])
 	{
 		new ExistingQuestions("Questions", 500, 500);

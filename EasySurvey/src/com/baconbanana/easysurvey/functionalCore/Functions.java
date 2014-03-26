@@ -119,6 +119,7 @@ public class Functions
 			}
 			catch (ParseException e)
 			{
+				continue;
 			}
 		}
 
