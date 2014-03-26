@@ -18,7 +18,10 @@ import javax.swing.ListSelectionModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * Class responsible for displaying and deleting existing questions
+ *
+ */
 public class ExistingQuestions extends Window{
 	private  JList<String> questionList;
     private DefaultListModel<String> questionModel;
@@ -30,7 +33,6 @@ public class ExistingQuestions extends Window{
 	private Template template;
 	
 	public ExistingQuestions(String tit,  int width, int height, Template t) {
-		//super(tit, width, height);
 		super(tit, width, height);
 		template = t;
 		initLayout();
@@ -46,7 +48,6 @@ public class ExistingQuestions extends Window{
 		try {
 			fillData();
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		questionList = new JList<String>(questionModel);
@@ -83,7 +84,6 @@ public class ExistingQuestions extends Window{
 				fillData();
 				
 			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

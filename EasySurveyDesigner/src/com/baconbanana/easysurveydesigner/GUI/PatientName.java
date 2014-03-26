@@ -11,8 +11,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.TransmissionParser
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveyfunctions.models.Patient;
 /**
- * 
- * a class that takes name of the patient who is going to take survey
+ * Class that takes name of the patient who is going to take survey
  *
  */
 public class PatientName {
@@ -48,10 +47,8 @@ public class PatientName {
 						JOptionPane.showMessageDialog(null, "Patient Already Exists", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
 					}
 				} catch (HeadlessException | SQLException | ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -73,7 +70,7 @@ public class PatientName {
 		
 	}
 	/**
-	 * method to get the patient's DOB in right format for parsing
+	 * Method to get the patient's DOB in right format for parsing
 	 * and creating Patient class
 	 * @return Patient class
 	 */
@@ -84,7 +81,6 @@ public class PatientName {
 		try {
 			return new Patient(id,patientName,replaced);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;

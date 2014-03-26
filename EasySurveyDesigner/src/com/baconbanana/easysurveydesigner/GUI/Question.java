@@ -1,7 +1,5 @@
 package com.baconbanana.easysurveydesigner.GUI;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
@@ -12,8 +10,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
- * encapsulated class for new qustion classes
- * @author ZimS
+ * Encapsulated class for new question classes
  *
  */
 public abstract class Question extends SQLWindow{
@@ -143,8 +140,6 @@ public abstract class Question extends SQLWindow{
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 

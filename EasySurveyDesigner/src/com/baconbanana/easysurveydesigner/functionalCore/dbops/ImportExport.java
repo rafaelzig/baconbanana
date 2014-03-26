@@ -145,13 +145,13 @@ public class ImportExport {
 				}
 			});
 		}
-		fileCHooCHoo.showDialog(fileCHooCHoo, title);
+		int result=fileCHooCHoo.showDialog(fileCHooCHoo, title);
 
 		File selectedFile = fileCHooCHoo.getSelectedFile();
 
 		String newName = null;
 
-		if (selectedFile != null) {
+		if (result!=JFileChooser.CANCEL_OPTION) {
 			newName = selectedFile.getAbsolutePath();
 
 			System.out.println(newName);
@@ -162,6 +162,9 @@ public class ImportExport {
 			} else
 				newName = newName + ".sql";
 			return new File(newName);
+		}
+		else if (result==JFileChooser.CANCEL_OPTION){
+			fileCHooCHoo.cancelSelection();
 		}
 		return null;
 	}

@@ -14,7 +14,10 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * Class that displays answers made by the patient for specific question on specific survey
+ *
+ */
 public class PatientAnswers extends SQLWindow{
 
 	private JList<String> patientQuestionList;
@@ -64,7 +67,6 @@ public class PatientAnswers extends SQLWindow{
 		cancelBtn.addActionListener(this);
 
 		setFrameOptions();
-		// TODO FIX PACK!!!!!!!
 		getWindow().pack();
 
 	}
@@ -94,10 +96,8 @@ public class PatientAnswers extends SQLWindow{
 						+ DBController.appendApo(patientSurvey.getPatientSurveyList().getSelectedValue()) + " AND Content = " + DBController.appendApo(patientQuestionList.getSelectedValue()), 0, "Choice");
 				}
 			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

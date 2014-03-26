@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,7 +26,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.coms.DeviceWaiter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.InputWaiter;
 /**
  * Communicating with the device
- * @author ZimS
  *
  */
 
@@ -62,7 +60,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected static InputStream inS = null;
 	protected volatile static boolean connectionPageClosed = false;
 /**
- * tries to send the survey to the device
+ * Tries to send the survey to the device
  * and receive  survey from device
  * @throws InterruptedException
  */

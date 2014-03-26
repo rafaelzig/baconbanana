@@ -28,7 +28,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
  * An abstract class that encapsulates common functions of the template window
- * @author ZimS
  *
  */
 public abstract class Template extends SQLWindow{
@@ -114,7 +113,7 @@ public abstract class Template extends SQLWindow{
 	}
 
 /**
- * listener for different question types
+ * Listener for different question types
  */
 
 		
@@ -130,7 +129,6 @@ public abstract class Template extends SQLWindow{
 	}
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	/**
@@ -215,6 +213,7 @@ public abstract class Template extends SQLWindow{
 
 							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
 							getListModel().getData();
+							createSurvey.getSurveyPrevModel().getData();
 							} catch (ClassNotFoundException | SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -236,22 +235,21 @@ public abstract class Template extends SQLWindow{
 				}
 
 			} catch (SQLException | ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			getWindow().dispose();
-			//action for cancel
+			//Action for cancel
 		}else if(e.getSource().equals(cancelBtn)){
 			onCancel();
 
 		}
 	}
 	/**
-	 * abstract methord to control canceling
+	 * Abstract method to control cancelling
 	 */
 	public abstract void onCancel();
 	/**
-	 * abstract methord to control saving
+	 * Abstract method to control saving
 	 */
 	public abstract void onSave();
 	
@@ -262,7 +260,7 @@ public abstract class Template extends SQLWindow{
 	    } catch(NumberFormatException e) { 
 	        return false; 
 	    }
-	    // only got here if we didn't return false
+	    // Only got here if we didn't return false
 	    return true;
 	}
 

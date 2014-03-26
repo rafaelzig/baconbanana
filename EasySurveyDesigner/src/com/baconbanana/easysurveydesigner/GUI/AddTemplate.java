@@ -1,24 +1,12 @@
 package com.baconbanana.easysurveydesigner.GUI;
 
-import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
-import javax.swing.JOptionPane;
-
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.ContingencyQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.DateQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.MultipleAnswerQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.MultipleChoiceQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.NumericQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.RatingQuestion;
-import com.baconbanana.easysurveydesigner.GUI.QuestionTypes.TextualQuestion;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 
 /**
- * class for Adding Templates
- * @author ZimS
+ * Class for Adding Templates
  *
  */
 
@@ -32,7 +20,7 @@ public class AddTemplate extends Template{
 		enableTemplateNameRequester(false);
 	}
 	/**
-	 * Controls behavure of cancel button
+	 * Controls behaver of cancel button
 	 */
 
 	@Override
@@ -41,10 +29,8 @@ public class AddTemplate extends Template{
 			DBController.getInstance().delete("Template","Template="+ DBController.appendApo(this.getTemplateName()));
 			DBController.getInstance().delete("Survey_Template","Template="+ DBController.appendApo(this.getTemplateName()));
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	
@@ -53,7 +39,7 @@ public class AddTemplate extends Template{
 	}
 	
 	/**
-	 * controls behavure for save button
+	 * controls behaver for save button
 	 */
 	public void onSave(){
 		try {

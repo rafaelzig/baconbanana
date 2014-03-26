@@ -19,8 +19,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
- * class for creating different multiple answer questions
- * @author ZimS
+ * Class for creating different multiple answer questions
  *
  */
 public class MultipleQuestion extends Question{
@@ -65,7 +64,7 @@ public class MultipleQuestion extends Question{
 		JPanel jpButtons = new JPanel(new FlowLayout());
 		jpButtons.setPreferredSize(new Dimension(800, 50));
 
-		//instatiate buttons
+		//Instantiate buttons
 		addBtn = new JButton("add");
 		jpButtons.add(addBtn);
 		addBtn.addActionListener(this);
@@ -80,8 +79,6 @@ public class MultipleQuestion extends Question{
 		getCancelBtn().addActionListener(this);
 //		//add buttons
 		panel.add(jpButtons, LayoutController.summonCon(1, 4, 1, 1, 80, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
-//
-//		getWindow().add(panelSouth, BorderLayout.SOUTH);
 	}
 	/**
 	 * adds question choices into database
@@ -108,7 +105,7 @@ public class MultipleQuestion extends Question{
 				if(questionId == 0){
 					try{
 						dbCon = DBController.getInstance();
-						//add question and add that question to tempalte
+						//add question and add that question to template
 						questionId = dbCon.insertInto("Question", "null", DBController.appendApo(questText), DBController.appendApo(getQuestionType().toString()));
 						dbCon.insertInto("Template", DBController.appendApo(template.getTemplateName()), String.valueOf(questionId));
 					}catch(SQLException | ClassNotFoundException ee){
@@ -127,7 +124,7 @@ public class MultipleQuestion extends Question{
 						int choiceId = choiceModel.insertElement("Choice", "null", DBController.appendApo(choice));
 						try{
 							dbCon = DBController.getInstance();
-							//insert question and choice linkup
+							//insert question and choice link up
 							dbCon.insertInto("Question_Choice", String.valueOf(questionId), String.valueOf(choiceId));
 						}catch(SQLException | ClassNotFoundException ee){
 							ee.printStackTrace();
@@ -143,7 +140,6 @@ public class MultipleQuestion extends Question{
 			}
 		}
 		else if(e.getSource().equals(removeBtn)){
-            //TODO fix it
 			for (int x = 0; x < choicesTableModel.getRowCount(); x++) {
 
 				if ((boolean) choicesTableModel.getValueAt(x, 1) == true) {

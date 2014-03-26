@@ -13,8 +13,7 @@ import javax.swing.JTextField;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 /**
- * adding entry into database to hild new user and gui for it
- * @author ZimS
+ * Adding entry into database to hold new user and gui for it
  *
  */
 public class CreateUser extends Window{
