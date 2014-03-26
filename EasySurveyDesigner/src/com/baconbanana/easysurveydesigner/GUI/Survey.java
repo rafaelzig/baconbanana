@@ -156,7 +156,7 @@ public abstract class Survey extends SQLWindow{
 			//getWindow().setEnabled(false);
 
 		}else if(e.getSource().equals(editBtn)){
-			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(),800,500);
+			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(),800,500, this);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
 			//			editTemplate.getListModel().getData();
 		}
@@ -189,7 +189,7 @@ public abstract class Survey extends SQLWindow{
 			onCancel();		
 		}
 		else if(e.getSource().equals(sendBtn)){
-			//TODO send
+			new PatientName();
 		}
 
 	}
