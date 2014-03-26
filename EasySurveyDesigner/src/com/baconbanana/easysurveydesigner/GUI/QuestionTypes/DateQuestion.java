@@ -27,8 +27,9 @@ public class DateQuestion extends OpenQuestion{
 		int questId = 0;
 		try {
 			dbCon = DBController.getInstance();
-			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.DATE.toString()));
+			questId = t.getListModel().insertElement("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.DATE.toString()));
 			dbCon.insertInto("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
+			t.getListModel().getData();
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

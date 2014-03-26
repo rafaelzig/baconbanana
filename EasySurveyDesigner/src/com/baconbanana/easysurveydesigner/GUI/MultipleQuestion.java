@@ -30,7 +30,6 @@ public class MultipleQuestion extends Question{
 	private JButton addBtn;
 	private JButton removeBtn;
 	private DefaultTableModel choicesTableModel;
-	private JTextPane questionTxta;
 	private JList<String> choicesList;
 	private SQLList choiceModel;
 	private Template template;
@@ -44,24 +43,25 @@ public class MultipleQuestion extends Question{
 		template = t;
 	}
 
-	public void initiWidgetsQt(QuestionType qt){
+	protected void initiWidgetsQt(QuestionType qt){
 		setQuestionType(qt);
 		JPanel panel = new JPanel(new GridBagLayout());
 		getWindow().add(panel);
 		
-		panel.add(new JPanel(), LayoutController.summonCon(0, 0, 1, 4, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
-		panel.add(new JPanel(), LayoutController.summonCon(3, 0, 1, 4, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		panel.add(new JPanel(), LayoutController.summonCon(0, 0, 1, 5, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+		panel.add(new JPanel(), LayoutController.summonCon(3, 0, 1, 5, 1, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
 		
-		questionTxta = new JTextPane();
-		questionTxta.setBorder(getBorder());
+		panel.add(getTextEditors(), LayoutController.summonCon(1, 1, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 		
-		panel.add(questionTxta, LayoutController.summonCon(1, 1, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
+		
+		
+		panel.add(questionTxta, LayoutController.summonCon(1, 2, 1, 1, 8, 2, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 		
 		choiceModel = new SQLList("Choice NATURAL JOIN Question_Choice", "QuestionID=" + questionId, 0, "Choice");
 		choicesList = new JList<String>(choiceModel);
 		JScrollPane choicesListsp = new JScrollPane(choicesList);
 		
-		panel.add(choicesListsp, LayoutController.summonCon(1, 2, 1, 1, 8, 4, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		panel.add(choicesListsp, LayoutController.summonCon(1, 3, 1, 1, 8, 4, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
 
 		JPanel jpButtons = new JPanel(new FlowLayout());
 		jpButtons.setPreferredSize(new Dimension(800, 50));
@@ -80,7 +80,7 @@ public class MultipleQuestion extends Question{
 		jpButtons.add(getCancelBtn());
 		getCancelBtn().addActionListener(this);
 //		//add buttons
-		panel.add(jpButtons, LayoutController.summonCon(1, 3, 1, 1, 80, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		panel.add(jpButtons, LayoutController.summonCon(1, 4, 1, 1, 80, 2, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
 //
 //		getWindow().add(panelSouth, BorderLayout.SOUTH);
 	}
@@ -93,6 +93,7 @@ public class MultipleQuestion extends Question{
  * button listener
  */
 	public void actionPerformed(ActionEvent e) {
+		checkTextEditors(e);
 		if(e.getSource().equals(getSaveBtn())){
 			template.getListModel().getData();
 			getWindow().dispose();

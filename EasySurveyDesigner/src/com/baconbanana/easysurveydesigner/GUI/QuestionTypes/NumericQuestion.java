@@ -19,14 +19,15 @@ public class NumericQuestion extends OpenQuestion{
 	
 	public NumericQuestion(String tit, int width, int height, Template t) {
 		super(tit, width, height, t);
-		
+		initiWidgetsQt(QuestionType.NUMERICAL);
 		answerTxt = JOptionPane.showInputDialog(null, "Enter Numeric Question : ", "New Numeric Question", 1);
 		
 		int questId = 0;
 		try {
 			dbCon = DBController.getInstance();
-			questId = dbCon.insertInto("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.NUMERICAL.toString()));
+			questId = t.getListModel().insertElement("Question", "null", DBController.appendApo(answerTxt), DBController.appendApo(QuestionType.NUMERICAL.toString()));
 			dbCon.insertInto("Template", DBController.appendApo(t.getTemplateName()), String.valueOf(questId));
+			t.getListModel().getData();
 		} catch (SQLException | ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,8 +36,5 @@ public class NumericQuestion extends OpenQuestion{
 		t.getListModel().getData();
 
 		getWindow().dispose();
-	}
-	
-	public void actionPerformed(ActionEvent e) {
 	}
 }
