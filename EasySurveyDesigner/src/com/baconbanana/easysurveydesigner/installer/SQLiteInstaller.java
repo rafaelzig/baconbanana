@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 
 
-public class MySQLInstaller {
+public class SQLiteInstaller {
 	public static void main(String[] args){
 		String osName = System.getProperty("os.name");
 		System.out.println(osName);
@@ -37,7 +37,7 @@ public class MySQLInstaller {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		MySQLInstaller sqlLite = new MySQLInstaller();
+		SQLiteInstaller sqlLite = new SQLiteInstaller();
 		sqlLite.copyFolder(scrFolder, destFolder);
 		//sqlLite.installSQLLite(docLoc);
 	}

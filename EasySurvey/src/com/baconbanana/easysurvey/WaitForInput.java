@@ -7,7 +7,6 @@ import java.net.Socket;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 /**
  * This class has a while loop that keeps looping every second until

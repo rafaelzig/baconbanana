@@ -67,7 +67,6 @@ public class SendSurveyGetAnswers implements ActionListener {
  */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
-				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
@@ -223,10 +222,10 @@ public static synchronized void setServerSocket(ServerSocket s){
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(Boolean b){
-		connectionPageClosed = b;
+	public static synchronized void setPageClosed(){
+		connectionPageClosed = true;
 	}
-	public static synchronized boolean getPageClosed(){
+	public static synchronized boolean isPageClosed(){
 		return connectionPageClosed;
 	}
 	
@@ -261,7 +260,7 @@ public static synchronized void setServerSocket(ServerSocket s){
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
-					setPageClosed(true);
+					setPageClosed();
 					try {
 						if(serverSocket!=null)
 						serverSocket.close();
