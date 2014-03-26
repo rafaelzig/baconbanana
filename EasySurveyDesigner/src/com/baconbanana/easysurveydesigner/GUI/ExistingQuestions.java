@@ -19,7 +19,7 @@ import javax.swing.ListSelectionModel;
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 
-public class ExistingQuestions extends Window  implements ActionListener{
+public class ExistingQuestions extends Window{
 	private  JList<String> questionList;
     private DefaultListModel<String> questionModel;
     private JButton deleteBtn = new JButton("Delete");
@@ -27,10 +27,12 @@ public class ExistingQuestions extends Window  implements ActionListener{
 	private JButton doneButton = new JButton("Done");
 	private HashMap<String, String> myMap;
 	private ListSelectionModel questionListSelectionModel;
+	private Template template;
 	
-	public ExistingQuestions(String tit,  int width, int height) {
+	public ExistingQuestions(String tit,  int width, int height, Template t) {
 		//super(tit, width, height);
 		super(tit, width, height);
+		template = t;
 		initLayout();
 		setFrameOptions();
 	}
@@ -60,7 +62,9 @@ public class ExistingQuestions extends Window  implements ActionListener{
 		bottomPanel.add(addButton);
 		bottomPanel.add(deleteBtn);
 		bottomPanel.add(doneButton);
-	
+		
+		addButton.addActionListener(this);
+		doneButton.addActionListener(this);
 		deleteBtn.addActionListener(this);
 	
 		getWindow().add(panel);
@@ -85,14 +89,18 @@ public class ExistingQuestions extends Window  implements ActionListener{
 			
 		}
 		else if (act.getSource().equals(addButton)){
-			try {
-				DBController.getInstance().insertInto("Template", "INSERT TEMPLATE NAME HERE",DBController.appendApo(myMap.get(questionList.getSelectedValue())));
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
+			try{
+				DBController dbCon = DBController.getInstance();
+				dbCon.insertInto("Template", DBController.appendApo(template.getTemplateName()), DBController.appendApo(myMap.get(questionList.getSelectedValue())));
+				template.getListModel().getData();
+			}catch(SQLException | ClassNotFoundException e){
 				e.printStackTrace();
 			}
+			getWindow().dispose();
 		}
-		
+		else if (act.getSource().equals(doneButton)){
+			getWindow().dispose();
+		}
 	}
 	private void fillData() throws ClassNotFoundException, SQLException
 	{
