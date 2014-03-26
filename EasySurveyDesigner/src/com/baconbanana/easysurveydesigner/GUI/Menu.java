@@ -4,10 +4,14 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
 /**
@@ -44,6 +48,9 @@ public class Menu extends Window
 		// TODO fix button size
 		getWindow().setLayout(new BorderLayout());
 		getWindow().setResizable(false);
+		//getWindow().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridBagLayout());
 
@@ -88,7 +95,9 @@ public class Menu extends Window
 		getWindow().add(buttonPanel, BorderLayout.CENTER);
 
 	}
-
+	
+	
+	  
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{

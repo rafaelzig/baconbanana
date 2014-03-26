@@ -240,11 +240,4 @@ public class ConnectionActivity extends Activity
 
 }
 
-/*
- * @Override protected void onStop(){ //<----new line super.onStop(); //<----new
- * line connection.cancel(true);//<----new line }
- * 
- * @Override protected void onDestroy(){ connection.cancel(true);//<----new line
- * }
- */
 
