@@ -42,8 +42,8 @@ public abstract class Template extends SQLWindow{
 	protected JLabel nameOfTemplateTxf;
 	protected JComboBox<QuestionType> typeComboBox;
 
-	private JList<String> templateList;
-	private SQLList templateModel;
+	protected JList<String> templateList;
+	protected SQLList templateModel;
 	
 	private String templateName;
 	

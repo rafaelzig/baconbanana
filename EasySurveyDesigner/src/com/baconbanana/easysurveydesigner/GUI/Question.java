@@ -16,10 +16,9 @@ import com.baconbanana.easysurveyfunctions.models.QuestionType;
  * @author ZimS
  *
  */
-public class Question extends SQLWindow{
+public abstract class Question extends SQLWindow{
 
 	private QuestionType questionType;
-	private JTextPane questionTxa;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private Template template;
@@ -27,40 +26,37 @@ public class Question extends SQLWindow{
 	private JButton italic;
 	private JButton colour;
 	private JButton size;
+	
+	protected JTextPane questionTxta;
 
 	public Question(String tit, int width, int height, Template t) {
 		super(tit, width, height);
 		template = t;
+		questionTxta = new JTextPane();
+		questionTxta.setBorder(getBorder());
 		setFrameOptions();
 	}
 
-	public void initiWidgets(){
-		getWindow().setLayout(new BorderLayout());
-		
-		//Question name and data
-		// --------------center of window---------------------
-		setQuestionTxa(new JTextPane());
-		questionTxa.setText("Type Question here");
-		getQuestionTxa().setPreferredSize(new Dimension(800, 280));
-		getQuestionTxa().setBorder(getBorder());
-		getWindow().add(getQuestionTxa(), BorderLayout.CENTER);
+	public JPanel getTextEditors(){
+		JPanel panel = new JPanel(new FlowLayout());
 		
 		strong = new JButton("Bold");
 		italic = new JButton("Italic");
 		colour = new JButton("Red");
 		size = new JButton("Size");
-		
-		JPanel jpButtons = new JPanel(new FlowLayout());
-		jpButtons.add(strong);
-		jpButtons.add(italic);
-		jpButtons.add(colour);
-		jpButtons.add(size);
-		
-		getWindow().add(jpButtons, BorderLayout.NORTH);
-		
-		// ---------------------------------------------------
-		
 
+		panel.add(strong);
+		panel.add(italic);
+		panel.add(colour);
+		panel.add(size);
+		
+		strong.addActionListener(this);
+		italic.addActionListener(this);
+		colour.addActionListener(this);
+		size.addActionListener(this);
+		
+		return panel;
+		
 	}
 	/**
 	 * This method controls general functionality to each cancel button in every type of the question.
@@ -77,13 +73,7 @@ public class Question extends SQLWindow{
 	}
 	
    
-	public JTextPane getQuestionTxa() {
-		return questionTxa;
-	}
 
-	public void setQuestionTxa(JTextPane questionTxa) {
-		this.questionTxa = questionTxa;
-	}
 
 	public QuestionType getQuestionType() {
 		return questionType;
@@ -108,46 +98,43 @@ public class Question extends SQLWindow{
 	public void setSaveBtn(JButton saveBtn) {
 		this.saveBtn = saveBtn;
 	}
-
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+	protected void checkTextEditors(ActionEvent e){
 		if(e.getSource().equals(strong)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<strong>" + msg + "</strong>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(italic)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<i>" + msg + "</i>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(colour)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(size)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg ="<big>" + msg + "</big>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}
 	}
