@@ -55,7 +55,7 @@ public class ExistingQuestions extends SQLWindow implements ActionListener {
 	public void actionPerformed(ActionEvent act) {
 		if(act.getSource().equals(deleteBtn)){
 			String print;
-			DBController.getInstance().
+		//	DBController.getInstance().
 			
 			
 		}

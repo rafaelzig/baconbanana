@@ -10,10 +10,6 @@ import android.content.Context;
 
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
-import com.baconbanana.easysurveydesigner.functionalCore.parsing.Operations;
-
-
-
 /**
  * Auxiliary Class used to perform Android Storage operations like write and
  * read.
