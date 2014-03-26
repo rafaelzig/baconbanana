@@ -2,7 +2,9 @@ package com.baconbanana.easysurveydesigner.GUI;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * Class that responsible for editing existing template
+ */
 public class EditTemplate extends Template{
 
 	public EditTemplate(String tit, int width, int height, Survey s) {
@@ -13,7 +15,7 @@ public class EditTemplate extends Template{
 	}
 
 	/**
-	 * controls behavure for cancel
+	 * Controls behaver for cancel
 	 */
 	@Override
 	public void onCancel() {
@@ -21,7 +23,7 @@ public class EditTemplate extends Template{
 	}
 
 	/**
-	 * controls behavure for save button
+	 * Controls behaver for save button
 	 */
 	@Override
 	public void onSave() {

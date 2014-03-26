@@ -12,8 +12,7 @@ import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 /**
- * deleting user from database
- * @author ZimS
+ * Deleting user from database
  *
  */
 public class DeleteUser extends Window {
@@ -39,7 +38,6 @@ public class DeleteUser extends Window {
 
 		GridBagConstraints bagCon = new GridBagConstraints();
 		bagCon.gridx = 0;
-		//subject to change
 		bagCon.gridy = 0;
 		bagCon.gridheight = 1;
 		bagCon.gridwidth = 3;

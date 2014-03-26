@@ -12,8 +12,7 @@ import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
 /**
- * menu window with multiple functionality
- * @author ZimS
+ * Menu window with multiple functionality
  *
  */
 public class Menu extends Window
@@ -45,7 +44,6 @@ public class Menu extends Window
 
 	private void initiWidgets()
 	{
-		// TODO fix button size
 		getWindow().setLayout(new BorderLayout());
 		getWindow().setResizable(false);
 		getWindow().setDefaultCloseOperation(0);
@@ -56,7 +54,6 @@ public class Menu extends Window
 
 		GridBagConstraints btnCon = new GridBagConstraints();
 		btnCon.gridx = 0;
-		// subject to change
 		btnCon.gridy = 0;
 		btnCon.gridheight = 1;
 		btnCon.gridwidth = 1;
@@ -138,9 +135,7 @@ public class Menu extends Window
 					break;
 			}
 		}
-		catch (InterruptedException | IOException exception)
-		{
-			// TODO Auto-generated catch block
+		catch (InterruptedException | IOException exception){
 			exception.printStackTrace();
 		}
 	}

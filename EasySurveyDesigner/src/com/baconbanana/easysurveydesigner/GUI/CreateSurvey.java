@@ -5,8 +5,7 @@ import java.sql.SQLException;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
- * class for creating new survey
- * @author ZimS
+ * Class for creating new survey
  *
  */
 public class CreateSurvey extends Survey{
@@ -30,7 +29,6 @@ public class CreateSurvey extends Survey{
 			DBController.getInstance().delete("Survey_Stage","Survey="+ DBController.appendApo(surveyName));
 			
 		} catch (ClassNotFoundException | SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		getWindow().dispose();
@@ -38,7 +36,7 @@ public class CreateSurvey extends Survey{
 	}
 
 	/**
-	 * loads empty template
+	 * Loads empty template
 	 */
 	@Override
 	public void createSurveyPrev() {
