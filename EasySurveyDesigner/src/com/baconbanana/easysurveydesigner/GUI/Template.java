@@ -215,6 +215,7 @@ public abstract class Template extends SQLWindow{
 
 							DBController.getInstance().delete("Template", "QuestionID="+id+" and Template="+DBController.appendApo(this.getTemplateName()));
 							getListModel().getData();
+							createSurvey.getSurveyPrevModel().getData();
 							} catch (ClassNotFoundException | SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

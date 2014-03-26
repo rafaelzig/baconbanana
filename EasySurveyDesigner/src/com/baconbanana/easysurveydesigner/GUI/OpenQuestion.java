@@ -67,8 +67,10 @@ public class OpenQuestion extends Question{
 			try {
 				DBController dbCon = DBController.getInstance();
 				questId = template.getListModel().insertElement("Question", "null", DBController.appendApo(questionTxta.getText()), DBController.appendApo(questType.toString()));
+				if (dbCon.exists("Question", "questionid="+questId)){
 				dbCon.insertInto("Template", DBController.appendApo(template.getTemplateName()), String.valueOf(questId));
 				template.getListModel().getData();
+				}
 			} catch (SQLException | ClassNotFoundException ee) {
 				// TODO Auto-generated catch block
 				ee.printStackTrace();
