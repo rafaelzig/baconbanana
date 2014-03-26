@@ -27,7 +27,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 /**
- * template window
+ * An abstract class that encapsulates common functions of the template window
  * @author ZimS
  *
  */
@@ -42,8 +42,8 @@ public abstract class Template extends SQLWindow{
 	protected JLabel nameOfTemplateTxf;
 	protected JComboBox<QuestionType> typeComboBox;
 
-	private JList<String> templateList;
-	private SQLList templateModel;
+	protected JList<String> templateList;
+	protected SQLList templateModel;
 	
 	private String templateName;
 	
@@ -51,11 +51,19 @@ public abstract class Template extends SQLWindow{
 	
 	protected DBController dbCon;
  
-
-	public Template(String tit, int width, int height) {
+	/**
+	 * 
+	 * @param tit Title for the window
+	 * @param width 
+	 * @param height
+	 * @param s	Parent survey of a template
+	 */
+	public Template(String tit, int width, int height, Survey s) {
 		super(tit, width, height);
 		templateName = tit;		
+		createSurvey = s;
 	}
+
 	protected void initiWidgets(){
 
 		JPanel stage = new JPanel(new GridBagLayout());
@@ -125,12 +133,17 @@ public abstract class Template extends SQLWindow{
 		// TODO Auto-generated method stub
 		
 	}
+	/**
+	 * Loops a dialog that requires a valid template name
+	 * @param valid
+	 */
 	protected void enableTemplateNameRequester(boolean valid){
 		while(valid == false){
 			templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 				if(templateName != null){
 					try{
 						dbCon = DBController.getInstance();
+						//Checks if template exists
 						if(!dbCon.exists("Template", "Template=" + DBController.appendApo(templateName))){
 							nameOfTemplateTxf.setText("<html><p style='text-align:center;font-size:large;'><strong><i>" + templateName + "</i></strong></p><html>");
 							templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateName), 0, "Content");
@@ -153,6 +166,7 @@ public abstract class Template extends SQLWindow{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		//Action for create question button
 		if(e.getSource().equals(createQuestionBtn)){
 			QuestionType type = (QuestionType) typeComboBox.getSelectedItem();
 			String tit = new String("New " + type.toString());
@@ -183,7 +197,7 @@ public abstract class Template extends SQLWindow{
 
 			}
 		}
-						
+		//Action for the delete button	
 		else if(e.getSource().equals(deleteBtn)){
 			try {System.out.print(DBController.getInstance().select("Question","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
@@ -199,10 +213,11 @@ public abstract class Template extends SQLWindow{
 							e1.printStackTrace();
 							}
 				}
-
+		//Action for the add existing button
 		else if(e.getSource().equals(addExistingQuestionBtn)){
-			new ExistingQuestions("Questions", 500, 500);
+			new ExistingQuestions("Questions", 500, 500, this);
 		}
+		//Action for save button
 		else if(e.getSource().equals(saveBtn)){
 			try {
 				dbCon = DBController.getInstance();
@@ -210,9 +225,7 @@ public abstract class Template extends SQLWindow{
 					JOptionPane.showMessageDialog(null, "Template is not saved because you have not added any questions to it.", "Info", JOptionPane.INFORMATION_MESSAGE);
 					createSurvey.getSurveyTemplateListModel().getData();
 				}else {
-					dbCon.insertInto("Survey_Template", DBController.appendApo(createSurvey.getSurveyName()), DBController.appendApo(this.getTemplateName()));
-					createSurvey.getSurveyPrevModel().getData("Survey_Template", "Survey = " + DBController.appendApo(createSurvey.getSurveyName()), 1, "Survey", "Template");
-					createSurvey.getSurveyTemplateListModel().getData();
+					onSave();
 				}
 
 			} catch (SQLException | ClassNotFoundException e1) {
@@ -220,12 +233,19 @@ public abstract class Template extends SQLWindow{
 				e1.printStackTrace();
 			}
 			getWindow().dispose();
+			//action for cancel
 		}else if(e.getSource().equals(cancelBtn)){
 			onCancel();
 
 		}
 	}
-	
+	/**
+	 * abstract methord to control canceling
+	 */
 	public abstract void onCancel();
+	/**
+	 * abstract methord to control saving
+	 */
+	public abstract void onSave();
 
 }

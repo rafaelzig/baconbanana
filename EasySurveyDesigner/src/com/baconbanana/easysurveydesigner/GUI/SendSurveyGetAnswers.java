@@ -5,17 +5,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import java.util.Set;
-
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,7 +50,6 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected JFrame frame, frameIp;
 	
 	Thread connection = new Connection();
-	Thread setIP = new setIP();
 	Thread IPwindow = new Thread();
 	
 	
@@ -73,6 +67,22 @@ public class SendSurveyGetAnswers implements ActionListener {
 				setEverything();
 			    connection.start();
 				connection.join();
+				
+				Thread setIP=new Thread(new Runnable()
+				{
+					
+					@Override
+					public void run() {
+						if (serverSocket == null) {
+							status.setText("Could not connect");
+							changeAccept(false);
+
+						} else {
+							status.setText("Waiting for a device to connect. " + localIP);
+
+						}
+					}
+				});
 				setIP.start();
 				setIP.join();
 				
@@ -115,20 +125,6 @@ public class SendSurveyGetAnswers implements ActionListener {
 				
 	}
 
-			public class setIP extends Thread {
-
-				public void run() {
-					if (serverSocket == null) {
-						status.setText("Could not connect");
-						changeAccept(false);
-
-					} else {
-						status.setText("Waiting for a device to connect. " + localIP);
-
-					}
-				}
-			}
-
 			private void TempsendPage() {
 
 				final JFrame frame2 = new JFrame("send");
@@ -140,24 +136,15 @@ public class SendSurveyGetAnswers implements ActionListener {
 				thePanel.setLayout(new GridLayout(1, 2));
 
 				final JTextField name = new JTextField(20);
-
-				final JComboBox day, month, year;
-
-				String months[] = { "01", "02", "03", "04" };
-				String days[] = { "01", "02", "03" };
-				String years[] = { "1994", "1996", "1998" };
-
-				month = new JComboBox(months);
-				day = new JComboBox(days);
-				year = new JComboBox(years);
+				 final JTextField date = new JTextField(20);
+				
 
 				JLabel l = new JLabel();
 				l.setText("Enter Name:");
-
-				thePanel.add(new JLabel("Date of birth:"));
-				thePanel.add(day);
-				thePanel.add(month);
-				thePanel.add(year);
+				
+				thePanel.add(new JLabel("Date of birth(d-m-yyyy):"));
+				thePanel.add(date);
+				
 				theOtherPanel.add(l);
 				theOtherPanel.add(name);
 
@@ -166,31 +153,18 @@ public class SendSurveyGetAnswers implements ActionListener {
 				frame2.add(thePanel);
 				frame2.add(theOtherPanel);
 
-				month.addItemListener(new ItemListener() {
-
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						String s = (String) month.getSelectedItem();
-						
-					}
-				});
-
+				
 				JButton send = new JButton("send");
 				send.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						String n = name.getText().toString();
-						StringBuilder d = new StringBuilder();
-						d.append(day.getSelectedItem().toString());
-						d.append("-");
-						d.append(month.getSelectedItem().toString());
-						d.append("-");
-						d.append(year.getSelectedItem().toString());
+						String m = date.getText().toString();
+						
+						
 
-						String date = d.toString();
-
-						Thread t5 = new DataSender(n, date, clientSocket);
+						Thread t5 = new DataSender(n, m, clientSocket);
 						t5.start();
 
 						frame2.dispose();

@@ -20,9 +20,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
  *
  */
 public class PatientSelector extends SQLWindow{
-	
-	private JLabel patientLbl;
-	
+
 	private JList<String> patientList;
 	private JList<String> patientSurveyList;
 	private SQLList patientListModel;
@@ -41,21 +39,19 @@ public class PatientSelector extends SQLWindow{
 	private void initiWidgets() {
 		
 		patientListModel = new SQLList("Patient", 0, "Name");
-		patientList =new JList<String>(patientListModel);
-		patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" + DBController.appendApo(patientList.getSelectedValue()), 0,"PatientID", "Name", "Survey");
-		patientSurveyList = new JList<String>(patientSurveyListModel);
+		setPatientList(new JList<String>(patientListModel));
+		patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" + DBController.appendApo(getPatientList().getSelectedValue()), 1,"PatientID", "Name", "Survey");
+		setPatientSurveyList(new JList<String>(patientSurveyListModel));
 		patientListModel.getData();
-		patientSelectionModel=patientList.getSelectionModel();
+		patientSelectionModel=getPatientList().getSelectionModel();
 		
 		getWindow().setLayout(new BorderLayout());
-		patientLbl = new JLabel("List of Patients");
-		getWindow().add(patientLbl, BorderLayout.NORTH);
 		
 		JPanel centerPanel = new JPanel(new GridLayout(1, 2));
-		centerPanel.add(new JScrollPane(patientList));
-		patientList.setBorder(getBorder());
-		centerPanel.add(new JScrollPane(patientSurveyList));
-		patientSurveyList.setBorder(getBorder());
+		centerPanel.add(new JScrollPane(getPatientList()));
+		getPatientList().setBorder(getBorder());
+		centerPanel.add(new JScrollPane(getPatientSurveyList()));
+		getPatientSurveyList().setBorder(getBorder());
 		getWindow().add(centerPanel, BorderLayout.CENTER);
 		
 		JPanel southPanel = new JPanel(new GridLayout(1,2));
@@ -78,8 +74,9 @@ public class PatientSelector extends SQLWindow{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(selectBtn)){
-			if (!(patientSurveyList.getSelectedValue() == null)){
-				
+			if (!(getPatientSurveyList().getSelectedValue() == null) && !(getPatientList().getSelectedValue() == null)){
+				PatientAnswers showData = new PatientAnswers("Answers from " + getPatientSurveyList().getSelectedValue() + " made by " 
+				+ getPatientList().getSelectedValue(), 800, 800, this);
 			}
 		}
 		else if (e.getSource().equals(cancelBtn)){
@@ -91,11 +88,27 @@ public class PatientSelector extends SQLWindow{
 		if(e.getSource().equals(patientSelectionModel) && patientSelectionModel.getValueIsAdjusting() == false){
 			//could change to templatelist.getselecteditem
 			patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" 
-			+ DBController.appendApo(patientList.getSelectedValue()), 2,"PatientID", "Name", "Survey");
+			+ DBController.appendApo(getPatientList().getSelectedValue()), 2,"PatientID", "Name", "Survey");
 			patientSurveyListModel.getData();
-			populateList(patientSurveyList, patientSurveyListModel);
+			populateList(getPatientSurveyList(), patientSurveyListModel);
 			
 		}
+	}
+
+	public JList<String> getPatientSurveyList() {
+		return patientSurveyList;
+	}
+
+	public void setPatientSurveyList(JList<String> patientSurveyList) {
+		this.patientSurveyList = patientSurveyList;
+	}
+
+	public JList<String> getPatientList() {
+		return patientList;
+	}
+
+	public void setPatientList(JList<String> patientList) {
+		this.patientList = patientList;
 	}
 
 }

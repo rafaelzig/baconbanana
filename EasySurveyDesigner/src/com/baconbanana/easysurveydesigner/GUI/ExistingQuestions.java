@@ -1,7 +1,8 @@
 package com.baconbanana.easysurveydesigner.GUI;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -9,22 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
+import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 
-public class ExistingQuestions extends JFrame  implements ActionListener{
+public class ExistingQuestions extends Window{
 	private  JList<String> questionList;
     private DefaultListModel<String> questionModel;
     private JButton deleteBtn = new JButton("Delete");
@@ -32,22 +27,22 @@ public class ExistingQuestions extends JFrame  implements ActionListener{
 	private JButton doneButton = new JButton("Done");
 	private HashMap<String, String> myMap;
 	private ListSelectionModel questionListSelectionModel;
-	public ExistingQuestions(String tit,  int width, int height) {
-		
-		
+	private Template template;
+	
+	public ExistingQuestions(String tit,  int width, int height, Template t) {
 		//super(tit, width, height);
-		super();
-		setVisible(true);
+		super(tit, width, height);
+		template = t;
 		initLayout();
- 
-			}
+		setFrameOptions();
+	}
 
 
 	public void initLayout()
 	{
 		questionModel = new DefaultListModel<String>();
-			
 		myMap = new HashMap<String, String>();
+		JPanel panel = new JPanel(new GridBagLayout());
 		try {
 			fillData();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -55,29 +50,30 @@ public class ExistingQuestions extends JFrame  implements ActionListener{
 			e.printStackTrace();
 		}
 		questionList = new JList<String>(questionModel);
-		setLayout(new BorderLayout());
-        JPanel bottomPanel = new JPanel(new GridLayout(1,3));
 		
-		add(new JScrollPane(questionList),BorderLayout.CENTER);
-		add(bottomPanel,BorderLayout.SOUTH);
+        JPanel bottomPanel = new JPanel(new FlowLayout());
+        panel.add(new JPanel(), LayoutController.summonCon(0, 0, 1, 4, 10, 100, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+        panel.add(new JPanel(), LayoutController.summonCon(2, 0, 1, 4, 10, 100, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+        panel.add(new JPanel(), LayoutController.summonCon(0, 0, 3, 1, 100, 10, GridBagConstraints.CENTER, GridBagConstraints.VERTICAL));
+        
+        panel.add(new JScrollPane(questionList),LayoutController.summonCon(1, 1, 1, 1, 90, 80, GridBagConstraints.CENTER, GridBagConstraints.BOTH));
+		panel.add(bottomPanel,LayoutController.summonCon(1, 2, 1, 1, 90, 10, GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL));
 		
 		bottomPanel.add(addButton);
 		bottomPanel.add(deleteBtn);
 		bottomPanel.add(doneButton);
 		
-		
+		addButton.addActionListener(this);
+		doneButton.addActionListener(this);
 		deleteBtn.addActionListener(this);
-		// TODO FIX PACK!!!!!!!
-		pack();
-		
 	
+		getWindow().add(panel);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent act) {
 		if(act.getSource().equals(deleteBtn)){
 			try {
-				
 				DBController connection = DBController.getInstance();
 				connection.delete("Question","QuestionID="+ DBController.appendApo(myMap.get(questionList.getSelectedValue())));
 				connection.delete("Patient_Question_Choice","QuestionID="+ DBController.appendApo(myMap.get(questionList.getSelectedValue())));
@@ -93,32 +89,31 @@ public class ExistingQuestions extends JFrame  implements ActionListener{
 			
 		}
 		else if (act.getSource().equals(addButton)){
-			try {
-				DBController.getInstance().insertInto("Template", "INSERT TEMPLATE NAME HERE",DBController.appendApo(myMap.get(questionList.getSelectedValue())));
-			} catch (ClassNotFoundException | SQLException e) {
-				// TODO Auto-generated catch block
+			try{
+				DBController dbCon = DBController.getInstance();
+				dbCon.insertInto("Template", DBController.appendApo(template.getTemplateName()), DBController.appendApo(myMap.get(questionList.getSelectedValue())));
+				template.getListModel().getData();
+			}catch(SQLException | ClassNotFoundException e){
 				e.printStackTrace();
 			}
+			getWindow().dispose();
 		}
-		
+		else if (act.getSource().equals(doneButton)){
+			getWindow().dispose();
+		}
 	}
 	private void fillData() throws ClassNotFoundException, SQLException
 	{
 		questionModel.removeAllElements();
 		List<Object[]> questions= DBController.getInstance().selectAll("Question");
 		for (Object[] objects : questions) {
-			String thisString =  objects[1]+" | "+objects[2];
+			String listDataItem =  objects[1]+" | "+objects[2];
 			String id = objects[0]+"";
-			questionModel.addElement(thisString);
-			myMap.put(thisString,id);
-			System.out.println(myMap.get(thisString));
+			questionModel.addElement(listDataItem);
+			myMap.put(listDataItem, id);
+			System.out.println(myMap.get(listDataItem));
 		}
 	}
 
-	
-	public static void main(String args[])
-	{
-		new ExistingQuestions("Questions", 500, 500);
-	}
 
 }

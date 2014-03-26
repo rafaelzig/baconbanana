@@ -15,6 +15,7 @@ import javax.swing.WindowConstants;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
+import com.baconbanana.easysurveydesigner.installer.SQLiteInstaller;
 /**
  * The first window of the program which checks if user is allowed to use it
  * @author ZimS
@@ -34,6 +35,8 @@ public class LoginPage extends Window
 	public LoginPage(String tit, int width, int height)
 	{
 		super(tit, width, height);
+		SQLiteInstaller sqlite = new SQLiteInstaller();
+		sqlite.getLocation();
 		initiWidgets();
 		initialiseConnection();
 		setFrameOptions();
