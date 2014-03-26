@@ -40,8 +40,8 @@ public class SQLList extends AbstractListModel{
 	}
 	
 	@Override
-	public Object getElementAt(int i) {
-		return  data.get(i)[sortColumn];
+	public String getElementAt(int i) {
+		return (String) data.get(i)[sortColumn];
 	}
 	
 	public String getId(int i){
