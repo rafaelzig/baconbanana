@@ -51,7 +51,6 @@ public abstract class Survey extends SQLWindow{
 	public Survey(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
 		surveyName = tit;
-		initiWidgets();
 	}
 
 	/**
