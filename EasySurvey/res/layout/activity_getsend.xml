@@ -1,62 +1,73 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-     <EditText
-         android:id="@+id/ip"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentTop="true"
-         android:ems="10" />
+    <EditText
+        android:id="@+id/ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:ems="10" />
 
-     <Button
-         android:id="@+id/connect"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentRight="true"
-         android:layout_alignParentTop="true"
-         android:onClick="connect"
-         android:text="Connect" />
+    <CheckBox
+        android:id="@+id/remember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ip"
+        android:layout_toLeftOf="@+id/connect"
+        android:text="Remember" />
 
-     <Button
-         android:id="@+id/get"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/remember"
-         android:layout_alignRight="@+id/remember"
-         android:layout_below="@+id/remember"
-         android:layout_marginTop="152dp"
-         android:onClick="get"
-         android:text="get" />
+    <ImageButton
+        android:id="@+id/connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/remember"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20sp"
+        android:layout_toRightOf="@+id/ip"
+        android:background="@drawable/button"
+        android:onClick="connect"
+        android:src="@android:drawable/ic_menu_share" />
 
-     <Button
-         android:id="@+id/start"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignLeft="@+id/connect"
-         android:layout_alignParentBottom="true"
-         android:layout_marginBottom="34dp"
-         android:onClick="moveToSurveyActivity"
-         android:text="Start" />
+    <ImageButton
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="100sp"
+        android:background="@drawable/button"
+        android:onClick="send"
+        android:src="@android:drawable/ic_menu_send" />
 
-     <CheckBox
-         android:id="@+id/remember"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentLeft="true"
-         android:layout_below="@+id/ip"
-         android:text="Remember" />
+    <ImageButton
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="100sp"
+        android:background="@drawable/button"
+        android:onClick="validateUser"
+        android:src="@android:drawable/ic_menu_edit"/>
 
-     <Button
-         android:id="@+id/send"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/start"
-         android:layout_alignParentLeft="true"
-         android:layout_alignRight="@+id/get"
-         android:layout_marginBottom="94dp"
-         android:onClick="send"
-         android:text="send" />
-     
+    <ImageButton
+        android:id="@+id/get"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/remember"
+        android:layout_margin="100sp"
+        android:layout_marginTop="74dp"
+        android:background="@drawable/button"
+        android:onClick="get"
+        android:src="@android:drawable/ic_menu_save" />
+
 </RelativeLayout>

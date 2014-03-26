@@ -1,9 +1,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-<TextView
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </DatePicker>
+
+    <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,26 +17,19 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="10sp"
         android:gravity="center_vertical"
-        android:text=""
         android:textColor="#FFFFFF"
         android:textStyle="bold" />
-    
-   	<DatePicker 
-    android:id="@+id/datePicker"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
-    
 
-</DatePicker>
+    <Button
+        android:id="@+id/confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="100sp"
+        android:background="@drawable/button"
+        android:onClick="moveToVideo"
+        android:text="@string/confirm" />
 
-     <Button
-         android:id="@+id/confirm"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentRight="true"
-         android:layout_alignParentTop="true"
-         android:onClick="moveToVideo"
-         android:text="Confirm" />
-
-     
 </RelativeLayout>

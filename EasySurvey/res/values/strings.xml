@@ -10,5 +10,6 @@
     <string name="go_to_previous_question">Go to previous question</string>
     <string name="activate_to_speak_your_answer">Activate to speak your answer</string>
     <string name="finish_the_survey">Finish the survey</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

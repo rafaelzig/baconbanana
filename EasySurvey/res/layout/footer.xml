@@ -93,8 +93,8 @@
         android:layout_marginLeft="100sp"
         android:layout_marginRight="100sp"
         android:background="@drawable/button"
+        android:src="@android:drawable/ic_btn_speak_now"
         android:contentDescription="@string/activate_to_speak_your_answer"
-        android:onClick="setAnswerFromSpeech"
-        android:src="@android:drawable/ic_btn_speak_now" />
+        android:onClick="setAnswerFromSpeech" />
 
 </RelativeLayout>
