@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 
+import com.baconbanana.easysurveyfunctions.models.Patient;
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 
@@ -29,6 +30,10 @@ public class DataSender extends Thread {
 		this.name = name;
 		this.date = date;
 		this.clientSocket = s;
+	}
+
+	public DataSender(Patient patient, Socket clientSocket2) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public void run() {
