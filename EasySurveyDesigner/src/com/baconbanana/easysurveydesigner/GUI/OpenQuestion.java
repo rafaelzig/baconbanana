@@ -15,8 +15,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveyfunctions.models.QuestionType;
 
 /**
- * creating open-ended question
- * @author ZimS
+ * Creating open-ended question
  *
  */
 public class OpenQuestion extends Question{
@@ -70,7 +69,6 @@ public class OpenQuestion extends Question{
 				dbCon.insertInto("Template", DBController.appendApo(template.getTemplateName()), String.valueOf(questId));
 				template.getListModel().getData();
 			} catch (SQLException | ClassNotFoundException ee) {
-				// TODO Auto-generated catch block
 				ee.printStackTrace();
 			}
 			getWindow().dispose();

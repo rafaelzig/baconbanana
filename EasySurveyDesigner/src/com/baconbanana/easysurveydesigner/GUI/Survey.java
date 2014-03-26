@@ -19,7 +19,7 @@ import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
- * An abstract class that encompeses common survey window functions
+ * An abstract class that encompasses common survey window functions
  *
  */
 public abstract class Survey extends SQLWindow{
@@ -51,10 +51,10 @@ public abstract class Survey extends SQLWindow{
 	}
 
 	/**
-	 * Methord that creates GUI elements and instalises models
+	 * Method that creates GUI elements and instalises models
 	 */
 	public void initiWidgets(){
-		//inisiles buttons
+		//Initiates buttons
 		addBtn = new JButton("Add");
 		editBtn = new JButton("Edit");
 		deleteBtn = new JButton("Delete");
@@ -63,24 +63,24 @@ public abstract class Survey extends SQLWindow{
 		cancelBtn = new JButton("Cancel");
 		sendBtn = new JButton("Send");
 		
-		//inisilises labels
+		//Initiates labels
 		JLabel templatesLbl = new JLabel("List of Templates");
 		JLabel templatePrevLbl = new JLabel("Template Preview");
 		JLabel surveyPrevLbl = new JLabel("Survey Preview");
 
-		//inisilises Models
+		//Initiates Models
 		templateModelFromSurvey = new SQLList("Template", 0 , "Template", "QuestionID");
 		templatePrevModel = new SQLList("Template NATURAL JOIN Question", 0, "Question");
 		
-		//abstract methord
+		//Abstract method
 		createSurveyPrev();
 
-		//inisilises lists
+		//Initiates lists
 		templateList = new JList<String>(templateModelFromSurvey);
 		templatePrevList = new JList<String>(templatePrevModel);
 		surveyPrevList = new JList<String>(surveyPrevModel);
 
-		//adds lists to scroll pane
+		//Adds lists to scroll pane
 		JScrollPane templateListsp = new JScrollPane(templateList);
 		JScrollPane templatePrevListsp = new JScrollPane(templatePrevList);
 		JScrollPane surveyPrevListsp = new JScrollPane(surveyPrevList);
@@ -105,7 +105,7 @@ public abstract class Survey extends SQLWindow{
 
 		JPanel templateBtnContainer = new JPanel(new FlowLayout());
 
-		//add buttons to stage
+		//Add buttons to stage
 		stage.add(templateBtnContainer, LayoutController.summonCon(1, 6, 4, 1, 4, 5, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 		templateBtnContainer.add(addBtn);
 		addBtn.addActionListener(this);
@@ -145,11 +145,10 @@ public abstract class Survey extends SQLWindow{
 
 
 	/**
-	 * actionlistener for buttons in gui
+	 * Actionlistener for buttons in gui
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
 			new AddTemplate("Template", 800, 500, this);
 			
@@ -159,31 +158,28 @@ public abstract class Survey extends SQLWindow{
 
 		}
 		else if(e.getSource().equals(deleteBtn)){
-			//remove data from records
+			//Remove data from records
 			if (!(templateList.getSelectedValue() == null)){
 				try {
 					DBController.getInstance().delete("Template","Template="+ DBController.appendApo(templateList.getSelectedValue()));
 					DBController.getInstance().delete("Survey_Template","Template="+ DBController.appendApo(templateList.getSelectedValue()));
 					templateModelFromSurvey.getData();
 				} catch (ClassNotFoundException | SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
 			}
 		}
 		else if(e.getSource().equals(moveBtn)){
-			//transer template to survey
+			//Transfer template to survey
 			if (!(templateList.getSelectedValue() == null)){
 				try {
 					if(!(DBController.getInstance().exists("Survey_Template", "Survey = " + DBController.appendApo(getSurveyName()) + "AND Template = " + DBController.appendApo(templateList.getSelectedValue()))))
 					{
 					surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateList.getSelectedValue()));}
 				} catch (ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
@@ -218,7 +214,7 @@ public abstract class Survey extends SQLWindow{
 	 */
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		//get preview of question in a template
+		//Get preview of question in a template
 		if(e.getSource().equals(templatelsm) && templatelsm.getValueIsAdjusting() == false){
 			templatePrevModel = new SQLList("Template NATURAL JOIN Question", "Template=" +
 			DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
@@ -230,7 +226,7 @@ public abstract class Survey extends SQLWindow{
 	
 	public abstract void createSurveyPrev();
 	/**
-	 * Mathord that loops until user enters a valid survey name
+	 * Method that loops until user enters a valid survey name
 	 * @param valid true to get title, false to skip
 	 */
 	protected void enableSurveyNameRequester(boolean valid){

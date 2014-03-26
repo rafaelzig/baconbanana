@@ -10,8 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.border.Border;
 
 /**
- * abstract class to create a generic window
- * @author ZimS
+ * Abstract class to create a generic window
  *
  */
 public abstract class Window implements ActionListener{
@@ -45,13 +44,12 @@ public abstract class Window implements ActionListener{
 			window.setExtendedState(Frame.MAXIMIZED_BOTH); 
 			window.setMinimumSize(new Dimension(400,400));
 			window.setDefaultCloseOperation(0);
-			//window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		}
 		window.setVisible(true);
 
 	}
 	/**
-	 * set small frame options to make layout fit correctly
+	 * Set small frame options to make layout fit correctly
 	 */
 	public void setFrameOptions(){
 		window.setMinimumSize(new Dimension(width, height));
@@ -63,7 +61,7 @@ public abstract class Window implements ActionListener{
 	
 	/**
 	 * 
-	 * @return framm object of this window
+	 * @return frame object of this window
 	 */
 	public JFrame getWindow(){
 		return window;

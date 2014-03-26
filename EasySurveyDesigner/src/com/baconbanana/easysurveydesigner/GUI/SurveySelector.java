@@ -17,7 +17,6 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
- * 
  * The class which consists of the list of surveys and questions in each particular survey 
  * stored in database
  *
@@ -39,7 +38,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
  
 			}
 /**
- * initialising layout
+ * Initialising layout
  */
 	private void initLayout()
 	{
@@ -78,21 +77,21 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		getWindow().pack();
 	}
 	/**
-	 * getter for survey model
+	 * Getter for survey model
 	 * @return Model of survey
 	 */
 	public  SQLList getSurveyListModel() {
 		return surveyModel;
 	}
 	/**
-	 * getter for survey list
+	 * Getter for survey list
 	 * @return List of surveys
 	 */
 	public  JList<String> getSurveyList() {
 		return surveyList;
 	}
 	/**
-	 * setter for survey list
+	 * Setter for survey list
 	 * @param surveyList List of surveys
 	 */
 	public  void setSurveyList(JList<String>surveyList) {
@@ -100,7 +99,7 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	}
 	@Override
 	/**
-	 * action listener that controls all buttons on layout
+	 * Action listener that controls all buttons on layout
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(openBtn)){
@@ -136,7 +135,6 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(surveySelectionModel) && surveySelectionModel.getValueIsAdjusting() == false){
-			//could change to templatelist.getselecteditem
 			questionModel = new SQLList("Survey_Template NATURAL JOIN Template NATURAL JOIN Question", "Survey=" + DBController.appendApo
 					(surveyModel.getId(surveyList.getSelectedIndex())), 0, "Content");
 			populateList(questionList, questionModel);

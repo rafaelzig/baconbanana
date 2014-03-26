@@ -15,8 +15,7 @@ import javax.swing.event.ListSelectionEvent;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
- * class to select a patient
- * @author ZimS
+ * Class to select a patient
  *
  */
 public class PatientSelector extends SQLWindow{
@@ -67,7 +66,6 @@ public class PatientSelector extends SQLWindow{
 		cancelBtn.addActionListener(this);
 		
 		setFrameOptions();
-		// TODO FIX PACK!!!!!!!
 		getWindow().pack();
 	}
 
@@ -87,7 +85,6 @@ public class PatientSelector extends SQLWindow{
 	}
 	public void valueChanged(ListSelectionEvent e) {
 		if(e.getSource().equals(patientSelectionModel) && patientSelectionModel.getValueIsAdjusting() == false){
-			//could change to templatelist.getselecteditem
 			patientSurveyListModel = new SQLList("Patient NATURAL JOIN Patient_Survey", "Name =" 
 			+ DBController.appendApo(getPatientList().getSelectedValue()), 2,"PatientID", "Name", "Survey");
 			patientSurveyListModel.getData();

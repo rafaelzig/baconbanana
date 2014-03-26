@@ -10,7 +10,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * A class for managing windows that use SQL
- * @author ZimS
  *
  */
 public abstract class SQLWindow extends Window implements ListSelectionListener{
@@ -18,16 +17,16 @@ public abstract class SQLWindow extends Window implements ListSelectionListener{
 	private DBController dbCon;
 	private String context;
 	/**
-	 * Constructer for full screen windows
+	 * Constructor for full screen windows
 	 * @param tit title 
-	 * @param fullScreen if true window will be fullscreen
+	 * @param fullScreen if true window will be full screen
 	 */
 	public SQLWindow(String tit, boolean fullScreen) {
 		super(tit, fullScreen);
 
 	}
 	/**
-	 * Constructer for small window
+	 * Constructor for small window
 	 * @param tit title
 	 * @param width
 	 * @param height
@@ -54,11 +53,9 @@ public abstract class SQLWindow extends Window implements ListSelectionListener{
 	public void createContext(String tableName, String...values){
 		try {
 			dbCon = DBController.getInstance();
-			//may have an issue with ambiguity
 			dbCon.insertInto(tableName, DBController.appendApo(values));
 			context = values[0];
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

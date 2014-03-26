@@ -18,7 +18,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.installer.SQLiteInstaller;
 /**
  * The first window of the program which checks if user is allowed to use it
- * @author ZimS
  *
  */
 public class LoginPage extends Window
@@ -61,7 +60,7 @@ public class LoginPage extends Window
 	private void initiWidgets()
 	{
 		// DBCreator.checkAndCreateTables();
-		// create panel for widgets and layout
+		// Create panel for widgets and layout
 		getWindow().setResizable(false);
 		getWindow().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		panel = new JPanel(new GridBagLayout());
@@ -77,7 +76,7 @@ public class LoginPage extends Window
 		panel.add(welcome, LayoutController.summonCon(1, 0, 3, 1, 1, 0.3, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 
 		// Creates label and text field to panel
-		// TODO remove barry and xxx
+		// TODO remove barry and xxx!!!
 
 		panel.add(new JLabel("User name"), LayoutController.summonCon(1, 1, 1, 1, 0, 0.1, GridBagConstraints.CENTER, GridBagConstraints.NONE));
 
