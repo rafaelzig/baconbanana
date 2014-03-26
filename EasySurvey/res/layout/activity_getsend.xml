@@ -36,6 +36,7 @@
          android:layout_height="wrap_content"
          android:layout_alignLeft="@+id/connect"
          android:layout_alignParentBottom="true"
+         android:layout_alignParentRight="true"
          android:layout_marginBottom="34dp"
          android:onClick="moveToSurveyActivity"
          android:text="Start" />

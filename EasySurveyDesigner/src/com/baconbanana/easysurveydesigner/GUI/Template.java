@@ -202,7 +202,7 @@ public abstract class Template extends SQLWindow{
 				}
 
 		else if(e.getSource().equals(addExistingQuestionBtn)){
-			new ExistingQuestions("Questions", 500, 500);
+			new ExistingQuestions("Questions", 500, 500, this);
 		}
 		else if(e.getSource().equals(saveBtn)){
 			try {
