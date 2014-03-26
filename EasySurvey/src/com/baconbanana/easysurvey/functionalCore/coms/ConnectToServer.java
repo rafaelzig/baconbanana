@@ -90,8 +90,9 @@ public class ConnectToServer extends AsyncTask<String, Void, String> {
 									boolean b=ConnectionActivity.isSurveyCompleted();
 									 if(b){
 										 ConnectionActivity.changeSendButton(true);
-									}
+									}else{
 									 new WaitForInput().execute("");
+									}
 								}
 							})
 							

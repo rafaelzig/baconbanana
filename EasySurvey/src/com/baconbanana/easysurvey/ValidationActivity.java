@@ -1,19 +1,14 @@
 package com.baconbanana.easysurvey;
 
-import java.text.ParseException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baconbanana.easysurveyfunctions.models.Patient;
-import com.baconbanana.easysurveyfunctions.models.Survey;
-import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
 public class ValidationActivity extends Activity
 {
@@ -29,7 +24,7 @@ public class ValidationActivity extends Activity
 		setContentView(R.layout.activity_validation);
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
-		t = (TextView) findViewById(R.id.txtName);
+		t = (TextView) findViewById(R.id.btnReady);
 		String nameanddate = ConnectionActivity.getNameAndDate();
 		System.out.println(nameanddate);
 		date = nameanddate.substring(nameanddate.indexOf("*") + 1,
