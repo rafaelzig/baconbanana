@@ -16,10 +16,9 @@ import com.baconbanana.easysurveyfunctions.models.QuestionType;
  * @author ZimS
  *
  */
-public class Question extends SQLWindow{
+public abstract class Question extends SQLWindow{
 
 	private QuestionType questionType;
-	private JTextPane questionTxa;
 	private JButton saveBtn;
 	private JButton cancelBtn;
 	private Template template;
@@ -99,86 +98,43 @@ public class Question extends SQLWindow{
 	public void setSaveBtn(JButton saveBtn) {
 		this.saveBtn = saveBtn;
 	}
-
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getSource().equals(strong)){
-			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
-        	String newMsg = "<strong>" + msg + "</strong>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
-        	
-		}else if(e.getSource().equals(italic)){
-			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
-        	String newMsg = "<i>" + msg + "</i>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
-        	
-		}else if(e.getSource().equals(colour)){
-			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
-        	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
-        	
-		}else if(e.getSource().equals(size)){
-			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
-        	String newMsg ="<big>" + msg + "</big>";
-        	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
-        	
-		}
-	}
 	
 	protected void checkTextEditors(ActionEvent e){
 		if(e.getSource().equals(strong)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<strong>" + msg + "</strong>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(italic)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<i>" + msg + "</i>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(colour)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg = "<font color=#FF0000>" + msg + "</font color=#FF0000>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}else if(e.getSource().equals(size)){
 			
-			String whole = questionTxa.getText();
-        	String msg = questionTxa.getSelectedText();
+			String whole = questionTxta.getText();
+        	String msg = questionTxta.getSelectedText();
         	String newMsg ="<big>" + msg + "</big>";
         	msg = whole.replace(msg, newMsg);
-        	questionTxa.setContentType("text/html");
-        	questionTxa.setText(msg);
+        	questionTxta.setContentType("text/html");
+        	questionTxta.setText(msg);
         	
 		}
 	}
