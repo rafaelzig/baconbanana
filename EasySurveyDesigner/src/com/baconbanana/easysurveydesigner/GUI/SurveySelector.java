@@ -16,7 +16,11 @@ import javax.swing.event.ListSelectionEvent;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
-
+/**
+ * 
+ * 
+ *
+ */
 public class SurveySelector extends SQLWindow implements ActionListener {
 	private  JList<String> surveyList;
     private SQLList surveyModel;
