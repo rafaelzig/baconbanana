@@ -1,19 +1,26 @@
 package com.baconbanana.easysurvey;
 
+import java.text.ParseException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baconbanana.easysurveyfunctions.models.Patient;
+import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
+
 public class ValidationActivity extends Activity
 {
-
-	TextView t;
+	private Patient patient;
+	private DatePicker datePicker;
+	private TextView t;
 	private String date;
-	DatePicker datePicker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -24,15 +31,14 @@ public class ValidationActivity extends Activity
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
 		t = (TextView) findViewById(R.id.txtName);
 		String nameanddate = ConnectionActivity.getNameAndDate();
-
-		String name = nameanddate.substring(0, nameanddate.indexOf("*"));
+		System.out.println(nameanddate);
 		date = nameanddate.substring(nameanddate.indexOf("*") + 1,
 				nameanddate.length());
 		System.out.println(date);
-		// t.setText("Hello "+name+"!");
 	}
 
-	public void moveToVideo(View v)
+
+	public void validate(View v)
 	{
 		int day = datePicker.getDayOfMonth();
 		int month = datePicker.getMonth() + 1;
@@ -40,11 +46,20 @@ public class ValidationActivity extends Activity
 		String dayString = Integer.toString(day);
 		String monthString = Integer.toString(month);
 		String yearString = Integer.toString(year);
+		Integer mont = datePicker.getMonth() + 1;
+		Integer da = datePicker.getDayOfMonth();
+		String dateFromPicker = datePicker.getYear()
+				+ "-"
+				+ ((mont.toString().length() == 1 ? "0" + mont.toString()
+						: mont.toString()))
+				+ "-"
+				+ ((da.toString().length() == 1 ? "0" + da.toString() : da
+						.toString()));
+
 		t.setText(dayString + monthString + yearString);
 
-		String datefromPicker = (day + "-" + month + "-" + year);
-
-		if (datefromPicker.equals(date))
+		System.out.println(dateFromPicker);
+		if (dateFromPicker.equals(date))
 		{
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);

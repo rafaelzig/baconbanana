@@ -9,27 +9,26 @@
         android:layout_height="wrap_content" >
     </DatePicker>
 
-    <TextView
-        android:id="@+id/txtName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10sp"
-        android:gravity="center_vertical"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold" />
+<!--     <TextView -->
+<!--         android:id="@+id/txtName" -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_alignParentBottom="true" -->
+<!--         android:layout_centerHorizontal="true" -->
+<!--         android:layout_margin="10sp" -->
+<!--         android:gravity="center_vertical" -->
+<!--         android:textColor="#FFFFFF" -->
+<!--         android:textStyle="bold" /> -->
 
     <Button
         android:id="@+id/confirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/txtName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_margin="100sp"
         android:background="@drawable/button"
-        android:onClick="moveToVideo"
+        android:onClick="validate"
         android:text="@string/confirm" />
 
 </RelativeLayout>

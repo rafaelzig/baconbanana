@@ -141,6 +141,13 @@ public abstract class Template extends SQLWindow{
 		while(valid == false){
 			templateName = JOptionPane.showInputDialog(null, "Enter Template Name : ", "Name Template", 1);
 				if(templateName != null){
+					
+					char first=templateName.charAt(0);
+					if(isInteger(first)){
+						templateName="Template"+ templateName;
+					}
+					
+					
 					try{
 						dbCon = DBController.getInstance();
 						//Checks if template exists
@@ -247,5 +254,16 @@ public abstract class Template extends SQLWindow{
 	 * abstract methord to control saving
 	 */
 	public abstract void onSave();
+	
+	public static boolean isInteger(char c) {
+	    try { 
+	    	String s=""+c;
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    // only got here if we didn't return false
+	    return true;
+	}
 
 }

@@ -3,69 +3,114 @@ package com.baconbanana.easysurveydesigner.functionalCore.coms;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
-import java.util.Map;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.List;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-import com.baconbanana.easysurveyfunctions.models.DateQuestion;
-import com.baconbanana.easysurveyfunctions.models.MultipleAnswerQuestion;
-import com.baconbanana.easysurveyfunctions.models.MultipleChoiceQuestion;
-import com.baconbanana.easysurveyfunctions.models.NumericQuestion;
-import com.baconbanana.easysurveyfunctions.models.QuestionType;
+import com.baconbanana.easysurveydesigner.functionalCore.dbops.Table;
+import com.baconbanana.easysurveyfunctions.models.Question;
+import com.baconbanana.easysurveyfunctions.models.Survey;
 import com.baconbanana.easysurveyfunctions.parsing.Operations;
 
-public class AntiParser {
-	String jsonString;
-	Map resultJson;
+public class AntiParser
+{
+	Survey survey;
+
 	public AntiParser(){
 		try {
-			jsonString = Operations.readFile("Survey.json");
-			resultJson = Operations.parseJSON(jsonString);
-			JSONArray questionList = (JSONArray) resultJson.get("questionList");
-			for(int i = 0; i < questionList.size();i++){
-			JSONObject questionObj = (JSONObject) questionList.get(i);	
-			parseQuestion(questionObj);
-				
-			}
-		} catch (IOException | ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			String json = Operations.readFile("Survey.json");
+			survey = new Survey(Operations.parseJSON(json)); 
+			
+			for(Question question : survey.getQuestionList())
+				insertIntoDB(question);
+		}catch(IOException | ParseException e){
+			
 		}
-		//System.out.println(resultJson.toString());		
+		
 	}
 	
-	private void parseQuestion(JSONObject question){
-		String questioner = (String) question.get("question");
-		String type = (String) question.get("type");
-		DBController dbCon = DBController.getInstance();
+	private void insertIntoDB(Question question)
+	{
+		DBController dbCon;
+		List<Object[]> data;
 		try{
 			
-			if(type.equals(QuestionType.NUMERICAL.toString())){
-				db
-			}else if(type.equals(QuestionType.DATE.toString())){
-				survey.add(new DateQuestion(content));
-			}else if(type.equals(QuestionType.TEXTUAL.toString())){
-				survey.add(new DateQuestion(content));
-			}else if(type.equals(QuestionType.MULTIPLEANSWER.toString())){
-				survey.add(new MultipleAnswerQuestion(content, parseMultiQuestion(QuestionId)));
-			}else if(type.equals(QuestionType.MULTIPLECHOICE.toString())){
-				survey.add(new MultipleChoiceQuestion(content, parseMultiQuestion(QuestionId)));
-			}else if(type.equals(QuestionType.RATING.toString())){
-				//survey.add(new RatingQuestion(content, parseMultiQuestion(QuestionId)));
-			}else if(type.equals(QuestionType.CONTINGENCY.toString())){
-				parseContingency();
+			dbCon = DBController.getInstance();
+		
+			switch (question.getType())
+			{
+				case TEXTUAL:
+					if(!dbCon.exists(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()))){
+						int answerid = dbCon.insertInto(Table.ANSWER.getName(), "null", DBController.appendApo(question.getAnswer()));
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(answerid));
+					}else{
+						data = dbCon.select(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()), "AnswerID");
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(data.get(0)[0]));
+					}
+					break;
+				case NUMERICAL:
+					if(!dbCon.exists(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()))){
+						int answerid = dbCon.insertInto(Table.ANSWER.getName(), "null", DBController.appendApo(question.getAnswer()));
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(answerid));
+					}else{
+						data = dbCon.select(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()), "AnswerID");
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(data.get(0)[0]));
+					}
+					break;
+				case DATE:
+					if(!dbCon.exists(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()))){
+						int answerid = dbCon.insertInto(Table.ANSWER.getName(), "null", DBController.appendApo(question.getAnswer()));
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(answerid));
+					}else{
+						data = dbCon.select(Table.ANSWER.getName(), "Answer=" + DBController.appendApo(question.getAnswer()), "AnswerID");
+						int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+						dbCon.insertInto(Table.PATIENT_QUESTION_ANSWER.getName(), String.valueOf(patientsurveyid), String.valueOf(question.getId()), String.valueOf(data.get(0)[0]));
+					}
+					break;
+				case MULTIPLEANSWER:
+					int patientsurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+					String[] answers = question.getAnswer().split(Operations.SEPARATOR);
+					addChoice(patientsurveyid, question, answers);
+					break;
+				case MULTIPLECHOICE:
+					int patientsurvyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+					addChoice(patientsurvyid, question, question.getAnswer());
+					break;
+				case RATING:
+					int patiensurveyid = dbCon.insertInto(Table.PATIENT_SURVEY.getName(), "null", DBController.appendApo(String.valueOf(survey.getPatient().getId())), DBController.appendApo(survey.getName()), "'1'");
+					addChoice(patiensurveyid, question, question.getAnswer());
+					break;
+				case CONTINGENCY:
+					// TODO
+					break;
 			}
-		}catch(SQLException e){
-			e.printStackTrace();
+		}catch(SQLException | ClassNotFoundException e){
+			
+			
 		}
-		}
+		
 	}
 	
-	public static void main(String args[]){
+	private void addChoice(int psid, Question quest, String... listOfChoices){
+		DBController dbCon;
+		List<Object[]> data;
+		for(String i : listOfChoices){
+			try{
+				dbCon = DBController.getInstance();
+				data = dbCon.select(Table.CHOICE.getName(), "Choice=" + DBController.appendApo(i), "ChoiceID");
+				dbCon.insertInto(Table.PATIENT_QUESTION_CHOICE.getName(), String.valueOf(psid), String.valueOf(quest.getId()), String.valueOf(data.get(0)[0]));
+			}catch(SQLException | ClassNotFoundException e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void main(String args[])
+	{
 		new AntiParser();
 	}
-	
-
 }

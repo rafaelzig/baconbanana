@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.AbstractListModel;
-import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 /**

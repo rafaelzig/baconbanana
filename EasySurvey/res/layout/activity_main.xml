@@ -6,7 +6,7 @@
     android:background="@drawable/green" >
 
     <Button
-        android:id="@+id/btnBegin"
+        android:id="@+id/btnReady"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -20,7 +20,7 @@
         android:id="@+id/frameLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnBegin"
+        android:layout_above="@+id/btnReady"
         android:layout_centerHorizontal="true" >
 
         <VideoView
@@ -30,7 +30,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/txtGet"
+        android:id="@+id/txtGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/frameLayout1"

@@ -20,7 +20,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * An abstract class that encompeses common survey window functions
- * @author ZimS
  *
  */
 public abstract class Survey extends SQLWindow{
@@ -153,7 +152,7 @@ public abstract class Survey extends SQLWindow{
 		// TODO Auto-generated method stub
 		if(e.getSource().equals(addBtn)){
 			new AddTemplate("Template", 800, 500, this);
-
+			
 		}else if(e.getSource().equals(editBtn)){
 			EditTemplate editTemplate = new EditTemplate(templateList.getSelectedValue(),800,500, this);
 			editTemplate.getListModel().getData("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(templateModelFromSurvey.getId(templateList.getSelectedIndex())), 0, "Content");
@@ -176,7 +175,17 @@ public abstract class Survey extends SQLWindow{
 		else if(e.getSource().equals(moveBtn)){
 			//transer template to survey
 			if (!(templateList.getSelectedValue() == null)){
-				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo((String)templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
+				try {
+					if(!(DBController.getInstance().exists("Survey_Template", "Survey = " + DBController.appendApo(getSurveyName()) + "AND Template = " + DBController.appendApo(templateList.getSelectedValue()))))
+					{
+					surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateList.getSelectedValue()));}
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
 		}
@@ -189,6 +198,7 @@ public abstract class Survey extends SQLWindow{
 		}
 		else if(e.getSource().equals(sendBtn)){
 			new PatientName(getSurveyName());
+			getWindow().dispose();
 		}
 
 	}
@@ -249,6 +259,7 @@ public abstract class Survey extends SQLWindow{
 		}
 		
 	}
+	
 	
 }
 

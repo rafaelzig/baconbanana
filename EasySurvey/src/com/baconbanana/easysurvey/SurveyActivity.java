@@ -464,19 +464,20 @@ public class SurveyActivity extends Activity
 		}
 		catch (FileNotFoundException e)
 		{
-			// TODO Auto-generated catch block
-
+			Log.e(getClass().getSimpleName(), "Error saving file to storage");
 			e.printStackTrace();
+			finish();
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
+			Log.e(getClass().getSimpleName(), "Error reading file from storage");
 			e.printStackTrace();
+			finish();
 		}
 
 		ConnectionActivity.setSurveyCompleted();
 
-		Intent intent = new Intent(this, ConnectionActivity.class);
+		Intent intent = new Intent(this, SurveyFinished.class);
 		startActivity(intent);
 	}
 

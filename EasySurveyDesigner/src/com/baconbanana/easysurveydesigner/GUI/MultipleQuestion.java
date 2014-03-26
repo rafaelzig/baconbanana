@@ -12,7 +12,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.LayoutController;
