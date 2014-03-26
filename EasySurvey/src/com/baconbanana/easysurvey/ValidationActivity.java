@@ -1,19 +1,27 @@
 package com.baconbanana.easysurvey;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.ParseException;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baconbanana.easysurvey.functionalCore.Storage;
+import com.baconbanana.easysurveyfunctions.models.Patient;
+import com.baconbanana.easysurveyfunctions.models.Survey;
+import com.baconbanana.easysurveyfunctions.parsing.Operations;
+
 public class ValidationActivity extends Activity
 {
-
-	TextView t;
-	private String date;
-	DatePicker datePicker;
+	private Patient patient;
+	private DatePicker datePicker;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -22,17 +30,36 @@ public class ValidationActivity extends Activity
 		setContentView(R.layout.activity_validation);
 
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
-		t = (TextView) findViewById(R.id.txtName);
-		String nameanddate = ConnectionActivity.getNameAndDate();
 
-		String name = nameanddate.substring(0, nameanddate.indexOf("*"));
-		date = nameanddate.substring(nameanddate.indexOf("*") + 1,
-				nameanddate.length());
-		System.out.println(date);
-		// t.setText("Hello "+name+"!");
+		// String nameanddate = ConnectionActivity.getNameAndDate();
+
+		// String name = nameanddate.substring(0, nameanddate.indexOf("*"));
+		// date = nameanddate.substring(nameanddate.indexOf("*") + 1,
+		// nameanddate.length());
+		// System.out.println(date);
+		// // t.setText("Hello "+name+"!");
+
+		Patient patient = getPatient(getIntent().getStringExtra(
+				ConnectionActivity.EXTRA_MESSAGE));
 	}
 
-	public void moveToVideo(View v)
+	private Patient getPatient(String jsonString)
+	{
+		try
+		{
+			return new Survey(Operations.parseJSON(jsonString)).getPatient();
+		}
+		catch (ParseException e)
+		{
+			Log.e(getClass().getSimpleName(), "Error while parsing json");
+			e.printStackTrace();
+			finish();
+		}
+		
+		return null;
+	}
+
+	public void validate(View v)
 	{
 		int day = datePicker.getDayOfMonth();
 		int month = datePicker.getMonth() + 1;
