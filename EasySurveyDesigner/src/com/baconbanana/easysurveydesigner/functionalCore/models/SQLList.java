@@ -21,7 +21,6 @@ public class SQLList extends AbstractListModel{
 	private String[] columns;
 	private int sortColumn;
 	private DBController dbCon;
-	private ResultSet rs;
 	private String condition;
 	
 	

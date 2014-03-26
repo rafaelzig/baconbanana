@@ -243,7 +243,7 @@ public abstract class Survey extends SQLWindow{
 			}else if(surveyName == null){
 				new Menu("Menu", 250, 300);
 				getWindow().dispose();
-				valid = true;
+				valid = false;
 			}else if(surveyName.equals("")){
 				JOptionPane.showMessageDialog(null, "Please Enter A Valid Survey Name", "Survey Name Error", JOptionPane.INFORMATION_MESSAGE);
 			}
