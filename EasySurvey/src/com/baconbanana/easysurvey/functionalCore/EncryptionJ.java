@@ -16,6 +16,7 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 import android.util.Base64;
+import android.util.Log;
 
 /**
  * 

@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.Set;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -53,11 +55,12 @@ public class SendSurveyGetAnswers implements ActionListener {
 	protected JFrame frame, frameIp;
 	
 	Thread connection = new Connection();
+	Thread setIP = new setIP();
 	Thread IPwindow = new Thread();
 	
 	
-	protected static InputStream inS = null;
 	protected volatile boolean noDevice = true;
+	protected static InputStream inS = null;
 	protected volatile static boolean connectionPageClosed = false;
 /**
  * tries to send the survey to the device
@@ -66,26 +69,13 @@ public class SendSurveyGetAnswers implements ActionListener {
  */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
+				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
-				Thread setIp = new Thread(new Runnable()
-				{
-					
-					@Override
-					public void run() {
-						if (serverSocket == null) {
-							status.setText("Could not connect");
-							changeAccept(false);
-
-						} else {
-							status.setText("Waiting for a device to connect. " + localIP);
-
-						}
-					}
-				});
-				setIp.start();
-				setIp.join();
+				setIP.start();
+				setIP.join();
+				
 			}
 
 			private void setEverything() {
@@ -121,8 +111,23 @@ public class SendSurveyGetAnswers implements ActionListener {
 				frame.setSize(500, 100);
 				frame.setVisible(true);
 				frame.setLocationRelativeTo(null);
-				frame.setDefaultCloseOperation(0);				
+				frame.setDefaultCloseOperation(0);
+				
 	}
+
+			public class setIP extends Thread {
+
+				public void run() {
+					if (serverSocket == null) {
+						status.setText("Could not connect");
+						changeAccept(false);
+
+					} else {
+						status.setText("Waiting for a device to connect. " + localIP);
+
+					}
+				}
+			}
 
 			private void TempsendPage() {
 
@@ -202,7 +207,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 
 			}
 
-			public static synchronized void setServerSocket(ServerSocket s){
+public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
 	public static synchronized ServerSocket getServerSocket(){
@@ -220,14 +225,14 @@ public class SendSurveyGetAnswers implements ActionListener {
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(){ // Why synchronised? Boolean already volatile
-		connectionPageClosed = true;
+	public static synchronized void setPageClosed(Boolean b){
+		connectionPageClosed = b;
 	}
-	public static synchronized boolean isPageClosed(){ // Why synchronised? Boolean already volatile
+	public static synchronized boolean getPageClosed(){
 		return connectionPageClosed;
 	}
 	
-	public static synchronized void changeSend(boolean b){ 
+	public static synchronized void changeSend(boolean b){
 		send.setEnabled(b);
 	}
 	public static synchronized void changeGet(boolean b){
@@ -244,7 +249,8 @@ public class SendSurveyGetAnswers implements ActionListener {
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{	
+	{
+		
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -258,7 +264,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
-					setPageClosed();
+					setPageClosed(true);
 					try {
 						if(serverSocket!=null)
 						serverSocket.close();
@@ -282,4 +288,5 @@ public class SendSurveyGetAnswers implements ActionListener {
 					break;
 		}
 	}
+	
 }
