@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.ImportExport;
-import com.baconbanana.easysurveydesigner.newGUI.SendSurveyGetAnswers;
 /**
  * menu window with multiple functionality
  * @author ZimS
