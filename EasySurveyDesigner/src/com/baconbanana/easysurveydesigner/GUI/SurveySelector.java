@@ -60,17 +60,12 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 		getSurveyList().setBorder(getBorder());
 		questionList.setBorder(getBorder());
 		
-		System.out.println(surveyModel.getSize());
-		
 		surveySelectionModel.addListSelectionListener(this);
 		openBtn.addActionListener(this);
 		deleteBtn.addActionListener(this);
 		cancelBtn.addActionListener(this);
-		
-		//SQLList surveyModel = new SQLList(Table.SURVEY.getName(), new String[] {"Survey"} , 0);
-	//	populateList(surveyList, surveyModel);
+
 		setFrameOptions();
-		// TODO FIX PACK!!!!!!!
 		getWindow().pack();
 	}
 	public  SQLList getSurveyListModel() {
@@ -107,11 +102,8 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 			getWindow().dispose();
 			new Menu("Menu", 250, 300);
 		}
-//	    SQLList surveyCreateModel = new SQLList("Survey_Template", "Survey=" + DBController.appendApo
-//				(surveyModel.getId(surveyList.getSelectedIndex())),0,"Template");
-//	    surveyCreateModel.getData();
 		
-		}
+	}
 	
 
 	@Override
@@ -122,7 +114,6 @@ public class SurveySelector extends SQLWindow implements ActionListener {
 					(surveyModel.getId(surveyList.getSelectedIndex())), 0, "Content");
 			populateList(questionList, questionModel);
 			questionModel.getData();
-			System.out.println(surveyList.getSelectedIndex());
 		}
 		
 	}
