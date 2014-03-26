@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.GUI;
+package com.baconbanana.easysurveydesigner.newGUI;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -19,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.baconbanana.easysurveydesigner.GUI.Menu;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.Connection;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataGetter;
 import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
@@ -67,6 +69,7 @@ public class SendSurveyGetAnswers implements ActionListener {
  */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
+				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
@@ -204,7 +207,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 
 			}
 
-			public static synchronized void setServerSocket(ServerSocket s){
+public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
 	public static synchronized ServerSocket getServerSocket(){
@@ -222,10 +225,10 @@ public class SendSurveyGetAnswers implements ActionListener {
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(){
-		connectionPageClosed = true;
+	public static synchronized void setPageClosed(Boolean b){
+		connectionPageClosed = b;
 	}
-	public static synchronized boolean isPageClosed(){
+	public static synchronized boolean getPageClosed(){
 		return connectionPageClosed;
 	}
 	
@@ -246,7 +249,8 @@ public class SendSurveyGetAnswers implements ActionListener {
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{	
+	{
+		
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -260,7 +264,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
-					setPageClosed();
+					setPageClosed(true);
 					try {
 						if(serverSocket!=null)
 						serverSocket.close();
@@ -284,4 +288,5 @@ public class SendSurveyGetAnswers implements ActionListener {
 					break;
 		}
 	}
+	
 }

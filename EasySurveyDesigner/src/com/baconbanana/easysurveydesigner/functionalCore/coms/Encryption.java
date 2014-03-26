@@ -23,8 +23,8 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class Encryption {
 
-	private static byte[] secret = null;
-	private static SecretKeySpec secretKey = null;
+	public static byte[] secret = null;
+	public static SecretKeySpec secretKey = null;
 
 	public static void setKeys() {
 		try {
@@ -37,7 +37,7 @@ public class Encryption {
 
 	/**
 	 * This method, using another method in Encryption class, encrypts data.
-	 * Then converts it bytes string. Then returns it.
+	 * Then converts it bytes string. Then returnes it.
 	 * 
 	 * @param message
 	 * @return encrypted

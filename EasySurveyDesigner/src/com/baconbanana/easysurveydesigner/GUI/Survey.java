@@ -178,7 +178,7 @@ public abstract class Survey extends SQLWindow{
 
 			if (!(templateList.getSelectedValue() == null)){
 
-				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo(templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
+				surveyPrevModel.insertElement("Survey_Template", DBController.appendApo(this.surveyName), DBController.appendApo((String)templateModelFromSurvey.getElementAt(templateList.getSelectedIndex())));
 				surveyPrevModel.getData("Survey_Template", "Survey = " + DBController.appendApo(this.surveyName), 1, "Survey", "Template");
 			}
 		}
