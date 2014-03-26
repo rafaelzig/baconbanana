@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.baconbanana.easysurvey.functionalCore.coms.ConnectToServer;
+import com.baconbanana.easysurvey.functionalCore.coms.Get;
+import com.baconbanana.easysurvey.functionalCore.coms.Send;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -14,7 +18,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +25,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+
+import com.baconbanana.easysurvey.functionalCore.Storage;
 
 /**
  * This activity class if a launcher activity that lets the user to connect to 
@@ -57,8 +62,6 @@ public class ConnectionActivity extends Activity {
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
 			+ "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
 	private static InputStream inputS = null;
-	
-	private static AsyncTask connection, getA, sendA, waitForInput ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -87,17 +90,13 @@ public class ConnectionActivity extends Activity {
 		}
 	}
 
-	protected void onStop(){   	//<----new line
-		super.onStop();	        //<----new line
-		connection.cancel(true);//<----new line
-		}						//<----new line
+
 	
 	public void connect(View v) {
 		Log.d("c", "connect called");
 		if (isOnline()) {
 			if (notFirstTime) {
-				
-				connection=new ConnectToServer(inputS, skt, context, IP).execute("");
+				new ConnectToServer(inputS, skt, context, IP).execute("");
 				
 			} else {
 
@@ -215,3 +214,15 @@ public class ConnectionActivity extends Activity {
 	}
 	
 }
+
+	
+	/*@Override
+	protected void onStop(){   	//<----new line
+		super.onStop();	        //<----new line
+		connection.cancel(true);//<----new line
+		}	
+	@Override
+	 protected void onDestroy(){
+		 connection.cancel(true);//<----new line
+	 }*/
+

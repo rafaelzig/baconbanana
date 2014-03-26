@@ -16,7 +16,8 @@ import com.baconbanana.easysurveydesigner.GUI.SendSurveyGetAnswers;
  * while the following two conditions hold: 1- serverSucket is null and 
  * 2- the connection page is not closed. So if the page will be closed
  * or the serverSocket will be created the thread will stop
- * @author beka, team
+ * @author beka, team 
+ *
  */
 public class Connection extends Thread {
 	
@@ -28,38 +29,32 @@ public class Connection extends Thread {
 			listOfSockets[x] = 2000 + x;
 		}
 	}
-	
+
 	public void run() {
 
-		while(SendSurveyGetAnswers.getServerSocket() == null 
-			&& !SendSurveyGetAnswers.isPageClosed()) {
+		while(SendSurveyGetAnswers.getServerSocket()== null 
+			&& SendSurveyGetAnswers.getPageClosed()==false) {
 			
 			try {
-			
 				String IP;
-				
 				Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-		       
 				NetworkInterface netint= Collections.list(nets).get(0);
 				Enumeration<InetAddress> inetAddresses = netint.getInetAddresses(); // Variable never used?
 				IP="Your IP is "+InetAddress.getLocalHost().getHostAddress().toString();
 				System.out.println(IP);
-				SendSurveyGetAnswers.setLocalIP(IP);
+				SendSurveyGetAnswers.setLocalIP(IP); // Concurrency here
 				
-			} catch (UnknownHostException ex) {
+			} catch (UnknownHostException | SocketException ex) {
 				System.out.println("Failed to Find ip");
 				ex.printStackTrace();
-			} catch (SocketException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			
 			try {
-				ServerSocket ss = createServerSocket(listOfSockets); 
+				ServerSocket ss = createServerSocket(listOfSockets);
 				System.out.println("will try to create new socket" );
 				System.out.println("got port"
 						+ ss.getLocalPort() + "\n");
-				SendSurveyGetAnswers.setServerSocket(ss); // Concurrency here
+				SendSurveyGetAnswers.setServerSocket(ss);
 			} catch (IOException ex) {
 				System.err.println("no available ports");
 			}

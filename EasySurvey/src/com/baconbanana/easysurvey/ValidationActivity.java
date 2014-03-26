@@ -22,22 +22,37 @@ public class ValidationActivity extends Activity {
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_validation);
+	
 		
 		t= (TextView)findViewById(R.id.txtName);
 		d=(DatePicker)findViewById(R.id.datePicker);
 		b=(Button)findViewById(R.id.confirm);
 		String nameanddate= ConnectionActivity.getNameAndDate();
-		System.out.println(nameanddate);
+	
 		String name=nameanddate.substring(0,nameanddate.indexOf("*") );
-		final String date=nameanddate.substring(nameanddate.indexOf("*")+1, nameanddate.length() );
+	 final String date=nameanddate.substring(nameanddate.indexOf("*")+1, nameanddate.length() );
 		System.out.println(date);
-		t.setText("Hello "+name+"!");
+		//t.setText("Hello "+name+"!");
 		
 		b.setOnClickListener(new View.OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				if(datePicked.equals(date)){
+				
+				DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+				 int day = datePicker.getDayOfMonth();
+				 int month = datePicker.getMonth() + 1;
+				 int year = datePicker.getYear();
+				String dayString = Integer.toString(day);
+				String monthString = Integer.toString(month);
+				String yearString = Integer.toString(year);
+				t.setText(dayString+monthString+yearString);
+				
+				 String datefromPicker = (day+"-"+month+"-"+year);
+				 
+				 
+				 
+				 if(datefromPicker.equals(date)){
 					moveToVideo();
 				}
 				else{

@@ -48,12 +48,13 @@ public class InputWaiter extends Thread {
 					inS = clientSocket.getInputStream();
 					System.out.println("waiting for input");
 
-					if (SendSurveyGetAnswers.isPageClosed()) {
+					if (SendSurveyGetAnswers.getPageClosed()) {
 						System.out.println("found out that page is closed");
 						finish();
 					}
 
 				} catch (IOException | InterruptedException e) {
+					finish();
 					continue;
 				}
 

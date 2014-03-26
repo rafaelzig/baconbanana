@@ -1,30 +1,40 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:id="@+id/mainLayout"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:background="@drawable/green">
- 
-     <Button
-         android:id="@+id/btnBegin"
-         android:background="@drawable/button"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_alignParentBottom="true"
-         android:layout_centerHorizontal="true"
-         android:layout_marginBottom="24dp"
-         android:onClick="beginSurvey"
-         android:text="Begin Survey" />
- 
-     <FrameLayout
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_above="@+id/btnBegin"
-         android:layout_centerHorizontal="true" >
- 
-         <VideoView
-             android:id="@+id/videoView"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content" />
-     </FrameLayout>
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/green" >
+
+    <Button
+        android:id="@+id/btnBegin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button"
+        android:onClick="beginSurvey"
+        android:text="Begin Survey" />
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btnBegin"
+        android:layout_centerHorizontal="true" >
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/frameLayout1"
+        android:layout_centerHorizontal="true"
+        android:text="TextView" />
+
 </RelativeLayout>

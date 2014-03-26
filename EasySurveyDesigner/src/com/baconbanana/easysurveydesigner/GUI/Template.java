@@ -54,12 +54,7 @@ public abstract class Template extends SQLWindow{
 
 	public Template(String tit, int width, int height) {
 		super(tit, width, height);
-		templateName = tit;
-		initiWidgets();
-
-
-		
-		
+		templateName = tit;		
 	}
 	protected void initiWidgets(){
 

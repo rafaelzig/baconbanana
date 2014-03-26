@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.Set;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -67,6 +69,7 @@ public class SendSurveyGetAnswers implements ActionListener {
  */
 	public SendSurveyGetAnswers() throws InterruptedException {
 				
+				setPageClosed(false);
 				setEverything();
 			    connection.start();
 				connection.join();
@@ -137,24 +140,15 @@ public class SendSurveyGetAnswers implements ActionListener {
 				thePanel.setLayout(new GridLayout(1, 2));
 
 				final JTextField name = new JTextField(20);
-
-				final JComboBox day, month, year;
-
-				String months[] = { "01", "02", "03", "04" };
-				String days[] = { "01", "02", "03" };
-				String years[] = { "1994", "1996", "1998" };
-
-				month = new JComboBox(months);
-				day = new JComboBox(days);
-				year = new JComboBox(years);
+				 final JTextField date = new JTextField(20);
+				
 
 				JLabel l = new JLabel();
 				l.setText("Enter Name:");
-
-				thePanel.add(new JLabel("Date of birth:"));
-				thePanel.add(day);
-				thePanel.add(month);
-				thePanel.add(year);
+				
+				thePanel.add(new JLabel("Date of birth(d-m-yyyy):"));
+				thePanel.add(date);
+				
 				theOtherPanel.add(l);
 				theOtherPanel.add(name);
 
@@ -163,31 +157,18 @@ public class SendSurveyGetAnswers implements ActionListener {
 				frame2.add(thePanel);
 				frame2.add(theOtherPanel);
 
-				month.addItemListener(new ItemListener() {
-
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						String s = (String) month.getSelectedItem();
-						
-					}
-				});
-
+				
 				JButton send = new JButton("send");
 				send.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						String n = name.getText().toString();
-						StringBuilder d = new StringBuilder();
-						d.append(day.getSelectedItem().toString());
-						d.append("-");
-						d.append(month.getSelectedItem().toString());
-						d.append("-");
-						d.append(year.getSelectedItem().toString());
+						String m = date.getText().toString();
+						
+						
 
-						String date = d.toString();
-
-						Thread t5 = new DataSender(n, date, clientSocket);
+						Thread t5 = new DataSender(n, m, clientSocket);
 						t5.start();
 
 						frame2.dispose();
@@ -204,7 +185,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 
 			}
 
-			public static synchronized void setServerSocket(ServerSocket s){
+public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
 	public static synchronized ServerSocket getServerSocket(){
@@ -222,10 +203,10 @@ public class SendSurveyGetAnswers implements ActionListener {
 	public static synchronized void setReceivedData(String s){
 		receivedData = s;
 	}
-	public static synchronized void setPageClosed(){
-		connectionPageClosed = true;
+	public static synchronized void setPageClosed(Boolean b){
+		connectionPageClosed = b;
 	}
-	public static synchronized boolean isPageClosed(){
+	public static synchronized boolean getPageClosed(){
 		return connectionPageClosed;
 	}
 	
@@ -246,7 +227,8 @@ public class SendSurveyGetAnswers implements ActionListener {
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{	
+	{
+		
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -260,7 +242,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 				case CLOSE_S:
 					frame.dispose();
 					new Menu("Menu", 250, 300);
-					setPageClosed();
+					setPageClosed(true);
 					try {
 						if(serverSocket!=null)
 						serverSocket.close();
@@ -284,4 +266,5 @@ public class SendSurveyGetAnswers implements ActionListener {
 					break;
 		}
 	}
+	
 }
