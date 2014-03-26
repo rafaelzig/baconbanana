@@ -20,7 +20,6 @@ import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveydesigner.functionalCore.models.SQLList;
 /**
  * An abstract class that encompeses common survey window functions
- * @author ZimS
  *
  */
 public abstract class Survey extends SQLWindow{
@@ -199,6 +198,7 @@ public abstract class Survey extends SQLWindow{
 		}
 		else if(e.getSource().equals(sendBtn)){
 			new PatientName(getSurveyName());
+			getWindow().dispose();
 		}
 
 	}

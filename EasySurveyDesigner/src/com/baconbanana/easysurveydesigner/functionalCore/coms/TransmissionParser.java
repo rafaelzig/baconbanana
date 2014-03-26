@@ -25,7 +25,7 @@ public class TransmissionParser {
 		new TransmissionParser("mySurveyTommy", "Jackson Johnson");
 	}
 	
-	public TransmissionParser(String surveyName, String patientName){
+	public TransmissionParser(String surveyName, Patient patient){
 		survey = new ArrayList<>();
 		try{
 			DBController dbCon = DBController.getInstance();

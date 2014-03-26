@@ -6,6 +6,8 @@ import java.text.ParseException;
 
 import javax.swing.JOptionPane;
 
+import com.baconbanana.easysurveydesigner.functionalCore.coms.DataSender;
+import com.baconbanana.easysurveydesigner.functionalCore.coms.TransmissionParser;
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
 import com.baconbanana.easysurveyfunctions.models.Patient;
 /**
@@ -39,6 +41,8 @@ public class PatientName {
 					DBController dbCon = DBController.getInstance();				
 					if(!dbCon.exists("Patient", "Name=" + DBController.appendApo(patientName))){
 						id= dbCon.insertInto("Patient","null",DBController.appendApo(patientName),DBController.appendApo(patientDOB));
+						new TransmissionParser(survey, getPatient());
+						new SendSurveyGetAnswers(getPatient());
 }
 					else{
 						JOptionPane.showMessageDialog(null, "Patient Already Exists", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);
@@ -46,8 +50,11 @@ public class PatientName {
 				} catch (HeadlessException | SQLException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				new SurveySelector("Select one to upload", 800, 800);
+				
 			}
 			else if(patientDOB.equals("")){
 				JOptionPane.showMessageDialog(null, "Please Enter Patient DOB", "Patient Information Error", JOptionPane.INFORMATION_MESSAGE);

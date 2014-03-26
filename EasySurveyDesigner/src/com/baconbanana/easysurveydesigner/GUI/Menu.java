@@ -126,7 +126,7 @@ public class Menu extends Window
 					getWindow().dispose();
 					break;
 				case CONNECT_DEVICE_TEXT:
-					new SendSurveyGetAnswers();
+					new SendSurveyGetAnswers(null);
 					getWindow().dispose();
 					break;
 				case IMPORT_TEXT:
