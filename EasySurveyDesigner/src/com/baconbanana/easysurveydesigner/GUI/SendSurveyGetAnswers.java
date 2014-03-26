@@ -202,7 +202,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 
 			}
 
-public static synchronized void setServerSocket(ServerSocket s){
+			public static synchronized void setServerSocket(ServerSocket s){
 		serverSocket = s;
 	}
 	public static synchronized ServerSocket getServerSocket(){
