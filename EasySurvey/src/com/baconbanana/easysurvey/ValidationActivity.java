@@ -24,12 +24,11 @@ public class ValidationActivity extends Activity
 		datePicker = (DatePicker) findViewById(R.id.datePicker);
 		t = (TextView) findViewById(R.id.txtName);
 		String nameanddate = ConnectionActivity.getNameAndDate();
+		System.out.println(nameanddate);
 
-		String name = nameanddate.substring(0, nameanddate.indexOf("*"));
 		date = nameanddate.substring(nameanddate.indexOf("*") + 1,
 				nameanddate.length());
 		System.out.println(date);
-		// t.setText("Hello "+name+"!");
 	}
 
 	public void moveToVideo(View v)
@@ -40,11 +39,16 @@ public class ValidationActivity extends Activity
 		String dayString = Integer.toString(day);
 		String monthString = Integer.toString(month);
 		String yearString = Integer.toString(year);
+		Integer mont = datePicker.getMonth()+1;
+		Integer da = datePicker.getDayOfMonth();
+		String dateFromPicker =datePicker.getYear()+"-"+((mont.toString().length()   == 1 ? "0"+mont.toString():mont.toString()) )+"-"+((da.toString().length() == 1 ? "0"+da.toString():da.toString()));
+
 		t.setText(dayString + monthString + yearString);
+		
 
-		String datefromPicker = (day + "-" + month + "-" + year);
 
-		if (datefromPicker.equals(date))
+		System.out.println(dateFromPicker);
+		if (dateFromPicker.equals(date))
 		{
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
