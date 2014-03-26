@@ -10,7 +10,7 @@ public class EditTemplate extends Template{
 	public EditTemplate(String tit, int width, int height) {
 		super(tit, width, height);
 		initiWidgets();
-		templateModel = new SQLList("Template NATURAL JOIN Question", DBController.appendApo("Template=" + tit), 0, "Content");
+		templateModel = new SQLList("Template NATURAL JOIN Question", "Template=" + DBController.appendApo(tit), 0, "Content");
 		templateList.setModel(templateModel);
 	}
 
