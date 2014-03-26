@@ -71,8 +71,7 @@ public class AddTemplate extends Template{
 		}
 						
 		else if(e.getSource().equals(getDeleteBtn())){
-			try {System.out.print(DBController.getInstance().select("Question","Content="+
-					DBController.appendApo(getTemplateList().getSelectedValue()),"QuestionID").get(0)[0]);
+			try {
 			int id =(int) DBController.getInstance().select("Question natural join template","Content="+
 					DBController.appendApo(getTemplateList().getSelectedValue())+" and template="+
 							DBController.appendApo(getTemplateName()),"QuestionID").get(0)[0];
