@@ -1,4 +1,4 @@
-package com.baconbanana.easysurveydesigner.newGUI;
+package com.baconbanana.easysurveydesigner.GUI;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -135,22 +137,22 @@ public class SendSurveyGetAnswers implements ActionListener {
 				thePanel.setLayout(new FlowLayout());
 
 				JPanel theOtherPanel = new JPanel();
-				thePanel.setLayout(new GridLayout(1, 1));
+				thePanel.setLayout(new GridLayout(1, 2));
 
 				final JTextField name = new JTextField(20);
-                 final JTextField date = new JTextField(20);
-		
+				 final JTextField date = new JTextField(20);
+				
 
 				JLabel l = new JLabel();
 				l.setText("Enter Name:");
-
+				
 				thePanel.add(new JLabel("Date of birth(d-m-yyyy):"));
 				thePanel.add(date);
 				
 				theOtherPanel.add(l);
 				theOtherPanel.add(name);
 
-			
+				// sendPage.add(new JLabe);
 				frame2.setLayout(new GridLayout(3, 1));
 				frame2.add(thePanel);
 				frame2.add(theOtherPanel);
@@ -163,6 +165,7 @@ public class SendSurveyGetAnswers implements ActionListener {
 					public void actionPerformed(ActionEvent e) {
 						String n = name.getText().toString();
 						String m = date.getText().toString();
+						
 						
 
 						Thread t5 = new DataSender(n, m, clientSocket);
@@ -224,7 +227,8 @@ public static synchronized void setServerSocket(ServerSocket s){
 	
 @Override
 	public void actionPerformed(ActionEvent e)
-	{	
+	{
+		
 			switch (e.getActionCommand())
 			{
 				case GET_S:
@@ -262,4 +266,5 @@ public static synchronized void setServerSocket(ServerSocket s){
 					break;
 		}
 	}
+	
 }
