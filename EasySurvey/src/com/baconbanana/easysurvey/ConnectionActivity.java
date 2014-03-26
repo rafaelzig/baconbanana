@@ -264,4 +264,3 @@ public class ConnectionActivity extends Activity
 
 }
 
-
