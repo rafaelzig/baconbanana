@@ -9,10 +9,16 @@ public class EditSurvey extends Survey{
 		initiWidgets();
 		
 	}
+	/**
+	 * behavure for cancel button
+	 */
 	public void onCancel(){
 		getWindow().dispose();
 		new Menu("Menu", 400, 400);
 	}
+	/**
+	 * load a survey into the GUI
+	 */
 	@Override
 	public void createSurveyPrev() {
 		surveyPrevModel = new SQLList("Survey_Template", 1, "Survey", "Template");

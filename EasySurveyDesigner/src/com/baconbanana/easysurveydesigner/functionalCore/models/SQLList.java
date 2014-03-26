@@ -9,7 +9,11 @@ import javax.swing.AbstractListModel;
 import javax.swing.JOptionPane;
 
 import com.baconbanana.easysurveydesigner.functionalCore.dbops.DBController;
-
+/**
+ * A model for SQL lists, controls the views and database
+ * @author Control
+ *
+ */
 public class SQLList extends AbstractListModel{
 	
 	private List<Object[]> data;
@@ -21,7 +25,12 @@ public class SQLList extends AbstractListModel{
 	private String condition;
 	
 	
-	//get ID at some point
+	/**
+	 * Constructor for lists without conditions
+	 * @param tableName
+	 * @param sortCol Column of the result that the results will be displayed and oredered by
+	 * @param col Columns that will be recived from database
+	 */
 	public SQLList(String tableName, int sortCol, String... col){
 		super();
 		data = new LinkedList<>();
@@ -29,7 +38,13 @@ public class SQLList extends AbstractListModel{
 		columns = col;
 		sortColumn = sortCol;
 	}
-	
+	/**
+	 * Constructor for lists with a condition
+	 * @param tableName
+	 * @param condition Condition which the database will be filtered by
+	 * @param sortCol Column of the result that the results will be displayed and oredered by
+	 * @param col Columns that will be recived from database
+	 */
 	public SQLList(String tableName, String condition, int sortCol, String...col){
 		super();
 		data = new LinkedList<>();
@@ -38,13 +53,15 @@ public class SQLList extends AbstractListModel{
 		this.condition = condition;
 		sortColumn = sortCol;
 	}
-	
+	/**
+	 * returns elent that will be displayed by list widget
+	 */
 	@Override
 	public String getElementAt(int i) {
 		return (String) data.get(i)[sortColumn];
 	}
 	/**
-	 * 
+	 * Returns the if of the the object
 	 * @param i index of value
 	 * @return ID or 0 if invalid
 	 */
@@ -59,9 +76,19 @@ public class SQLList extends AbstractListModel{
 	public int getSize() {
 		return data.size();
 	}
+	/**
+	 * Helper methord that does not require teble specification
+	 * Decision made depending on wether condition is given
+	 */
 	public void getData(){
 		if(condition == null) getData(table, sortColumn, columns) ; else getData(table, condition, sortColumn, columns);
 	}
+	/**
+	 * Refresh a list without a condition
+	 * @param tableName
+	 * @param sortCol Column of the result that the results will be displayed and oredered by
+	 * @param col Columns that will be recived from database
+	 */
 	public void getData(String tableName, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
@@ -77,6 +104,13 @@ public class SQLList extends AbstractListModel{
 			e.printStackTrace();
 		}
  	}
+	/**
+	 * Refresh a list with a condition
+	 * @param tableName
+	 * @param condition Condition which the database will be filtered by
+	 * @param sortCol Column of the result that the results will be displayed and oredered by
+	 * @param col Columns that will be recived from database
+	 */
 	public void getData(String tableName, String cond, int sortCol, String... col){
 		try {
 			dbCon = DBController.getInstance();
@@ -93,7 +127,12 @@ public class SQLList extends AbstractListModel{
 		}
 		
 	}
-	
+	/**
+	 * This methord inserts an elemet into the list and into the database
+	 * @param table name of table
+	 * @param values values to be inserted
+	 * @return
+	 */
 	public int insertElement(String table, String...values ){
 		try {
 			dbCon = DBController.getInstance();
